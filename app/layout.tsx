@@ -6,6 +6,9 @@ const geist = Geist({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Expense Tracker',
   description: 'Manage your finances with ease',
+  appleWebApp: {
+    title: 'Expense Tracker',
+  },
 };
 
 export default function RootLayout({
