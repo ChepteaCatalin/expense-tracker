@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
-
-const geist = Geist({ subsets: ['latin'] });
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 
 export const metadata: Metadata = {
   title: 'Expense Tracker',
   description: 'Manage your finances with ease',
-  appleWebApp: {
-    title: 'Expense Tracker',
-  },
+  appleWebApp: { title: 'Expense Tracker' },
 };
+
+const geist = Geist({ variable: '--font-geist', subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -17,8 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geist.className}>
-      <body>{children}</body>
+    <html lang="en" className={geist.variable}>
+      <body>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }
