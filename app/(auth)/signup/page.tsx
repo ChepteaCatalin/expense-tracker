@@ -46,7 +46,6 @@ export default function SignUpPage() {
             autoComplete="name"
             spellCheck="false"
           />
-
           <TextField
             label="Email"
             fullWidth
