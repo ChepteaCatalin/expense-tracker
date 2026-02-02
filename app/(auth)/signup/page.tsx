@@ -5,7 +5,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import linkStyles from '@/styles/Link.module.css';
-import PasswordInput from '@/components/PasswordInput';
+import PasswordInput from '@/app/(auth)/_components/PasswordInput';
+import Logo from '../_components/Logo';
 
 const spacing = 2.5;
 
@@ -19,10 +20,12 @@ export default function SignUpPage() {
     <Grid
       component="main"
       container
+      flexDirection="column"
       alignItems="center"
       justifyContent="center"
       sx={{ minHeight: `calc(100vh - ${2 * spacing * 8}px)`, my: spacing }}
     >
+      <Logo />
       <Card
         sx={{
           display: 'flex',
