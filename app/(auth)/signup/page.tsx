@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import linkStyles from '@/styles/Link.module.css';
+import PasswordInput from '@/components/PasswordInput';
 
 const spacing = 2.5;
 
@@ -53,22 +54,8 @@ export default function SignUpPage() {
             autoComplete="email"
             spellCheck="false"
           />
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            required
-            autoComplete="new-password"
-            spellCheck="false"
-          />
-          <TextField
-            label="Confirm Password"
-            type="password"
-            fullWidth
-            required
-            autoComplete="new-password"
-            spellCheck="false"
-          />
+          <PasswordInput label="Password" />
+          <PasswordInput label="Confirm Password" />
         </Grid>
         <Grid
           container
