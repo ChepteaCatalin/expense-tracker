@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Manage your finances with ease',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#ffffff',
+    theme_color: '#121212',
+    background_color: '#121212',
     icons: [
       {
         src: '/web-app-manifest-192x192.png',

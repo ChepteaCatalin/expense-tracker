@@ -2,34 +2,23 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-  cssVariables: { colorSchemeSelector: 'class' },
+  cssVariables: true,
   typography: { fontFamily: 'var(--font-geist)' },
-  colorSchemes: {
-    light: {
-      palette: {
-        primary: {
-          main: '#1ED760',
-        },
-      },
-    },
-    dark: {
-      palette: {
-        primary: {
-          main: '#1ED760',
-        },
-        background: {
-          default: '#121212',
-          paper: '#212121',
-        },
-      },
+  palette: {
+    mode: 'dark',
+    primary: { main: '#1ED760' },
+    background: {
+      default: '#121212',
+      paper: '#212121',
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
-        root: { textTransform: 'none' },
+        root: { textTransform: 'none', fontSize: '1rem' },
       },
     },
+    MuiTextField: { defaultProps: { size: 'small' } },
   },
 });
 
