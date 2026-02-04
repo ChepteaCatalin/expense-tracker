@@ -9,7 +9,7 @@ import Link from 'next/link';
 import linkStyles from '@/styles/Link.module.css';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { signInAction } from './actions';
+import { signIn } from '../_actions/signIn';
 import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
 import PasswordInput from '../_components/PasswordInput';
 
@@ -24,7 +24,7 @@ export default function SignInForm() {
   });
 
   return (
-    <form action={signInAction} noValidate onSubmit={handleSubmit(() => {})}>
+    <form action={signIn} noValidate onSubmit={handleSubmit(() => {})}>
       <Grid container spacing={2}>
         <TextField
           {...register('email')}

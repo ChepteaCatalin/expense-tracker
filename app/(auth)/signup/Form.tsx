@@ -10,7 +10,7 @@ import PasswordInput from '../_components/PasswordInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../_utils/signUpSchema';
-import { signUpAction } from './actions';
+import { signUp } from '../_actions/signUp';
 
 export default function SignUpForm() {
   const {
@@ -28,7 +28,7 @@ export default function SignUpForm() {
   });
 
   return (
-    <form action={signUpAction} noValidate onSubmit={handleSubmit(() => {})}>
+    <form action={signUp} noValidate onSubmit={handleSubmit(() => {})}>
       <Grid container spacing={2}>
         <TextField
           {...register('name')}
