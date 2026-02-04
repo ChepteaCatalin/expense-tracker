@@ -13,7 +13,7 @@ export const signUpSchema = z
       .string()
       .trim()
       .min(1, 'Name is required')
-      .min(3, 'Name must be at least 3 characters long')
+      .min(2, 'Name must be at least 2 characters long')
       .max(100, 'Name must be at most 100 characters long'),
     email: z.email('Invalid email address'),
     password: passwordSchema,
