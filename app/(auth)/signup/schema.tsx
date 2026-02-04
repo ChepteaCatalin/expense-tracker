@@ -1,11 +1,5 @@
 import z from 'zod';
-
-const passwordSchema = z
-  .string()
-  .trim()
-  .min(1, 'Password is required')
-  .min(6, 'Password must be at least 6 characters long')
-  .max(100, 'Password must be at most 100 characters long');
+import { passwordSchema } from '../_lib/validation';
 
 export const signUpSchema = z
   .object({

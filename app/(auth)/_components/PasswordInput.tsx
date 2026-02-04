@@ -7,7 +7,25 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 
-export default function PasswordInput({ label }: { label: string }) {
+interface PasswordInputProps {
+  label: string;
+  ref?: React.Ref<HTMLInputElement>;
+  name?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  error?: boolean;
+  helperText?: string;
+}
+
+export default function PasswordInput({
+  label,
+  name,
+  ref,
+  onChange,
+  onBlur,
+  error,
+  helperText,
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -18,6 +36,12 @@ export default function PasswordInput({ label }: { label: string }) {
       required
       autoComplete="new-password"
       spellCheck="false"
+      name={name}
+      ref={ref}
+      onChange={onChange}
+      onBlur={onBlur}
+      error={error}
+      helperText={helperText}
       slotProps={{
         input: {
           endAdornment: (

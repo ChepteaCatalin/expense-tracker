@@ -50,10 +50,17 @@ export default function SignUpForm() {
           error={!!errors.email}
           helperText={errors.email?.message}
         />
-        <PasswordInput label="Password" {...register('password')} />
+        <PasswordInput
+          label="Password"
+          {...register('password')}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+        />
         <PasswordInput
           label="Confirm Password"
           {...register('confirmPassword')}
+          error={!!errors.confirmPassword}
+          helperText={errors.confirmPassword?.message}
         />
       </Grid>
       <Grid
