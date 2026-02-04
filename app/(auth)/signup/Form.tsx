@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../_utils/signUpSchema';
 import { signUp } from '../_actions/signUp';
+import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
 
 export default function SignUpForm() {
   const {
@@ -74,6 +75,7 @@ export default function SignUpForm() {
         <Button type="submit" variant="contained" fullWidth>
           Create account
         </Button>
+        <GoogleSignInButton />
         <Grid container spacing={0.5}>
           <Typography>Already have an account?</Typography>
           <Link href="/signin" className={linkStyles.link}>
