@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { signInSchema } from '../_lib/signInSchema';
+import { signInSchema } from '../_utils/signInSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';

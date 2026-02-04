@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import PasswordInput from '../_components/PasswordInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema } from '../_lib/signUpSchema';
+import { signUpSchema } from '../_utils/signUpSchema';
 import { signUpAction } from './actions';
 
 export default function SignUpForm() {
