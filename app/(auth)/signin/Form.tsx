@@ -1,45 +1,31 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
+import { signInSchema } from '../_lib/signInSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import linkStyles from '@/styles/Link.module.css';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { signInAction } from './actions';
+import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
 import PasswordInput from '../_components/PasswordInput';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema } from '../_lib/signUpSchema';
-import { signUpAction } from './actions';
 
-export default function SignUpForm() {
+export default function SignInForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
-    resolver: zodResolver(signUpSchema),
+    defaultValues: { email: '', password: '' },
+    resolver: zodResolver(signInSchema),
   });
 
   return (
-    <form action={signUpAction} noValidate onSubmit={handleSubmit(() => {})}>
+    <form action={signInAction} noValidate onSubmit={handleSubmit(() => {})}>
       <Grid container spacing={2}>
-        <TextField
-          {...register('name')}
-          label="Name"
-          fullWidth
-          required
-          autoComplete="name"
-          spellCheck="false"
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
         <TextField
           {...register('email')}
           label="Email"
@@ -51,16 +37,10 @@ export default function SignUpForm() {
           helperText={errors.email?.message}
         />
         <PasswordInput
-          label="Password"
           {...register('password')}
+          label="Password"
           error={!!errors.password}
           helperText={errors.password?.message}
-        />
-        <PasswordInput
-          label="Confirm Password"
-          {...register('confirmPassword')}
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
         />
       </Grid>
       <Grid
@@ -72,12 +52,13 @@ export default function SignUpForm() {
         sx={{ width: '100%' }}
       >
         <Button type="submit" variant="contained" fullWidth>
-          Create account
+          Sign In
         </Button>
+        <GoogleSignInButton />
         <Grid container spacing={0.5}>
-          <Typography>Already have an account?</Typography>
-          <Link href="/signin" className={linkStyles.link}>
-            Sign In
+          <Typography>{`Don't have an account?`}</Typography>
+          <Link href="/signup" className={linkStyles.link}>
+            Sign Up
           </Link>
         </Grid>
       </Grid>

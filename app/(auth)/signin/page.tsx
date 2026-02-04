@@ -1,13 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Link from 'next/link';
-import linkStyles from '@/styles/Link.module.css';
-import PasswordInput from '@/app/(auth)/_components/PasswordInput';
-import GoogleSignInButton from '@/app/(auth)/_components/GoogleSignInButton/GoogleSignInButton';
 import Logo from '../_components/Logo';
+import Form from './Form';
 
 const spacing = 2.5;
 
@@ -42,35 +37,7 @@ export default function SignInPage() {
         <Typography component="h1" sx={{ fontWeight: 700, fontSize: '1.5rem' }}>
           Sign In
         </Typography>
-        <Grid container spacing={2}>
-          <TextField
-            label="Email"
-            fullWidth
-            required
-            autoComplete="email"
-            spellCheck="false"
-          />
-          <PasswordInput label="Password" />
-        </Grid>
-        <Grid
-          container
-          spacing={1.5}
-          mt={1.5}
-          flexDirection="column"
-          alignItems="center"
-          sx={{ width: '100%' }}
-        >
-          <Button variant="contained" fullWidth>
-            Sign In
-          </Button>
-          <GoogleSignInButton />
-          <Grid container spacing={0.5}>
-            <Typography>{`Don't have an account?`}</Typography>
-            <Link href="/signup" className={linkStyles.link}>
-              Sign Up
-            </Link>
-          </Grid>
-        </Grid>
+        <Form />
       </Card>
     </Grid>
   );
