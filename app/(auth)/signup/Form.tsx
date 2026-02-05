@@ -12,13 +12,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../_utils/signUpSchema';
 import { signUp } from '../_actions/signUp';
 import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
+import { useActionState } from 'react';
+import { SignUpFormErrors } from '../_types/signUp';
+import Alert from '@mui/material/Alert';
 
 export default function SignUpForm() {
   const {
     register,
-    handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { errors, isValid },
   } = useForm({
+    mode: 'onChange',
     defaultValues: {
       name: '',
       email: '',
@@ -28,9 +32,30 @@ export default function SignUpForm() {
     resolver: zodResolver(signUpSchema),
   });
 
+  const [actionErrors, signUpAction, isPending] = useActionState(signUp, {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  } satisfies SignUpFormErrors);
+
   return (
-    <form action={signUp} noValidate onSubmit={handleSubmit(() => {})}>
+    <form action={signUpAction} noValidate>
       <Grid container spacing={2}>
+        <Grid container spacing={1} flexDirection="column" flex="1">
+          {[
+            actionErrors.name,
+            actionErrors.email,
+            actionErrors.password,
+            actionErrors.confirmPassword,
+          ]
+            .filter(Boolean)
+            .map(err => (
+              <Alert severity="error" key={err}>
+                {err}
+              </Alert>
+            ))}
+        </Grid>
         <TextField
           {...register('name')}
           label="Name"
@@ -72,7 +97,14 @@ export default function SignUpForm() {
         alignItems="center"
         sx={{ width: '100%' }}
       >
-        <Button type="submit" variant="contained" fullWidth>
+        <Button
+          type={isValid ? 'submit' : 'button'}
+          onClick={() => trigger()}
+          loading={isPending}
+          loadingPosition="start"
+          variant="contained"
+          fullWidth
+        >
           Create account
         </Button>
         <GoogleSignInButton />

@@ -1,11 +1,12 @@
 import z from 'zod';
 
-const passwordSchema = z
-  .string()
-  .min(1, 'Password is required')
-  .min(6, 'Password must be at least 6 characters long')
-  .max(100, 'Password must be at most 100 characters long')
-  .refine(val => !/\s/.test(val), 'Password must not contain spaces');
+const passwordSchema = (label: string) =>
+  z
+    .string()
+    .min(1, `${label} is required`)
+    .min(6, `${label} must be at least 6 characters long`)
+    .max(100, `${label} must be at most 100 characters long`)
+    .refine(val => !/\s/.test(val), `${label} must not contain spaces`);
 
 export const signUpSchema = z
   .object({
@@ -16,8 +17,8 @@ export const signUpSchema = z
       .min(2, 'Name must be at least 2 characters long')
       .max(100, 'Name must be at most 100 characters long'),
     email: z.email('Invalid email address'),
-    password: passwordSchema,
-    confirmPassword: passwordSchema,
+    password: passwordSchema('Password'),
+    confirmPassword: passwordSchema('Confirm Password'),
   })
   .refine(data => data.password === data.confirmPassword, {
     message: 'Passwords must match',
