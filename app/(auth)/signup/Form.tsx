@@ -33,6 +33,7 @@ export default function SignUpForm() {
   });
 
   const [actionErrors, signUpAction, isPending] = useActionState(signUp, {
+    api: '',
     name: '',
     email: '',
     password: '',
@@ -44,6 +45,7 @@ export default function SignUpForm() {
       <Grid container spacing={2}>
         <Grid container spacing={1} flexDirection="column" flex="1">
           {[
+            actionErrors.api,
             actionErrors.name,
             actionErrors.email,
             actionErrors.password,
