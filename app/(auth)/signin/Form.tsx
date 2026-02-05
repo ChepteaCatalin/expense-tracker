@@ -12,20 +12,37 @@ import Typography from '@mui/material/Typography';
 import { signIn } from '../_actions/signIn';
 import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
 import PasswordInput from '../_components/PasswordInput';
+import { useActionState } from 'react';
+import { SignInFormErrors } from '../_types/signIn';
+import Alert from '@mui/material/Alert';
 
 export default function SignInForm() {
   const {
     register,
-    handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { errors, isValid },
   } = useForm({
+    mode: 'onChange',
     defaultValues: { email: '', password: '' },
     resolver: zodResolver(signInSchema),
   });
 
+  const [actionErrors, signInAction, isPending] = useActionState(signIn, {
+    email: '',
+    password: '',
+  } satisfies SignInFormErrors);
+
   return (
-    <form action={signIn} noValidate onSubmit={handleSubmit(() => {})}>
+    <form action={signInAction} noValidate>
       <Grid container spacing={2}>
+        <Grid container spacing={1} flexDirection="column" flex="1">
+          {actionErrors.email && (
+            <Alert severity="error">{actionErrors.email}</Alert>
+          )}
+          {actionErrors.password && (
+            <Alert severity="error">{actionErrors.password}</Alert>
+          )}
+        </Grid>
         <TextField
           {...register('email')}
           label="Email"
@@ -51,7 +68,14 @@ export default function SignInForm() {
         alignItems="center"
         sx={{ width: '100%' }}
       >
-        <Button type="submit" variant="contained" fullWidth>
+        <Button
+          type={isValid ? 'submit' : 'button'}
+          onClick={() => trigger()}
+          loading={isPending}
+          loadingPosition="start"
+          variant="contained"
+          fullWidth
+        >
           Sign In
         </Button>
         <GoogleSignInButton />
