@@ -7,6 +7,5 @@ export const authClient = createAuthClient({
 export function signInWithGoogle() {
   return authClient.signIn.social({
     provider: 'google',
-    callbackURL: `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/dashboard`,
   });
 }

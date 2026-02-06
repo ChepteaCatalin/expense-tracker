@@ -49,5 +49,5 @@ export async function signUp(
     }
   }
 
-  redirect('/dashboard');
+  redirect('/');
 }

@@ -42,5 +42,5 @@ export async function signIn(
     }
   }
 
-  redirect('/dashboard');
+  redirect('/');
 }
