@@ -13,6 +13,8 @@ export default function Logo() {
           width: '150px',
           height: 'auto',
           borderRadius: '50%',
+          userSelect: 'none',
+          pointerEvents: 'none',
         }}
       />
     </Grid>
