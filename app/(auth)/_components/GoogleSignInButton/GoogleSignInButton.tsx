@@ -1,9 +1,14 @@
 import './styles.css';
+import { signInWithGoogle } from '@/lib/auth-client';
 
 // https://developers.google.com/identity/branding-guidelines
 export default function GoogleSignInButton() {
   return (
-    <button className="gsi-material-button">
+    <button
+      type="button"
+      onClick={signInWithGoogle}
+      className="gsi-material-button"
+    >
       <div className="gsi-material-button-state"></div>
       <div className="gsi-material-button-content-wrapper">
         <div className="gsi-material-button-icon">
