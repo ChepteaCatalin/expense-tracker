@@ -28,6 +28,7 @@ export default function SignInForm() {
   });
 
   const [actionErrors, signInAction, isPending] = useActionState(signIn, {
+    api: '',
     email: '',
     password: '',
   } satisfies SignInFormErrors);
@@ -36,12 +37,13 @@ export default function SignInForm() {
     <form action={signInAction} noValidate>
       <Grid container spacing={2}>
         <Grid container spacing={1} flexDirection="column" flex="1">
-          {actionErrors.email && (
-            <Alert severity="error">{actionErrors.email}</Alert>
-          )}
-          {actionErrors.password && (
-            <Alert severity="error">{actionErrors.password}</Alert>
-          )}
+          {[actionErrors.api, actionErrors.email, actionErrors.password]
+            .filter(Boolean)
+            .map(err => (
+              <Alert severity="error" key={err}>
+                {err}
+              </Alert>
+            ))}
         </Grid>
         <TextField
           {...register('email')}

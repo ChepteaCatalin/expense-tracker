@@ -5,6 +5,7 @@ import { SignUpFormErrors } from '../_types/signUp';
 import { signUpSchema } from '../_utils/signUpSchema';
 import { auth } from '@/lib/auth';
 import { APIError } from 'better-auth/api';
+import { redirect } from 'next/navigation';
 
 export async function signUp(
   _: SignUpFormErrors,
@@ -48,11 +49,5 @@ export async function signUp(
     }
   }
 
-  return {
-    api: '',
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  };
+  redirect('/dashboard');
 }
