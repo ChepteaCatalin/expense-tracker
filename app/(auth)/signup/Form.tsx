@@ -94,7 +94,7 @@ export default function SignUpForm() {
       <Grid
         container
         spacing={1.5}
-        mt={1.5}
+        mt={4}
         flexDirection="column"
         alignItems="center"
         sx={{ width: '100%' }}
