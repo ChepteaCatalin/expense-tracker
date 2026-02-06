@@ -1,9 +1,17 @@
-import Link from 'next/link';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-export default function RootPage() {
+export default async function RootPage() {
+  //TODO: move this in data access layer
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) redirect('/signin');
+
   return (
-    <main>
-      <Link href="/signup">Go to Sign Up Page</Link>
-    </main>
+    <div>
+      <h1>Dashboard</h1>
+    </div>
   );
 }
