@@ -5,9 +5,15 @@ import { redirect } from 'next/navigation';
 //TODO: remove this file
 export default async function TestHiddenContent() {
   //TODO: move this in data access layer
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  console.log('headers', await headers());
+  const session = await auth.api
+    .getSession({
+      headers: await headers(),
+    })
+    .catch(err => {
+      console.log('Error fetching session:', err);
+    });
+  console.log('🚀 ~ session:', session);
   if (!session) redirect('/signin');
 
   return (
