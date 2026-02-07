@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation';
 //TODO: remove this file
 export default async function TestHiddenContent() {
   //TODO: move this in data access layer
-  console.log('headers', await headers());
   const session = await auth.api
     .getSession({
       headers: await headers(),
