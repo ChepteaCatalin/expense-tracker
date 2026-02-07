@@ -9,6 +9,9 @@ export default function Logo() {
         src={logo}
         alt="Expense Tracker Logo"
         sizes="100vw"
+        loading="eager"
+        fetchPriority="high"
+        placeholder="blur"
         style={{
           width: '150px',
           height: 'auto',
