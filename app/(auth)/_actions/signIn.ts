@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import { SignInFormErrors } from '../_types/signIn';
+import { SignInFormErrors, SignInFormValues } from '../_types/signIn';
 import { signInSchema } from '../_utils/signInSchema';
 import { extractZodError } from '@/utils/zod';
 import { APIError } from 'better-auth/api';
@@ -10,11 +10,8 @@ import { headers } from 'next/headers';
 
 export async function signIn(
   _: SignInFormErrors,
-  data: FormData,
+  { email, password }: SignInFormValues,
 ): Promise<SignInFormErrors> {
-  const email = data.get('email') as string;
-  const password = data.get('password') as string;
-
   const parseResult = signInSchema.safeParse({
     email,
     password,

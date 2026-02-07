@@ -1,7 +1,7 @@
 'use server';
 
 import { extractZodError } from '@/utils/zod';
-import { SignUpFormErrors } from '../_types/signUp';
+import { SignUpFormErrors, SignUpFormValues } from '../_types/signUp';
 import { signUpSchema } from '../_utils/signUpSchema';
 import { auth } from '@/lib/auth';
 import { APIError } from 'better-auth/api';
@@ -9,17 +9,13 @@ import { redirect } from 'next/navigation';
 
 export async function signUp(
   _: SignUpFormErrors,
-  data: FormData,
+  { name, email, password, confirmPassword }: SignUpFormValues,
 ): Promise<SignUpFormErrors> {
-  const name = data.get('name') as string;
-  const email = data.get('email') as string;
-  const password = data.get('password') as string;
-
   const parseResult = signUpSchema.safeParse({
     name,
     email,
     password,
-    confirmPassword: data.get('confirmPassword'),
+    confirmPassword,
   });
   const getError = extractZodError(parseResult);
 

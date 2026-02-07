@@ -3,12 +3,12 @@ import Box from '@mui/material/Box';
 
 export default function ApiErrorAlert({
   message,
-  isDirty,
+  hide,
 }: {
   message: string;
-  isDirty: boolean;
+  hide: boolean;
 }) {
-  if (!message || isDirty) return null;
+  if (!message || hide) return null;
 
   return (
     <Box sx={{ width: '100%' }} mb={2}>

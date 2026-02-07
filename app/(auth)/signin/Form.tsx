@@ -10,21 +10,19 @@ import linkStyles from '@/styles/Link.module.css';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { signIn } from '../_actions/signIn';
-import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
+import GoogleAuthButton from '../_components/GoogleAuthButton';
 import PasswordInput from '../_components/PasswordInput';
-import { useActionState } from 'react';
-import { SignInFormErrors } from '../_types/signIn';
+import { startTransition, useActionState, useState } from 'react';
+import { SignInFormErrors, SignInFormValues } from '../_types/signIn';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
-import useResetFormAfterSubmit from '../_utils/useResetFormAfterSubmit';
 
 export default function SignInForm() {
   const {
     register,
-    reset,
-    trigger,
-    formState: { errors, isValid, isDirty },
-  } = useForm({
-    mode: 'onChange',
+    handleSubmit,
+    subscribe,
+    formState: { errors },
+  } = useForm<SignInFormValues>({
     defaultValues: { email: '', password: '' },
     resolver: zodResolver(signInSchema),
   });
@@ -35,12 +33,24 @@ export default function SignInForm() {
     password: '',
   } satisfies SignInFormErrors);
 
-  useResetFormAfterSubmit(reset, isPending);
+  const [hideApiError, setHideApiError] = useState(false);
+  subscribe({
+    formState: { values: true },
+    callback: () => setHideApiError(true),
+  });
 
   return (
-    <form action={signInAction} noValidate>
+    <form
+      noValidate
+      onSubmit={handleSubmit(data => {
+        startTransition(() => {
+          setHideApiError(false);
+          signInAction(data);
+        });
+      })}
+    >
       <Grid container spacing={2}>
-        <ApiErrorAlert message={actionErrors.api} isDirty={isDirty} />
+        <ApiErrorAlert hide={hideApiError} message={actionErrors.api} />
         <TextField
           {...register('email')}
           label="Email"
@@ -67,8 +77,7 @@ export default function SignInForm() {
         sx={{ width: '100%' }}
       >
         <Button
-          type={isValid ? 'submit' : 'button'}
-          onClick={() => trigger()}
+          type="submit"
           loading={isPending}
           loadingPosition="start"
           variant="contained"
@@ -76,7 +85,7 @@ export default function SignInForm() {
         >
           Sign In
         </Button>
-        <GoogleSignInButton />
+        <GoogleAuthButton />
         <Grid container spacing={0.5}>
           <Typography>{`Don't have an account?`}</Typography>
           <Link href="/signup" className={linkStyles.link}>

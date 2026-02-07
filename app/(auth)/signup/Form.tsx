@@ -11,20 +11,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../_utils/signUpSchema';
 import { signUp } from '../_actions/signUp';
-import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
-import { useActionState } from 'react';
-import { SignUpFormErrors } from '../_types/signUp';
+import GoogleAuthButton from '../_components/GoogleAuthButton';
+import { startTransition, useActionState, useState } from 'react';
+import { SignUpFormErrors, SignUpFormValues } from '../_types/signUp';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
-import useResetFormAfterSubmit from '../_utils/useResetFormAfterSubmit';
 
 export default function SignUpForm() {
   const {
     register,
     trigger,
-    reset,
-    formState: { errors, isValid, isDirty },
-  } = useForm({
-    mode: 'onChange',
+    handleSubmit,
+    subscribe,
+    formState: { errors, isSubmitted },
+  } = useForm<SignUpFormValues>({
     defaultValues: {
       name: '',
       email: '',
@@ -42,12 +41,24 @@ export default function SignUpForm() {
     confirmPassword: '',
   } satisfies SignUpFormErrors);
 
-  useResetFormAfterSubmit(reset, isPending);
+  const [hideApiError, setHideApiError] = useState(false);
+  subscribe({
+    formState: { values: true },
+    callback: () => setHideApiError(true),
+  });
 
   return (
-    <form action={signUpAction} noValidate>
+    <form
+      noValidate
+      onSubmit={handleSubmit(data => {
+        startTransition(() => {
+          setHideApiError(false);
+          signUpAction(data);
+        });
+      })}
+    >
       <Grid container spacing={2}>
-        <ApiErrorAlert message={actionErrors.api} isDirty={isDirty} />
+        <ApiErrorAlert hide={hideApiError} message={actionErrors.api} />
         <TextField
           {...register('name')}
           label="Name"
@@ -71,7 +82,9 @@ export default function SignUpForm() {
         <PasswordInput
           label="Password"
           {...register('password', {
-            onChange: () => trigger('confirmPassword'),
+            onChange: () => {
+              if (isSubmitted) trigger('confirmPassword');
+            },
           })}
           error={!!errors.password}
           helperText={errors.password?.message}
@@ -92,8 +105,7 @@ export default function SignUpForm() {
         sx={{ width: '100%' }}
       >
         <Button
-          type={isValid ? 'submit' : 'button'}
-          onClick={() => trigger()}
+          type="submit"
           loading={isPending}
           loadingPosition="start"
           variant="contained"
@@ -101,7 +113,7 @@ export default function SignUpForm() {
         >
           Create account
         </Button>
-        <GoogleSignInButton />
+        <GoogleAuthButton />
         <Grid container spacing={0.5}>
           <Typography>Already have an account?</Typography>
           <Link href="/signin" className={linkStyles.link}>
