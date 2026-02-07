@@ -22,7 +22,7 @@ export default function SignInForm() {
     register,
     reset,
     trigger,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
   } = useForm({
     mode: 'onChange',
     defaultValues: { email: '', password: '' },
@@ -40,7 +40,7 @@ export default function SignInForm() {
   return (
     <form action={signInAction} noValidate>
       <Grid container spacing={2}>
-        <ApiErrorAlert message={actionErrors.api} />
+        <ApiErrorAlert message={actionErrors.api} isDirty={isDirty} />
         <TextField
           {...register('email')}
           label="Email"

@@ -22,7 +22,7 @@ export default function SignUpForm() {
     register,
     trigger,
     reset,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
   } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -47,7 +47,7 @@ export default function SignUpForm() {
   return (
     <form action={signUpAction} noValidate>
       <Grid container spacing={2}>
-        <ApiErrorAlert message={actionErrors.api} />
+        <ApiErrorAlert message={actionErrors.api} isDirty={isDirty} />
         <TextField
           {...register('name')}
           label="Name"
