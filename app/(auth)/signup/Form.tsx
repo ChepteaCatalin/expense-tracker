@@ -70,7 +70,9 @@ export default function SignUpForm() {
         />
         <PasswordInput
           label="Password"
-          {...register('password')}
+          {...register('password', {
+            onChange: () => trigger('confirmPassword'),
+          })}
           error={!!errors.password}
           helperText={errors.password?.message}
         />
