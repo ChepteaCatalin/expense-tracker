@@ -6,6 +6,7 @@ import { signInSchema } from '../_utils/signInSchema';
 import { extractZodError } from '@/utils/zod';
 import { APIError } from 'better-auth/api';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 export async function signIn(
   _: SignInFormErrors,
@@ -31,6 +32,7 @@ export async function signIn(
   try {
     await auth.api.signInEmail({
       body: { email, password, rememberMe: true },
+      headers: await headers(),
     });
   } catch (error) {
     if (error instanceof APIError) {
