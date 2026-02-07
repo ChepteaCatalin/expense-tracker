@@ -14,7 +14,7 @@ import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInBu
 import PasswordInput from '../_components/PasswordInput';
 import { useActionState } from 'react';
 import { SignInFormErrors } from '../_types/signIn';
-import ApiError from '../_components/ApiError';
+import ApiErrorAlert from '../_components/ApiErrorAlert';
 
 export default function SignInForm() {
   const {
@@ -36,7 +36,7 @@ export default function SignInForm() {
   return (
     <form action={signInAction} noValidate>
       <Grid container spacing={2}>
-        <ApiError message={actionErrors.api} />
+        <ApiErrorAlert message={actionErrors.api} />
         <TextField
           {...register('email')}
           label="Email"

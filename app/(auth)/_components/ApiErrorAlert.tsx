@@ -1,7 +1,7 @@
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 
-export default function ApiError({ message }: { message: string }) {
+export default function ApiErrorAlert({ message }: { message: string }) {
   if (!message) return null;
 
   return (

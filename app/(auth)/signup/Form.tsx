@@ -14,7 +14,7 @@ import { signUp } from '../_actions/signUp';
 import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInButton';
 import { useActionState } from 'react';
 import { SignUpFormErrors } from '../_types/signUp';
-import ApiError from '../_components/ApiError';
+import ApiErrorAlert from '../_components/ApiErrorAlert';
 
 export default function SignUpForm() {
   const {
@@ -43,7 +43,7 @@ export default function SignUpForm() {
   return (
     <form action={signUpAction} noValidate>
       <Grid container spacing={2}>
-        <ApiError message={actionErrors.api} />
+        <ApiErrorAlert message={actionErrors.api} />
         <TextField
           {...register('name')}
           label="Name"
