@@ -1,10 +1,5 @@
 import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  reactCompiler: true,
-  cacheComponents: true,
-};
-
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''};
@@ -18,7 +13,9 @@ const cspHeader = `
     upgrade-insecure-requests;
 `;
 
-module.exports = {
+const nextConfig: NextConfig = {
+  reactCompiler: true,
+  cacheComponents: true,
   async headers() {
     return [
       {

@@ -1,17 +1,10 @@
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
+import TestHiddenContent from './TestHiddenContent';
 
 export default async function RootPage() {
-  //TODO: move this in data access layer
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) redirect('/signin');
-
   return (
-    <div>
-      <h1>Dashboard</h1>
-    </div>
+    <Suspense fallback={<p>Loading...</p>}>
+      <TestHiddenContent />
+    </Suspense>
   );
 }
