@@ -15,10 +15,12 @@ import PasswordInput from '../_components/PasswordInput';
 import { useActionState } from 'react';
 import { SignInFormErrors } from '../_types/signIn';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
+import useResetFormAfterSubmit from '../_utils/useResetFormAfterSubmit';
 
 export default function SignInForm() {
   const {
     register,
+    reset,
     trigger,
     formState: { errors, isValid },
   } = useForm({
@@ -32,6 +34,8 @@ export default function SignInForm() {
     email: '',
     password: '',
   } satisfies SignInFormErrors);
+
+  useResetFormAfterSubmit(reset, isPending);
 
   return (
     <form action={signInAction} noValidate>

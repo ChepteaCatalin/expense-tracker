@@ -15,11 +15,13 @@ import GoogleSignInButton from '../_components/GoogleSignInButton/GoogleSignInBu
 import { useActionState } from 'react';
 import { SignUpFormErrors } from '../_types/signUp';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
+import useResetFormAfterSubmit from '../_utils/useResetFormAfterSubmit';
 
 export default function SignUpForm() {
   const {
     register,
     trigger,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: 'onChange',
@@ -39,6 +41,8 @@ export default function SignUpForm() {
     password: '',
     confirmPassword: '',
   } satisfies SignUpFormErrors);
+
+  useResetFormAfterSubmit(reset, isPending);
 
   return (
     <form action={signUpAction} noValidate>
