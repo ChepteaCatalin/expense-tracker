@@ -106,6 +106,7 @@ export default function SignUpForm() {
       >
         <Button
           type="submit"
+          disabled={!hideApiError && !!actionErrors.api}
           loading={isPending}
           loadingPosition="start"
           variant="contained"

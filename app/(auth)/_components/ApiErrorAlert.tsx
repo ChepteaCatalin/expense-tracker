@@ -11,7 +11,7 @@ export default function ApiErrorAlert({
   if (!message || hide) return null;
 
   return (
-    <Box sx={{ width: '100%' }} mb={2}>
+    <Box width="100%" mb={1.5}>
       <Alert severity="error">{message}</Alert>
     </Box>
   );

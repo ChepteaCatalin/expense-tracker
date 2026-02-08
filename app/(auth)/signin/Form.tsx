@@ -78,6 +78,7 @@ export default function SignInForm() {
       >
         <Button
           type="submit"
+          disabled={!hideApiError && !!actionErrors.api}
           loading={isPending}
           loadingPosition="start"
           variant="contained"
