@@ -1,9 +1,9 @@
 'use server';
 
+import { signUpEmail } from '@/data/auth';
 import { extractZodError } from '@/utils/zod';
 import { SignUpFormErrors, SignUpFormValues } from '../_types/signUp';
 import { signUpSchema } from '../_utils/signUpSchema';
-import { auth } from '@/lib/auth';
 import { APIError } from 'better-auth/api';
 import { redirect } from 'next/navigation';
 
@@ -30,9 +30,7 @@ export async function signUp(
   }
 
   try {
-    await auth.api.signUpEmail({
-      body: { name, email, password },
-    });
+    await signUpEmail({ name, email, password });
   } catch (error) {
     if (error instanceof APIError) {
       return {

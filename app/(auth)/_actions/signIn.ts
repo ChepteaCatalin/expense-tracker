@@ -1,6 +1,6 @@
 'use server';
 
-import { auth } from '@/lib/auth';
+import { signInEmail } from '@/data/auth';
 import { SignInFormErrors, SignInFormValues } from '../_types/signIn';
 import { signInSchema } from '../_utils/signInSchema';
 import { extractZodError } from '@/utils/zod';
@@ -26,9 +26,7 @@ export async function signIn(
   }
 
   try {
-    await auth.api.signInEmail({
-      body: { email, password, rememberMe: true },
-    });
+    await signInEmail({ email, password });
   } catch (error) {
     if (error instanceof APIError) {
       return {
