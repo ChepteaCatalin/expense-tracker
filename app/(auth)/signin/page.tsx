@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Logo from '../_components/Logo';
 import Form from './Form';
 import Link from 'next/link';
-import linkStyles from '@/styles/Link.module.css';
+import linkStyles from '../_styles/Link.module.css';
 
 const spacing = 2.5;
 
