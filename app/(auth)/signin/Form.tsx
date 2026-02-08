@@ -1,16 +1,16 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { signInSchema } from '../_utils/signInSchema';
+import { signInSchema } from '../validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { signIn } from '../_actions/signIn';
+import { signIn } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import PasswordInput from '../_components/PasswordInput';
 import { startTransition, useActionState, useState } from 'react';
-import { SignInFormErrors, SignInFormValues } from '../_types/signIn';
+import { SignInFormErrors, SignInFormValues } from '../types';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
 
 export default function SignInForm() {

@@ -6,11 +6,11 @@ import Grid from '@mui/material/Grid';
 import PasswordInput from '../_components/PasswordInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema } from '../_utils/signUpSchema';
-import { signUp } from '../_actions/signUp';
+import { signUpSchema } from '../validation';
+import { signUp } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import { startTransition, useActionState, useState } from 'react';
-import { SignUpFormErrors, SignUpFormValues } from '../_types/signUp';
+import { SignUpFormErrors, SignUpFormValues } from '../types';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
 
 export default function SignUpForm() {

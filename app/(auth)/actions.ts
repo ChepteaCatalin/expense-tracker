@@ -1,9 +1,14 @@
 'use server';
 
-import { signUpEmail } from '@/data/auth';
-import { extractZodError } from '@/utils/zod';
-import { SignUpFormErrors, SignUpFormValues } from '../_types/signUp';
-import { signUpSchema } from '../_utils/signUpSchema';
+import { signInEmail, signUpEmail } from '@/data/auth';
+import {
+  SignInFormErrors,
+  SignInFormValues,
+  SignUpFormErrors,
+  SignUpFormValues,
+} from './types';
+import { signInSchema, signUpSchema } from './validation';
+import { extractZodError } from '@/lib/zod';
 import { APIError } from 'better-auth/api';
 import { redirect } from 'next/navigation';
 
@@ -39,6 +44,39 @@ export async function signUp(
         email: '',
         password: '',
         confirmPassword: '',
+      };
+    }
+  }
+
+  redirect('/');
+}
+
+export async function signIn(
+  _: SignInFormErrors,
+  { email, password }: SignInFormValues,
+): Promise<SignInFormErrors> {
+  const parseResult = signInSchema.safeParse({
+    email,
+    password,
+  });
+  const getError = extractZodError(parseResult);
+
+  if (!parseResult.success) {
+    return {
+      api: '',
+      email: getError('email'),
+      password: getError('password'),
+    };
+  }
+
+  try {
+    await signInEmail({ email, password });
+  } catch (error) {
+    if (error instanceof APIError) {
+      return {
+        api: error.message,
+        email: '',
+        password: '',
       };
     }
   }
