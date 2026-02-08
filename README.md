@@ -26,4 +26,4 @@ I deploy the project on [Vercel](vercel.com/).
 
 I use [Neon](https://neon.com/).
 
-1. Run migrations from `better-auth_migrations`
+1. Run migrations from `better-auth_migrations`.

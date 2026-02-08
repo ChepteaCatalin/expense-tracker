@@ -5,7 +5,7 @@ export default function ApiErrorAlert({
   message,
   hide,
 }: {
-  message: string;
+  message?: string;
   hide: boolean;
 }) {
   if (!message || hide) return null;

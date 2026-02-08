@@ -10,7 +10,7 @@ import { signUpSchema } from '../validation';
 import { signUp } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import { startTransition, useActionState, useState } from 'react';
-import { SignUpFormErrors, SignUpFormValues } from '../types';
+import { SignUpFormValues } from '../types';
 import ApiErrorAlert from '../_components/ApiErrorAlert';
 
 export default function SignUpForm() {
@@ -30,13 +30,7 @@ export default function SignUpForm() {
     resolver: zodResolver(signUpSchema),
   });
 
-  const [actionErrors, signUpAction, isPending] = useActionState(signUp, {
-    api: '',
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  } satisfies SignUpFormErrors);
+  const [actionErrors, signUpAction, isPending] = useActionState(signUp, {});
 
   const [hideApiError, setHideApiError] = useState(false);
   subscribe({

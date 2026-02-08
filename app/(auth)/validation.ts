@@ -1,5 +1,6 @@
 import z from 'zod';
 
+const emailSchema = z.email('Invalid email address');
 const passwordSchema = (label: string) =>
   z
     .string()
@@ -16,7 +17,7 @@ export const signUpSchema = z
       .min(1, 'Name is required')
       .min(2, 'Name must be at least 2 characters long')
       .max(100, 'Name must be at most 100 characters long'),
-    email: z.email('Invalid email address'),
+    email: emailSchema,
     password: passwordSchema('Password'),
     confirmPassword: passwordSchema('Confirm Password'),
   })
@@ -26,6 +27,6 @@ export const signUpSchema = z
   });
 
 export const signInSchema = z.object({
-  email: z.email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: emailSchema,
+  password: passwordSchema('Password'),
 });

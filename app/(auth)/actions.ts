@@ -26,7 +26,6 @@ export async function signUp(
 
   if (!parseResult.success) {
     return {
-      api: '',
       name: getError('name'),
       email: getError('email'),
       password: getError('password'),
@@ -38,13 +37,7 @@ export async function signUp(
     await signUpEmail({ name, email, password });
   } catch (error) {
     if (error instanceof APIError) {
-      return {
-        api: error.message,
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      };
+      return { api: error.message };
     }
   }
 
@@ -63,7 +56,6 @@ export async function signIn(
 
   if (!parseResult.success) {
     return {
-      api: '',
       email: getError('email'),
       password: getError('password'),
     };
@@ -73,11 +65,7 @@ export async function signIn(
     await signInEmail({ email, password });
   } catch (error) {
     if (error instanceof APIError) {
-      return {
-        api: error.message,
-        email: '',
-        password: '',
-      };
+      return { api: error.message };
     }
   }
 
