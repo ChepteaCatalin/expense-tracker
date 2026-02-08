@@ -93,14 +93,7 @@ export default function SignUpForm() {
           helperText={errors.confirmPassword?.message}
         />
       </Grid>
-      <Grid
-        container
-        spacing={1.5}
-        mt={4}
-        flexDirection="column"
-        alignItems="center"
-        sx={{ width: '100%' }}
-      >
+      <Grid container spacing={1.5} mt={4}>
         <Button
           type="submit"
           disabled={!hideApiError && !!actionErrors.api}
