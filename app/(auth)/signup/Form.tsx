@@ -2,10 +2,7 @@
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Link from 'next/link';
-import linkStyles from '@/styles/Link.module.css';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import PasswordInput from '../_components/PasswordInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -115,12 +112,6 @@ export default function SignUpForm() {
           Create account
         </Button>
         <GoogleAuthButton />
-        <Grid container spacing={0.5}>
-          <Typography>Already have an account?</Typography>
-          <Link href="/signin" className={linkStyles.link}>
-            Sign In
-          </Link>
-        </Grid>
       </Grid>
     </form>
   );

@@ -5,10 +5,7 @@ import { signInSchema } from '../_utils/signInSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Link from 'next/link';
-import linkStyles from '@/styles/Link.module.css';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import { signIn } from '../_actions/signIn';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import PasswordInput from '../_components/PasswordInput';
@@ -87,12 +84,6 @@ export default function SignInForm() {
           Sign In
         </Button>
         <GoogleAuthButton />
-        <Grid container spacing={0.5}>
-          <Typography>{`Don't have an account?`}</Typography>
-          <Link href="/signup" className={linkStyles.link}>
-            Sign Up
-          </Link>
-        </Grid>
       </Grid>
     </form>
   );

@@ -3,6 +3,8 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Logo from '../_components/Logo';
 import Form from './Form';
+import Link from 'next/link';
+import linkStyles from '@/styles/Link.module.css';
 
 const spacing = 2.5;
 
@@ -38,6 +40,12 @@ export default function SignInPage() {
           Sign In
         </Typography>
         <Form />
+        <Grid container spacing={0.5} mt={-0.75}>
+          <Typography>{`Don't have an account?`}</Typography>
+          <Link href="/signup" className={linkStyles.link}>
+            Sign Up
+          </Link>
+        </Grid>
       </Card>
     </Grid>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import './styles.css';
 import { signInWithGoogle } from '@/lib/auth-client';
 
