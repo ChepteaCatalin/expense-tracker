@@ -50,9 +50,14 @@ export default function PasswordInput({
                 aria-label={
                   showPassword ? 'hide the password' : 'display the password'
                 }
-                onClick={() => setShowPassword(show => !show)}
-                onMouseDown={preserveFocus}
-                onMouseUp={preserveFocus}
+                onMouseDown={e => {
+                  e.preventDefault();
+                  setShowPassword(true);
+                }}
+                onMouseUp={e => {
+                  e.preventDefault();
+                  setShowPassword(false);
+                }}
                 edge="end"
               >
                 {showPassword ? (
@@ -67,8 +72,4 @@ export default function PasswordInput({
       }}
     />
   );
-}
-
-function preserveFocus(event: React.MouseEvent<HTMLButtonElement>) {
-  event.preventDefault();
 }
