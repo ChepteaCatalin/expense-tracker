@@ -5,8 +5,8 @@ const passwordSchema = (label: string) =>
   z
     .string()
     .min(1, `${label} is required`)
-    .min(6, `${label} must be at least 6 characters long`)
-    .max(100, `${label} must be at most 100 characters long`)
+    .min(8, `${label} must be at least 8 characters long`)
+    .max(128, `${label} must be at most 128 characters long`)
     .refine(val => !/\s/.test(val), `${label} must not contain spaces`);
 
 export const signUpSchema = z
@@ -15,8 +15,7 @@ export const signUpSchema = z
       .string()
       .trim()
       .min(1, 'Name is required')
-      .min(2, 'Name must be at least 2 characters long')
-      .max(100, 'Name must be at most 100 characters long'),
+      .max(255, 'Name must be at most 255 characters long'),
     email: emailSchema,
     password: passwordSchema('Password'),
     confirmPassword: passwordSchema('Confirm Password'),
