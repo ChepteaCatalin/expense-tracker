@@ -8,19 +8,19 @@ export const getSession = cache(async () => {
   return auth.api.getSession({ headers: await headers() });
 });
 
-export const signInEmail = ({
+export function signInEmail({
   email,
   password,
 }: {
   email: string;
   password: string;
-}) => {
+}) {
   return auth.api.signInEmail({
     body: { email, password, rememberMe: true },
   });
-};
+}
 
-export const signUpEmail = ({
+export function signUpEmail({
   name,
   email,
   password,
@@ -28,8 +28,12 @@ export const signUpEmail = ({
   name: string;
   email: string;
   password: string;
-}) => {
+}) {
   return auth.api.signUpEmail({
     body: { name, email, password },
   });
-};
+}
+
+export async function signOut() {
+  return auth.api.signOut({ headers: await headers() });
+}
