@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import AccountDetails from './_components/AccountDetails';
+import AccountDetails from './AccountDetails';
 import Section from './_components/Section';
 import { Suspense } from 'react';
 import AccountDetailsSkeleton from './_components/AccountDetailsSkeleton';

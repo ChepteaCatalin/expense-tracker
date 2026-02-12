@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import SignOutBtn from './SignOutBtn';
+import SignOutBtn from './_components/SignOutBtn';
 
 export default async function AccountDetails() {
   const { user } = await requireAuth();
@@ -12,6 +12,8 @@ export default async function AccountDetails() {
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar
+          src={user.image || undefined}
+          alt={user.name}
           sx={{
             width: 56,
             height: 56,
