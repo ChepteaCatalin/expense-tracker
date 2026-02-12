@@ -26,4 +26,6 @@ I deploy the project on [Vercel](vercel.com/).
 
 I use [Neon](https://neon.com/).
 
-1. Run migrations from `better-auth_migrations`.
+- Run the `migrations/schema.sql` script against a fresh/local development database.
+
+To generate a db dump, install PostgreSQL locally then use the `pg_dump --schema-only --no-owner --no-privileges --clean --if-exists "$DATABASE_URL" > migrations/schema.sql` command. **Remove the Neon security tokens (/restrict and /unrestrict)**.
