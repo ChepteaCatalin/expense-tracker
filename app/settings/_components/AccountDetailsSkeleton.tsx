@@ -1,24 +1,27 @@
 import Divider from '@mui/material/Divider';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import Section from './Section';
 
 export default function AccountDetailsSkeleton() {
   return (
-    <Stack spacing={3}>
-      <Stack
-        direction="row"
-        spacing={2}
-        alignItems="center"
-        sx={{ height: '60px' }}
-      >
-        <Skeleton variant="circular" width={56} height={56} />
-        <Stack spacing={0.5} flex={1}>
-          <Skeleton variant="text" width="40%" height={32} />
-          <Skeleton variant="text" width="60%" height={16} />
+    <Section title="Account">
+      <Stack spacing={3}>
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
+          sx={{ height: '60px' }}
+        >
+          <Skeleton variant="circular" width={56} height={56} />
+          <Stack spacing={0.5} flex={1}>
+            <Skeleton variant="text" width="40%" height={32} />
+            <Skeleton variant="text" width="60%" height={16} />
+          </Stack>
         </Stack>
+        <Divider />
+        <Skeleton variant="rectangular" height={40} />
       </Stack>
-      <Divider />
-      <Skeleton variant="rectangular" height={40} />
-    </Stack>
+    </Section>
   );
 }

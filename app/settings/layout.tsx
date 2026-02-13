@@ -1,16 +1,22 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import AccountDetails from './AccountDetails';
-import Section from './_components/Section';
 import { Suspense } from 'react';
 import AccountDetailsSkeleton from './_components/AccountDetailsSkeleton';
+import ChangePasswordSkeleton from './_components/ChangePasswordSkeleton';
+import Grid from '@mui/material/Grid';
 
 export const metadata = {
   title: 'Settings',
   description: 'Manage your account and preferences',
 };
 
-export default async function SettingsPage() {
+export default function SettingsLayout({
+  account,
+  password,
+}: {
+  account: React.ReactNode;
+  password: React.ReactNode;
+}) {
   return (
     <Box
       component="main"
@@ -33,11 +39,10 @@ export default async function SettingsPage() {
           Manage your account and preferences
         </Typography>
       </Box>
-      <Section title="Account">
-        <Suspense fallback={<AccountDetailsSkeleton />}>
-          <AccountDetails />
-        </Suspense>
-      </Section>
+      <Grid container spacing={6} flexDirection="column">
+        <Suspense fallback={<AccountDetailsSkeleton />}>{account}</Suspense>
+        <Suspense fallback={<ChangePasswordSkeleton />}>{password}</Suspense>
+      </Grid>
     </Box>
   );
 }
