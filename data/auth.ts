@@ -8,7 +8,7 @@ export const getSession = cache(async () => {
   return auth.api.getSession({ headers: await headers() });
 });
 
-export function signInEmail({
+export async function signInEmail({
   email,
   password,
 }: {
@@ -17,6 +17,7 @@ export function signInEmail({
 }) {
   return auth.api.signInEmail({
     body: { email, password, rememberMe: true },
+    headers: await headers(),
   });
 }
 
