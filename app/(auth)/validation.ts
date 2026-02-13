@@ -1,13 +1,7 @@
+import { passwordSchema } from '@/lib/zod';
 import z from 'zod';
 
 const emailSchema = z.email('Invalid email address');
-const passwordSchema = (label: string) =>
-  z
-    .string()
-    .min(1, `${label} is required`)
-    .min(8, `${label} must be at least 8 characters long`)
-    .max(128, `${label} must be at most 128 characters long`)
-    .refine(val => !/\s/.test(val), `${label} must not contain spaces`);
 
 export const signUpSchema = z
   .object({

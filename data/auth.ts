@@ -37,3 +37,20 @@ export function signUpEmail({
 export async function signOut() {
   return auth.api.signOut({ headers: await headers() });
 }
+
+export async function changePassword({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+  return auth.api.changePassword({
+    body: {
+      currentPassword,
+      newPassword,
+      revokeOtherSessions: true,
+    },
+    headers: await headers(),
+  });
+}
