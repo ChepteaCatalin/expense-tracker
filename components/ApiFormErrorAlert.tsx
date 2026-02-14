@@ -6,7 +6,7 @@ export default function ApiFormErrorAlert({
   hide,
 }: {
   message?: string;
-  hide: boolean;
+  hide?: boolean;
 }) {
   if (!message || hide) return null;
 

@@ -85,7 +85,8 @@ CREATE TABLE public."user" (
     "emailVerified" boolean NOT NULL,
     image text,
     "createdAt" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    "updatedAt" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    "updatedAt" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    currency character varying(3) DEFAULT 'MDL'::character varying
 );
 
 

@@ -13,9 +13,11 @@ export const metadata = {
 export default function SettingsLayout({
   account,
   password,
+  preferences,
 }: {
   account: React.ReactNode;
   password: React.ReactNode;
+  preferences: React.ReactNode;
 }) {
   return (
     <Box
@@ -42,6 +44,7 @@ export default function SettingsLayout({
       <Grid container spacing={6} flexDirection="column">
         <Suspense fallback={<AccountDetailsSkeleton />}>{account}</Suspense>
         <Suspense fallback={<ChangePasswordSkeleton />}>{password}</Suspense>
+        <Suspense fallback={<div>Loading...</div>}>{preferences}</Suspense>
       </Grid>
     </Box>
   );

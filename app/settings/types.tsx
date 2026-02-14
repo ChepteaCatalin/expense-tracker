@@ -7,3 +7,8 @@ export interface ChangePasswordFormValues {
 }
 
 export type ChangePasswordFormErrors = FormErrors<ChangePasswordFormValues>;
+
+export type ChangeCurrencyError = {
+  api?: string;
+  currency?: string;
+};

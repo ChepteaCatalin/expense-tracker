@@ -20,4 +20,12 @@ export const auth = betterAuth({
     },
   },
   plugins: [nextCookies()],
+  user: {
+    additionalFields: {
+      currency: {
+        type: 'string',
+        defaultValue: 'MDL',
+      },
+    },
+  },
 });
