@@ -41,11 +41,10 @@ export async function updatePassword(
   }
 
   try {
-    await changePassword({ newPassword, currentPassword });
+    await changePassword({ currentPassword, newPassword });
+    await signOut();
   } catch (error) {
-    if (error instanceof APIError) {
-      return { api: error.message };
-    }
+    if (error instanceof APIError) return { api: error.message };
   }
 
   redirect('/signin');

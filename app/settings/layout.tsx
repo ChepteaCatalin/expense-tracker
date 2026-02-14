@@ -26,7 +26,7 @@ export default function SettingsLayout({
       py={4}
       px={3}
     >
-      <Box mb={4.5}>
+      <Box mb={6}>
         <Typography
           variant="h3"
           component="h1"

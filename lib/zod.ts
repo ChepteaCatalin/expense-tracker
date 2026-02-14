@@ -9,6 +9,7 @@ export function extractZodError(safeParseResult: ZodSafeParseResult<unknown>) {
 export const passwordSchema = (label: string) =>
   z
     .string()
+    .trim()
     .min(1, `${label} is required`)
     .min(8, `${label} must be at least 8 characters long`)
     .max(128, `${label} must be at most 128 characters long`)
