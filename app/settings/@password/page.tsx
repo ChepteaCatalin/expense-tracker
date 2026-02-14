@@ -9,7 +9,7 @@ export default async function PasswordPage() {
 
   return (
     <Section title="Change Password">
-      <Form />
+      <Form key={user.id} />
     </Section>
   );
 }
