@@ -1,6 +1,6 @@
 import { requireAuth } from '@/lib/auth-utils';
 import Section from '../_components/Section';
-import ChangePasswordForm from './ChangePasswordForm';
+import Form from './Form';
 
 export default async function PasswordPage() {
   const { user } = await requireAuth();
@@ -9,7 +9,7 @@ export default async function PasswordPage() {
 
   return (
     <Section title="Change Password">
-      <ChangePasswordForm />
+      <Form />
     </Section>
   );
 }

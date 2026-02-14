@@ -12,7 +12,7 @@ import { startTransition, useActionState, useState } from 'react';
 import { updatePassword } from '../actions';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
-export default function ChangePasswordForm() {
+export default function Form() {
   const {
     register,
     handleSubmit,
