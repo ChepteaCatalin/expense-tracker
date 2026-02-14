@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import AccountDetailsSkeleton from './_components/AccountDetailsSkeleton';
 import ChangePasswordSkeleton from './_components/ChangePasswordSkeleton';
 import Grid from '@mui/material/Grid';
+import PreferencesSkeleton from './_components/PreferencesSkeleton';
 
 export const metadata = {
   title: 'Settings',
@@ -44,7 +45,7 @@ export default function SettingsLayout({
       <Grid container spacing={6} flexDirection="column">
         <Suspense fallback={<AccountDetailsSkeleton />}>{account}</Suspense>
         <Suspense fallback={<ChangePasswordSkeleton />}>{password}</Suspense>
-        <Suspense fallback={<div>Loading...</div>}>{preferences}</Suspense>
+        <Suspense fallback={<PreferencesSkeleton />}>{preferences}</Suspense>
       </Grid>
     </Box>
   );
