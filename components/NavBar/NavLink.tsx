@@ -26,7 +26,11 @@ export default function NavLink({
       className={clsx(styles.link, { [styles.active]: isActive })}
     >
       <Icon fontSize={notMobile ? 'large' : 'medium'} />
-      <Typography fontSize="0.875rem" fontWeight={600}>
+      <Typography
+        fontSize="0.875rem"
+        fontWeight={600}
+        lineHeight={notMobile ? 1.3 : 1.2}
+      >
         {text}
       </Typography>
     </Link>
