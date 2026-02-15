@@ -1,0 +1,34 @@
+'use client';
+
+import Link from 'next/link';
+import styles from './NavLink.module.css';
+import { useSelectedLayoutSegment } from 'next/navigation';
+import { clsx } from 'clsx';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Typography from '@mui/material/Typography';
+
+export default function NavLink({
+  href,
+  Icon,
+  text,
+}: {
+  href: string;
+  Icon: React.ElementType;
+  text: string;
+}) {
+  const segment = useSelectedLayoutSegment();
+  const isActive = `/${segment}` === href;
+  const notMobile = useMediaQuery('(min-width: 1000px)');
+
+  return (
+    <Link
+      href={href}
+      className={clsx(styles.link, { [styles.active]: isActive })}
+    >
+      <Icon fontSize={notMobile ? 'large' : 'medium'} />
+      <Typography fontSize="0.875rem" fontWeight={600}>
+        {text}
+      </Typography>
+    </Link>
+  );
+}
