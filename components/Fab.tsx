@@ -12,7 +12,7 @@ export default function Fab() {
       color="primary"
       aria-label="add"
       sx={{
-        position: 'absolute',
+        position: 'fixed',
         bottom: notMobile ? 100 : 81,
         right: 10,
       }}
