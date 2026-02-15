@@ -21,14 +21,7 @@ export default function SettingsLayout({
   preferences: React.ReactNode;
 }) {
   return (
-    <Box
-      component="main"
-      boxSizing="content-box"
-      maxWidth="600px"
-      mx="auto"
-      py={4}
-      px={3}
-    >
+    <Box boxSizing="content-box" maxWidth="600px" mx="auto">
       <Box mb={6}>
         <Typography
           variant="h3"

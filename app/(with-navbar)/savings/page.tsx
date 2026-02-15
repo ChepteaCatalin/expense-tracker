@@ -1,10 +1,10 @@
-import Fab from '@/components/NavBar/Fab';
+import Fab from '@/components/Fab';
 
 export default function SavingsPage() {
   return (
-    <main>
+    <div>
       Savings
       <Fab />
-    </main>
+    </div>
   );
 }

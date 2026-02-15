@@ -1,10 +1,10 @@
-import Fab from '@/components/NavBar/Fab';
+import Fab from '@/components/Fab';
 
 export default function ExpensesPage() {
   return (
-    <main>
+    <div>
       Expenses
       <Fab />
-    </main>
+    </div>
   );
 }
