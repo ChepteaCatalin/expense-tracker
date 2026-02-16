@@ -2,7 +2,7 @@ import Heading from '@/components/Heading';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Form from '../Form';
+import Form from '../../_Form/Form';
 
 export const metadata = {
   title: 'New Category',
