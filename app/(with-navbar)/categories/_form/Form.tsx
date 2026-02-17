@@ -22,7 +22,7 @@ export default function Form() {
     defaultValues: {
       name: '',
       type: 'expense',
-      image: '/category-icons/other.svg',
+      icon: '/category-icons/other.svg',
       backgroundColor: '',
     },
     resolver: zodResolver(categorySchema),

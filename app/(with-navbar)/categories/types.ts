@@ -3,7 +3,7 @@ export type CategoryType = 'expense' | 'income';
 export interface CategoryFormValues {
   name: string;
   type: CategoryType;
-  image: string;
+  icon: string;
   backgroundColor: string;
 }
 
