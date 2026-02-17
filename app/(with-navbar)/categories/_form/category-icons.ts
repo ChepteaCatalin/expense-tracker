@@ -30,7 +30,7 @@ import BankIcon from '@/public/category-icons/bank.svg';
 import InvestIcon from '@/public/category-icons/invest.svg';
 import DebtIcon from '@/public/category-icons/debt.svg';
 
-export const iconsList: CategoryIcon[] = [
+export const categoryIcons: CategoryIcon[] = [
   { src: '/category-icons/other.svg', Component: OtherIcon },
   { src: '/category-icons/school.svg', Component: SchoolIcon },
   { src: '/category-icons/receipt.svg', Component: ReceiptIcon },

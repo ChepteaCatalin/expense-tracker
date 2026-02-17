@@ -14,8 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { categorySchema } from '../validation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { iconsList } from './icons-list';
+import { categoryIcons } from './category-icons';
 import Icon from './Icon';
+import ColorInput from './ColorInput';
 
 export default function Form() {
   const methods = useForm<CategoryFormValues>({
@@ -23,7 +24,7 @@ export default function Form() {
       name: '',
       type: 'expense',
       icon: '/category-icons/other.svg',
-      backgroundColor: '',
+      strokeColor: 'rgb(227, 227, 227)',
     },
     resolver: zodResolver(categorySchema),
   });
@@ -94,10 +95,23 @@ export default function Form() {
               mt: 0.5,
             }}
           >
-            {iconsList.map(icon => (
+            {categoryIcons.map(icon => (
               <Icon key={icon.src} icon={icon} />
             ))}
           </Box>
+        </Box>
+        <Box>
+          <Controller
+            control={control}
+            name="strokeColor"
+            render={({ field: { onChange, value } }) => (
+              <ColorInput
+                label="Stroke color"
+                value={value}
+                onChange={onChange}
+              />
+            )}
+          />
         </Box>
       </Grid>
     </FormProvider>

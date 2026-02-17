@@ -23,6 +23,22 @@ const eslintConfig = defineConfig([
               message:
                 'Import specific components from @mui/material/ComponentName instead of destructuring from the main package.',
             },
+            {
+              name: 'lodash',
+              message:
+                'Import specific functions from lodash/<functionName> instead of importing from lodash.',
+            },
+            // TODO: remove this once `optimizePackageImports` is no longer experimental
+            {
+              name: 'lodash-es',
+              message:
+                'Import specific functions from lodash-es/<functionName> instead of importing from lodash-es.',
+            },
+            {
+              name: 'lodash/fp',
+              message:
+                'Import specific functions from lodash/fp/<functionName> instead of importing from lodash/fp.',
+            },
           ],
         },
       ],

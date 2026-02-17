@@ -1,6 +1,6 @@
 .link {
     text-decoration: none;
-    color: #fff;
+    color: rgb(227, 227, 227);
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;

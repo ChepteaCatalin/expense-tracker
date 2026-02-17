@@ -8,5 +8,5 @@ export const categorySchema = z.object({
     .max(100, 'Name must be at most 100 characters'),
   type: z.enum(['expense', 'income']),
   icon: z.string().trim().min(1, 'Image is required'),
-  backgroundColor: z.string().trim().min(1, 'Background color is required'),
+  strokeColor: z.string().trim().min(1, 'Stroke color is required'),
 });
