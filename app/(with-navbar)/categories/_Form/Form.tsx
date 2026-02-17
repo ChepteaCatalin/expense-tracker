@@ -2,7 +2,7 @@
 
 import TextField from '@mui/material/TextField';
 import { Controller, useForm } from 'react-hook-form';
-import { CategoryFormValues } from '../categories/types';
+import { CategoryFormValues } from '../types';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -11,7 +11,7 @@ import Radio from '@mui/material/Radio';
 import { useId } from 'react';
 import Grid from '@mui/material/Grid';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { categorySchema } from '../categories/validation';
+import { categorySchema } from '../validation';
 import Icons from './Icons';
 
 export default function Form() {
