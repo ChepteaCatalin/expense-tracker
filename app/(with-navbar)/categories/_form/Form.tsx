@@ -22,7 +22,7 @@ export default function Form() {
     defaultValues: {
       name: '',
       type: 'expense',
-      image: '',
+      image: '/category-icons/other.svg',
       backgroundColor: '',
     },
     resolver: zodResolver(categorySchema),
@@ -87,7 +87,7 @@ export default function Form() {
             sx={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, 40px)',
-              maxHeight: '40vh',
+              maxHeight: '232px',
               overflowY: 'auto',
               justifyContent: 'center',
               gap: 3,

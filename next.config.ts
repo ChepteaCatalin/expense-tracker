@@ -16,6 +16,14 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
   async headers() {
     return [
       {

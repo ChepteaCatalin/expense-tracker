@@ -13,5 +13,5 @@ export interface Category extends CategoryFormValues {
 
 export interface CategoryIcon {
   src: string;
-  alt: string;
+  Component: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
