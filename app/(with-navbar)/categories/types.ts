@@ -10,3 +10,8 @@ export interface CategoryFormValues {
 export interface Category extends CategoryFormValues {
   id: number;
 }
+
+export interface CategoryIcon {
+  src: string;
+  alt: string;
+}

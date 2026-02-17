@@ -1,4 +1,6 @@
-export const iconsList: { src: string; alt: string }[] = [
+import { CategoryIcon } from '../types';
+
+export const iconsList: CategoryIcon[] = [
   { src: '/category-icons/school.svg', alt: 'School' },
   { src: '/category-icons/receipt.svg', alt: 'Receipt' },
   { src: '/category-icons/travel.svg', alt: 'Travel' },
