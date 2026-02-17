@@ -3,7 +3,6 @@ import Popover from '@mui/material/Popover';
 import { useId, useState } from 'react';
 import Button from '@mui/material/Button';
 import CircleIcon from '@mui/icons-material/Circle';
-import debounce from 'lodash-es/debounce';
 
 export default function ColorInput({
   label,
@@ -14,6 +13,7 @@ export default function ColorInput({
   value: string;
   onChange: (color: string) => void;
 }) {
+  const [localValue, setLocalValue] = useState(value);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const id = useId();
@@ -25,7 +25,9 @@ export default function ColorInput({
         color="inherit"
         onClick={event => setAnchorEl(event.currentTarget)}
         endIcon={
-          <CircleIcon sx={{ color: value, width: '32px', height: '32px' }} />
+          <CircleIcon
+            sx={{ color: localValue, width: '32px', height: '32px' }}
+          />
         }
         sx={{ '& .MuiButton-icon': { ml: 0.5 }, color: 'text.secondary' }}
       >
@@ -39,11 +41,11 @@ export default function ColorInput({
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <ColorPicker
-          value={value}
+          value={localValue}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onChange={debounce((color: any) => {
-            onChange(color.toRgbString());
-          }, 300)}
+          onChange={(color: any) => setLocalValue(color.toRgbString())}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onChangeComplete={(color: any) => onChange(color.toRgbString())}
         />
       </Popover>
     </>
