@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import { categoryIcons } from './category-icons';
 import Icon from './Icon';
 import ColorInput from './ColorInput';
+import Button from '@mui/material/Button';
 
 export default function Form() {
   const methods = useForm<CategoryFormValues>({
@@ -120,6 +121,9 @@ export default function Form() {
             )}
           />
         </Grid>
+        <Button type="submit" variant="contained" color="primary">
+          Create category
+        </Button>
       </Grid>
     </FormProvider>
   );
