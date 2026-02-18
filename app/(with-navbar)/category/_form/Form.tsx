@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
-import { useId } from 'react';
+import { startTransition, useActionState, useId, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { categorySchema } from '../validation';
@@ -18,6 +18,7 @@ import { categoryIcons } from './category-icons';
 import Icon from './Icon';
 import ColorInput from './ColorInput';
 import Button from '@mui/material/Button';
+import { createCategory } from '../actions';
 
 export default function Form() {
   const methods = useForm<CategoryFormValues>({
@@ -33,8 +34,21 @@ export default function Form() {
   const {
     control,
     register,
+    subscribe,
+    handleSubmit,
     formState: { errors },
   } = methods;
+
+  const [actionErrors, createCategoryAction, isPending] = useActionState(
+    createCategory,
+    {},
+  );
+
+  const [hideApiError, setHideApiError] = useState(false);
+  subscribe({
+    formState: { values: true },
+    callback: () => setHideApiError(true),
+  });
 
   const radioGroupId = useId();
 
@@ -46,6 +60,12 @@ export default function Form() {
         spacing={3}
         component="form"
         noValidate
+        onSubmit={handleSubmit(data => {
+          startTransition(() => {
+            setHideApiError(false);
+            createCategoryAction(data);
+          });
+        })}
       >
         <TextField
           {...register('name')}
@@ -121,7 +141,14 @@ export default function Form() {
             )}
           />
         </Grid>
-        <Button type="submit" variant="contained" color="primary">
+        <Button
+          type="submit"
+          disabled={!hideApiError && !!actionErrors.api}
+          loading={isPending}
+          loadingPosition="start"
+          variant="contained"
+          fullWidth
+        >
           Create category
         </Button>
       </Grid>

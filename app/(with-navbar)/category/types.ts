@@ -1,3 +1,5 @@
+import { FormErrors } from '@/types/form';
+
 export type CategoryType = 'expense' | 'income';
 
 export interface CategoryFormValues {
@@ -7,6 +9,8 @@ export interface CategoryFormValues {
   strokeColor: string;
   backgroundColor: string;
 }
+
+export type CategoryFormErrors = FormErrors<CategoryFormValues>;
 
 export interface Category extends CategoryFormValues {
   id: number;
