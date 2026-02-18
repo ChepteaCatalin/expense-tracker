@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { getSession } from '@/data/auth';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';

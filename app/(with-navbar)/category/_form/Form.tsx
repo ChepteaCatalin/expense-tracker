@@ -19,6 +19,7 @@ import Icon from './Icon';
 import ColorInput from './ColorInput';
 import Button from '@mui/material/Button';
 import { createCategory } from '../actions';
+import Divider from '@mui/material/Divider';
 
 export default function Form() {
   const methods = useForm<CategoryFormValues>({
@@ -141,6 +142,7 @@ export default function Form() {
             )}
           />
         </Grid>
+        <Divider />
         <Button
           type="submit"
           disabled={!hideApiError && !!actionErrors.api}

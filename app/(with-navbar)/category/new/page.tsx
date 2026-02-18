@@ -3,13 +3,16 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Form from '../_form/Form';
+import { requireAuth } from '@/lib/auth-utils';
 
 export const metadata = {
   title: 'New Category',
   description: 'Create a category for expenses or income',
 };
 
-export default function NewCategoryPage() {
+export default async function NewCategoryPage() {
+  await requireAuth();
+
   return (
     <Box boxSizing="content-box" maxWidth="610px" mx="auto">
       <Heading title={metadata.title} subtitle={metadata.description} />
