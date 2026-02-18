@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function NewCategoryPage() {
   return (
-    <Box boxSizing="content-box" maxWidth="600px" mx="auto">
+    <Box boxSizing="content-box" maxWidth="610px" mx="auto">
       <Heading title={metadata.title} subtitle={metadata.description} />
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
         <CardContent>

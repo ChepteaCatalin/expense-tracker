@@ -9,4 +9,5 @@ export const categorySchema = z.object({
   type: z.enum(['expense', 'income']),
   icon: z.string().trim().min(1, 'Image is required'),
   strokeColor: z.string().trim().min(1, 'Stroke color is required'),
+  backgroundColor: z.string().trim().min(1, 'Background color is required'),
 });

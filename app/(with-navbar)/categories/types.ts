@@ -5,6 +5,7 @@ export interface CategoryFormValues {
   type: CategoryType;
   icon: string;
   strokeColor: string;
+  backgroundColor: string;
 }
 
 export interface Category extends CategoryFormValues {

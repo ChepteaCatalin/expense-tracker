@@ -25,6 +25,7 @@ export default function Form() {
       type: 'expense',
       icon: '/category-icons/other.svg',
       strokeColor: 'rgb(227, 227, 227)',
+      backgroundColor: 'rgb(115, 115, 115)',
     },
     resolver: zodResolver(categorySchema),
   });
@@ -82,17 +83,16 @@ export default function Form() {
             </FormControl>
           )}
         />
-        <Box>
+        <Box sx={{ mt: -1.125 }}>
           <Typography color="text.secondary">Icon</Typography>
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, 40px)',
-              maxHeight: '232px',
+              gridTemplateColumns: 'repeat(auto-fit, 54px)',
+              maxHeight: '264px',
               overflowY: 'auto',
               justifyContent: 'center',
-              gap: 3,
-              mt: 0.5,
+              gap: 2,
             }}
           >
             {categoryIcons.map(icon => (
@@ -100,19 +100,26 @@ export default function Form() {
             ))}
           </Box>
         </Box>
-        <Box>
+        <Grid container spacing={2}>
           <Controller
             control={control}
-            name="strokeColor"
+            name="backgroundColor"
             render={({ field: { onChange, value } }) => (
               <ColorInput
-                label="Stroke color"
+                label="Background"
                 value={value}
                 onChange={onChange}
               />
             )}
           />
-        </Box>
+          <Controller
+            control={control}
+            name="strokeColor"
+            render={({ field: { onChange, value } }) => (
+              <ColorInput label="Stroke" value={value} onChange={onChange} />
+            )}
+          />
+        </Grid>
       </Grid>
     </FormProvider>
   );
