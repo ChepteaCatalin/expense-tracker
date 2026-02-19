@@ -14,6 +14,9 @@ export type CategoryFormErrors = FormErrors<CategoryFormValues>;
 
 export interface Category extends CategoryFormValues {
   id: number;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CategoryIcon {
