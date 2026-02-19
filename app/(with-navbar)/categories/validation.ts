@@ -11,15 +11,15 @@ export const categorySchema = z.object({
     .string()
     .trim()
     .min(1, 'Icon is required')
-    .max(255, 'Icon must be at most 255 characters'),
+    .max(100, 'Icon must be at most 100 characters'),
   strokeColor: z
     .string()
     .trim()
     .min(1, 'Stroke color is required')
-    .max(100, 'Stroke color must be at most 100 characters'),
+    .max(50, 'Stroke color must be at most 50 characters'),
   backgroundColor: z
     .string()
     .trim()
     .min(1, 'Background color is required')
-    .max(100, 'Background color must be at most 100 characters'),
+    .max(50, 'Background color must be at most 50 characters'),
 });
