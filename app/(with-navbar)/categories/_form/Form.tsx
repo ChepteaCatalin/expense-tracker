@@ -2,7 +2,7 @@
 
 import TextField from '@mui/material/TextField';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { CategoryFormValues } from '../types';
+import { CategoryFormValues } from '@/types/category';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -20,6 +20,7 @@ import ColorInput from './ColorInput';
 import Button from '@mui/material/Button';
 import { createCategory } from '../actions';
 import Divider from '@mui/material/Divider';
+import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
 export default function Form() {
   const methods = useForm<CategoryFormValues>({
@@ -55,6 +56,7 @@ export default function Form() {
 
   return (
     <FormProvider {...methods}>
+      <ApiFormErrorAlert hide={hideApiError} message={actionErrors.api} />
       <Grid
         container
         direction="column"

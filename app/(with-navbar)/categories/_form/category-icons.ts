@@ -1,4 +1,4 @@
-import { CategoryIcon } from '../types';
+import { CategoryIcon } from '@/types/category';
 import SchoolIcon from '@/public/category-icons/school.svg';
 import ReceiptIcon from '@/public/category-icons/receipt.svg';
 import TravelIcon from '@/public/category-icons/travel.svg';

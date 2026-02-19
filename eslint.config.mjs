@@ -27,6 +27,7 @@ const eslintConfig = defineConfig([
         },
       ],
       'no-var': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),

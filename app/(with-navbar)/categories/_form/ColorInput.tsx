@@ -42,9 +42,7 @@ export default function ColorInput({
       >
         <ColorPicker
           value={localValue}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onChange={(color: any) => setLocalValue(color.toRgbString())}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onChangeComplete={(color: any) => onChange(color.toRgbString())}
         />
       </Popover>
