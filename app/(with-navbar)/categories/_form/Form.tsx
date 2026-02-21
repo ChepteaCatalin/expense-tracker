@@ -56,7 +56,11 @@ export default function Form() {
 
   return (
     <FormProvider {...methods}>
-      <ApiFormErrorAlert hide={hideApiError} message={actionErrors.api} />
+      <ApiFormErrorAlert
+        hide={hideApiError}
+        message={actionErrors.api}
+        sx={{ mb: 3 }}
+      />
       <Grid
         container
         direction="column"

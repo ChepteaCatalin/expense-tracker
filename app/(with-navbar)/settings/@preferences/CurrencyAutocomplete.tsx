@@ -32,7 +32,7 @@ export default function CurrencyAutocomplete({
 
   return (
     <Box>
-      <ApiFormErrorAlert message={actionErrors.api} />
+      <ApiFormErrorAlert message={actionErrors.api} sx={{ mb: 1.5 }} />
       <Autocomplete
         renderInput={params => <TextField {...params} label="Currency" />}
         value={value}

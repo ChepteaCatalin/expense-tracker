@@ -52,7 +52,11 @@ export default function Form() {
       spacing={3}
       p={1}
     >
-      <ApiFormErrorAlert hide={hideApiError} message={actionErrors.api} />
+      <ApiFormErrorAlert
+        hide={hideApiError}
+        message={actionErrors.api}
+        sx={{ mb: 1.5 }}
+      />
       <PasswordInput
         {...register('currentPassword')}
         label="Current Password"

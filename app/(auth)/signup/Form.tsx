@@ -49,7 +49,11 @@ export default function SignUpForm() {
       })}
     >
       <Grid container spacing={2}>
-        <ApiFormErrorAlert hide={hideApiError} message={actionErrors.api} />
+        <ApiFormErrorAlert
+          hide={hideApiError}
+          message={actionErrors.api}
+          sx={{ mb: 1.5 }}
+        />
         <TextField
           {...register('name')}
           label="Name"
