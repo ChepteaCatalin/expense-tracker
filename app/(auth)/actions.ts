@@ -8,33 +8,19 @@ import {
   SignUpFormValues,
 } from './types';
 import { signInSchema, signUpSchema } from './validation';
-import { extractZodError } from '@/lib/zod';
+import { getFormErrors } from '@/lib/zod';
 import { APIError } from 'better-auth/api';
 import { redirect } from 'next/navigation';
 
 export async function signUp(
   _: SignUpFormErrors,
-  { name, email, password, confirmPassword }: SignUpFormValues,
+  formValues: SignUpFormValues,
 ): Promise<SignUpFormErrors> {
-  const parseResult = signUpSchema.safeParse({
-    name,
-    email,
-    password,
-    confirmPassword,
-  });
-  const getError = extractZodError(parseResult);
-
-  if (!parseResult.success) {
-    return {
-      name: getError('name'),
-      email: getError('email'),
-      password: getError('password'),
-      confirmPassword: getError('confirmPassword'),
-    };
-  }
+  const errors = getFormErrors(signUpSchema, formValues);
+  if (errors) return errors;
 
   try {
-    await signUpEmail({ name, email, password });
+    await signUpEmail(formValues);
   } catch (error) {
     if (error instanceof APIError) {
       return { api: error.message };
@@ -46,23 +32,13 @@ export async function signUp(
 
 export async function signIn(
   _: SignInFormErrors,
-  { email, password }: SignInFormValues,
+  formValues: SignInFormValues,
 ): Promise<SignInFormErrors> {
-  const parseResult = signInSchema.safeParse({
-    email,
-    password,
-  });
-  const getError = extractZodError(parseResult);
-
-  if (!parseResult.success) {
-    return {
-      email: getError('email'),
-      password: getError('password'),
-    };
-  }
+  const errors = getFormErrors(signInSchema, formValues);
+  if (errors) return errors;
 
   try {
-    await signInEmail({ email, password });
+    await signInEmail(formValues);
   } catch (error) {
     if (error instanceof APIError) {
       return { api: error.message };

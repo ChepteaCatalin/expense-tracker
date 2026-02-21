@@ -8,7 +8,7 @@ import {
   ChangePasswordFormValues,
 } from './types';
 import { changePasswordSchema } from './validation';
-import { extractZodError } from '@/lib/zod';
+import { getFormErrors } from '@/lib/zod';
 import { APIError } from 'better-auth';
 import { currencies, updateCurrency as changeCurrency } from '@/data/currency';
 import { revalidatePath } from 'next/cache';
@@ -26,29 +26,13 @@ export async function signOut() {
 
 export async function updatePassword(
   _: ChangePasswordFormErrors,
-  {
-    currentPassword,
-    newPassword,
-    confirmNewPassword,
-  }: ChangePasswordFormValues,
+  formValues: ChangePasswordFormValues,
 ): Promise<ChangePasswordFormErrors> {
-  const parseResult = changePasswordSchema.safeParse({
-    currentPassword,
-    newPassword,
-    confirmNewPassword,
-  });
-  const getError = extractZodError(parseResult);
-
-  if (!parseResult.success) {
-    return {
-      currentPassword: getError('currentPassword'),
-      newPassword: getError('newPassword'),
-      confirmNewPassword: getError('confirmNewPassword'),
-    };
-  }
+  const errors = getFormErrors(changePasswordSchema, formValues);
+  if (errors) return errors;
 
   try {
-    await changePassword({ currentPassword, newPassword });
+    await changePassword(formValues);
     await signOut();
   } catch (error) {
     if (error instanceof APIError) return { api: error.message };

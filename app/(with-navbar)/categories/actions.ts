@@ -1,6 +1,6 @@
 'use server';
 
-import { extractZodError } from '@/lib/zod';
+import { getFormErrors } from '@/lib/zod';
 import { CategoryFormErrors, CategoryFormValues } from '@/types/category';
 import { categorySchema } from './validation';
 import { redirect } from 'next/navigation';
@@ -11,18 +11,8 @@ export async function createCategory(
   _: CategoryFormErrors,
   category: CategoryFormValues,
 ): Promise<CategoryFormErrors> {
-  const parseResult = categorySchema.safeParse(category);
-  const getError = extractZodError(parseResult);
-
-  if (!parseResult.success) {
-    return {
-      name: getError('name'),
-      type: getError('type'),
-      icon: getError('icon'),
-      strokeColor: getError('strokeColor'),
-      backgroundColor: getError('backgroundColor'),
-    };
-  }
+  const errors = getFormErrors(categorySchema, category);
+  if (errors) return errors;
 
   try {
     await createNewCategory(category);
