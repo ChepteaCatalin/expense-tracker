@@ -58,7 +58,11 @@ export default function Form() {
         sx={{ mb: 1.5 }}
       />
       <PasswordInput
-        {...register('currentPassword')}
+        {...register('currentPassword', {
+          onChange: () => {
+            if (isSubmitted) trigger('newPassword');
+          },
+        })}
         label="Current Password"
         error={!!errors.currentPassword}
         helperText={errors.currentPassword?.message}
