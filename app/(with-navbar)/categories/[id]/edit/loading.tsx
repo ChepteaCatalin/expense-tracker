@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 
-export default function LoadingSkeleton() {
+export default function EditCategoryLoading() {
   return (
     <Grid container direction="column" spacing={3}>
       <Skeleton variant="rectangular" height={40} />

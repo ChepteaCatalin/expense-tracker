@@ -1,5 +1,4 @@
 import Form from '../_components/form/Form';
-import { requireAuth } from '@/lib/auth-utils';
 import PageWrapper from '../_components/PageWrapper';
 
 export const metadata = {
@@ -8,8 +7,6 @@ export const metadata = {
 };
 
 export default async function NewCategoryPage() {
-  await requireAuth();
-
   return (
     <PageWrapper title={metadata.title} subtitle={metadata.description}>
       <Form />
