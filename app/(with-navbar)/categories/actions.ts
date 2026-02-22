@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation';
 import {
   createCategory as createNewCategory,
   updateCategory as updateExistingCategory,
+  deleteCategory as deleteExistingCategory,
 } from '@/data/category';
 import { PostgresErrorCode } from '@/types/error-codes';
 import { UnauthorizedError } from '@/utils/error';
@@ -56,5 +57,17 @@ export async function updateCategory(
 
   updateTag(`categories`);
   updateTag(`categories/${category.id}`);
+  redirect('/categories');
+}
+
+export async function deleteCategory(_: string, id: number) {
+  try {
+    await deleteExistingCategory(id);
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return 'Failed to delete category';
+  }
+
+  updateTag(`categories`);
   redirect('/categories');
 }

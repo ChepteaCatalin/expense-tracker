@@ -3,6 +3,7 @@ import { validIdParam } from '@/utils/url';
 import { notFound, redirect } from 'next/navigation';
 import Form from '../../_components/form/Form';
 import { UnauthorizedError } from '@/utils/error';
+import DeleteCategory from '../../_components/DeleteCategory';
 
 export default async function ManageCategoryPage({
   params,
@@ -20,5 +21,10 @@ export default async function ManageCategoryPage({
 
   if (!category) notFound();
 
-  return <Form category={category} />;
+  return (
+    <>
+      <Form category={category} />
+      <DeleteCategory id={category.id} name={category.name} />
+    </>
+  );
 }

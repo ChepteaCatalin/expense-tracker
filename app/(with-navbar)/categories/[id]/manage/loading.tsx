@@ -18,6 +18,7 @@ export default function ManageCategoryLoading() {
       <Skeleton variant="rectangular" height={44} />
       <Divider />
       <Skeleton variant="rectangular" height={40} />
+      <Skeleton variant="rectangular" height={40} />
     </Grid>
   );
 }

@@ -56,6 +56,16 @@ export async function updateCategory(
   if (result[0]) return categoryFromDb(result[0]);
 }
 
+export async function deleteCategory(categoryId: number) {
+  const session = await getSession();
+  if (!session) throw new UnauthorizedError();
+
+  await sql`
+    DELETE FROM category
+    WHERE id = ${categoryId} AND user_id = ${session.user.id}
+  `;
+}
+
 export async function getAllCategories() {
   const session = await getSession();
   if (!session) throw new UnauthorizedError();
