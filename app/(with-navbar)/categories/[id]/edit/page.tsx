@@ -20,5 +20,5 @@ export default async function EditCategoryPage({
 
   if (!category) notFound();
 
-  return <Form defaultValues={category} />;
+  return <Form category={category} />;
 }

@@ -35,6 +35,27 @@ export async function createCategory(
   if (result[0]) return categoryFromDb(result[0]);
 }
 
+export async function updateCategory(
+  category: Category,
+): Promise<Category | undefined> {
+  const session = await getSession();
+  if (!session) throw new UnauthorizedError();
+
+  const result = await sql`
+    UPDATE category 
+    SET 
+      name = ${category.name},
+      icon = ${category.icon},
+      stroke_color = ${category.strokeColor},
+      background_color = ${category.backgroundColor},
+      updated_at = NOW()
+    WHERE id = ${category.id} AND user_id = ${session.user.id}
+    RETURNING *
+  `;
+
+  if (result[0]) return categoryFromDb(result[0]);
+}
+
 export async function getAllCategories() {
   const session = await getSession();
   if (!session) throw new UnauthorizedError();

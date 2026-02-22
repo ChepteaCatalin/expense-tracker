@@ -2,7 +2,7 @@
 
 import TextField from '@mui/material/TextField';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { CategoryFormValues } from '@/types/category';
+import { Category, CategoryFormValues } from '@/types/category';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -18,23 +18,29 @@ import { categoryIcons } from './category-icons';
 import Icon from './Icon';
 import ColorInput from './ColorInput';
 import Button from '@mui/material/Button';
-import { createCategory } from '../../actions';
+import { createCategory, updateCategory } from '../../actions';
 import Divider from '@mui/material/Divider';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
-export default function Form({
-  defaultValues,
-}: {
-  defaultValues?: CategoryFormValues;
-}) {
+export default function Form({ category }: { category?: Category }) {
+  const isEditMode = !!category;
+
   const methods = useForm<CategoryFormValues>({
-    defaultValues: defaultValues || {
-      name: '',
-      type: 'expense',
-      icon: '/category-icons/other.svg',
-      strokeColor: 'rgb(227, 227, 227)',
-      backgroundColor: 'rgb(115, 115, 115)',
-    },
+    defaultValues: isEditMode
+      ? {
+          name: category.name,
+          type: category.type,
+          icon: category.icon,
+          strokeColor: category.strokeColor,
+          backgroundColor: category.backgroundColor,
+        }
+      : {
+          name: '',
+          type: 'expense',
+          icon: '/category-icons/other.svg',
+          strokeColor: 'rgb(227, 227, 227)',
+          backgroundColor: 'rgb(115, 115, 115)',
+        },
     resolver: zodResolver(categorySchema),
   });
   const {
@@ -45,10 +51,10 @@ export default function Form({
     formState: { errors },
   } = methods;
 
-  const [actionErrors, createCategoryAction, isPending] = useActionState(
-    createCategory,
-    {},
-  );
+  const [createCategoryErrors, createCategoryAction, isPendingCreate] =
+    useActionState(createCategory, {});
+  const [updateCategoryErrors, updateCategoryAction, isPendingUpdate] =
+    useActionState(updateCategory, {});
 
   const [hideApiError, setHideApiError] = useState(false);
   subscribe({
@@ -58,13 +64,11 @@ export default function Form({
 
   const radioGroupId = useId();
 
-  const isEditMode = !!defaultValues;
-
   return (
     <FormProvider {...methods}>
       <ApiFormErrorAlert
         hide={hideApiError}
-        message={actionErrors.api}
+        message={createCategoryErrors.api || updateCategoryErrors.api}
         sx={{ mb: 3 }}
       />
       <Grid
@@ -76,7 +80,8 @@ export default function Form({
         onSubmit={handleSubmit(data => {
           startTransition(() => {
             setHideApiError(false);
-            createCategoryAction(data);
+            if (isEditMode) updateCategoryAction({ ...category, ...data });
+            else createCategoryAction(data);
           });
         })}
       >
@@ -120,13 +125,13 @@ export default function Form({
                   control={<Radio />}
                   label="Expense"
                   value="expense"
-                  disabled={isEditMode && defaultValues.type === 'income'}
+                  disabled={category?.type === 'income'}
                 />
                 <FormControlLabel
                   control={<Radio />}
                   label="Income"
                   value="income"
-                  disabled={isEditMode && defaultValues.type === 'expense'}
+                  disabled={category?.type === 'expense'}
                 />
               </RadioGroup>
             </FormControl>
@@ -172,8 +177,11 @@ export default function Form({
         <Divider />
         <Button
           type="submit"
-          disabled={!hideApiError && !!actionErrors.api}
-          loading={isPending}
+          disabled={
+            !hideApiError &&
+            (!!createCategoryErrors.api || !!updateCategoryErrors.api)
+          }
+          loading={isPendingCreate || isPendingUpdate}
           loadingPosition="start"
           variant="contained"
           fullWidth
