@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { createCategory as createNewCategory } from '@/data/category';
 import { PostgresErrorCode } from '@/types/error-codes';
 import { UnauthorizedError } from '@/utils/error';
+import { revalidateTag } from 'next/cache';
 
 export async function createCategory(
   _: CategoryFormErrors,
@@ -25,7 +26,6 @@ export async function createCategory(
     return { api: 'Failed to create category' };
   }
 
-  //TODO: update/revalidate path?
-  //TODO: define the /categories page
+  revalidateTag('categories', 'max');
   redirect('/categories');
 }
