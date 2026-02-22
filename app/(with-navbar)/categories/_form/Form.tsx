@@ -22,9 +22,13 @@ import { createCategory } from '../actions';
 import Divider from '@mui/material/Divider';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
-export default function Form() {
+export default function Form({
+  defaultValues,
+}: {
+  defaultValues?: CategoryFormValues;
+}) {
   const methods = useForm<CategoryFormValues>({
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: '',
       type: 'expense',
       icon: '/category-icons/other.svg',

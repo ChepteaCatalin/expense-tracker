@@ -24,5 +24,6 @@ export async function createCategory(
   }
 
   //TODO: update/revalidate path?
+  //TODO: define the /categories page
   redirect('/categories');
 }
