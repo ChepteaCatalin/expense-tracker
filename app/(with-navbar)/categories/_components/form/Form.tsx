@@ -89,7 +89,9 @@ export default function Form({
           spellCheck="false"
           error={!!errors.name}
           helperText={errors.name?.message}
-          slotProps={{ inputLabel: { shrink: isEditMode } }}
+          slotProps={{
+            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+          }}
         />
         <Controller
           control={control}

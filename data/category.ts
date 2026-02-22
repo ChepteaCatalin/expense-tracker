@@ -35,9 +35,40 @@ export async function createCategory(
   if (result[0]) return categoryFromDb(result[0]);
 }
 
-export async function getCategoryById(
-  categoryId: number,
-): Promise<Category | undefined> {
+export async function getAllCategories() {
+  const session = await getSession();
+  if (!session) throw new UnauthorizedError();
+
+  return queryAllCategories(session.user.id);
+}
+
+const queryAllCategories = cache(
+  async (userId: string): Promise<Category[] | Array<never>> => {
+    'use cache';
+    cacheLife('weeks');
+    cacheTag(`categories`);
+
+    const result = await sql`
+    SELECT 
+      id,
+      name,
+      type,
+      icon,
+      stroke_color,
+      background_color,
+      user_id,
+      created_at,
+      updated_at
+    FROM category
+    WHERE user_id = ${userId}
+  `;
+
+    if (!result?.length) return [];
+    return result.map(categoryFromDb);
+  },
+);
+
+export async function getCategoryById(categoryId: number) {
   const session = await getSession();
   if (!session) throw new UnauthorizedError();
 
