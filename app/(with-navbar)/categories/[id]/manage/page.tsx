@@ -4,9 +4,9 @@ import { notFound, redirect } from 'next/navigation';
 import Form from '../../_components/form/Form';
 import { UnauthorizedError } from '@/utils/error';
 
-export default async function EditCategoryPage({
+export default async function ManageCategoryPage({
   params,
-}: PageProps<'/categories/[id]/edit'>) {
+}: PageProps<'/categories/[id]/manage'>) {
   const { id } = await params;
 
   if (!validIdParam(id)) notFound();

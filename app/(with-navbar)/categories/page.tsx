@@ -20,10 +20,10 @@ export default async function CategoriesPage() {
         {categories.map(category => (
           <Link
             key={category.id}
-            href={`/categories/${category.id}/edit`}
+            href={`/categories/${category.id}/manage`}
             style={{ display: 'block' }}
           >
-            {`Edit category "${category.name}"`}
+            {`Manage category "${category.name}"`}
           </Link>
         ))}
       </div>

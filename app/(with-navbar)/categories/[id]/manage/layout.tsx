@@ -1,11 +1,11 @@
 import PageWrapper from '../../_components/PageWrapper';
 
 export const metadata = {
-  title: 'Edit Category',
-  description: 'Edit an expense or income category',
+  title: 'Manage Category',
+  description: 'Manage an expense or income category',
 };
 
-export default function EditCategoryLayout({
+export default function ManageCategoryLayout({
   children,
 }: {
   children: React.ReactNode;
