@@ -95,8 +95,18 @@ export default function Form({
           control={control}
           name="type"
           render={({ field: { onChange, onBlur, value, ref } }) => (
-            <FormControl onBlur={onBlur} ref={ref} error={!!errors.type}>
-              <FormLabel id={radioGroupId}>Type</FormLabel>
+            <FormControl
+              onBlur={onBlur}
+              ref={ref}
+              error={!!errors.type}
+              disabled={isEditMode}
+            >
+              <FormLabel
+                id={radioGroupId}
+                sx={{ '&.Mui-disabled': { color: 'text.secondary' } }}
+              >
+                Type
+              </FormLabel>
               <RadioGroup
                 name="type"
                 value={value}
@@ -108,11 +118,13 @@ export default function Form({
                   control={<Radio />}
                   label="Expense"
                   value="expense"
+                  disabled={isEditMode && defaultValues.type === 'income'}
                 />
                 <FormControlLabel
                   control={<Radio />}
                   label="Income"
                   value="income"
+                  disabled={isEditMode && defaultValues.type === 'expense'}
                 />
               </RadioGroup>
             </FormControl>
@@ -164,7 +176,7 @@ export default function Form({
           variant="contained"
           fullWidth
         >
-          {isEditMode ? 'Update category' : 'Create category'}
+          {isEditMode ? 'Edit category' : 'Create category'}
         </Button>
       </Grid>
     </FormProvider>
