@@ -11,14 +11,14 @@ import Radio from '@mui/material/Radio';
 import { startTransition, useActionState, useId, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { categorySchema } from '../validation';
+import { categorySchema } from '../../validation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { categoryIcons } from './category-icons';
 import Icon from './Icon';
 import ColorInput from './ColorInput';
 import Button from '@mui/material/Button';
-import { createCategory } from '../actions';
+import { createCategory } from '../../actions';
 import Divider from '@mui/material/Divider';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
