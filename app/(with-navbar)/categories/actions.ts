@@ -6,6 +6,7 @@ import { categorySchema } from './validation';
 import { redirect } from 'next/navigation';
 import { createCategory as createNewCategory } from '@/data/category';
 import { PostgresErrorCode } from '@/types/error-codes';
+import { UnauthorizedError } from '@/utils/error';
 
 export async function createCategory(
   _: CategoryFormErrors,
@@ -17,6 +18,7 @@ export async function createCategory(
   try {
     await createNewCategory(category);
   } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
     if (err.code === PostgresErrorCode.UniqueViolation) {
       return { api: 'A category with this name already exists' };
     }

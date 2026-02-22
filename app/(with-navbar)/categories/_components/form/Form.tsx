@@ -58,6 +58,8 @@ export default function Form({
 
   const radioGroupId = useId();
 
+  const isEditMode = !!defaultValues;
+
   return (
     <FormProvider {...methods}>
       <ApiFormErrorAlert
@@ -87,6 +89,7 @@ export default function Form({
           spellCheck="false"
           error={!!errors.name}
           helperText={errors.name?.message}
+          slotProps={{ inputLabel: { shrink: isEditMode } }}
         />
         <Controller
           control={control}
@@ -161,7 +164,7 @@ export default function Form({
           variant="contained"
           fullWidth
         >
-          Create category
+          {isEditMode ? 'Update category' : 'Create category'}
         </Button>
       </Grid>
     </FormProvider>

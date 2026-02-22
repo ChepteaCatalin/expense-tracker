@@ -1,17 +1,24 @@
 import { getCategoryById } from '@/data/category';
 import { validIdParam } from '@/utils/url';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Form from '../../_components/form/Form';
+import { UnauthorizedError } from '@/utils/error';
 
 export default async function EditCategoryPage({
   params,
 }: PageProps<'/categories/[id]/edit'>) {
   const { id } = await params;
 
-  //TODO: define the /categories page
-  if (!validIdParam(id)) return redirect('/categories');
+  if (!validIdParam(id)) notFound();
 
-  const category = await getCategoryById(+id);
+  try {
+    var category = await getCategoryById(+id);
+  } catch (err) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    notFound();
+  }
+
+  if (!category) notFound();
 
   return <Form defaultValues={category} />;
 }

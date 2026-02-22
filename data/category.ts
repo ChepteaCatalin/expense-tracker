@@ -4,14 +4,14 @@ import { getSession } from './auth';
 import { sql } from '@/lib/neon';
 import { Category, CategoryFormValues } from '@/types/category';
 import { cache } from 'react';
-import { requireAuth } from '@/lib/auth-utils';
 import { cacheLife, cacheTag } from 'next/cache';
+import { UnauthorizedError } from '@/utils/error';
 
 export async function createCategory(
   category: CategoryFormValues,
 ): Promise<Category | undefined> {
   const session = await getSession();
-  if (!session) return;
+  if (!session) throw new UnauthorizedError();
 
   const result = await sql`
     INSERT INTO category (
@@ -38,9 +38,10 @@ export async function createCategory(
 export async function getCategoryById(
   categoryId: number,
 ): Promise<Category | undefined> {
-  const { user } = await requireAuth();
+  const session = await getSession();
+  if (!session) throw new UnauthorizedError();
 
-  return queryCategoryById(user.id, categoryId);
+  return queryCategoryById(session.user.id, categoryId);
 }
 
 const queryCategoryById = cache(
