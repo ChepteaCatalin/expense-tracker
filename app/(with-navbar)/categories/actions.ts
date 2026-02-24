@@ -15,7 +15,6 @@ import {
 } from '@/data/category';
 import { PostgresErrorCode } from '@/types/error-codes';
 import { UnauthorizedError } from '@/utils/error';
-import { revalidateTag, updateTag } from 'next/cache';
 
 export async function createCategory(
   _: CategoryFormErrors,
@@ -34,7 +33,6 @@ export async function createCategory(
     return { api: 'Failed to create category' };
   }
 
-  revalidateTag('categories', 'max');
   redirect('/categories');
 }
 
@@ -55,8 +53,6 @@ export async function updateCategory(
     return { api: 'Failed to update category' };
   }
 
-  updateTag(`categories`);
-  updateTag(`categories/${category.id}`);
   redirect('/categories');
 }
 
@@ -68,6 +64,5 @@ export async function deleteCategory(_: string, id: number) {
     return 'Failed to delete category';
   }
 
-  updateTag(`categories`);
   redirect('/categories');
 }

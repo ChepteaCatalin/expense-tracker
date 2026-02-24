@@ -4,12 +4,12 @@ import { getSession } from './auth';
 import { sql } from '@/lib/neon';
 import { Category, CategoryFormValues } from '@/types/category';
 import { cache } from 'react';
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { UnauthorizedError } from '@/utils/error';
 
 export async function createCategory(
   category: CategoryFormValues,
-): Promise<Category | undefined> {
+): Promise<Category> {
   const session = await getSession();
   if (!session) throw new UnauthorizedError();
 
@@ -32,12 +32,14 @@ export async function createCategory(
     RETURNING *
   `;
 
-  if (result[0]) return categoryFromDb(result[0]);
+  if (!result[0]) throw new Error('Failed to create category');
+
+  updateTag('categories');
+
+  return categoryFromDb(result[0]);
 }
 
-export async function updateCategory(
-  category: Category,
-): Promise<Category | undefined> {
+export async function updateCategory(category: Category): Promise<Category> {
   const session = await getSession();
   if (!session) throw new UnauthorizedError();
 
@@ -53,17 +55,28 @@ export async function updateCategory(
     RETURNING *
   `;
 
-  if (result[0]) return categoryFromDb(result[0]);
+  if (!result[0]) throw new Error('Category not found or update failed');
+
+  updateTag(`categories`);
+  updateTag(`categories/${category.id}`);
+
+  return categoryFromDb(result[0]);
 }
 
 export async function deleteCategory(categoryId: number) {
   const session = await getSession();
   if (!session) throw new UnauthorizedError();
 
-  await sql`
+  const result = await sql`
     DELETE FROM category
     WHERE id = ${categoryId} AND user_id = ${session.user.id}
+    RETURNING id
   `;
+
+  if (!result[0]) throw new Error('Category not found or delete failed');
+
+  updateTag(`categories`);
+  updateTag(`categories/${categoryId}`);
 }
 
 export async function getAllCategories() {
