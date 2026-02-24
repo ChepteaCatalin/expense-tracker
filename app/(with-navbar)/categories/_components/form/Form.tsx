@@ -26,21 +26,7 @@ export default function Form({ category }: { category?: Category }) {
   const isEditMode = !!category;
 
   const methods = useForm<CategoryFormValues>({
-    defaultValues: isEditMode
-      ? {
-          name: category.name,
-          type: category.type,
-          icon: category.icon,
-          strokeColor: category.strokeColor,
-          backgroundColor: category.backgroundColor,
-        }
-      : {
-          name: '',
-          type: 'expense',
-          icon: '/category-icons/other.svg',
-          strokeColor: 'rgb(227, 227, 227)',
-          backgroundColor: 'rgb(115, 115, 115)',
-        },
+    defaultValues: getDefaultValues(category),
     resolver: zodResolver(categorySchema),
   });
   const {
@@ -191,4 +177,23 @@ export default function Form({ category }: { category?: Category }) {
       </Grid>
     </FormProvider>
   );
+}
+
+function getDefaultValues(category?: Category): CategoryFormValues {
+  if (category)
+    return {
+      name: category.name,
+      type: category.type,
+      icon: category.icon,
+      strokeColor: category.strokeColor,
+      backgroundColor: category.backgroundColor,
+    };
+
+  return {
+    name: '',
+    type: 'expense',
+    icon: '/category-icons/other.svg',
+    strokeColor: 'rgb(227, 227, 227)',
+    backgroundColor: 'rgb(115, 115, 115)',
+  };
 }

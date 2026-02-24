@@ -4,6 +4,12 @@ import { notFound, redirect } from 'next/navigation';
 import Form from '../../_components/form/Form';
 import { UnauthorizedError } from '@/utils/error';
 import DeleteCategory from '../../_components/DeleteCategory';
+import PageWrapper from '../../_components/PageWrapper';
+
+export const metadata = {
+  title: 'Manage Category',
+  description: 'Manage an expense or income category',
+};
 
 export default async function ManageCategoryPage({
   params,
@@ -22,9 +28,9 @@ export default async function ManageCategoryPage({
   if (!category) notFound();
 
   return (
-    <>
+    <PageWrapper title={metadata.title} subtitle={metadata.description}>
       <Form category={category} />
       <DeleteCategory id={category.id} name={category.name} />
-    </>
+    </PageWrapper>
   );
 }
