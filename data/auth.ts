@@ -4,9 +4,16 @@ import { cache } from 'react';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
-export const getSession = cache(async () => {
-  return auth.api.getSession({ headers: await headers() });
-});
+export const getSession = cache(async () =>
+  auth.api.getSession({ headers: await headers() }),
+);
+
+export const getSessionWithoutCache = cache(async () =>
+  auth.api.getSession({
+    query: { disableCookieCache: true },
+    headers: await headers(),
+  }),
+);
 
 export async function signInEmail({
   email,

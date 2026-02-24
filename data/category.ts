@@ -1,147 +1,136 @@
 import 'server-only';
 
-import { getSession } from './auth';
 import { sql } from '@/lib/neon';
 import { Category, CategoryFormValues } from '@/types/category';
 import { cache } from 'react';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
-import { UnauthorizedError } from '@/utils/error';
+import { authGuard } from '@/lib/auth-utils';
 
-export async function createCategory(
-  category: CategoryFormValues,
-): Promise<Category> {
-  const session = await getSession();
-  if (!session) throw new UnauthorizedError();
+export const createCategory = authGuard(
+  session =>
+    async (category: CategoryFormValues): Promise<Category> => {
+      const result = await sql`
+        INSERT INTO category (
+          name,
+          type,
+          icon,
+          stroke_color,
+          background_color,
+          user_id
+        ) VALUES (
+          ${category.name},
+          ${category.type},
+          ${category.icon},
+          ${category.strokeColor},
+          ${category.backgroundColor},
+          ${session.user.id}
+        )
+        RETURNING *
+      `;
 
-  const result = await sql`
-    INSERT INTO category (
-      name,
-      type,
-      icon,
-      stroke_color,
-      background_color,
-      user_id
-    ) VALUES (
-      ${category.name},
-      ${category.type},
-      ${category.icon},
-      ${category.strokeColor},
-      ${category.backgroundColor},
-      ${session.user.id}
-    )
-    RETURNING *
-  `;
+      if (!result[0]) throw new Error('Failed to create category');
 
-  if (!result[0]) throw new Error('Failed to create category');
+      updateTag('categories');
 
-  updateTag('categories');
+      return categoryFromDb(result[0]);
+    },
+);
 
-  return categoryFromDb(result[0]);
-}
+export const updateCategory = authGuard(
+  session =>
+    async (category: Category): Promise<Category> => {
+      const result = await sql`
+        UPDATE category 
+        SET 
+          name = ${category.name},
+          icon = ${category.icon},
+          stroke_color = ${category.strokeColor},
+          background_color = ${category.backgroundColor},
+          updated_at = NOW()
+        WHERE id = ${category.id} AND user_id = ${session.user.id}
+        RETURNING *
+      `;
 
-export async function updateCategory(category: Category): Promise<Category> {
-  const session = await getSession();
-  if (!session) throw new UnauthorizedError();
+      if (!result[0]) throw new Error('Category not found or update failed');
 
-  const result = await sql`
-    UPDATE category 
-    SET 
-      name = ${category.name},
-      icon = ${category.icon},
-      stroke_color = ${category.strokeColor},
-      background_color = ${category.backgroundColor},
-      updated_at = NOW()
-    WHERE id = ${category.id} AND user_id = ${session.user.id}
-    RETURNING *
-  `;
+      updateTag(`categories`);
+      updateTag(`categories/${category.id}`);
 
-  if (!result[0]) throw new Error('Category not found or update failed');
+      return categoryFromDb(result[0]);
+    },
+);
 
-  updateTag(`categories`);
-  updateTag(`categories/${category.id}`);
+export const deleteCategory = authGuard(
+  session => async (categoryId: number) => {
+    const result = await sql`
+      DELETE FROM category
+      WHERE id = ${categoryId} AND user_id = ${session.user.id}
+      RETURNING id
+    `;
 
-  return categoryFromDb(result[0]);
-}
+    if (!result[0]) throw new Error('Category not found or delete failed');
 
-export async function deleteCategory(categoryId: number) {
-  const session = await getSession();
-  if (!session) throw new UnauthorizedError();
+    updateTag(`categories`);
+    updateTag(`categories/${categoryId}`);
+  },
+);
 
-  const result = await sql`
-    DELETE FROM category
-    WHERE id = ${categoryId} AND user_id = ${session.user.id}
-    RETURNING id
-  `;
-
-  if (!result[0]) throw new Error('Category not found or delete failed');
-
-  updateTag(`categories`);
-  updateTag(`categories/${categoryId}`);
-}
-
-export async function getAllCategories() {
-  const session = await getSession();
-  if (!session) throw new UnauthorizedError();
-
-  return queryAllCategories(session.user.id);
-}
-
-const queryAllCategories = cache(
-  async (userId: string): Promise<Category[] | Array<never>> => {
+export const getAllCategories = authGuard(session =>
+  cache(async (userId: string): Promise<Category[] | Array<never>> => {
     'use cache';
     cacheLife('weeks');
     cacheTag(`categories`);
 
     const result = await sql`
-    SELECT 
-      id,
-      name,
-      type,
-      icon,
-      stroke_color,
-      background_color,
-      user_id,
-      created_at,
-      updated_at
-    FROM category
-    WHERE user_id = ${userId}
-  `;
+      SELECT 
+        id,
+        name,
+        type,
+        icon,
+        stroke_color,
+        background_color,
+        user_id,
+        created_at,
+        updated_at
+      FROM category
+      WHERE user_id = ${userId}
+    `;
 
     if (!result?.length) return [];
     return result.map(categoryFromDb);
-  },
+  })(session.user.id),
 );
 
-export async function getCategoryById(categoryId: number) {
-  const session = await getSession();
-  if (!session) throw new UnauthorizedError();
+export const getCategoryById = authGuard(
+  session =>
+    async (categoryId: number): Promise<Category | undefined> =>
+      cache(
+        async (
+          userId: string,
+          categoryId: number,
+        ): Promise<Category | undefined> => {
+          'use cache';
+          cacheLife('weeks');
+          cacheTag(`categories/${categoryId}`);
 
-  return queryCategoryById(session.user.id, categoryId);
-}
+          const result = await sql`
+            SELECT 
+              id,
+              name,
+              type,
+              icon,
+              stroke_color,
+              background_color,
+              user_id,
+              created_at,
+              updated_at
+            FROM category
+            WHERE id = ${categoryId} AND user_id = ${userId}
+          `;
 
-const queryCategoryById = cache(
-  async (userId: string, categoryId: number): Promise<Category | undefined> => {
-    'use cache';
-    cacheLife('weeks');
-    cacheTag(`categories/${categoryId}`);
-
-    const result = await sql`
-    SELECT 
-      id,
-      name,
-      type,
-      icon,
-      stroke_color,
-      background_color,
-      user_id,
-      created_at,
-      updated_at
-    FROM category
-    WHERE id = ${categoryId} AND user_id = ${userId}
-  `;
-
-    if (result[0]) return categoryFromDb(result[0]);
-  },
+          if (result[0]) return categoryFromDb(result[0]);
+        },
+      )(session.user.id, categoryId),
 );
 
 function categoryFromDb(dbResult: Record<string, any>): Category {

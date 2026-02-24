@@ -12,6 +12,7 @@ import { getFormErrors } from '@/lib/zod';
 import { APIError } from 'better-auth';
 import { currencies, updateCurrency as changeCurrency } from '@/data/currency';
 import { revalidatePath } from 'next/cache';
+import { UnauthorizedError } from '@/utils/error';
 
 export async function signOut() {
   try {
@@ -48,7 +49,8 @@ export async function updateCurrency(_: ChangeCurrencyError, currency: string) {
 
   try {
     await changeCurrency(currency);
-  } catch {
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
     return { api: 'Failed to update currency' };
   }
 

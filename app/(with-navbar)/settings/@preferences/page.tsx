@@ -1,10 +1,10 @@
 import { currencies } from '@/data/currency';
 import Section from '../_components/Section';
 import CurrencyAutocomplete from './CurrencyAutocomplete';
-import { requireAuth } from '@/lib/auth-utils';
+import { requireAuthWithoutCache } from '@/lib/auth-utils';
 
 export default async function PreferencesPage() {
-  const { user } = await requireAuth();
+  const { user } = await requireAuthWithoutCache();
 
   return (
     <Section title="Preferences">

@@ -1,9 +1,9 @@
-import { requireAuth } from '@/lib/auth-utils';
+import { requireAuthWithoutCache } from '@/lib/auth-utils';
 import Section from '../_components/Section';
 import Form from './Form';
 
 export default async function PasswordPage() {
-  const { user } = await requireAuth();
+  const { user } = await requireAuthWithoutCache();
 
   if (user.emailVerified) return null;
 
