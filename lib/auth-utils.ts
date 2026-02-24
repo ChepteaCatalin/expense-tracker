@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { getSession, getSessionWithoutCache } from '@/data/auth';
+import { getSession } from '@/data/auth';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { UnauthorizedError } from '@/utils/error';
@@ -8,14 +8,6 @@ import { Session } from './auth';
 
 export const requireAuth = cache(async () => {
   const session = await getSession();
-
-  if (!session) redirect('/signin');
-
-  return session;
-});
-
-export const requireAuthWithoutCache = cache(async () => {
-  const session = await getSessionWithoutCache();
 
   if (!session) redirect('/signin');
 

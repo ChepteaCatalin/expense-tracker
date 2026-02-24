@@ -1,4 +1,4 @@
-import { requireAuthWithoutCache } from '@/lib/auth-utils';
+import { requireAuth } from '@/lib/auth-utils';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
@@ -7,7 +7,7 @@ import SignOutBtn from './SignOutBtn';
 import Section from '../_components/Section';
 
 export default async function AccountPage() {
-  const { user } = await requireAuthWithoutCache();
+  const { user } = await requireAuth();
 
   return (
     <Section title="Account">
