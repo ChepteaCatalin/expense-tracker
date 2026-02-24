@@ -5,11 +5,9 @@ import Form from '../../_components/form/Form';
 import { UnauthorizedError } from '@/utils/error';
 import DeleteCategory from '../../_components/DeleteCategory';
 import PageWrapper from '../../_components/PageWrapper';
+import { metadata } from './constants';
 
-export const metadata = {
-  title: 'Manage Category',
-  description: 'Manage an expense or income category',
-};
+export { metadata };
 
 export default async function ManageCategoryPage({
   params,
