@@ -1,4 +1,4 @@
-import { ErrorCode } from '@/types/error-codes';
+import { ErrorCode, PostgresErrorCode } from '@/types/error-codes';
 
 export class UnauthorizedError extends Error {
   public readonly statusCode = 401;
@@ -12,4 +12,8 @@ export class UnauthorizedError extends Error {
       Error.captureStackTrace(this, UnauthorizedError);
     }
   }
+}
+
+export function isUniqueViolationError(error: any): boolean {
+  return error?.code === PostgresErrorCode.UniqueViolation;
 }

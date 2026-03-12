@@ -13,8 +13,7 @@ import {
   updateCategory as updateExistingCategory,
   deleteCategory as deleteExistingCategory,
 } from '@/data/category';
-import { PostgresErrorCode } from '@/types/error-codes';
-import { UnauthorizedError } from '@/utils/error';
+import { isUniqueViolationError, UnauthorizedError } from '@/utils/error';
 
 export async function createCategory(
   _: CategoryFormErrors,
@@ -27,7 +26,7 @@ export async function createCategory(
     await createNewCategory(category);
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
-    if (err.code === PostgresErrorCode.UniqueViolation) {
+    if (isUniqueViolationError(err)) {
       return { api: 'A category with this name already exists' };
     }
     return { api: 'Failed to create category' };
@@ -47,7 +46,7 @@ export async function updateCategory(
     await updateExistingCategory(category);
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
-    if (err.code === PostgresErrorCode.UniqueViolation) {
+    if (isUniqueViolationError(err)) {
       return { api: 'A category with this name already exists' };
     }
     return { api: 'Failed to update category' };
