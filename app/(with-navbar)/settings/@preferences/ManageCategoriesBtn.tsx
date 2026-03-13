@@ -2,7 +2,9 @@
 
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
-import Category from '@mui/icons-material/Category';
+import { CategoryType } from '@/types/category';
+
+const DEFAULT_CATEGORY_TYPE: CategoryType = 'expense';
 
 export default function ManageCategoriesBtn() {
   const router = useRouter();
@@ -10,8 +12,7 @@ export default function ManageCategoriesBtn() {
   return (
     <Button
       variant="outlined"
-      startIcon={<Category />}
-      onClick={() => router.push('/categories/expense')}
+      onClick={() => router.push(`/categories/type/${DEFAULT_CATEGORY_TYPE}`)}
     >
       Manage Expense and Income Categories
     </Button>

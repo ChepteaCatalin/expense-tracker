@@ -30,7 +30,7 @@ import BankIcon from '@/public/category-icons/bank.svg';
 import InvestIcon from '@/public/category-icons/invest.svg';
 import DebtIcon from '@/public/category-icons/debt.svg';
 
-export const categoryIcons: CategoryIcon[] = [
+export const categoryIcons = [
   { src: '/category-icons/other.svg', Component: OtherIcon },
   { src: '/category-icons/school.svg', Component: SchoolIcon },
   { src: '/category-icons/receipt.svg', Component: ReceiptIcon },
@@ -61,4 +61,4 @@ export const categoryIcons: CategoryIcon[] = [
   { src: '/category-icons/bank.svg', Component: BankIcon },
   { src: '/category-icons/invest.svg', Component: InvestIcon },
   { src: '/category-icons/debt.svg', Component: DebtIcon },
-];
+] as const satisfies ReadonlyArray<CategoryIcon>;

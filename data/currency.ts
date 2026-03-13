@@ -1372,4 +1372,4 @@ export const currencies = [
     currency: 'Zimbabwe Gold',
     countries: ['Zimbabwe'],
   },
-];
+] as const;
