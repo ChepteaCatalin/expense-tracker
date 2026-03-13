@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { sql } from '@/lib/neon';
-import { Category, CategoryFormValues } from '@/types/category';
+import { Category, CategoryFormValues, CategoryType } from '@/types/category';
 import { cache } from 'react';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
@@ -99,6 +99,35 @@ export const getAllCategories = authGuard(session =>
     if (!result?.length) return [];
     return result.map(categoryFromDb);
   })(session.user.id),
+);
+
+export const getAllCategoriesByType = authGuard(session =>
+  cache(
+    (userId: string) =>
+      async (type: CategoryType): Promise<Category[] | Array<never>> => {
+        'use cache';
+        cacheLife('weeks');
+        cacheTag(`categories`);
+
+        const result = await sql`
+          SELECT 
+            id,
+            name,
+            type,
+            icon,
+            stroke_color,
+            background_color,
+            user_id,
+            created_at,
+            updated_at
+          FROM category
+          WHERE user_id = ${userId} AND type = ${type}
+        `;
+
+        if (!result?.length) return [];
+        return result.map(categoryFromDb);
+      },
+  )(session.user.id),
 );
 
 export const getCategoryById = authGuard(

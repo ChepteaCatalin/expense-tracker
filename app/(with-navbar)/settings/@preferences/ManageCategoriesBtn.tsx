@@ -11,7 +11,7 @@ export default function ManageCategoriesBtn() {
     <Button
       variant="outlined"
       startIcon={<Category />}
-      onClick={() => router.push('/categories')}
+      onClick={() => router.push('/categories/expense')}
     >
       Manage Expense and Income Categories
     </Button>

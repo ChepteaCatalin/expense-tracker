@@ -1,4 +1,4 @@
-import { getAllCategories } from '@/data/category';
+import { getAllCategoriesByType } from '@/data/category';
 import { UnauthorizedError } from '@/utils/error';
 import { notFound, redirect } from 'next/navigation';
 import PageWrapper from './_components/PageWrapper';
@@ -11,7 +11,7 @@ export const metadata = {
 
 export default async function CategoriesPage() {
   try {
-    var categories = await getAllCategories();
+    var categories = await getAllCategoriesByType('income');
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     notFound();
