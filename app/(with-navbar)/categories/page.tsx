@@ -1,7 +1,13 @@
 import { getAllCategories } from '@/data/category';
 import { UnauthorizedError } from '@/utils/error';
-import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+import PageWrapper from './_components/PageWrapper';
+import Typography from '@mui/material/Typography';
+
+export const metadata = {
+  title: 'Categories',
+  description: 'Manage your expense and income categories',
+};
 
 export default async function CategoriesPage() {
   try {
@@ -12,21 +18,8 @@ export default async function CategoriesPage() {
   }
 
   return (
-    <div>
-      <div>
-        <Link href="/categories/new">Create new category</Link>
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        {categories.map(category => (
-          <Link
-            key={category.id}
-            href={`/categories/${category.id}/manage`}
-            style={{ display: 'block' }}
-          >
-            {`Manage category "${category.name}"`}
-          </Link>
-        ))}
-      </div>
-    </div>
+    <PageWrapper title={metadata.title} subtitle={metadata.description}>
+      {!categories?.length && <Typography>No categories added yet.</Typography>}
+    </PageWrapper>
   );
 }
