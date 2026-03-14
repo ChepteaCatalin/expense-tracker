@@ -2,13 +2,15 @@ import { getAllCategoriesByType } from '@/data/category';
 import { CategoryType } from '@/types/category';
 import { UnauthorizedError } from '@/utils/error';
 import { notFound, redirect } from 'next/navigation';
-import CategoryIconButton from './_CategoryIconButton/CategoryIconButton';
-import { categoryIcons } from '@/utils/category-icons';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
+import Box from '@mui/material/Box';
+import { categoryIcons } from '@/utils/category-icons';
+import styles from './Icon.module.css';
+import Typography from '@mui/material/Typography';
 
 export default async function CategoriesByTypePage({
   params,
@@ -25,23 +27,64 @@ export default async function CategoriesByTypePage({
   }
 
   return (
-    <Grid container direction="column" spacing={3}>
-      {categories.map(category => (
-        <CategoryIconButton
-          key={category.id}
-          id={category.id}
-          icon={categoryIcons.find(icon => icon.src === category.icon)}
-          backgroundColor={category.backgroundColor}
-          strokeColor={category.strokeColor}
-        />
-      ))}
-      <Divider />
-      <Link href="/categories/new">
-        <Button variant="contained" startIcon={<AddIcon />} fullWidth>
-          New category
-        </Button>
-      </Link>
-    </Grid>
+    <Box>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, 100px)',
+          maxHeight: '458px',
+          overflowY: 'auto',
+          alignContent: 'start',
+          columnGap: 1,
+          rowGap: 4,
+        }}
+      >
+        {categories.map(category => {
+          const Icon = categoryIcons.find(
+            icon => category.icon === icon.src,
+          )!.Component;
+
+          return (
+            <Link
+              key={category.id}
+              href={`/categories/${category.id}/manage`}
+              style={{ textDecoration: 'none' }}
+            >
+              <Box>
+                <Icon
+                  className={styles.icon}
+                  style={{
+                    backgroundColor: category.backgroundColor,
+                    fill: category.strokeColor,
+                  }}
+                />
+                <Typography
+                  color="rgb(227, 227, 227)"
+                  textAlign="center"
+                  mt={0.3}
+                  px={1}
+                  sx={{
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {category.name}
+                </Typography>
+              </Box>
+            </Link>
+          );
+        })}
+      </Box>
+      <Grid container direction="column" spacing={3} mt={3}>
+        <Divider />
+        <Link href="/categories/new">
+          <Button variant="contained" startIcon={<AddIcon />} fullWidth>
+            New category
+          </Button>
+        </Link>
+      </Grid>
+    </Box>
   );
 }
 
