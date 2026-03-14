@@ -1,0 +1,10 @@
+.icon {
+    display: block;
+    border-radius: 50%;
+    padding: 3px;
+    box-sizing: content-box;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

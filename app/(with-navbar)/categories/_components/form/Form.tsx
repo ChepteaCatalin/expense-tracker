@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { categorySchema } from '../../validation';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { categoryIcons } from './category-icons';
+import { categoryIcons } from '@/utils/category-icons';
 import Icon from './Icon';
 import ColorInput from './ColorInput';
 import Button from '@mui/material/Button';
