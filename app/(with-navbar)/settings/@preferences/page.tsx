@@ -3,7 +3,11 @@ import Section from '../_components/Section';
 import CurrencyAutocomplete from './CurrencyAutocomplete';
 import { requireAuth } from '@/lib/auth-utils';
 import Grid from '@mui/material/Grid';
-import ManageCategoriesBtn from './ManageCategoriesBtn';
+import Button from '@mui/material/Button';
+import { CategoryType } from '@/types/category';
+import Link from 'next/link';
+
+const DEFAULT_CATEGORY_TYPE: CategoryType = 'expense';
 
 export default async function PreferencesPage() {
   const { user } = await requireAuth();
@@ -16,7 +20,11 @@ export default async function PreferencesPage() {
           defaultValue={currencies.find(c => c.code === user?.currency)}
           options={currencies.map(({ code, currency }) => ({ code, currency }))}
         />
-        <ManageCategoriesBtn />
+        <Link href={`/categories/type/${DEFAULT_CATEGORY_TYPE}`}>
+          <Button variant="outlined" fullWidth>
+            Manage Expense and Income Categories
+          </Button>
+        </Link>
       </Grid>
     </Section>
   );
