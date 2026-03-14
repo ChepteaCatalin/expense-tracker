@@ -5,6 +5,7 @@ import {
   Category,
   CategoryFormErrors,
   CategoryFormValues,
+  CategoryType,
 } from '@/types/category';
 import { categorySchema } from './validation';
 import { redirect } from 'next/navigation';
@@ -32,7 +33,7 @@ export async function createCategory(
     return { api: 'Failed to create category' };
   }
 
-  redirect('/categories');
+  redirect(`/categories/type/${category.type}`);
 }
 
 export async function updateCategory(
@@ -52,10 +53,13 @@ export async function updateCategory(
     return { api: 'Failed to update category' };
   }
 
-  redirect('/categories');
+  redirect(`/categories/type/${category.type}`);
 }
 
-export async function deleteCategory(_: string, id: number) {
+export async function deleteCategory(
+  _: string,
+  { id, type }: { id: number; type: CategoryType },
+) {
   try {
     await deleteExistingCategory(id);
   } catch (err: any) {
@@ -63,5 +67,5 @@ export async function deleteCategory(_: string, id: number) {
     return 'Failed to delete category';
   }
 
-  redirect('/categories');
+  redirect(`/categories/type/${type}`);
 }

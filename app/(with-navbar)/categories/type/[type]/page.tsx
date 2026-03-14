@@ -25,6 +25,7 @@ export default async function CategoriesByTypePage({
       {categories.map(category => (
         <CategoryIconButton
           key={category.id}
+          id={category.id}
           icon={categoryIcons.find(icon => icon.src === category.icon)}
           backgroundColor={category.backgroundColor}
           strokeColor={category.strokeColor}

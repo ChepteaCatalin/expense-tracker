@@ -4,12 +4,15 @@ import DeleteDialog from '@/components/DeleteDialog';
 import Button from '@mui/material/Button';
 import { startTransition, useActionState, useState } from 'react';
 import { deleteCategory } from '../actions';
+import { CategoryType } from '@/types/category';
 
 export default function DeleteCategory({
   id,
+  type,
   name,
 }: {
   id: number;
+  type: CategoryType;
   name: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -46,7 +49,7 @@ export default function DeleteCategory({
           setHideError(true);
           startTransition(() => {
             setHideError(false);
-            deleteAction(id);
+            deleteAction({ id, type });
           });
         }}
       />

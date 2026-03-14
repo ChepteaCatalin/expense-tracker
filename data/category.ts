@@ -75,32 +75,6 @@ export const deleteCategory = authGuard(
   },
 );
 
-export const getAllCategories = authGuard(session =>
-  cache(async (userId: string): Promise<Category[] | Array<never>> => {
-    'use cache';
-    cacheLife('weeks');
-    cacheTag(`categories`);
-
-    const result = await sql`
-      SELECT 
-        id,
-        name,
-        type,
-        icon,
-        stroke_color,
-        background_color,
-        user_id,
-        created_at,
-        updated_at
-      FROM category
-      WHERE user_id = ${userId}
-    `;
-
-    if (!result?.length) return [];
-    return result.map(categoryFromDb);
-  })(session.user.id),
-);
-
 export const getAllCategoriesByType = authGuard(session =>
   cache(
     (userId: string) =>

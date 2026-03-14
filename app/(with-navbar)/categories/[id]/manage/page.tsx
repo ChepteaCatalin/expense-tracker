@@ -28,7 +28,11 @@ export default async function ManageCategoryPage({
   return (
     <PageWrapper title={metadata.title} subtitle={metadata.description}>
       <Form category={category} />
-      <DeleteCategory id={category.id} name={category.name} />
+      <DeleteCategory
+        id={category.id}
+        type={category.type}
+        name={category.name}
+      />
     </PageWrapper>
   );
 }
