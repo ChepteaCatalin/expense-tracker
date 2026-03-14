@@ -18,7 +18,6 @@ export default function LinkLabel({
       sx={{
         borderRadius: '6px',
         textAlign: 'center',
-        fontSize: '0.875rem',
         fontWeight: 700,
         p: '8px',
         color: isActive ? '#1ed760' : 'rgb(227, 227, 227)',
