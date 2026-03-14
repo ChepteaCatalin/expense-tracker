@@ -1,10 +1,14 @@
 import { getAllCategoriesByType } from '@/data/category';
 import { CategoryType } from '@/types/category';
 import { UnauthorizedError } from '@/utils/error';
-import Box from '@mui/material/Box';
 import { notFound, redirect } from 'next/navigation';
-import CategoryIconButton from './CategoryIconButton';
+import CategoryIconButton from './_CategoryIconButton/CategoryIconButton';
 import { categoryIcons } from '@/utils/category-icons';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import AddIcon from '@mui/icons-material/Add';
+import Link from 'next/link';
 
 export default async function CategoriesByTypePage({
   params,
@@ -21,7 +25,7 @@ export default async function CategoriesByTypePage({
   }
 
   return (
-    <Box>
+    <Grid container direction="column" spacing={3}>
       {categories.map(category => (
         <CategoryIconButton
           key={category.id}
@@ -31,7 +35,13 @@ export default async function CategoriesByTypePage({
           strokeColor={category.strokeColor}
         />
       ))}
-    </Box>
+      <Divider />
+      <Link href="/categories/new">
+        <Button variant="contained" startIcon={<AddIcon />} fullWidth>
+          New category
+        </Button>
+      </Link>
+    </Grid>
   );
 }
 
