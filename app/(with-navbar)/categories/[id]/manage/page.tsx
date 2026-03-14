@@ -6,6 +6,7 @@ import { UnauthorizedError } from '@/utils/error';
 import DeleteCategory from '../../_components/DeleteCategory';
 import PageWrapper from '../../_components/PageWrapper';
 import { metadata } from './constants';
+import BackToLink from '@/components/BackToLink';
 
 export { metadata };
 
@@ -26,7 +27,17 @@ export default async function ManageCategoryPage({
   if (!category) notFound();
 
   return (
-    <PageWrapper title={metadata.title} subtitle={metadata.description}>
+    <PageWrapper
+      title={metadata.title}
+      subtitle={metadata.description}
+      aboveCard={
+        <BackToLink
+          href={`/categories/type/${category.type}`}
+          pageName="Categories"
+          sx={{ mb: 0.5 }}
+        />
+      }
+    >
       <Form category={category} />
       <DeleteCategory
         id={category.id}

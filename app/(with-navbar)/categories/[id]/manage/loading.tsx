@@ -11,6 +11,11 @@ export default function ManageCategoryLoading() {
   return (
     <Box boxSizing="content-box" maxWidth="610px" mx="auto">
       <Heading title={metadata.title} subtitle={metadata.description} />
+      <Skeleton
+        variant="rectangular"
+        height={28}
+        sx={{ mb: 0.5, width: '180px' }}
+      />
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
         <CardContent>
           <Grid container direction="column" spacing={3}>
