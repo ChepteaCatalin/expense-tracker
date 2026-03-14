@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import { categoryIcons } from '@/utils/category-icons';
 import styles from './Icon.module.css';
 import Typography from '@mui/material/Typography';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 
 export default async function CategoriesByTypePage({
   params,
@@ -28,54 +29,63 @@ export default async function CategoriesByTypePage({
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, 100px)',
-          maxHeight: '458px',
-          overflowY: 'auto',
-          alignContent: 'start',
-          columnGap: 1,
-          rowGap: 4,
-        }}
-      >
-        {categories.map(category => {
-          const Icon = categoryIcons.find(
-            icon => category.icon === icon.src,
-          )!.Component;
+      {categories.length ? (
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, 100px)',
+            maxHeight: '458px',
+            overflowY: 'auto',
+            alignContent: 'start',
+            columnGap: 1,
+            rowGap: 4,
+          }}
+        >
+          {categories.map(category => {
+            const Icon = categoryIcons.find(
+              icon => category.icon === icon.src,
+            )!.Component;
 
-          return (
-            <Link
-              key={category.id}
-              href={`/categories/${category.id}/manage`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Box>
-                <Icon
-                  className={styles.icon}
-                  style={{
-                    backgroundColor: category.backgroundColor,
-                    fill: category.strokeColor,
-                  }}
-                />
-                <Typography
-                  color="rgb(227, 227, 227)"
-                  textAlign="center"
-                  mt={0.3}
-                  px={1}
-                  sx={{
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {category.name}
-                </Typography>
-              </Box>
-            </Link>
-          );
-        })}
-      </Box>
+            return (
+              <Link
+                key={category.id}
+                href={`/categories/${category.id}/manage`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Box>
+                  <Icon
+                    className={styles.icon}
+                    style={{
+                      backgroundColor: category.backgroundColor,
+                      fill: category.strokeColor,
+                    }}
+                  />
+                  <Typography
+                    color="rgb(227, 227, 227)"
+                    textAlign="center"
+                    mt={0.3}
+                    px={1}
+                    sx={{
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {category.name}
+                  </Typography>
+                </Box>
+              </Link>
+            );
+          })}
+        </Box>
+      ) : (
+        <Grid container direction="column" alignItems="center">
+          <SearchOffIcon
+            sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
+          />
+          <Typography>No {type} categories found</Typography>
+        </Grid>
+      )}
       <Grid container direction="column" spacing={3} mt={3}>
         <Divider />
         <Link href="/categories/new">
