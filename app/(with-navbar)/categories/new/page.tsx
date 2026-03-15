@@ -1,26 +1,34 @@
 import BackToLink from '@/components/BackToLink';
 import Form from '../_components/form/Form';
 import PageWrapper from '../_components/PageWrapper';
+import { isValidCategoryType } from '../_utils';
+import { metadata } from './constants';
+import { notFound } from 'next/navigation';
 
-export const metadata = {
-  title: 'New Category',
-  description: 'Create a new expense or income category',
-};
+export { metadata };
 
-export default async function NewCategoryPage() {
+export default async function NewCategoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type: string }>;
+}) {
+  const { type } = await searchParams;
+
+  if (!isValidCategoryType(type)) notFound();
+
   return (
     <PageWrapper
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
         <BackToLink
-          href="/categories/type/expense"
+          href={`/categories/type/${type}`}
           pageName="Categories"
           sx={{ mb: 0.5 }}
         />
       }
     >
-      <Form />
+      <Form type={type} />
     </PageWrapper>
   );
 }

@@ -2,7 +2,7 @@
 
 import TextField from '@mui/material/TextField';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { Category, CategoryFormValues } from '@/types/category';
+import { Category, CategoryFormValues, CategoryType } from '@/types/category';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -22,11 +22,17 @@ import { createCategory, updateCategory } from '../../actions';
 import Divider from '@mui/material/Divider';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
-export default function Form({ category }: { category?: Category }) {
+export default function Form({
+  category,
+  type,
+}: {
+  category?: Category;
+  type?: CategoryType;
+}) {
   const isEditMode = !!category;
 
   const methods = useForm<CategoryFormValues>({
-    defaultValues: getDefaultValues(category),
+    defaultValues: getDefaultValues(category, type),
     resolver: zodResolver(categorySchema),
   });
   const {
@@ -179,7 +185,10 @@ export default function Form({ category }: { category?: Category }) {
   );
 }
 
-function getDefaultValues(category?: Category): CategoryFormValues {
+function getDefaultValues(
+  category?: Category,
+  type?: CategoryType,
+): CategoryFormValues {
   if (category)
     return {
       name: category.name,
@@ -191,7 +200,7 @@ function getDefaultValues(category?: Category): CategoryFormValues {
 
   return {
     name: '',
-    type: 'expense',
+    type: type ?? 'expense',
     icon: '/category-icons/other.svg',
     strokeColor: 'rgb(227, 227, 227)',
     backgroundColor: 'rgb(115, 115, 115)',

@@ -1,5 +1,4 @@
 import { getAllCategoriesByType } from '@/data/category';
-import { CategoryType } from '@/types/category';
 import { UnauthorizedError } from '@/utils/error';
 import { notFound, redirect } from 'next/navigation';
 import Divider from '@mui/material/Divider';
@@ -12,6 +11,7 @@ import { categoryIcons } from '@/utils/category-icons';
 import styles from './Icon.module.css';
 import Typography from '@mui/material/Typography';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
+import { isValidCategoryType } from '../../_utils';
 
 export default async function CategoriesByTypePage({
   params,
@@ -65,6 +65,7 @@ export default async function CategoriesByTypePage({
                     textAlign="center"
                     mt={0.3}
                     px={1}
+                    fontSize="0.875rem"
                     sx={{
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
@@ -88,7 +89,7 @@ export default async function CategoriesByTypePage({
       )}
       <Grid container direction="column" spacing={3} mt={3}>
         <Divider />
-        <Link href="/categories/new">
+        <Link href={{ pathname: '/categories/new', query: { type } }}>
           <Button variant="contained" startIcon={<AddIcon />} fullWidth>
             New category
           </Button>
@@ -96,10 +97,4 @@ export default async function CategoriesByTypePage({
       </Grid>
     </Box>
   );
-}
-
-function isValidCategoryType(value: string): value is CategoryType {
-  const VALID_CATEGORY_TYPES: CategoryType[] = ['expense', 'income'];
-
-  return VALID_CATEGORY_TYPES.includes(value as CategoryType);
 }
