@@ -38,10 +38,18 @@ export default function Form({
 }) {
   const isEditMode = !!category;
 
+  const [createCategoryErrors, createCategoryAction, isPendingCreate] =
+    useActionState(createCategory, {});
+  const [updateCategoryErrors, updateCategoryAction, isPendingUpdate] =
+    useActionState(updateCategory, {});
+
+  const disabledForm = isPendingCreate || isPendingUpdate;
+
   const methods = useForm<CategoryFormValues>({
     shouldUnregister: true,
     defaultValues: getDefaultValues(category, type),
     resolver: zodResolver(categorySchema),
+    disabled: disabledForm,
   });
   const {
     control,
@@ -51,11 +59,6 @@ export default function Form({
     handleSubmit,
     formState: { errors },
   } = methods;
-
-  const [createCategoryErrors, createCategoryAction, isPendingCreate] =
-    useActionState(createCategory, {});
-  const [updateCategoryErrors, updateCategoryAction, isPendingUpdate] =
-    useActionState(updateCategory, {});
 
   const [hideApiError, setHideApiError] = useState(false);
   subscribe({
@@ -102,6 +105,7 @@ export default function Form({
           spellCheck="false"
           error={!!errors.name}
           helperText={errors.name?.message}
+          disabled={disabledForm}
           slotProps={{
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
@@ -109,7 +113,7 @@ export default function Form({
         <Controller
           control={control}
           name="type"
-          render={({ field: { onChange, onBlur, value, ref } }) => (
+          render={({ field: { onChange, onBlur, value, ref, disabled } }) => (
             <FormControl
               onBlur={onBlur}
               ref={ref}
@@ -133,13 +137,13 @@ export default function Form({
                   control={<Radio />}
                   label="Expense"
                   value="expense"
-                  disabled={category?.type === 'income'}
+                  disabled={disabled || category?.type === 'income'}
                 />
                 <FormControlLabel
                   control={<Radio />}
                   label="Income"
                   value="income"
-                  disabled={category?.type === 'expense'}
+                  disabled={disabled || category?.type === 'expense'}
                 />
               </RadioGroup>
             </FormControl>
@@ -158,7 +162,7 @@ export default function Form({
             }}
           >
             {categoryIcons.map(icon => (
-              <Icon key={icon.src} icon={icon} />
+              <Icon key={icon.src} icon={icon} disabled={disabledForm} />
             ))}
           </Box>
         </Box>
@@ -166,19 +170,25 @@ export default function Form({
           <Controller
             control={control}
             name="backgroundColor"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange, value, disabled } }) => (
               <ColorInput
                 label="Background"
                 value={value}
                 onChange={onChange}
+                disabled={disabled}
               />
             )}
           />
           <Controller
             control={control}
             name="strokeColor"
-            render={({ field: { onChange, value } }) => (
-              <ColorInput label="Stroke" value={value} onChange={onChange} />
+            render={({ field: { onChange, value, disabled } }) => (
+              <ColorInput
+                label="Stroke"
+                value={value}
+                onChange={onChange}
+                disabled={disabled}
+              />
             )}
           />
         </Grid>

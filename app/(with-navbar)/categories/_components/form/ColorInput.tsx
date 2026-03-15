@@ -4,15 +4,19 @@ import { useEffect, useId, useState } from 'react';
 import Button from '@mui/material/Button';
 import CircleIcon from '@mui/icons-material/Circle';
 
+interface ColorInputProps {
+  label: string;
+  value: string;
+  onChange: (color: string) => void;
+  disabled?: boolean;
+}
+
 export default function ColorInput({
   label,
   value,
   onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (color: string) => void;
-}) {
+  disabled,
+}: ColorInputProps) {
   const [localValue, setLocalValue] = useState(value);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -33,6 +37,7 @@ export default function ColorInput({
             sx={{ color: localValue, width: '32px', height: '32px' }}
           />
         }
+        disabled={disabled}
         sx={{ '& .MuiButton-icon': { ml: 0.5 }, color: 'text.secondary' }}
       >
         {label}
