@@ -23,10 +23,18 @@ export default function CategoriesLoading() {
       }
     >
       <Box>
-        <Skeleton variant="rectangular" height={300} />
+        <Skeleton
+          variant="rectangular"
+          height={300}
+          sx={{ borderRadius: '10px' }}
+        />
         <Grid container direction="column" spacing={3} mt={3}>
           <Divider />
-          <Skeleton variant="rectangular" height={40} />
+          <Skeleton
+            variant="rectangular"
+            height={40}
+            sx={{ borderRadius: '4px' }}
+          />
         </Grid>
       </Box>
     </PageWrapper>

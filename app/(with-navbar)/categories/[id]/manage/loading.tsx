@@ -14,24 +14,49 @@ export default function ManageCategoryLoading() {
       <Skeleton
         variant="rectangular"
         height={28}
-        sx={{ mb: 0.5, width: '180px' }}
+        sx={{ mb: 0.5, width: '180px', borderRadius: '4px' }}
       />
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
         <CardContent>
           <Grid container direction="column" spacing={3}>
-            <Skeleton variant="rectangular" height={40} />
+            <Skeleton
+              variant="rectangular"
+              height={40}
+              sx={{ borderRadius: '4px' }}
+            />
             <Box>
               <Skeleton variant="text" height={23} width="10%" />
-              <Skeleton variant="rectangular" height={33} width="35%" />
+              <Skeleton
+                variant="rectangular"
+                height={33}
+                width="35%"
+                sx={{ borderRadius: '4px' }}
+              />
             </Box>
             <Box>
               <Skeleton variant="text" height={24} width="10%" />
-              <Skeleton variant="rectangular" height={264} />
+              <Skeleton
+                variant="rectangular"
+                height={264}
+                sx={{ borderRadius: '10px' }}
+              />
             </Box>
-            <Skeleton variant="rectangular" height={44} />
+            <Skeleton
+              variant="rectangular"
+              height={44}
+              sx={{ borderRadius: '4px' }}
+            />
             <Divider />
-            <Skeleton variant="rectangular" height={40} />
-            <Skeleton variant="rectangular" height={40} />
+            <Skeleton
+              variant="rectangular"
+              height={40}
+              sx={{ borderRadius: '4px' }}
+            />
+            <Skeleton
+              variant="rectangular"
+              height={40}
+              sx={{ borderRadius: '4px' }}
+            />
           </Grid>
         </CardContent>
       </Card>

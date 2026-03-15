@@ -20,7 +20,11 @@ export default function AccountDetailsSkeleton() {
           </Stack>
         </Stack>
         <Divider />
-        <Skeleton variant="rectangular" height={40} />
+        <Skeleton
+          variant="rectangular"
+          height={40}
+          sx={{ borderRadius: '4px' }}
+        />
       </Stack>
     </Section>
   );

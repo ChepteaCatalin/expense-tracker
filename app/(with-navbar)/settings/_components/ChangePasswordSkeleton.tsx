@@ -7,11 +7,27 @@ export default function ChangePasswordSkeleton() {
   return (
     <Section title="Change Password">
       <Stack spacing={3} p={1}>
-        <Skeleton variant="rectangular" height={40} />
-        <Skeleton variant="rectangular" height={40} />
-        <Skeleton variant="rectangular" height={40} />
+        <Skeleton
+          variant="rectangular"
+          height={40}
+          sx={{ borderRadius: '4px' }}
+        />
+        <Skeleton
+          variant="rectangular"
+          height={40}
+          sx={{ borderRadius: '4px' }}
+        />
+        <Skeleton
+          variant="rectangular"
+          height={40}
+          sx={{ borderRadius: '4px' }}
+        />
         <Divider />
-        <Skeleton variant="rectangular" height={40} />
+        <Skeleton
+          variant="rectangular"
+          height={40}
+          sx={{ borderRadius: '4px' }}
+        />
       </Stack>
     </Section>
   );
