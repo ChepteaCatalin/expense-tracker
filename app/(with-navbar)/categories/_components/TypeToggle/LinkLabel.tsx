@@ -1,7 +1,7 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function LinkLabel({
   href,
@@ -11,7 +11,9 @@ export default function LinkLabel({
   text: string;
 }) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const searchParams = useSearchParams();
+
+  const isActive = `${pathname}?${searchParams.toString()}` === href;
 
   return (
     <Box

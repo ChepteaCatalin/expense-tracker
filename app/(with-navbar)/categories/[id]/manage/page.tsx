@@ -32,7 +32,10 @@ export default async function ManageCategoryPage({
       subtitle={metadata.description}
       aboveCard={
         <BackToLink
-          href={`/categories/type/${category.type}`}
+          href={{
+            pathname: '/categories',
+            query: { type: category.type },
+          }}
           pageName="Categories"
           sx={{ mb: 0.5 }}
         />

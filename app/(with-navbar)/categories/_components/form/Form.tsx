@@ -21,6 +21,7 @@ import Button from '@mui/material/Button';
 import { createCategory, updateCategory } from '../../actions';
 import Divider from '@mui/material/Divider';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
+import SaveIcon from '@mui/icons-material/Save';
 
 export default function Form({
   category,
@@ -175,10 +176,11 @@ export default function Form({
           }
           loading={isPendingCreate || isPendingUpdate}
           loadingPosition="start"
+          startIcon={<SaveIcon />}
           variant="contained"
           fullWidth
         >
-          {isEditMode ? 'Edit category' : 'Create category'}
+          Save
         </Button>
       </Grid>
     </FormProvider>

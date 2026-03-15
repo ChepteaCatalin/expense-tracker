@@ -2,13 +2,14 @@ import Button from '@mui/material/Button';
 import type { SxProps, Theme } from '@mui/material/styles';
 import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import type { UrlObject } from 'url';
 
 export default function BackToLink({
   href,
   pageName,
   sx,
 }: {
-  href: string;
+  href: string | UrlObject;
   pageName: string;
   sx?: SxProps<Theme>;
 }) {

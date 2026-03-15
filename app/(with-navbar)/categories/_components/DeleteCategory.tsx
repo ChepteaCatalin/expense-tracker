@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { startTransition, useActionState, useState } from 'react';
 import { deleteCategory } from '../actions';
 import { CategoryType } from '@/types/category';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function DeleteCategory({
   id,
@@ -31,8 +32,9 @@ export default function DeleteCategory({
         sx={{ mt: 3 }}
         onClick={() => setOpen(true)}
         fullWidth
+        startIcon={<DeleteIcon />}
       >
-        Delete category
+        Delete
       </Button>
       <DeleteDialog
         open={open}

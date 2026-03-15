@@ -20,7 +20,12 @@ export default async function PreferencesPage() {
           defaultValue={currencies.find(c => c.code === user?.currency)}
           options={currencies.map(({ code, currency }) => ({ code, currency }))}
         />
-        <Link href={`/categories/type/${DEFAULT_CATEGORY_TYPE}`}>
+        <Link
+          href={{
+            pathname: '/categories',
+            query: { type: DEFAULT_CATEGORY_TYPE },
+          }}
+        >
           <Button variant="outlined" fullWidth>
             Manage Expense and Income Categories
           </Button>

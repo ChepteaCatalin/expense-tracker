@@ -22,18 +22,21 @@ export default function TypeToggle() {
         border: '1px solid rgba(30, 215, 96, 0.16)',
       }}
     >
-      {CATEGORY_TYPES.map(categoryType => {
-        const href = `/categories/type/${categoryType.value}`;
-        return (
-          <Link
-            key={categoryType.value}
-            href={href}
-            style={{ textDecoration: 'none', flex: 1 }}
-          >
-            <LinkLabel href={href} text={categoryType.label} />
-          </Link>
-        );
-      })}
+      {CATEGORY_TYPES.map(categoryType => (
+        <Link
+          key={categoryType.value}
+          href={{
+            pathname: '/categories',
+            query: { type: categoryType.value },
+          }}
+          style={{ textDecoration: 'none', flex: 1 }}
+        >
+          <LinkLabel
+            href={`/categories?type=${categoryType.value}`}
+            text={categoryType.label}
+          />
+        </Link>
+      ))}
     </Box>
   );
 }
