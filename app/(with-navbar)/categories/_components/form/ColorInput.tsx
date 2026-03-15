@@ -1,6 +1,6 @@
 import ColorPicker from '@/components/ColorPicker';
 import Popover from '@mui/material/Popover';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import Button from '@mui/material/Button';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -18,6 +18,10 @@ export default function ColorInput({
 
   const id = useId();
   const open = !!anchorEl;
+
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
 
   return (
     <>

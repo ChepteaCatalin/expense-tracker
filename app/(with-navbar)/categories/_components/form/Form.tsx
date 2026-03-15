@@ -8,7 +8,13 @@ import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
-import { startTransition, useActionState, useId, useState } from 'react';
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useId,
+  useState,
+} from 'react';
 import Grid from '@mui/material/Grid';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { categorySchema } from '../../validation';
@@ -33,12 +39,14 @@ export default function Form({
   const isEditMode = !!category;
 
   const methods = useForm<CategoryFormValues>({
+    shouldUnregister: true,
     defaultValues: getDefaultValues(category, type),
     resolver: zodResolver(categorySchema),
   });
   const {
     control,
     register,
+    reset,
     subscribe,
     handleSubmit,
     formState: { errors },
@@ -56,6 +64,13 @@ export default function Form({
   });
 
   const radioGroupId = useId();
+
+  useEffect(
+    function resetFormOnUnmount() {
+      return reset;
+    },
+    [reset],
+  );
 
   return (
     <FormProvider {...methods}>
