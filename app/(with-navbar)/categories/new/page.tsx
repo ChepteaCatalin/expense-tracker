@@ -1,7 +1,7 @@
 import BackToLink from '@/components/BackToLink';
 import Form from '../_components/form/Form';
 import PageWrapper from '../_components/PageWrapper';
-import { isValidCategoryType } from '../_utils';
+import { isValidCategoryType } from '../utils';
 import { metadata } from './constants';
 import { notFound } from 'next/navigation';
 

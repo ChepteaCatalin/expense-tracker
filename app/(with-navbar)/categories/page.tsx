@@ -11,7 +11,7 @@ import { categoryIcons } from '@/utils/category-icons';
 import styles from './_components/CategoryIconButton.module.css';
 import Typography from '@mui/material/Typography';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
-import { isValidCategoryType } from './_utils';
+import { isValidCategoryType } from './utils';
 import TypeToggle from './_components/TypeToggle/TypeToggle';
 import PageWrapper from './_components/PageWrapper';
 
