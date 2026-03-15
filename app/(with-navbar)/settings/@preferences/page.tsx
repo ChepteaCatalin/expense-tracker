@@ -22,7 +22,7 @@ export default async function PreferencesPage() {
         />
         <Link
           href={{
-            pathname: '/categories',
+            pathname: '/categories/all',
             query: { type: DEFAULT_CATEGORY_TYPE },
           }}
         >

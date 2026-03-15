@@ -2,17 +2,12 @@
 
 import TextField from '@mui/material/TextField';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { Category, CategoryFormValues, CategoryType } from '@/types/category';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
+import { Category, CategoryFormValues } from '@/types/category';
 import {
   startTransition,
+  Suspense,
   useActionState,
   useEffect,
-  useId,
   useState,
 } from 'react';
 import Grid from '@mui/material/Grid';
@@ -28,14 +23,10 @@ import { createCategory, updateCategory } from '../../actions';
 import Divider from '@mui/material/Divider';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import SaveIcon from '@mui/icons-material/Save';
+import TypeRadioGroup from './TypeRadioGroup';
+import Skeleton from '@mui/material/Skeleton';
 
-export default function Form({
-  category,
-  type,
-}: {
-  category?: Category;
-  type?: CategoryType;
-}) {
+export default function Form({ category }: { category?: Category }) {
   const isEditMode = !!category;
 
   const [createCategoryErrors, createCategoryAction, isPendingCreate] =
@@ -47,7 +38,7 @@ export default function Form({
 
   const methods = useForm<CategoryFormValues>({
     shouldUnregister: true,
-    defaultValues: getDefaultValues(category, type),
+    defaultValues: getDefaultValues(category),
     resolver: zodResolver(categorySchema),
     disabled: disabledForm,
   });
@@ -65,8 +56,6 @@ export default function Form({
     formState: { values: true },
     callback: () => setHideApiError(true),
   });
-
-  const radioGroupId = useId();
 
   useEffect(
     function resetFormOnUnmount() {
@@ -110,45 +99,13 @@ export default function Form({
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
         />
-        <Controller
-          control={control}
-          name="type"
-          render={({ field: { onChange, onBlur, value, ref, disabled } }) => (
-            <FormControl
-              onBlur={onBlur}
-              ref={ref}
-              error={!!errors.type}
-              disabled={isEditMode}
-            >
-              <FormLabel
-                id={radioGroupId}
-                sx={{ '&.Mui-disabled': { color: 'text.secondary' } }}
-              >
-                Type
-              </FormLabel>
-              <RadioGroup
-                name="type"
-                value={value}
-                onChange={(_, value) => onChange(value)}
-                row
-                aria-labelledby={radioGroupId}
-              >
-                <FormControlLabel
-                  control={<Radio />}
-                  label="Expense"
-                  value="expense"
-                  disabled={disabled || category?.type === 'income'}
-                />
-                <FormControlLabel
-                  control={<Radio />}
-                  label="Income"
-                  value="income"
-                  disabled={disabled || category?.type === 'expense'}
-                />
-              </RadioGroup>
-            </FormControl>
-          )}
-        />
+        <Suspense fallback={<TypeRadioGroupSkeleton />}>
+          <TypeRadioGroup
+            isEditMode={isEditMode}
+            editingCategoryType={category?.type}
+            error={!!errors.type}
+          />
+        </Suspense>
         <Box sx={{ mt: -1.125 }}>
           <Typography color="text.secondary">Icon</Typography>
           <Box
@@ -212,10 +169,7 @@ export default function Form({
   );
 }
 
-function getDefaultValues(
-  category?: Category,
-  type?: CategoryType,
-): CategoryFormValues {
+function getDefaultValues(category?: Category): CategoryFormValues {
   if (category)
     return {
       name: category.name,
@@ -227,9 +181,23 @@ function getDefaultValues(
 
   return {
     name: '',
-    type: type ?? 'expense',
+    type: 'expense',
     icon: '/category-icons/other.svg',
     strokeColor: 'rgb(227, 227, 227)',
     backgroundColor: 'rgb(115, 115, 115)',
   };
+}
+
+function TypeRadioGroupSkeleton() {
+  return (
+    <Box>
+      <Skeleton variant="text" height={23} width="10%" />
+      <Skeleton
+        variant="rectangular"
+        height={42}
+        width="35%"
+        sx={{ borderRadius: '4px' }}
+      />
+    </Box>
+  );
 }

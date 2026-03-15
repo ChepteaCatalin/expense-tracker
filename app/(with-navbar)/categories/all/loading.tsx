@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
-import PageWrapper from './_components/PageWrapper';
+import PageWrapper from '../_components/PageWrapper';
 
 export const metadata = {
   title: 'Categories',

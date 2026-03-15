@@ -26,13 +26,13 @@ export default function TypeToggle() {
         <Link
           key={categoryType.value}
           href={{
-            pathname: '/categories',
+            pathname: '/categories/all',
             query: { type: categoryType.value },
           }}
           style={{ textDecoration: 'none', flex: 1 }}
         >
           <LinkLabel
-            href={`/categories?type=${categoryType.value}`}
+            href={`/categories/all?type=${categoryType.value}`}
             text={categoryType.label}
           />
         </Link>

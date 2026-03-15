@@ -8,12 +8,12 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import { categoryIcons } from '@/utils/category-icons';
-import styles from './_components/CategoryIconButton.module.css';
+import styles from '../_components/CategoryIconButton.module.css';
 import Typography from '@mui/material/Typography';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
-import { isValidCategoryType } from './utils';
-import TypeToggle from './_components/TypeToggle/TypeToggle';
-import PageWrapper from './_components/PageWrapper';
+import { isValidCategoryType } from '../utils';
+import TypeToggle from '../_components/TypeToggle/TypeToggle';
+import PageWrapper from '../_components/PageWrapper';
 
 export const metadata = {
   title: 'Categories',

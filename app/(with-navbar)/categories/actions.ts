@@ -33,7 +33,7 @@ export async function createCategory(
     return { api: 'Failed to create category' };
   }
 
-  redirect(`/categories?type=${category.type}`);
+  redirect(`/categories/all?type=${category.type}`);
 }
 
 export async function updateCategory(
@@ -53,7 +53,7 @@ export async function updateCategory(
     return { api: 'Failed to update category' };
   }
 
-  redirect(`/categories?type=${category.type}`);
+  redirect(`/categories/all?type=${category.type}`);
 }
 
 export async function deleteCategory(
@@ -67,5 +67,5 @@ export async function deleteCategory(
     return 'Failed to delete category';
   }
 
-  redirect(`/categories?type=${type}`);
+  redirect(`/categories/all?type=${type}`);
 }
