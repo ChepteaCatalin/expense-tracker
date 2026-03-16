@@ -75,7 +75,7 @@ export default async function CategoriesPage({
                       }}
                     />
                     <Typography
-                      color="rgb(227, 227, 227)"
+                      color="common.white"
                       textAlign="center"
                       mt={0.3}
                       px={1}
