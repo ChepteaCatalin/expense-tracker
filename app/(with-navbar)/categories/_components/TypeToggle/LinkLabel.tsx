@@ -29,7 +29,7 @@ export default function LinkLabel({
           'color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease',
         '&:hover': {
           color: '#1ed760',
-          backgroundColor: 'rgba(30, 215, 96, 0.08)',
+          backgroundColor: 'rgba(30, 215, 96, 0.06)',
         },
       }}
     >
