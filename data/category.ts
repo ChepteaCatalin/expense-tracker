@@ -30,7 +30,7 @@ export const createCategory = authGuard(
 
       if (!result[0]) throw new Error('Failed to create category');
 
-      updateTag('categories');
+      updateTag(`categories/${category.type}`);
 
       return categoryFromDb(result[0]);
     },
@@ -53,7 +53,7 @@ export const updateCategory = authGuard(
 
       if (!result[0]) throw new Error('Category not found or update failed');
 
-      updateTag(`categories`);
+      updateTag(`categories/${category.type}`);
       updateTag(`categories/${category.id}`);
 
       return categoryFromDb(result[0]);
@@ -65,12 +65,12 @@ export const deleteCategory = authGuard(
     const result = await sql`
       DELETE FROM category
       WHERE id = ${categoryId} AND user_id = ${session.user.id}
-      RETURNING id
+      RETURNING id, type
     `;
 
     if (!result[0]) throw new Error('Category not found or delete failed');
 
-    updateTag(`categories`);
+    updateTag(`categories/${result[0].type}`);
     updateTag(`categories/${categoryId}`);
   },
 );
@@ -81,7 +81,7 @@ export const getAllCategoriesByType = authGuard(session =>
       async (type: CategoryType): Promise<Category[] | Array<never>> => {
         'use cache';
         cacheLife('weeks');
-        cacheTag(`categories`);
+        cacheTag(`categories/${type}`);
 
         const result = await sql`
           SELECT 
