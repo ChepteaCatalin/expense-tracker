@@ -1,6 +1,6 @@
 import BackToLink from '@/components/BackToLink';
 import Form from '../_components/form/Form';
-import PageWrapper from '../_components/PageWrapper';
+import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
@@ -15,7 +15,7 @@ export default async function NewCategoryPage({
   searchParams: Promise<{ type: string }>;
 }) {
   return (
-    <PageWrapper
+    <TitledCardPageWrapper
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
@@ -34,7 +34,7 @@ export default async function NewCategoryPage({
       }
     >
       <Form />
-    </PageWrapper>
+    </TitledCardPageWrapper>
   );
 }
 

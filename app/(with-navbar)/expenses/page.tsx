@@ -1,6 +1,6 @@
 import Fab from '@/components/Fab';
-import Heading from '@/components/Heading';
-import Box from '@mui/material/Box';
+import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Expenses',
@@ -9,9 +9,13 @@ export const metadata = {
 
 export default function ExpensesPage() {
   return (
-    <Box>
-      <Heading title={metadata.title} subtitle={metadata.description} />
-      <Fab />
-    </Box>
+    <TitledCardPageWrapper
+      title={metadata.title}
+      subtitle={metadata.description}
+    >
+      <Link href="/expenses/new">
+        <Fab />
+      </Link>
+    </TitledCardPageWrapper>
   );
 }

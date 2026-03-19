@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
-import PageWrapper from '../_components/PageWrapper';
+import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 
 export const metadata = {
   title: 'Categories',
@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function CategoriesLoading() {
   return (
-    <PageWrapper
+    <TitledCardPageWrapper
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
@@ -37,6 +37,6 @@ export default function CategoriesLoading() {
           />
         </Grid>
       </Box>
-    </PageWrapper>
+    </TitledCardPageWrapper>
   );
 }

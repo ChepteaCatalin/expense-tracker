@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { isValidCategoryType } from '../utils';
 import TypeToggle from '../_components/TypeToggle/TypeToggle';
-import PageWrapper from '../_components/PageWrapper';
+import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 
 export const metadata = {
   title: 'Categories',
@@ -37,7 +37,7 @@ export default async function CategoriesPage({
   }
 
   return (
-    <PageWrapper
+    <TitledCardPageWrapper
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={<TypeToggle />}
@@ -110,6 +110,6 @@ export default async function CategoriesPage({
           </Link>
         </Grid>
       </Box>
-    </PageWrapper>
+    </TitledCardPageWrapper>
   );
 }

@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import Form from '../../_components/form/Form';
 import { UnauthorizedError } from '@/utils/error';
 import DeleteCategory from '../../_components/DeleteCategory';
-import PageWrapper from '../../_components/PageWrapper';
+import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 import { metadata } from './constants';
 import BackToLink from '@/components/BackToLink';
 
@@ -27,7 +27,7 @@ export default async function ManageCategoryPage({
   if (!category) notFound();
 
   return (
-    <PageWrapper
+    <TitledCardPageWrapper
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
@@ -47,6 +47,6 @@ export default async function ManageCategoryPage({
         type={category.type}
         name={category.name}
       />
-    </PageWrapper>
+    </TitledCardPageWrapper>
   );
 }
