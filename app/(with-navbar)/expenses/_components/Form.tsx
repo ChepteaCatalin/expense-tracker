@@ -68,8 +68,10 @@ export default function Form() {
         })}
       >
         <TextField
-          {...register('amount')}
-          type="number"
+          {...register('amount', {
+            setValueAs: (v: string) => parseFloat(String(v).replace(',', '.')),
+          })}
+          type="text"
           label="Amount"
           fullWidth
           required
