@@ -79,7 +79,7 @@ export default function Form() {
           helperText={errors.amount?.message}
           disabled={disabledForm}
           slotProps={{
-            htmlInput: { pattern: '[0-9]*' },
+            htmlInput: { inputMode: 'decimal' },
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
         />
