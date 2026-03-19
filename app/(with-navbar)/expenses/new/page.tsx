@@ -1,5 +1,6 @@
 import BackToLink from '@/components/BackToLink';
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
+import Form from '../_components/Form';
 
 export const metadata = {
   title: 'New Expense',
@@ -15,7 +16,7 @@ export default function NewExpense() {
         <BackToLink href="/expenses" pageName="Expenses" sx={{ mb: 0.5 }} />
       }
     >
-      1
+      <Form />
     </TitledCardPageWrapper>
   );
 }
