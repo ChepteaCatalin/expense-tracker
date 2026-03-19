@@ -68,9 +68,7 @@ export default function Form() {
         })}
       >
         <TextField
-          {...register('amount', {
-            setValueAs: (v: string) => parseFloat(String(v).replace(',', '.')),
-          })}
+          {...register('amount', { setValueAs: normalizeNumberInput })}
           type="text"
           label="Amount"
           fullWidth
@@ -109,6 +107,14 @@ export default function Form() {
 
 function getDefaultValues(): ExpenseFormValues {
   return {
-    amount: 0,
+    amount: '',
   };
+}
+
+function normalizeNumberInput(value: string): number | '' {
+  const normalized = String(value).trim().replace(',', '.');
+
+  if (!normalized) return '';
+
+  return +normalized;
 }

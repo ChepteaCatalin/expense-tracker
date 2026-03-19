@@ -1,3 +1,3 @@
 export interface ExpenseFormValues {
-  amount: number;
+  amount: number | '';
 }
