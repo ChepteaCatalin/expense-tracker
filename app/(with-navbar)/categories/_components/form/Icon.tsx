@@ -1,5 +1,4 @@
 import { CategoryIcon } from '@/types/category';
-import styles from './Icon.module.css';
 import { Controller, useWatch } from 'react-hook-form';
 import Box from '@mui/material/Box';
 
@@ -31,8 +30,12 @@ export default function Icon({
         >
           <icon.Component
             onClick={() => !disabled && onChange(icon.src)}
-            className={styles.icon}
             style={{
+              display: 'block',
+              borderRadius: '50%',
+              padding: '3px',
+              boxSizing: 'content-box',
+              cursor: 'pointer',
               ...(isSelected ? { backgroundColor, fill: strokeColor } : {}),
               ...(disabled ? { cursor: 'not-allowed' } : {}),
             }}

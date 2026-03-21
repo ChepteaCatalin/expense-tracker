@@ -12,6 +12,9 @@ import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import { Category } from '@/types/category';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { categoryIcons } from '@/utils/category-icons';
 
 export default function Form({ categories }: { categories: Category[] }) {
   //TODO:
@@ -84,6 +87,59 @@ export default function Form({ categories }: { categories: Category[] }) {
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
         />
+        <Box>
+          <Typography>Category</Typography>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, 100px)',
+              maxHeight: '458px',
+              overflowY: 'auto',
+              alignContent: 'start',
+              columnGap: 1,
+              rowGap: 4,
+              mt: 1,
+            }}
+          >
+            {categories.map(category => {
+              const Icon = categoryIcons.find(
+                icon => category.icon === icon.src,
+              )!.Component;
+
+              return (
+                <Box key={category.id}>
+                  <Icon
+                    style={{
+                      display: 'block',
+                      borderRadius: '50%',
+                      padding: '3px',
+                      boxSizing: 'content-box',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                      backgroundColor: category.backgroundColor,
+                      fill: category.strokeColor,
+                      cursor: 'pointer',
+                    }}
+                  />
+                  <Typography
+                    color="common.white"
+                    textAlign="center"
+                    mt={0.3}
+                    px={1}
+                    fontSize="0.875rem"
+                    sx={{
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {category.name}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
         <Divider />
         <Button
           type="submit"

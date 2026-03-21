@@ -8,7 +8,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import { categoryIcons } from '@/utils/category-icons';
-import styles from '../_components/CategoryIconButton.module.css';
 import Typography from '@mui/material/Typography';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { isValidCategoryType } from '../utils';
@@ -68,8 +67,14 @@ export default async function CategoriesPage({
                 >
                   <Box>
                     <Icon
-                      className={styles.icon}
                       style={{
+                        display: 'block',
+                        borderRadius: '50%',
+                        padding: '3px',
+                        boxSizing: 'content-box',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        cursor: 'pointer',
                         backgroundColor: category.backgroundColor,
                         fill: category.strokeColor,
                       }}
