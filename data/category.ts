@@ -30,7 +30,7 @@ export const createCategory = authGuard(
 
       if (!result[0]) throw new Error('Failed to create category');
 
-      updateTag(`categories/${category.type}`);
+      updateTag(`categories/type/${category.type}`);
 
       return categoryFromDb(result[0]);
     },
@@ -53,8 +53,8 @@ export const updateCategory = authGuard(
 
       if (!result[0]) throw new Error('Category not found or update failed');
 
-      updateTag(`categories/${category.type}`);
-      updateTag(`categories/${category.id}`);
+      updateTag(`categories/type/${category.type}`);
+      updateTag(`categories/id/${category.id}`);
 
       return categoryFromDb(result[0]);
     },
@@ -70,8 +70,8 @@ export const deleteCategory = authGuard(
 
     if (!result[0]) throw new Error('Category not found or delete failed');
 
-    updateTag(`categories/${result[0].type}`);
-    updateTag(`categories/${categoryId}`);
+    updateTag(`categories/type/${result[0].type}`);
+    updateTag(`categories/id/${categoryId}`);
   },
 );
 
@@ -81,7 +81,7 @@ export const getAllCategoriesByType = authGuard(session =>
       async (type: CategoryType): Promise<Category[] | Array<never>> => {
         'use cache';
         cacheLife('weeks');
-        cacheTag(`categories/${type}`);
+        cacheTag(`categories/type/${type}`);
 
         const result = await sql`
           SELECT 
@@ -114,7 +114,7 @@ export const getCategoryById = authGuard(
         ): Promise<Category | undefined> => {
           'use cache';
           cacheLife('weeks');
-          cacheTag(`categories/${categoryId}`);
+          cacheTag(`categories/id/${categoryId}`);
 
           const result = await sql`
             SELECT 
@@ -144,7 +144,6 @@ function categoryFromDb(dbResult: Record<string, any>): Category {
     icon: dbResult.icon,
     strokeColor: dbResult.stroke_color,
     backgroundColor: dbResult.background_color,
-    userId: dbResult.user_id,
     createdAt: new Date(dbResult.created_at),
     updatedAt: new Date(dbResult.updated_at),
   };

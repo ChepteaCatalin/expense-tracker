@@ -9,7 +9,6 @@ export interface Category {
   icon: string;
   strokeColor: string;
   backgroundColor: string;
-  userId: string;
   createdAt: Date;
   updatedAt: Date;
 }
