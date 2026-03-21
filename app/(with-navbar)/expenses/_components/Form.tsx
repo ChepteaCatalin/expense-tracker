@@ -6,15 +6,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { expenseSchema } from '../validation';
 import { startTransition, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import { Category } from '@/types/category';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { categoryIcons } from '@/utils/category-icons';
+import CategoriesInput from './CategoriesInput';
+import Link from 'next/link';
 
 export default function Form({ categories }: { categories: Category[] }) {
   //TODO:
@@ -60,9 +59,7 @@ export default function Form({ categories }: { categories: Category[] }) {
         message={undefined} //FIXME:
         sx={{ mb: 3 }}
       />
-      <Grid
-        container
-        direction="column"
+      <Stack
         spacing={3}
         component="form"
         noValidate
@@ -88,64 +85,26 @@ export default function Form({ categories }: { categories: Category[] }) {
           helperText={errors.amount?.message}
           disabled={disabledForm}
           slotProps={{
-            htmlInput: { inputMode: 'decimal' },
+            htmlInput: {
+              inputMode: 'decimal',
+              onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+                e.currentTarget.select(),
+            },
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
         />
-        <Box>
-          <Typography>Category</Typography>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, 100px)',
-              maxHeight: '458px',
-              overflowY: 'auto',
-              alignContent: 'start',
-              columnGap: 1,
-              rowGap: 4,
-              mt: 1,
-            }}
-          >
-            {categories.map(category => {
-              const Icon = categoryIcons.find(
-                icon => category.icon === icon.src,
-              )!.Component;
-
-              return (
-                <Box key={category.id}>
-                  <Icon
-                    style={{
-                      display: 'block',
-                      borderRadius: '50%',
-                      padding: '3px',
-                      boxSizing: 'content-box',
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
-                      backgroundColor: category.backgroundColor,
-                      fill: category.strokeColor,
-                      cursor: 'pointer',
-                    }}
-                  />
-                  <Typography
-                    color="common.white"
-                    textAlign="center"
-                    mt={0.3}
-                    px={1}
-                    fontSize="0.875rem"
-                    sx={{
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    {category.name}
-                  </Typography>
-                </Box>
-              );
-            })}
-          </Box>
-        </Box>
+        <CategoriesInput categories={categories} disabled={disabledForm} />
         <Divider />
+        <Link
+          href={{
+            pathname: '/categories/all',
+            query: { type: 'expense' },
+          }}
+        >
+          <Button variant="outlined" fullWidth>
+            Manage Expense Categories
+          </Button>
+        </Link>
         <Button
           type="submit"
           //   TODO:
@@ -162,7 +121,7 @@ export default function Form({ categories }: { categories: Category[] }) {
         >
           Save
         </Button>
-      </Grid>
+      </Stack>
     </FormProvider>
   );
 }
@@ -170,6 +129,7 @@ export default function Form({ categories }: { categories: Category[] }) {
 function getDefaultValues(): ExpenseFormValues {
   return {
     amount: '',
+    categoryId: '',
   };
 }
 
