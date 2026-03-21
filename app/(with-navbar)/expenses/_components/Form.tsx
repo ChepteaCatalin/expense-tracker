@@ -11,8 +11,9 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
+import { Category } from '@/types/category';
 
-export default function Form() {
+export default function Form({ categories }: { categories: Category[] }) {
   //TODO:
   const disabledForm = false;
   const isEditMode = false;
