@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../validation';
 import { signUp } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
-import { startTransition, useActionState, useState } from 'react';
+import { startTransition, useActionState, useEffect, useState } from 'react';
 import { SignUpFormValues } from '../types';
 import ApiFormErrorAlert from '../../../components/ApiFormErrorAlert';
 
@@ -33,10 +33,15 @@ export default function SignUpForm() {
   const [actionErrors, signUpAction, isPending] = useActionState(signUp, {});
 
   const [hideApiError, setHideApiError] = useState(false);
-  subscribe({
-    formState: { values: true },
-    callback: () => setHideApiError(true),
-  });
+
+  useEffect(
+    () =>
+      subscribe({
+        formState: { values: true },
+        callback: () => setHideApiError(true),
+      }),
+    [subscribe],
+  );
 
   return (
     <form

@@ -52,10 +52,15 @@ export default function Form({ category }: { category?: Category }) {
   } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
-  subscribe({
-    formState: { values: true },
-    callback: () => setHideApiError(true),
-  });
+
+  useEffect(
+    () =>
+      subscribe({
+        formState: { values: true },
+        callback: () => setHideApiError(true),
+      }),
+    [subscribe],
+  );
 
   useEffect(
     function resetFormOnUnmount() {

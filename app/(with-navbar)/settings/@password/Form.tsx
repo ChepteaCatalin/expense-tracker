@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchema } from '../validation';
 import PasswordInput from '@/app/(auth)/_components/PasswordInput';
-import { startTransition, useActionState, useState } from 'react';
+import { startTransition, useActionState, useEffect, useState } from 'react';
 import { updatePassword } from '../actions';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
@@ -34,10 +34,15 @@ export default function Form() {
   );
 
   const [hideApiError, setHideApiError] = useState(false);
-  subscribe({
-    formState: { values: true },
-    callback: () => setHideApiError(true),
-  });
+
+  useEffect(
+    () =>
+      subscribe({
+        formState: { values: true },
+        callback: () => setHideApiError(true),
+      }),
+    [subscribe],
+  );
 
   return (
     <Stack

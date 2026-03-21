@@ -9,9 +9,9 @@ import Grid from '@mui/material/Grid';
 import { signIn } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import PasswordInput from '../_components/PasswordInput';
-import { startTransition, useActionState, useState } from 'react';
+import { startTransition, useActionState, useEffect, useState } from 'react';
 import { SignInFormValues } from '../types';
-import ApiFormErrorAlert from '../../../components/ApiFormErrorAlert';
+import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
 export default function SignInForm() {
   const {
@@ -27,10 +27,15 @@ export default function SignInForm() {
   const [actionErrors, signInAction, isPending] = useActionState(signIn, {});
 
   const [hideApiError, setHideApiError] = useState(false);
-  subscribe({
-    formState: { values: true },
-    callback: () => setHideApiError(true),
-  });
+
+  useEffect(
+    () =>
+      subscribe({
+        formState: { values: true },
+        callback: () => setHideApiError(true),
+      }),
+    [subscribe],
+  );
 
   return (
     <form
