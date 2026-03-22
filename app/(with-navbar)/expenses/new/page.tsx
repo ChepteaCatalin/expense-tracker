@@ -1,11 +1,9 @@
 import BackToLink from '@/components/BackToLink';
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 import Form from '../_components/Form';
-import { redirect } from 'next/navigation';
 import { getAllCategoriesByType } from '@/data/category';
-import { UnauthorizedError } from '@/utils/error';
-import { Category } from '@/types/category';
 import { NoExpenseCategories } from '../_components/NoExpenseCategories';
+import { requireAuth } from '@/lib/auth-utils';
 
 export const metadata = {
   title: 'New Expense',
@@ -13,12 +11,10 @@ export const metadata = {
 };
 
 export default async function NewExpense() {
-  var categories: Category[] = [];
-  try {
-    categories = await getAllCategoriesByType('expense');
-  } catch (err) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-  }
+  const {
+    user: { currency },
+  } = await requireAuth();
+  const categories = await getAllCategoriesByType('expense');
 
   return (
     <TitledCardPageWrapper
@@ -31,7 +27,7 @@ export default async function NewExpense() {
       {!categories.length ? (
         <NoExpenseCategories />
       ) : (
-        <Form categories={categories} />
+        <Form currency={currency} categories={categories} />
       )}
     </TitledCardPageWrapper>
   );

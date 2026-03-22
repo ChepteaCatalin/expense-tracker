@@ -14,8 +14,16 @@ import TextField from '@mui/material/TextField';
 import { Category } from '@/types/category';
 import CategoriesInput from './CategoriesInput';
 import Link from 'next/link';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 
-export default function Form({ categories }: { categories: Category[] }) {
+export default function Form({
+  currency,
+  categories,
+}: {
+  currency: string;
+  categories: Category[];
+}) {
   //TODO:
   const disabledForm = false;
   const isEditMode = false;
@@ -73,26 +81,29 @@ export default function Form({ categories }: { categories: Category[] }) {
           });
         })}
       >
-        <TextField
-          {...register('amount', { setValueAs: normalizeNumberInput })}
-          type="text"
-          label="Amount"
-          fullWidth
-          required
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.amount}
-          helperText={errors.amount?.message}
-          disabled={disabledForm}
-          slotProps={{
-            htmlInput: {
-              inputMode: 'decimal',
-              onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                e.currentTarget.select(),
-            },
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
+        <Grid container justifyContent="center" alignItems="center" gap={1}>
+          <TextField
+            {...register('amount', { setValueAs: normalizeNumberInput })}
+            type="text"
+            label="Amount"
+            required
+            autoComplete="off"
+            spellCheck="false"
+            error={!!errors.amount}
+            helperText={errors.amount?.message}
+            disabled={disabledForm}
+            slotProps={{
+              htmlInput: {
+                inputMode: 'decimal',
+                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+                  e.currentTarget.select(),
+              },
+              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+            }}
+            sx={{ maxWidth: 150 }}
+          />
+          <Typography component="span">{currency}</Typography>
+        </Grid>
         <CategoriesInput categories={categories} disabled={disabledForm} />
         <Divider />
         <Link
