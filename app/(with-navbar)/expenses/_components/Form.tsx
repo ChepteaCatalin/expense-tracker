@@ -90,14 +90,12 @@ export default function Form({
         <Grid container justifyContent="center" alignItems="center" gap={1}>
           <TextField
             {...register('amount', { setValueAs: normalizeNumberInput })}
-            type="text"
             label="Amount"
             required
             autoComplete="off"
             spellCheck="false"
             error={!!errors.amount}
             helperText={errors.amount?.message}
-            disabled={disabledForm}
             slotProps={{
               htmlInput: {
                 inputMode: 'decimal',
@@ -130,6 +128,19 @@ export default function Form({
               }}
             />
           )}
+        />
+        <TextField
+          {...register('description')}
+          label="Description"
+          autoComplete="off"
+          spellCheck="false"
+          error={!!errors.description}
+          helperText={errors.description?.message}
+          multiline
+          maxRows={10}
+          slotProps={{
+            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+          }}
         />
         <Divider />
         <Link
@@ -168,6 +179,7 @@ function getDefaultValues(): ExpenseFormValues {
     amount: '',
     categoryId: '',
     date: null,
+    description: '',
   };
 }
 

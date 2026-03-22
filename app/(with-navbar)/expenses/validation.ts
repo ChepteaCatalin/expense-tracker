@@ -24,4 +24,5 @@ export const expenseSchema = z.object({
         .gt(0, 'Category id must be greater than zero'),
     ),
   date: validDate,
+  description: z.string().max(500, 'Must be at most 500 characters'),
 });

@@ -4,4 +4,5 @@ export interface ExpenseFormValues {
   amount: number | '';
   categoryId: number | '';
   date: FormDateTime;
+  description: string;
 }

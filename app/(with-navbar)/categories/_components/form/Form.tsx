@@ -99,7 +99,6 @@ export default function Form({ category }: { category?: Category }) {
           spellCheck="false"
           error={!!errors.name}
           helperText={errors.name?.message}
-          disabled={disabledForm}
           slotProps={{
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
