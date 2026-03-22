@@ -58,10 +58,11 @@ export default function CategoriesInput({
                       : 'transparent',
                     borderRadius: '8px',
                     p: 0.5,
+                    cursor: disabled ? 'not-allowed' : 'pointer',
                   }}
+                  onClick={() => !disabled && onChange(category.id)}
                 >
                   <icon.Component
-                    onClick={() => !disabled && onChange(category.id)}
                     style={{
                       display: 'block',
                       borderRadius: '50%',
@@ -71,7 +72,6 @@ export default function CategoriesInput({
                       marginRight: 'auto',
                       backgroundColor: category.backgroundColor,
                       fill: category.strokeColor,
-                      cursor: disabled ? 'not-allowed' : 'pointer',
                     }}
                   />
                   <Typography

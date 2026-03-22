@@ -1,3 +1,4 @@
+import { validDate } from '@/lib/MuiDatePicker/utils';
 import z from 'zod';
 
 export const expenseSchema = z.object({
@@ -22,4 +23,5 @@ export const expenseSchema = z.object({
         .int('Category id must be an integer')
         .gt(0, 'Category id must be greater than zero'),
     ),
+  date: validDate,
 });

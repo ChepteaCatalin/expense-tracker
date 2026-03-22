@@ -2,7 +2,7 @@
 
 import { ExpenseFormValues } from '@/types/expense';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { expenseSchema } from '../validation';
 import { startTransition, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
@@ -16,6 +16,11 @@ import CategoriesInput from './CategoriesInput';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import { DatePicker } from '@mui/x-date-pickers';
+import {
+  toDatePickerValue,
+  handleDatePickerChange,
+} from '@/lib/MuiDatePicker/utils';
 
 export default function Form({
   currency,
@@ -36,6 +41,7 @@ export default function Form({
   });
   const {
     register,
+    control,
     reset,
     subscribe,
     handleSubmit,
@@ -105,6 +111,26 @@ export default function Form({
           <Typography component="span">{currency}</Typography>
         </Grid>
         <CategoriesInput categories={categories} disabled={disabledForm} />
+        <Controller
+          name="date"
+          control={control}
+          render={({ field: { name, value, onChange, disabled } }) => (
+            <DatePicker
+              label="Date"
+              name={name}
+              disabled={disabled}
+              value={toDatePickerValue(value)}
+              onChange={handleDatePickerChange(onChange)}
+              slotProps={{
+                textField: {
+                  required: true,
+                  error: !!errors.date,
+                  helperText: errors.date?.message,
+                },
+              }}
+            />
+          )}
+        />
         <Divider />
         <Link
           href={{
@@ -141,6 +167,7 @@ function getDefaultValues(): ExpenseFormValues {
   return {
     amount: '',
     categoryId: '',
+    date: null,
   };
 }
 

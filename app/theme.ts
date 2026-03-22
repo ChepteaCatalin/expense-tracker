@@ -1,6 +1,7 @@
 'use client';
 
 import { createTheme } from '@mui/material/styles';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 
 const theme = createTheme({
   cssVariables: true,
@@ -20,6 +21,12 @@ const theme = createTheme({
       },
     },
     MuiTextField: { defaultProps: { size: 'small' } },
+    MuiDatePicker: {
+      defaultProps: {
+        format: 'DD MMMM YYYY',
+        slotProps: { textField: { size: 'small' } },
+      },
+    },
   },
 });
 
