@@ -14,13 +14,12 @@ import TextField from '@mui/material/TextField';
 import { Category } from '@/types/category';
 import CategoriesInput from './CategoriesInput';
 import Link from 'next/link';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
   toDatePickerValue,
   handleDatePickerChange,
 } from '@/lib/MuiDatePicker/utils';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export default function Form({
   currency,
@@ -87,27 +86,29 @@ export default function Form({
           });
         })}
       >
-        <Grid container justifyContent="center" alignItems="center" gap={1}>
-          <TextField
-            {...register('amount', { setValueAs: normalizeNumberInput })}
-            label="Amount"
-            required
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.amount}
-            helperText={errors.amount?.message}
-            slotProps={{
-              htmlInput: {
-                inputMode: 'decimal',
-                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                  e.currentTarget.select(),
-              },
-              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-            }}
-            sx={{ maxWidth: 150 }}
-          />
-          <Typography component="span">{currency}</Typography>
-        </Grid>
+        <TextField
+          {...register('amount', { setValueAs: normalizeNumberInput })}
+          label="Amount"
+          required
+          autoComplete="off"
+          spellCheck="false"
+          error={!!errors.amount}
+          helperText={errors.amount?.message}
+          slotProps={{
+            htmlInput: {
+              inputMode: 'decimal',
+              onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+                e.currentTarget.select(),
+            },
+            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">{currency}</InputAdornment>
+              ),
+            },
+          }}
+          sx={{ maxWidth: 150, alignSelf: 'center' }}
+        />
         <CategoriesInput categories={categories} disabled={disabledForm} />
         <Controller
           name="date"
