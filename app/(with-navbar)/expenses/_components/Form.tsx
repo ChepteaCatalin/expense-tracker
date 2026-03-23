@@ -4,7 +4,7 @@ import { ExpenseFormValues } from '@/types/expense';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { expenseSchema } from '../validation';
-import { startTransition, useEffect, useState } from 'react';
+import { startTransition, useActionState, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
@@ -20,6 +20,8 @@ import {
   handleDatePickerChange,
 } from '@/lib/MuiDatePicker/utils';
 import InputAdornment from '@mui/material/InputAdornment';
+import { createExpense } from '../actions';
+import dayjs from 'dayjs';
 
 export default function Form({
   currency,
@@ -28,9 +30,12 @@ export default function Form({
   currency: string;
   categories: Category[];
 }) {
-  //TODO:
-  const disabledForm = false;
+  const [createExpenseErrors, createExpenseAction, isPendingCreate] =
+    useActionState(createExpense, {});
+
+  //TODO: create the edit expense page
   const isEditMode = false;
+  const disabledForm = isPendingCreate;
 
   const methods = useForm<ExpenseFormValues>({
     shouldUnregister: true,
@@ -69,20 +74,17 @@ export default function Form({
     <FormProvider {...methods}>
       <ApiFormErrorAlert
         hide={hideApiError}
-        message={undefined} //FIXME:
+        message={createExpenseErrors.api}
         sx={{ mb: 3 }}
       />
       <Stack
         spacing={3}
         component="form"
         noValidate
-        onSubmit={handleSubmit(() => {
+        onSubmit={handleSubmit(data => {
           startTransition(() => {
             setHideApiError(false);
-
-            //TODO:
-            // if (isEditMode) updateCategoryAction({ ...category, ...data });
-            // else createCategoryAction(data);
+            createExpenseAction(data);
           });
         })}
       >
@@ -156,13 +158,8 @@ export default function Form({
         </Link>
         <Button
           type="submit"
-          //   TODO:
-          //   disabled={
-          //     !hideApiError &&
-          //     (!!createCategoryErrors.api || !!updateCategoryErrors.api)
-          //   }
-          //   TODO:
-          //   loading={isPendingCreate || isPendingUpdate}
+          disabled={!hideApiError && !!createExpenseErrors.api}
+          loading={isPendingCreate}
           loadingPosition="start"
           startIcon={<SaveIcon />}
           variant="contained"
@@ -179,7 +176,7 @@ function getDefaultValues(): ExpenseFormValues {
   return {
     amount: '',
     categoryId: '',
-    date: null,
+    date: dayjs().toISOString(),
     description: '',
   };
 }
