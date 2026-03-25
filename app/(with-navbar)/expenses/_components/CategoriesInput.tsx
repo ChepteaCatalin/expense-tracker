@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { categoryIcons } from '@/utils/category-icons';
 import { Category } from '@/types/category';
 import Typography from '@mui/material/Typography';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormState } from 'react-hook-form';
 
 export default function CategoriesInput({
   categories,
@@ -11,9 +11,7 @@ export default function CategoriesInput({
   categories: Category[];
   disabled: boolean;
 }) {
-  const {
-    formState: { errors },
-  } = useFormContext();
+  const { errors } = useFormState();
 
   return (
     <Box>
