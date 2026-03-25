@@ -3,8 +3,8 @@
 --
 
 
--- Dumped from database version 17.8 (6108b59)
--- Dumped by pg_dump version 18.2
+-- Dumped from database version 17.8 (a284a84)
+-- Dumped by pg_dump version 18.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,10 +19,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS "session_userId_fkey";
+ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_user;
+ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_category;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS fk_category_user;
 ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS "account_userId_fkey";
 DROP INDEX IF EXISTS public.verification_identifier_idx;
 DROP INDEX IF EXISTS public."session_userId_idx";
+DROP INDEX IF EXISTS public.idx_expense_user_id;
+DROP INDEX IF EXISTS public.idx_expense_user_date;
+DROP INDEX IF EXISTS public.idx_expense_date;
+DROP INDEX IF EXISTS public.idx_expense_category_id;
 DROP INDEX IF EXISTS public.idx_category_user_type;
 DROP INDEX IF EXISTS public.idx_category_user_id;
 DROP INDEX IF EXISTS public.idx_category_type;
@@ -33,11 +39,13 @@ ALTER TABLE IF EXISTS ONLY public."user" DROP CONSTRAINT IF EXISTS user_email_ke
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS uk_category_name_user;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_token_key;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey;
+ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS expense_pkey;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS category_pkey;
 ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS account_pkey;
 DROP TABLE IF EXISTS public.verification;
 DROP TABLE IF EXISTS public."user";
 DROP TABLE IF EXISTS public.session;
+DROP TABLE IF EXISTS public.expense;
 DROP TABLE IF EXISTS public.category;
 DROP TABLE IF EXISTS public.account;
 DROP TYPE IF EXISTS public.currency_code;
@@ -296,6 +304,37 @@ ALTER TABLE public.category ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: expense; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.expense (
+    id integer NOT NULL,
+    amount integer NOT NULL,
+    category_id integer NOT NULL,
+    user_id text NOT NULL,
+    date date NOT NULL,
+    description character varying(500),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT expense_amount_check CHECK ((amount > 0))
+);
+
+
+--
+-- Name: expense_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.expense ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.expense_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: session; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -355,6 +394,14 @@ ALTER TABLE ONLY public.account
 
 ALTER TABLE ONLY public.category
     ADD CONSTRAINT category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: expense expense_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.expense
+    ADD CONSTRAINT expense_pkey PRIMARY KEY (id);
 
 
 --
@@ -434,6 +481,34 @@ CREATE INDEX idx_category_user_type ON public.category USING btree (user_id, typ
 
 
 --
+-- Name: idx_expense_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_expense_category_id ON public.expense USING btree (category_id);
+
+
+--
+-- Name: idx_expense_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_expense_date ON public.expense USING btree (date);
+
+
+--
+-- Name: idx_expense_user_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_expense_user_date ON public.expense USING btree (user_id, date);
+
+
+--
+-- Name: idx_expense_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_expense_user_id ON public.expense USING btree (user_id);
+
+
+--
 -- Name: session_userId_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -461,6 +536,22 @@ ALTER TABLE ONLY public.account
 
 ALTER TABLE ONLY public.category
     ADD CONSTRAINT fk_category_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: expense fk_expense_category; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.expense
+    ADD CONSTRAINT fk_expense_category FOREIGN KEY (category_id) REFERENCES public.category(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: expense fk_expense_user; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.expense
+    ADD CONSTRAINT fk_expense_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
