@@ -35,6 +35,18 @@ export const createExpense = authGuard(
 
       // TODO: invalidate cache
 
-      return new Expense(result[0]);
+      return expenseFromDb(result[0]);
     },
 );
+
+function expenseFromDb(dbResult: Record<string, any>): Expense {
+  return {
+    id: dbResult.id,
+    amount: dbResult.amount,
+    categoryId: dbResult.category_id,
+    date: new Date(dbResult.date),
+    description: dbResult.description,
+    createdAt: new Date(dbResult.created_at),
+    updatedAt: new Date(dbResult.updated_at),
+  };
+}
