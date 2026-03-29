@@ -31,7 +31,10 @@ export default function PeriodsTabs() {
         onChange={(event, newValue: number) => {
           setValue(newValue);
           if (newValue == 4) setAnchorEl(event.currentTarget);
-          else router.replace(`/expenses?period=${valueToParam(newValue)}`);
+          else
+            router.replace(
+              `/expenses/categories/?period=${valueToParam(newValue)}`,
+            );
         }}
         aria-label="periods tabs"
         sx={{
