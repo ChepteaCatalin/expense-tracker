@@ -1,15 +1,15 @@
 import Fab from '@/components/Fab';
 import Link from 'next/link';
-import ExpensesByCategoryChart from './_components/ExpensesByCategoryChart';
+import ExpensesByCategoryChart from '../_components/ExpensesByCategoryChart';
 import Box from '@mui/material/Box';
 import Heading from '@/components/Heading';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import CategoryListItem from './_components/CategoryListItem';
-import NoExpensesForPeriod from './_components/NoExpensesForPeriod';
-import PeriodsTabs from './_components/PeriodsTabs';
-import { isValidPeriodParam } from './_utils/url';
+import CategoryListItem from '../_components/CategoryListItem';
+import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
+import PeriodsTabs from '../_components/PeriodsTabs';
+import { isValidPeriodParam } from '../_utils/url';
 import { notFound } from 'next/navigation';
 
 export const metadata = {

@@ -25,5 +25,5 @@ export async function createExpense(
     return { api: 'Failed to add the expense' };
   }
 
-  redirect('/expenses');
+  redirect('/expenses/categories?period=day');
 }

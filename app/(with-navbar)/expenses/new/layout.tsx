@@ -1,5 +1,6 @@
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 import BackToLink from '@/components/BackToLink';
+import { periods } from '../_utils/url';
 
 export const metadata = {
   title: 'New Expense',
@@ -17,8 +18,11 @@ export default function NewExpenseLayout({
       subtitle={metadata.description}
       aboveCard={
         <BackToLink
-          href="/expenses"
-          pageName="Expenses List"
+          href={{
+            pathname: '/expenses/categories',
+            query: { period: periods[0] },
+          }}
+          pageName="Expenses by Category"
           sx={{ mb: 0.5 }}
         />
       }

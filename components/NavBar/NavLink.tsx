@@ -17,7 +17,7 @@ export default function NavLink({
   text: string;
 }) {
   const segment = useSelectedLayoutSegment();
-  const isActive = `/${segment}` === href;
+  const isActive = href.startsWith(`/${segment}`);
   const notMobile = useMediaQuery('(min-width: 1000px)');
 
   return (

@@ -26,7 +26,7 @@ export default function NavBar() {
         <Grid container justifyContent="center" flex="1" spacing={2}>
           <Suspense>
             <NavLink
-              href="/expenses"
+              href="/expenses/categories?period=day"
               Icon={MonetizationOnIcon}
               text="Expenses"
             />
