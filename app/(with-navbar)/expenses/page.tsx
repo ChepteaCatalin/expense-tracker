@@ -8,6 +8,9 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from './_components/CategoryListItem';
 import NoExpensesForPeriod from './_components/NoExpensesForPeriod';
+import PeriodsTabs from './_components/PeriodsTabs';
+import { isValidPeriodParam } from './_utils/url';
+import { notFound } from 'next/navigation';
 
 export const metadata = {
   title: 'Expenses',
@@ -26,10 +29,19 @@ const categories = [
   },
 ];
 
-export default function ExpensesPage() {
+export default async function ExpensesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period: string }>;
+}) {
+  const { period } = await searchParams;
+
+  if (!isValidPeriodParam(period)) notFound();
+
   return (
     <Box boxSizing="content-box" maxWidth="610px" mx="auto">
       <Heading title={metadata.title} subtitle={metadata.description} />
+      <PeriodsTabs />
       <Link href="/expenses/new">
         <Fab />
       </Link>
