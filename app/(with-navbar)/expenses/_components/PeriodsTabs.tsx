@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useId, useState } from 'react';
-import { periods } from '../_utils/url';
+import { customPeriod, periods } from '../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 
@@ -29,12 +29,14 @@ export default function PeriodsTabs() {
       <Tabs
         value={value}
         onChange={(event, newValue: number) => {
-          setValue(newValue);
-          if (newValue == 4) setAnchorEl(event.currentTarget);
-          else
+          if (newValue == periods.findIndex(x => x === customPeriod)) {
+            setAnchorEl(event.currentTarget);
+          } else {
+            setValue(newValue);
             router.replace(
               `/expenses/categories/?period=${valueToParam(newValue)}`,
             );
+          }
         }}
         aria-label="periods tabs"
         sx={{

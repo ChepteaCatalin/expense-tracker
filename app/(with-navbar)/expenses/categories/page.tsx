@@ -4,12 +4,10 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from '../_components/CategoryListItem';
 import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
-import { isValidPeriodParam } from '../_utils/url';
+import { isValidDiffParam, isValidPeriodParam } from '../_utils/url';
 import { notFound } from 'next/navigation';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
+import DateNavButtons from '../_components/DateNavButtons';
 
 const categories = [
   {
@@ -26,11 +24,11 @@ const categories = [
 export default async function ExpensesByCategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ period: string }>;
+  searchParams: Promise<{ period: string; diff: string }>;
 }) {
-  const { period } = await searchParams;
+  const { period, diff } = await searchParams;
 
-  if (!isValidPeriodParam(period)) notFound();
+  if (!isValidPeriodParam(period) || !isValidDiffParam(diff)) notFound();
 
   return (
     <Box>
@@ -38,18 +36,7 @@ export default async function ExpensesByCategoriesPage({
         <CardContent
           sx={{ p: 0, '&:last-child': { pb: 1 }, position: 'relative' }}
         >
-          <IconButton
-            aria-label="previous"
-            sx={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          <IconButton
-            aria-label="previous"
-            sx={{ position: 'absolute', right: 0, top: 0, zIndex: 1 }}
-          >
-            <ArrowForwardIcon />
-          </IconButton>
+          <DateNavButtons />
           <ExpensesByCategoryChart
             currency="MDL"
             data={[
