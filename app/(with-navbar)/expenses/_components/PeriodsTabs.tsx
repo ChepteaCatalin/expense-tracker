@@ -6,6 +6,8 @@ import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useId, useState } from 'react';
 import { periods } from '../_utils/url';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 
 export default function PeriodsTabs() {
   const router = useRouter();
@@ -15,14 +17,21 @@ export default function PeriodsTabs() {
   const [value, setValue] = useState(() =>
     paramToValue(searchParams.get('period') || 'day'),
   );
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
+    null,
+  );
+
+  const popoverOpened = Boolean(anchorEl);
+  const popoverId = popoverOpened ? 'popover' + id : undefined;
 
   return (
     <Box mb={0.75}>
       <Tabs
         value={value}
-        onChange={(_event, newValue: number) => {
+        onChange={(event, newValue: number) => {
           setValue(newValue);
-          router.replace(`/expenses?period=${valueToParam(newValue)}`);
+          if (newValue == 4) setAnchorEl(event.currentTarget);
+          else router.replace(`/expenses?period=${valueToParam(newValue)}`);
         }}
         aria-label="periods tabs"
         sx={{
@@ -48,6 +57,22 @@ export default function PeriodsTabs() {
           />
         ))}
       </Tabs>
+      <Popover
+        id={popoverId}
+        open={popoverOpened}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+      </Popover>
     </Box>
   );
 }
