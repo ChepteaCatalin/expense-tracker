@@ -7,6 +7,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from './_components/CategoryListItem';
+import NoExpensesForPeriod from './_components/NoExpensesForPeriod';
 
 export const metadata = {
   title: 'Expenses',
@@ -45,7 +46,17 @@ export default function ExpensesPage() {
         </CardContent>
       </Card>
       <Stack spacing={2} mt={2}>
-        <CategoryListItem category={categories[0]} currency="MDL" />
+        {!categories?.length ? (
+          <NoExpensesForPeriod />
+        ) : (
+          categories.map(category => (
+            <CategoryListItem
+              key={category.id}
+              category={category}
+              currency="MDL"
+            />
+          ))
+        )}
       </Stack>
     </Box>
   );

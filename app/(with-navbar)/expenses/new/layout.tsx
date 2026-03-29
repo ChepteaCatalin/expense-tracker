@@ -16,7 +16,11 @@ export default function NewExpenseLayout({
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
-        <BackToLink href="/expenses" pageName="Expenses" sx={{ mb: 0.5 }} />
+        <BackToLink
+          href="/expenses"
+          pageName="Expenses List"
+          sx={{ mb: 0.5 }}
+        />
       }
     >
       {children}
