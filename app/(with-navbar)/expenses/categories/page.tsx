@@ -1,24 +1,15 @@
-import Fab from '@/components/Fab';
-import Link from 'next/link';
 import ExpensesByCategoryChart from '../_components/ExpensesByCategoryChart';
-import Box from '@mui/material/Box';
-import Heading from '@/components/Heading';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from '../_components/CategoryListItem';
 import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
-import PeriodsTabs from '../_components/PeriodsTabs';
 import { isValidPeriodParam } from '../_utils/url';
 import { notFound } from 'next/navigation';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import IconButton from '@mui/material/IconButton';
-
-export const metadata = {
-  title: 'Expenses',
-  description: 'Track and organize your spending',
-};
+import Box from '@mui/material/Box';
 
 const categories = [
   {
@@ -32,7 +23,7 @@ const categories = [
   },
 ];
 
-export default async function ExpensesPage({
+export default async function ExpensesByCategoriesPage({
   searchParams,
 }: {
   searchParams: Promise<{ period: string }>;
@@ -42,12 +33,7 @@ export default async function ExpensesPage({
   if (!isValidPeriodParam(period)) notFound();
 
   return (
-    <Box boxSizing="content-box" maxWidth="610px" mx="auto">
-      <Heading title={metadata.title} subtitle={metadata.description} />
-      <PeriodsTabs />
-      <Link href="/expenses/new">
-        <Fab />
-      </Link>
+    <Box>
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
         <CardContent
           sx={{ p: 0, '&:last-child': { pb: 1 }, position: 'relative' }}
@@ -74,7 +60,7 @@ export default async function ExpensesPage({
           />
         </CardContent>
       </Card>
-      <Stack spacing={2} mt={2}>
+      <Stack spacing={1.25} mt={2}>
         {!categories?.length ? (
           <NoExpensesForPeriod />
         ) : (
