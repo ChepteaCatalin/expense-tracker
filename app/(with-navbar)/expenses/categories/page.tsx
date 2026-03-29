@@ -11,6 +11,9 @@ import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
 import PeriodsTabs from '../_components/PeriodsTabs';
 import { isValidPeriodParam } from '../_utils/url';
 import { notFound } from 'next/navigation';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import IconButton from '@mui/material/IconButton';
 
 export const metadata = {
   title: 'Expenses',
@@ -46,7 +49,21 @@ export default async function ExpensesPage({
         <Fab />
       </Link>
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
-        <CardContent sx={{ p: 0, '&:last-child': { pb: 1 } }}>
+        <CardContent
+          sx={{ p: 0, '&:last-child': { pb: 1 }, position: 'relative' }}
+        >
+          <IconButton
+            aria-label="previous"
+            sx={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <IconButton
+            aria-label="previous"
+            sx={{ position: 'absolute', right: 0, top: 0, zIndex: 1 }}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
           <ExpensesByCategoryChart
             currency="MDL"
             data={[
