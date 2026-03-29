@@ -3,6 +3,12 @@
 import { createTheme } from '@mui/material/styles';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
 
+declare module '@mui/material/styles' {
+  interface TypeText {
+    pale: string;
+  }
+}
+
 const theme = createTheme({
   cssVariables: true,
   typography: { fontFamily: 'var(--font-geist)' },
@@ -12,6 +18,9 @@ const theme = createTheme({
     background: {
       default: '#121212',
       paper: '#212121',
+    },
+    text: {
+      pale: 'rgb(227, 227, 227)',
     },
   },
   components: {

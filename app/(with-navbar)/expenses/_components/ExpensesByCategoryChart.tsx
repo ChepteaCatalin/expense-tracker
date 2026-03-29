@@ -2,12 +2,13 @@
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
+import { ExpenseByCategoryChartData } from '../types';
 
 export default function ExpensesByCategoryChart({
   data,
   currency,
 }: {
-  data: { name: string; value: number }[];
+  data: ExpenseByCategoryChartData;
   currency: string;
 }) {
   const isDesktop = useMediaQuery('(min-width: 1000px)');
@@ -45,6 +46,7 @@ export default function ExpensesByCategoryChart({
               borderColor: 'rgb(227, 227, 227)',
               borderWidth: 1,
             },
+            color: data.map(item => item.color),
             label: { show: false },
             data,
           },

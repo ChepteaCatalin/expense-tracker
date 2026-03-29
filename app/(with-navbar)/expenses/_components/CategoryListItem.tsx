@@ -1,0 +1,77 @@
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { CategoryItem } from '../types';
+import Typography from '@mui/material/Typography';
+import { categoryIcons } from '@/utils/category-icons';
+import Grid from '@mui/material/Grid';
+
+export default function CategoryListItem({
+  category,
+  currency,
+}: {
+  category: CategoryItem;
+  currency: string;
+}) {
+  const Icon = categoryIcons.find(
+    icon => icon.src === category.icon,
+  )?.Component;
+
+  return (
+    <Card sx={{ borderRadius: '10px' }}>
+      <CardContent
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 2,
+          p: 1.25,
+          '&:last-child': { pb: 1.25 },
+        }}
+      >
+        <Grid container alignItems="center" gap={1} flexWrap="nowrap">
+          {Icon && (
+            <Icon
+              style={{
+                width: '32px',
+                height: '32px',
+                fontWeight: '32px',
+                padding: '3px',
+                borderRadius: '50%',
+                backgroundColor: category.backgroundColor,
+                fill: category.strokeColor,
+                flex: 'none',
+              }}
+            />
+          )}
+          <Typography
+            color="text.pale"
+            sx={{
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {category.name}
+          </Typography>
+        </Grid>
+        <Grid container gap={2} flexWrap="nowrap" sx={{ flex: 'none' }}>
+          <Typography
+            fontSize="0.875rem"
+            color="text.secondary"
+            whiteSpace="nowrap"
+          >
+            {category.percentage.toFixed(2)}%
+          </Typography>
+          <Typography
+            fontSize="0.875rem"
+            fontWeight={500}
+            color="text.pale"
+            whiteSpace="nowrap"
+          >
+            {`${category.amount} ${currency}`}
+          </Typography>
+        </Grid>
+      </CardContent>
+    </Card>
+  );
+}

@@ -6,6 +6,7 @@ import Heading from '@/components/Heading';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
+import CategoryListItem from './_components/CategoryListItem';
 
 export const metadata = {
   title: 'Expenses',
@@ -19,26 +20,31 @@ export default function ExpensesPage() {
       <Link href="/expenses/new">
         <Fab />
       </Link>
-      <Stack spacing={2}>
-        <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
-          <CardContent sx={{ p: 0, '&:last-child': { pb: 1 } }}>
-            <ExpensesByCategoryChart
-              currency="MDL"
-              data={[
-                { value: 1048, name: 'Search Engine' },
-                { value: 735.12, name: 'Direct' },
-                { value: 508, name: 'Email' },
-                { value: 484, name: 'Union Ads' },
-                { value: 300, name: 'Video Ads' },
-              ]}
-            />
-          </CardContent>
-        </Card>
-        <Card sx={{ borderRadius: '10px' }}>
-          <CardContent sx={{ pt: 1.25, '&:last-child': { pb: 1.25 } }}>
-            1
-          </CardContent>
-        </Card>
+      <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
+        <CardContent sx={{ p: 0, '&:last-child': { pb: 1 } }}>
+          <ExpensesByCategoryChart
+            currency="MDL"
+            data={[
+              { value: 1048, name: 'Search Engine', color: 'yellow' },
+              { value: 735.12, name: 'Direct', color: 'blue' },
+              { value: 508, name: 'Email', color: 'green' },
+            ]}
+          />
+        </CardContent>
+      </Card>
+      <Stack spacing={2} mt={2}>
+        <CategoryListItem
+          category={{
+            id: 1,
+            name: 'Category 1asdasdasdasdasdasdasdsd',
+            icon: '/category-icons/school.svg',
+            strokeColor: 'red',
+            backgroundColor: 'blue',
+            amount: 100000,
+            percentage: 25,
+          }}
+          currency="MDL"
+        />
       </Stack>
     </Box>
   );

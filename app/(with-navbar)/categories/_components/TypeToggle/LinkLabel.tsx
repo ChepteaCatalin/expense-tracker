@@ -22,7 +22,7 @@ export default function LinkLabel({
         textAlign: 'center',
         fontWeight: 700,
         p: '8px',
-        color: isActive ? '#1ed760' : 'rgb(227, 227, 227)',
+        color: isActive ? '#1ed760' : 'text.pale',
         backgroundColor: isActive ? 'rgba(30, 215, 96, 0.1)' : 'transparent',
         boxShadow: isActive ? '0 1px 5px rgba(30, 215, 96, 0.16)' : 'none',
         transition:
