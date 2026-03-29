@@ -13,6 +13,18 @@ export const metadata = {
   description: 'Track and organize your spending',
 };
 
+const categories = [
+  {
+    id: 1,
+    name: 'Category 1asdasdasdasdasdasdasdsd',
+    icon: '/category-icons/school.svg',
+    strokeColor: 'red',
+    backgroundColor: 'blue',
+    amount: 100000,
+    percentage: 25,
+  },
+];
+
 export default function ExpensesPage() {
   return (
     <Box boxSizing="content-box" maxWidth="610px" mx="auto">
@@ -33,18 +45,7 @@ export default function ExpensesPage() {
         </CardContent>
       </Card>
       <Stack spacing={2} mt={2}>
-        <CategoryListItem
-          category={{
-            id: 1,
-            name: 'Category 1asdasdasdasdasdasdasdsd',
-            icon: '/category-icons/school.svg',
-            strokeColor: 'red',
-            backgroundColor: 'blue',
-            amount: 100000,
-            percentage: 25,
-          }}
-          currency="MDL"
-        />
+        <CategoryListItem category={categories[0]} currency="MDL" />
       </Stack>
     </Box>
   );
