@@ -116,17 +116,22 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
       to: searchParams.get('to'),
     },
     resolver: zodResolver(
-      z
-        .object({ from: validDate, to: validDate })
-        .refine(
-          ({ from, to }) =>
-            dayjs(to).isAfter(dayjs(from), 'day') ||
-            dayjs(to).isSame(dayjs(from), 'day'),
-          {
-            message: 'To date must be on or after From date',
-            path: ['to'],
-          },
-        ),
+      z.object({ from: validDate, to: validDate }).refine(
+        ({ from, to }) => {
+          const fromDate = dayjs(from);
+          const toDate = dayjs(to);
+
+          if (!fromDate.isValid() || !toDate.isValid()) return true;
+
+          return (
+            toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day')
+          );
+        },
+        {
+          message: 'To date must be on or after From date',
+          path: ['to'],
+        },
+      ),
     ),
   });
 
