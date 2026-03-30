@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import IconButton from '@mui/material/IconButton';
+import { customPeriod } from '../_utils/url';
 
 export default function DateNavButtons() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export default function DateNavButtons() {
   const diff = searchParams.get('diff') || '0';
   const router = useRouter();
 
+  if (period === customPeriod) return null;
   return (
     <>
       <IconButton
