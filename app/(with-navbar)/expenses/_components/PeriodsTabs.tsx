@@ -105,15 +105,29 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
 
   const {
     control,
+    trigger,
     handleSubmit,
     formState: { errors },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
     shouldUnregister: true,
+    mode: 'onChange',
     defaultValues: {
       from: searchParams.get('from'),
       to: searchParams.get('to'),
     },
-    resolver: zodResolver(z.object({ from: validDate, to: validDate })),
+    resolver: zodResolver(
+      z
+        .object({ from: validDate, to: validDate })
+        .refine(
+          ({ from, to }) =>
+            dayjs(to).isAfter(dayjs(from), 'day') ||
+            dayjs(to).isSame(dayjs(from), 'day'),
+          {
+            message: 'To date must be on or after From date',
+            path: ['to'],
+          },
+        ),
+    ),
   });
 
   return (
@@ -128,7 +142,7 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
       })}
       p={1.5}
       spacing={1.5}
-      sx={{ width: '245px' }}
+      sx={{ width: '260px' }}
     >
       <Typography>Choose date range:</Typography>
       <Controller
@@ -139,7 +153,10 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
             label="From"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDatePickerChange(onChange)}
+            onChange={handleDatePickerChange(value => {
+              onChange(value);
+              trigger('to');
+            })}
             slotProps={{
               textField: {
                 required: true,
@@ -158,7 +175,10 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
             label="To"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDatePickerChange(onChange)}
+            onChange={handleDatePickerChange(value => {
+              onChange(value);
+              trigger('from');
+            })}
             slotProps={{
               textField: {
                 required: true,
