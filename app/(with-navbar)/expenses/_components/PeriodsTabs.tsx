@@ -5,17 +5,30 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useId, useState } from 'react';
-import { customPeriod, periods } from '../_utils/url';
+import { customPeriod, customPeriodIdx, periods } from '../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+import { Controller, useForm } from 'react-hook-form';
+import { DatePicker } from '@mui/x-date-pickers';
+import {
+  handleDatePickerChange,
+  toDatePickerValue,
+  validDate,
+} from '@/lib/MuiDatePicker/utils';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import dayjs from 'dayjs';
+import { FormDateTime } from '@/lib/MuiDatePicker/types';
 
 export default function PeriodsTabs() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = useId();
 
-  const [value, setValue] = useState(() =>
-    paramToValue(searchParams.get('period') || 'day'),
+  const [selectedTabIdx, setSelectedTabIdx] = useState(() =>
+    periods.indexOf(searchParams.get('period') as (typeof periods)[number]),
   );
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
     null,
@@ -27,15 +40,11 @@ export default function PeriodsTabs() {
   return (
     <Box mb={0.75}>
       <Tabs
-        value={value}
-        onChange={(event, newValue: number) => {
-          if (newValue == periods.findIndex(x => x === customPeriod)) {
-            setAnchorEl(event.currentTarget);
-          } else {
-            setValue(newValue);
-            router.replace(
-              `/expenses/categories/?period=${valueToParam(newValue)}`,
-            );
+        value={selectedTabIdx}
+        onChange={(_event, newValue: number) => {
+          if (newValue !== customPeriodIdx) {
+            setSelectedTabIdx(newValue);
+            router.replace(`/expenses/categories/?period=${periods[newValue]}`);
           }
         }}
         aria-label="periods tabs"
@@ -59,6 +68,9 @@ export default function PeriodsTabs() {
             label={period}
             id={`tab-${id}-${index}`}
             aria-controls={`tabpanel-${id}-${index}`}
+            onClick={event => {
+              if (index === customPeriodIdx) setAnchorEl(event.currentTarget);
+            }}
           />
         ))}
       </Tabs>
@@ -76,16 +88,101 @@ export default function PeriodsTabs() {
           horizontal: 'right',
         }}
       >
-        <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+        <CustomPeriodPopover
+          submitRange={() => {
+            setSelectedTabIdx(customPeriodIdx);
+            setAnchorEl(null);
+          }}
+        />
       </Popover>
     </Box>
   );
 }
 
-function paramToValue(param: string) {
-  return periods.indexOf(param as (typeof periods)[number]);
+function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ from: FormDateTime; to: FormDateTime }>({
+    shouldUnregister: true,
+    defaultValues: {
+      from: searchParams.get('from'),
+      to: searchParams.get('to'),
+    },
+    resolver: zodResolver(z.object({ from: validDate, to: validDate })),
+  });
+
+  return (
+    <Stack
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(data => {
+        submitRange();
+        router.replace(
+          `/expenses/categories/?${buildCustomPeriodParams(data)}`,
+        );
+      })}
+      p={1.5}
+      spacing={1.5}
+      sx={{ width: '245px' }}
+    >
+      <Typography>Choose date range:</Typography>
+      <Controller
+        name="from"
+        control={control}
+        render={({ field: { name, value, onChange } }) => (
+          <DatePicker
+            label="From"
+            name={name}
+            value={toDatePickerValue(value)}
+            onChange={handleDatePickerChange(onChange)}
+            slotProps={{
+              textField: {
+                required: true,
+                error: !!errors.from,
+                helperText: errors.from?.message,
+              },
+            }}
+          />
+        )}
+      />
+      <Controller
+        name="to"
+        control={control}
+        render={({ field: { name, value, onChange } }) => (
+          <DatePicker
+            label="To"
+            name={name}
+            value={toDatePickerValue(value)}
+            onChange={handleDatePickerChange(onChange)}
+            slotProps={{
+              textField: {
+                required: true,
+                error: !!errors.to,
+                helperText: errors.to?.message,
+              },
+            }}
+          />
+        )}
+      />
+      <Button type="submit" variant="contained">
+        View Expenses
+      </Button>
+    </Stack>
+  );
 }
 
-function valueToParam(value: number) {
-  return periods[value];
+function buildCustomPeriodParams(data: {
+  from: FormDateTime;
+  to: FormDateTime;
+}) {
+  return new URLSearchParams({
+    period: customPeriod,
+    from: dayjs(data.from).format('YYYY-MM-DD'),
+    to: dayjs(data.to).format('YYYY-MM-DD'),
+  }).toString();
 }

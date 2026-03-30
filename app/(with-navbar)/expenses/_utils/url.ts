@@ -1,6 +1,6 @@
 export const customPeriod = 'custom';
-
 export const periods = ['day', 'week', 'month', 'year', customPeriod] as const;
+export const customPeriodIdx = periods.findIndex(x => x === customPeriod);
 
 export function isValidPeriodParam(
   param: string | null,

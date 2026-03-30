@@ -1,4 +1,4 @@
-import { FormDateTime } from '@/lib/MuiDatePicker/utils';
+import { FormDateTime } from '@/lib/MuiDatePicker/types';
 import { FormErrors } from './form';
 
 export interface Expense {

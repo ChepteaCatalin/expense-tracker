@@ -1,8 +1,7 @@
 import type { PickerValue } from '@mui/x-date-pickers/internals';
 import dayjs from 'dayjs';
 import z from 'zod';
-
-export type FormDateTime = string | null;
+import { FormDateTime } from './types';
 
 export function handleDatePickerChange(onChange: (...event: any[]) => void) {
   return (date: PickerValue) =>
