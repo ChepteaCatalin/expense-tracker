@@ -4,10 +4,11 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from '../_components/CategoryListItem';
 import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
-import { isValidDiffParam, isValidPeriodParam } from '../_utils/url';
+import { validSearchParams } from '../_utils/url';
 import { notFound } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
+import { ExpenseByCategorySearchParams } from '@/types/expense';
 
 const categories = [
   {
@@ -24,11 +25,9 @@ const categories = [
 export default async function ExpensesByCategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ period: string; diff: string }>;
+  searchParams: Promise<ExpenseByCategorySearchParams>;
 }) {
-  const { period, diff } = await searchParams;
-
-  if (!isValidPeriodParam(period) || !isValidDiffParam(diff)) notFound();
+  if (!validSearchParams(await searchParams)) notFound();
 
   return (
     <Box>

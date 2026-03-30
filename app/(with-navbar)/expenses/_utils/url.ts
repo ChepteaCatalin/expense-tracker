@@ -1,14 +1,37 @@
+import { ExpenseByCategorySearchParams } from '@/types/expense';
+import dayjs from 'dayjs';
+
 export const customPeriod = 'custom';
 export const periods = ['day', 'week', 'month', 'year', customPeriod] as const;
 export const customPeriodIdx = periods.findIndex(x => x === customPeriod);
 
-export function isValidPeriodParam(
-  param: string | null,
-): param is (typeof periods)[number] {
+export function validSearchParams({
+  period,
+  diff,
+  from,
+  to,
+}: ExpenseByCategorySearchParams) {
+  return (
+    validPeriodParam(period) &&
+    vaalidDiffParam(diff) &&
+    validCustomPeriodParams(period, from, to)
+  );
+}
+
+function validPeriodParam(param: string | null) {
   return (periods as readonly string[]).includes(param ?? '');
 }
 
-export function isValidDiffParam(param: string | null): param is string | null {
+function vaalidDiffParam(param: string | null) {
   if (param == null) return true;
-  return !Number.isNaN(parseInt(param, 10));
+  return Number.isInteger(+param) && param.trim() !== '';
+}
+
+function validCustomPeriodParams(
+  period: string | null,
+  from: string | null,
+  to: string | null,
+) {
+  if (period !== customPeriod) return !from && !to;
+  return from && to && dayjs(from).isValid() && dayjs(to).isValid();
 }

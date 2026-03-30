@@ -19,3 +19,10 @@ export interface ExpenseFormValues {
 }
 
 export type ExpenseFormErrors = FormErrors<ExpenseFormValues>;
+
+export interface ExpenseByCategorySearchParams {
+  period: string;
+  diff: string | null;
+  from: string | null;
+  to: string | null;
+}
