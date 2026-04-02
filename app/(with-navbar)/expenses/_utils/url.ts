@@ -1,8 +1,18 @@
 import { ExpenseByCategorySearchParams } from '@/types/expense';
 import dayjs from 'dayjs';
 
+export const dayPeriod = 'day';
+export const weekPeriod = 'week';
+export const monthPeriod = 'month';
+export const yearPeriod = 'year';
 export const customPeriod = 'custom';
-export const periods = ['day', 'week', 'month', 'year', customPeriod] as const;
+export const periods = [
+  dayPeriod,
+  weekPeriod,
+  monthPeriod,
+  yearPeriod,
+  customPeriod,
+] as const;
 export const customPeriodIdx = periods.findIndex(x => x === customPeriod);
 
 export function validSearchParams({
