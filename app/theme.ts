@@ -36,6 +36,20 @@ const theme = createTheme({
         slotProps: { textField: { size: 'small' } },
       },
     },
+    MuiDesktopDatePicker: {
+      defaultProps: {
+        slotProps: {
+          actionBar: { actions: ['today'] },
+        },
+      },
+    },
+    MuiMobileDatePicker: {
+      defaultProps: {
+        slotProps: {
+          actionBar: { actions: ['cancel', 'accept', 'today'] },
+        },
+      },
+    },
   },
 });
 
