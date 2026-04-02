@@ -45,5 +45,3 @@ function validCustomPeriodParams(
     (toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day'))
   );
 }
-
-console.log(1);
