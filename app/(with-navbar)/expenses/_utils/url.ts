@@ -33,5 +33,15 @@ function validCustomPeriodParams(
   to: string | null,
 ) {
   if (period !== customPeriod) return !from && !to;
-  return from && to && dayjs(from).isValid() && dayjs(to).isValid();
+
+  const fromDate = dayjs(from);
+  const toDate = dayjs(to);
+
+  return (
+    from &&
+    to &&
+    fromDate.isValid() &&
+    toDate.isValid() &&
+    (toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day'))
+  );
 }
