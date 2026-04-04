@@ -29,3 +29,12 @@ export interface ExpenseByCategorySearchParams {
   from?: string | null;
   to?: string | null;
 }
+
+export interface ExpenseCategories {
+  categoryId: number;
+  name: string;
+  icon: string;
+  strokeColor: string;
+  backgroundColor: string;
+  totalAmount: number;
+}

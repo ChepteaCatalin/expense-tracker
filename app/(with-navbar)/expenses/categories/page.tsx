@@ -5,10 +5,12 @@ import Stack from '@mui/material/Stack';
 import CategoryListItem from '../_components/CategoryListItem';
 import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
 import { dateFromSearchParams, validSearchParams } from '../_utils/url';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
 import type { ExpenseByCategorySearchParams } from '@/types/expense';
+import { getExpensesCategories } from '@/data/expense';
+import { UnauthorizedError } from '@/utils/error';
 
 const categories = [
   {
@@ -29,8 +31,13 @@ export default async function ExpensesByCategoriesPage({
 }) {
   if (!validSearchParams(await searchParams)) notFound();
 
-  const asd = dateFromSearchParams(await searchParams);
-  console.log('🚀 ~ asd:', asd);
+  try {
+    var expensesByCategory = await getExpensesCategories(
+      dateFromSearchParams(await searchParams),
+    );
+  } catch (err) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+  }
 
   return (
     <Box>
