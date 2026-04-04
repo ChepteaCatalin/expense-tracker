@@ -11,6 +11,7 @@ import DateNavButtons from '../_components/DateNavButtons';
 import type { ExpenseByCategorySearchParams } from '@/types/expense';
 import { getExpensesCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
+import { getSession } from '@/data/auth';
 
 const categories = [
   {
@@ -39,6 +40,9 @@ export default async function ExpensesByCategoriesPage({
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
+  const session = await getSession();
+  const currency = session!.user.currency;
+
   return (
     <Box>
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
@@ -47,7 +51,7 @@ export default async function ExpensesByCategoriesPage({
         >
           <DateNavButtons />
           <ExpensesByCategoryChart
-            currency="MDL"
+            currency={currency}
             data={[
               { value: 1048, name: 'Search Engine', color: 'yellow' },
               { value: 735.12, name: 'Direct', color: 'blue' },
@@ -64,7 +68,7 @@ export default async function ExpensesByCategoriesPage({
             <CategoryListItem
               key={category.id}
               category={category}
-              currency="MDL"
+              currency={currency}
             />
           ))
         )}
