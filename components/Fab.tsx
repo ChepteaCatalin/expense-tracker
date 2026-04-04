@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function Fab() {
-  const notMobile = useMediaQuery('(min-width: 1000px)');
+  const isDesktop = useMediaQuery('(pointer: fine)');
 
   return (
     <MuiFab
@@ -13,7 +13,7 @@ export default function Fab() {
       aria-label="add"
       sx={{
         position: 'fixed',
-        bottom: notMobile ? 100 : 81,
+        bottom: isDesktop ? 100 : 81,
         right: 10,
       }}
     >

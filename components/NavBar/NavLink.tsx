@@ -18,18 +18,19 @@ export default function NavLink({
 }) {
   const segment = useSelectedLayoutSegment();
   const isActive = href.startsWith(`/${segment}`);
-  const notMobile = useMediaQuery('(min-width: 1000px)');
+  const isDesktop = useMediaQuery('(pointer: fine)');
 
   return (
     <Link
       href={href}
       className={clsx(styles.link, { [styles.active]: isActive })}
+      style={isDesktop ? { gap: '4px', padding: '8px 16px' } : undefined}
     >
-      <Icon fontSize={notMobile ? 'large' : 'medium'} />
+      <Icon fontSize={isDesktop ? 'large' : 'medium'} />
       <Typography
         fontSize="0.875rem"
         fontWeight={600}
-        lineHeight={notMobile ? 1.3 : 1.2}
+        lineHeight={isDesktop ? 1.3 : 1.2}
       >
         {text}
       </Typography>
