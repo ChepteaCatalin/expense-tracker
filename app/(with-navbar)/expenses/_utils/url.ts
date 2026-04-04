@@ -1,57 +1,66 @@
-import { ExpenseByCategorySearchParams } from '@/types/expense';
+import type { ExpenseByCategorySearchParams } from '@/types/expense';
 import dayjs from 'dayjs';
 
-export const dayPeriod = 'day';
-export const weekPeriod = 'week';
-export const monthPeriod = 'month';
-export const yearPeriod = 'year';
-export const customPeriod = 'custom';
-export const periods = [
-  dayPeriod,
-  weekPeriod,
-  monthPeriod,
-  yearPeriod,
-  customPeriod,
-] as const;
-export const customPeriodIdx = periods.findIndex(x => x === customPeriod);
+export const day = 'day';
+export const week = 'week';
+export const month = 'month';
+export const year = 'year';
+export const custom = 'custom';
+export const periods = [day, week, month, year, custom] as const;
+export const customPeriodIdx = periods.findIndex(x => x === custom);
+const validPeriodParams = [...periods, 'from', 'to'] as const;
+const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
-export function validSearchParams({
-  period,
-  diff,
-  from,
-  to,
-}: ExpenseByCategorySearchParams) {
+export function validSearchParams(
+  searchParams: ExpenseByCategorySearchParams,
+): boolean {
+  if (
+    Object.keys(searchParams || {}).some(
+      key =>
+        !validPeriodParams.includes(key as (typeof validPeriodParams)[number]),
+    )
+  ) {
+    return false;
+  }
+
+  const periodsParamsCnt = periods
+    .map(period => Object.hasOwn(searchParams || {}, period))
+    .filter(Boolean)?.length;
+
+  if (periodsParamsCnt === 0 || periodsParamsCnt > 1) return false;
+
+  const [period, periodValue] =
+    (Object.entries(searchParams || {}) || []).find(([key]) =>
+      periods.includes(key as (typeof periods)[number]),
+    ) || [];
+
+  if (period !== custom) {
+    return (
+      searchParams.from == null &&
+      searchParams.to == null &&
+      parseURLDate(periodValue).isValid()
+    );
+  }
+
+  if (periodValue !== 'true') return false;
+
+  const fromDate = parseURLDate(searchParams.from);
+  const toDate = parseURLDate(searchParams.to);
+
   return (
-    validPeriodParam(period) &&
-    vaalidDiffParam(diff) &&
-    validCustomPeriodParams(period, from, to)
-  );
-}
-
-function validPeriodParam(param: string | null) {
-  return (periods as readonly string[]).includes(param ?? '');
-}
-
-function vaalidDiffParam(param: string | null) {
-  if (param == null) return true;
-  return Number.isInteger(+param) && param.trim() !== '';
-}
-
-function validCustomPeriodParams(
-  period: string | null,
-  from: string | null,
-  to: string | null,
-) {
-  if (period !== customPeriod) return !from && !to;
-
-  const fromDate = dayjs(from);
-  const toDate = dayjs(to);
-
-  return (
-    from &&
-    to &&
     fromDate.isValid() &&
     toDate.isValid() &&
     (toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day'))
   );
+}
+
+function parseURLDate(date: string | null | undefined) {
+  if (typeof date !== 'string' || !isoDateRegex.test(date)) return dayjs('');
+
+  const parsedDate = dayjs(date);
+  if (!parsedDate.isValid() || parsedDate.format('YYYY-MM-DD') !== date) {
+    return dayjs('');
+  }
+
+  return parsedDate;
 }

@@ -21,8 +21,11 @@ export interface ExpenseFormValues {
 export type ExpenseFormErrors = FormErrors<ExpenseFormValues>;
 
 export interface ExpenseByCategorySearchParams {
-  period: string;
-  diff: string | null;
-  from: string | null;
-  to: string | null;
+  day?: string | null;
+  week?: string | null;
+  month?: string | null;
+  year?: string | null;
+  custom?: string | null;
+  from?: string | null;
+  to?: string | null;
 }

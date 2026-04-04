@@ -4,8 +4,9 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useId, useState } from 'react';
-import { customPeriod, customPeriodIdx, periods } from '../_utils/url';
+import { custom, customPeriodIdx, periods } from '../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Controller, useForm } from 'react-hook-form';
@@ -28,7 +29,7 @@ export default function PeriodsTabs() {
   const id = useId();
 
   const [selectedTabIdx, setSelectedTabIdx] = useState(() =>
-    periods.indexOf(searchParams.get('period') as (typeof periods)[number]),
+    defaultTabIdx(searchParams),
   );
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
     null,
@@ -44,7 +45,9 @@ export default function PeriodsTabs() {
         onChange={(_event, newValue: number) => {
           if (newValue !== customPeriodIdx) {
             setSelectedTabIdx(newValue);
-            router.replace(`/expenses/categories/?period=${periods[newValue]}`);
+            router.replace(
+              `/expenses/categories${defaultPeriodsParam(newValue)}`,
+            );
           }
         }}
         aria-label="periods tabs"
@@ -201,12 +204,21 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
   );
 }
 
+function defaultTabIdx(searchParams: ReadonlyURLSearchParams): number {
+  const idx = periods.findIndex(period => searchParams.has(period));
+  return idx === -1 ? 0 : idx;
+}
+
+function defaultPeriodsParam(periodIdx: number) {
+  return `?${periods[periodIdx]}=${[dayjs().format('YYYY-MM-DD'), dayjs().startOf('week').format('YYYY-MM-DD'), dayjs().startOf('month').format('YYYY-MM-DD'), dayjs().startOf('year').format('YYYY-MM-DD')][periodIdx]}`;
+}
+
 function buildCustomPeriodParams(data: {
   from: FormDateTime;
   to: FormDateTime;
 }) {
   return new URLSearchParams({
-    period: customPeriod,
+    [custom]: 'true',
     from: dayjs(data.from).format('YYYY-MM-DD'),
     to: dayjs(data.to).format('YYYY-MM-DD'),
   }).toString();

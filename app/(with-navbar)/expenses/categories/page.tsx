@@ -8,7 +8,7 @@ import { validSearchParams } from '../_utils/url';
 import { notFound } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
-import { ExpenseByCategorySearchParams } from '@/types/expense';
+import type { ExpenseByCategorySearchParams } from '@/types/expense';
 
 const categories = [
   {
