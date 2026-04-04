@@ -29,10 +29,7 @@ export function validSearchParams(
 
   if (periodsParamsCnt === 0 || periodsParamsCnt > 1) return false;
 
-  const [period, periodValue] =
-    (Object.entries(searchParams || {}) || []).find(([key]) =>
-      periods.includes(key as (typeof periods)[number]),
-    ) || [];
+  const [period, periodValue] = getActivePeriod(searchParams);
 
   if (period !== custom) {
     return (
@@ -51,6 +48,46 @@ export function validSearchParams(
     fromDate.isValid() &&
     toDate.isValid() &&
     (toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day'))
+  );
+}
+
+export function dateFromSearchParams(
+  searchParams: ExpenseByCategorySearchParams,
+): { from: string; to: string } {
+  const [period, periodValue] = getActivePeriod(searchParams);
+
+  if (!period) return { from: '', to: '' };
+  return (
+    {
+      [day]: {
+        from: dayjs(periodValue).format('YYYY-MM-DD'),
+        to: dayjs(periodValue).format('YYYY-MM-DD'),
+      },
+      [week]: {
+        from: dayjs(periodValue).startOf('week').format('YYYY-MM-DD'),
+        to: dayjs(periodValue).endOf('week').format('YYYY-MM-DD'),
+      },
+      [month]: {
+        from: dayjs(periodValue).startOf('month').format('YYYY-MM-DD'),
+        to: dayjs(periodValue).endOf('month').format('YYYY-MM-DD'),
+      },
+      [year]: {
+        from: dayjs(periodValue).startOf('year').format('YYYY-MM-DD'),
+        to: dayjs(periodValue).endOf('year').format('YYYY-MM-DD'),
+      },
+      [custom]: {
+        from: dayjs(searchParams.from).format('YYYY-MM-DD'),
+        to: dayjs(searchParams.to).format('YYYY-MM-DD'),
+      },
+    }[period] || { from: '', to: '' }
+  );
+}
+
+function getActivePeriod(searchParams: ExpenseByCategorySearchParams) {
+  return (
+    (Object.entries(searchParams || {}) || []).find(([key]) =>
+      periods.includes(key as (typeof periods)[number]),
+    ) || []
   );
 }
 

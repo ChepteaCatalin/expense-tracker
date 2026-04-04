@@ -2,10 +2,7 @@
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import 'dayjs/locale/en-gb';
-
-dayjs.locale('en-gb');
+import '@/lib/dayjs';
 
 export default function DatePickerProvider({
   children,

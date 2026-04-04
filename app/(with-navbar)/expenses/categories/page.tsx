@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from '../_components/CategoryListItem';
 import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
-import { validSearchParams } from '../_utils/url';
+import { dateFromSearchParams, validSearchParams } from '../_utils/url';
 import { notFound } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
@@ -28,6 +28,9 @@ export default async function ExpensesByCategoriesPage({
   searchParams: Promise<ExpenseByCategorySearchParams>;
 }) {
   if (!validSearchParams(await searchParams)) notFound();
+
+  const asd = dateFromSearchParams(await searchParams);
+  console.log('🚀 ~ asd:', asd);
 
   return (
     <Box>
