@@ -57,5 +57,5 @@ export default function ExpensesByCategoryChart({
 }
 
 function formatNr(value: number) {
-  return new Intl.NumberFormat('en-US').format(value);
+  return new Intl.NumberFormat('en-US').format(value).replace(/,/g, ' ');
 }
