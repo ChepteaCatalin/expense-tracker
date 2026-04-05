@@ -35,7 +35,7 @@ export default function ExpensesByCategoryChart({
           position: 'inside',
           confine: true,
           formatter: (params: any) =>
-            `<b>${params.name}:</b> ${formatNr(params.value)} ${currency} (${params.percent}%)`,
+            `${params.marker} <b>${params.name}:</b> ${formatNr(params.value)} ${currency} (${params.percent}%)`,
           textStyle: { color: 'rgb(227, 227, 227)' },
           extraCssText: 'white-space: normal',
         },
