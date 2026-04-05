@@ -9,8 +9,8 @@ import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
 import type {
-  ExpensesByCategorySearchParams,
-  ExpensesByCategory,
+  ExpenseByCategorySearchParams,
+  ExpenseCategory,
 } from '@/types/expense';
 import { getExpensesCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
@@ -20,7 +20,7 @@ import { fromCents } from '@/utils/currency';
 export default async function ExpensesByCategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<ExpensesByCategorySearchParams>;
+  searchParams: Promise<ExpenseByCategorySearchParams>;
 }) {
   if (!validSearchParams(await searchParams)) notFound();
 
@@ -78,7 +78,7 @@ export default async function ExpensesByCategoriesPage({
   );
 }
 
-function getCategoryPercentages(expensesByCategory: ExpensesByCategory[]) {
+function getCategoryPercentages(expensesByCategory: ExpenseCategory[]) {
   const expensesSum = expensesByCategory!.reduce(
     (sum, c) => sum + c.totalAmount,
     0,

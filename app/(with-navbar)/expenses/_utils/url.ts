@@ -1,4 +1,4 @@
-import type { ExpensesByCategorySearchParams } from '@/types/expense';
+import type { ExpenseByCategorySearchParams } from '@/types/expense';
 import dayjs from 'dayjs';
 
 export const day = 'day';
@@ -12,7 +12,7 @@ const validPeriodParams = [...periods, 'from', 'to'] as const;
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 export function validSearchParams(
-  searchParams: ExpensesByCategorySearchParams,
+  searchParams: ExpenseByCategorySearchParams,
 ): boolean {
   if (
     Object.keys(searchParams || {}).some(
@@ -52,7 +52,7 @@ export function validSearchParams(
 }
 
 export function dateFromSearchParams(
-  searchParams: ExpensesByCategorySearchParams,
+  searchParams: ExpenseByCategorySearchParams,
 ): { from: string; to: string } {
   const [period, periodValue] = getActivePeriod(searchParams);
 
@@ -83,7 +83,7 @@ export function dateFromSearchParams(
   );
 }
 
-function getActivePeriod(searchParams: ExpensesByCategorySearchParams) {
+function getActivePeriod(searchParams: ExpenseByCategorySearchParams) {
   return (
     (Object.entries(searchParams || {}) || []).find(([key]) =>
       periods.includes(key as (typeof periods)[number]),
