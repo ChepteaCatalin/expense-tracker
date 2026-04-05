@@ -34,7 +34,7 @@ export default function ExpensesByCategoryChart({
           trigger: 'item',
           position: 'inside',
           formatter: (params: any) =>
-            `${params.name}: ${formatNr(params.value)} ${currency} (${params.percent}%)`,
+            `<b>${params.name}:</b> ${formatNr(params.value)} ${currency} (${params.percent}%)`,
           textStyle: { color: 'rgb(227, 227, 227)' },
         },
         series: [

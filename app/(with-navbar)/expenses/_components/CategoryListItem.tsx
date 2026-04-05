@@ -46,6 +46,7 @@ export default function CategoryListItem({
           <Typography
             color="text.pale"
             fontSize="0.875rem"
+            fontWeight={500}
             sx={{
               overflow: 'hidden',
               whiteSpace: 'nowrap',
