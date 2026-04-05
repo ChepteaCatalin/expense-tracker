@@ -54,11 +54,12 @@ export default function CategoryListItem({
             {category.name}
           </Typography>
         </Grid>
-        <Grid container gap={2} flexWrap="nowrap" sx={{ flex: 'none' }}>
+        <Grid container gap={2.5} flexWrap="nowrap" sx={{ flex: 'none' }}>
           <Typography
-            fontSize="0.875rem"
+            fontSize="0.8125rem"
             color="text.secondary"
             whiteSpace="nowrap"
+            lineHeight="21px"
           >
             {category.percentage.toFixed(2)}%
           </Typography>
