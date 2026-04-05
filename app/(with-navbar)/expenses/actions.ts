@@ -7,6 +7,7 @@ import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
 import { createExpense as createNewExpense } from '@/data/expense';
 import { toCents } from '@/utils/currency';
+import dayjs from 'dayjs';
 
 export async function createExpense(
   _: ExpenseFormErrors,
@@ -25,5 +26,5 @@ export async function createExpense(
     return { api: 'Failed to add the expense' };
   }
 
-  redirect('/expenses/categories?period=day');
+  redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);
 }
