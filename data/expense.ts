@@ -4,7 +4,7 @@ import { sql } from '@/lib/neon';
 import type {
   Expense,
   ExpenseFormValues,
-  ExpenseCategory,
+  ExpensesByCategory,
 } from '@/types/expense';
 import { cache } from 'react';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
@@ -63,7 +63,7 @@ export const getExpensesCategories = authGuard(
     }: {
       from: string;
       to: string;
-    }): Promise<ExpenseCategory[]> =>
+    }): Promise<ExpensesByCategory[]> =>
       cache(
         async ({
           userId,
@@ -73,7 +73,7 @@ export const getExpensesCategories = authGuard(
           userId: string;
           from: string;
           to: string;
-        }): Promise<ExpenseCategory[]> => {
+        }): Promise<ExpensesByCategory[]> => {
           'use cache';
           cacheLife('minutes');
           cacheTag(userExpenseCategoriesTag(userId));

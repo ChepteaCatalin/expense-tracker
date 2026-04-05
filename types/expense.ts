@@ -21,7 +21,7 @@ export interface ExpenseFormValues {
 
 export type ExpenseFormErrors = FormErrors<ExpenseFormValues>;
 
-export interface ExpenseByCategorySearchParams {
+export interface ExpensesByCategorySearchParams {
   day?: string | null;
   week?: string | null;
   month?: string | null;
@@ -31,7 +31,7 @@ export interface ExpenseByCategorySearchParams {
   to?: string | null;
 }
 
-export interface ExpenseCategory {
+export interface ExpensesByCategory {
   categoryId: number;
   name: string;
   icon: string;
@@ -40,14 +40,14 @@ export interface ExpenseCategory {
   totalAmount: number;
 }
 
-interface ExpenseByCategoryChartItem {
+interface ExpensesByCategoryChartItem {
   readonly name: string;
   readonly value: number;
   readonly color: string;
 }
 
-export type ExpenseByCategoryChartData =
-  ReadonlyArray<ExpenseByCategoryChartItem>;
+export type ExpensesByCategoryChartData =
+  ReadonlyArray<ExpensesByCategoryChartItem>;
 
 export type CategoryItem = Readonly<
   Pick<Category, 'id' | 'name' | 'icon' | 'strokeColor' | 'backgroundColor'> & {
