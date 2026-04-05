@@ -94,7 +94,7 @@ export const getExpensesCategories = authGuard(
                 AND e.date <= ${to}::date
               GROUP BY c.id, c.name, c.icon, c.stroke_color, c.background_color
               ORDER BY total_amount DESC
-          `;
+            `;
 
             return result.map(row => ({
               categoryId: row.category_id,

@@ -12,6 +12,7 @@ import type { ExpenseByCategorySearchParams } from '@/types/expense';
 import { getExpensesCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
+import { fromCents } from '@/utils/currency';
 
 const categories = [
   {
@@ -52,11 +53,11 @@ export default async function ExpensesByCategoriesPage({
           <DateNavButtons />
           <ExpensesByCategoryChart
             currency={currency}
-            data={[
-              { value: 1048, name: 'Search Engine', color: 'yellow' },
-              { value: 735.12, name: 'Direct', color: 'blue' },
-              { value: 508, name: 'Email', color: 'green' },
-            ]}
+            data={expensesByCategory!.map(category => ({
+              name: category.name,
+              value: fromCents(category.totalAmount),
+              color: category.backgroundColor,
+            }))}
           />
         </CardContent>
       </Card>
