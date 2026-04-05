@@ -31,7 +31,7 @@ export interface ExpenseByCategorySearchParams {
   to?: string | null;
 }
 
-export interface ExpenseCategories {
+export interface ExpenseCategory {
   categoryId: number;
   name: string;
   icon: string;

@@ -8,23 +8,14 @@ import { dateFromSearchParams, validSearchParams } from '../_utils/url';
 import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
-import type { ExpenseByCategorySearchParams } from '@/types/expense';
+import type {
+  ExpenseByCategorySearchParams,
+  ExpenseCategory,
+} from '@/types/expense';
 import { getExpensesCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
 import { fromCents } from '@/utils/currency';
-
-const categories = [
-  {
-    id: 1,
-    name: 'Category 1asdasdasdasdasdasdasdsd',
-    icon: '/category-icons/school.svg',
-    strokeColor: 'red',
-    backgroundColor: 'blue',
-    amount: 100000,
-    percentage: 25,
-  },
-];
 
 export default async function ExpensesByCategoriesPage({
   searchParams,
@@ -43,6 +34,7 @@ export default async function ExpensesByCategoriesPage({
 
   const session = await getSession();
   const currency = session!.user.currency;
+  const categoryPercentages = getCategoryPercentages(expensesByCategory!);
 
   return (
     <Box>
@@ -62,18 +54,42 @@ export default async function ExpensesByCategoriesPage({
         </CardContent>
       </Card>
       <Stack spacing={1.25} mt={2}>
-        {!categories?.length ? (
+        {!expensesByCategory!.length ? (
           <NoExpensesForPeriod />
         ) : (
-          categories.map(category => (
+          expensesByCategory!.map(c => (
             <CategoryListItem
-              key={category.id}
-              category={category}
+              key={c.categoryId}
+              category={{
+                id: c.categoryId,
+                name: c.name,
+                icon: c.icon,
+                strokeColor: c.strokeColor,
+                backgroundColor: c.backgroundColor,
+                amount: fromCents(c.totalAmount),
+                percentage: categoryPercentages[c.categoryId],
+              }}
               currency={currency}
             />
           ))
         )}
       </Stack>
     </Box>
+  );
+}
+
+function getCategoryPercentages(expensesByCategory: ExpenseCategory[]) {
+  const expensesSum = expensesByCategory!.reduce(
+    (sum, c) => sum + c.totalAmount,
+    0,
+  );
+
+  return expensesByCategory!.reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr.categoryId]:
+        expensesSum === 0 ? 0 : (curr.totalAmount / expensesSum) * 100,
+    }),
+    {} as { [key: string]: number },
   );
 }
