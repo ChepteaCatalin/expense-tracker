@@ -1,5 +1,6 @@
 import { FormDateTime } from '@/lib/MuiDatePicker/types';
 import { FormErrors } from './form';
+import type { Category } from '@/types/category';
 
 export interface Expense {
   id: number;
@@ -38,3 +39,19 @@ export interface ExpenseCategories {
   backgroundColor: string;
   totalAmount: number;
 }
+
+interface ExpenseByCategoryChartItem {
+  readonly name: string;
+  readonly value: number;
+  readonly color: string;
+}
+
+export type ExpenseByCategoryChartData =
+  ReadonlyArray<ExpenseByCategoryChartItem>;
+
+export type CategoryItem = Readonly<
+  Pick<Category, 'id' | 'name' | 'icon' | 'strokeColor' | 'backgroundColor'> & {
+    amount: number;
+    percentage: number;
+  }
+>;

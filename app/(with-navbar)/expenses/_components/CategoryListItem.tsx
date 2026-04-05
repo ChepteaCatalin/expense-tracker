@@ -1,9 +1,9 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { CategoryItem } from '../types';
 import Typography from '@mui/material/Typography';
 import { categoryIcons } from '@/utils/category-icons';
 import Grid from '@mui/material/Grid';
+import { CategoryItem } from '@/types/expense';
 
 export default function CategoryListItem({
   category,

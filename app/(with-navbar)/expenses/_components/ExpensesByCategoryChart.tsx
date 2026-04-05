@@ -1,8 +1,8 @@
 'use client';
 
+import { ExpenseByCategoryChartData } from '@/types/expense';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
-import { ExpenseByCategoryChartData } from '../types';
 
 export default function ExpensesByCategoryChart({
   data,
