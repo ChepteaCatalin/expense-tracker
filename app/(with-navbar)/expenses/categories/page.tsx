@@ -9,7 +9,7 @@ import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '../_components/DateNavButtons';
 import type {
-  ExpenseByCategorySearchParams,
+  ExpenseCategoriesSearchParams,
   ExpenseCategory,
 } from '@/types/expense';
 import { getExpensesCategories } from '@/data/expense';
@@ -20,7 +20,7 @@ import { fromCents } from '@/utils/currency';
 export default async function ExpensesByCategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<ExpenseByCategorySearchParams>;
+  searchParams: Promise<ExpenseCategoriesSearchParams>;
 }) {
   if (!validSearchParams(await searchParams)) notFound();
 

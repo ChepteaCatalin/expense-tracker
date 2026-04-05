@@ -3,13 +3,13 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { categoryIcons } from '@/utils/category-icons';
 import Grid from '@mui/material/Grid';
-import { CategoryItem } from '@/types/expense';
+import { ExpenseCategoryListItem } from '@/types/expense';
 
 export default function CategoryListItem({
   category,
   currency,
 }: {
-  category: CategoryItem;
+  category: ExpenseCategoryListItem;
   currency: string;
 }) {
   const Icon = categoryIcons.find(
