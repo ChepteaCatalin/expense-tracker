@@ -1,7 +1,7 @@
 'use client';
 
 import { ExpenseCategoriesChartData } from '@/types/expense';
-import { fromCents } from '@/utils/currency';
+import { fromCents, readableCurrency } from '@/utils/currency';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
 
@@ -22,7 +22,7 @@ export default function ExpensesByCategoryChart({
       option={{
         backgroundColor: 'transparent',
         title: {
-          text: `${formatNr(sum)} ${currency}`,
+          text: `${readableCurrency(sum)} ${currency}`,
           left: 'center',
           top: 'center',
           textStyle: {
@@ -36,7 +36,7 @@ export default function ExpensesByCategoryChart({
           position: 'inside',
           confine: true,
           formatter: (params: any) =>
-            `${params.marker} <b>${params.name}:</b> ${formatNr(params.value)} ${currency} (${params.percent}%)`,
+            `${params.marker} <b>${params.name}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
           textStyle: { color: 'rgb(227, 227, 227)' },
           extraCssText: 'white-space: normal',
         },
@@ -57,10 +57,6 @@ export default function ExpensesByCategoryChart({
       }}
     />
   );
-}
-
-function formatNr(value: number) {
-  return new Intl.NumberFormat('en-US').format(value).replace(/,/g, ' ');
 }
 
 function innerRadius(value: number) {
