@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { custom, customPeriodIdx, periods } from '../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
@@ -37,6 +37,10 @@ export default function PeriodsTabs() {
 
   const popoverOpened = Boolean(anchorEl);
   const popoverId = popoverOpened ? 'popover' + id : undefined;
+
+  useEffect(function onUnmount() {
+    return () => setSelectedTabIdx(0);
+  }, []);
 
   return (
     <Box mb={0.75}>
