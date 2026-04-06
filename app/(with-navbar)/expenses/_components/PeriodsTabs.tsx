@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { useId, useState } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { custom, customPeriodIdx, periods } from '../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
@@ -22,11 +22,13 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
 import { FormDateTime } from '@/lib/MuiDatePicker/types';
+import LinearProgress from '@mui/material/LinearProgress';
 
 export default function PeriodsTabs() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = useId();
+  const [isPending, startNavigation] = useTransition();
 
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
     null,
@@ -36,12 +38,16 @@ export default function PeriodsTabs() {
   const popoverId = popoverOpened ? 'popover' + id : undefined;
 
   return (
-    <Box mb={0.75}>
+    <Box mb={0.5}>
       <Tabs
         value={tabIdxFromSearchParams(searchParams)}
         onChange={(_event, newValue: number) => {
           if (newValue !== customPeriodIdx) {
-            router.push(`/expenses/categories${defaultPeriodsParam(newValue)}`);
+            startNavigation(() => {
+              router.push(
+                `/expenses/categories${defaultPeriodsParam(newValue)}`,
+              );
+            });
           }
         }}
         aria-label="periods tabs"
@@ -62,6 +68,7 @@ export default function PeriodsTabs() {
         {periods.map((period, index) => (
           <Tab
             key={period}
+            disabled={isPending}
             label={period}
             id={`tab-${id}-${index}`}
             aria-controls={`tabpanel-${id}-${index}`}
@@ -85,14 +92,29 @@ export default function PeriodsTabs() {
           horizontal: 'right',
         }}
       >
-        <CustomPeriodPopover submitRange={() => setAnchorEl(null)} />
+        <CustomPeriodPopover
+          submitRange={params => {
+            setAnchorEl(null);
+            startNavigation(() => {
+              router.push(`/expenses/categories/?${params}`);
+            });
+          }}
+        />
       </Popover>
+      {isPending ? (
+        <LinearProgress sx={{ mt: 0.5, borderRadius: '999px' }} />
+      ) : (
+        <Box sx={{ height: 4, mt: 0.5 }} />
+      )}
     </Box>
   );
 }
 
-function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
-  const router = useRouter();
+function CustomPeriodPopover({
+  submitRange,
+}: {
+  submitRange: (params: string) => void;
+}) {
   const searchParams = useSearchParams();
 
   const {
@@ -132,8 +154,7 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
       component="form"
       noValidate
       onSubmit={handleSubmit(data => {
-        submitRange();
-        router.push(`/expenses/categories/?${buildCustomPeriodParams(data)}`);
+        submitRange(buildCustomPeriodParams(data));
       })}
       p={1.5}
       spacing={1.5}

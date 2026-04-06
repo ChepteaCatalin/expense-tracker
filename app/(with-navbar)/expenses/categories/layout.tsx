@@ -37,7 +37,7 @@ function PeriodTabsFallback() {
       sx={{
         height: '32px',
         mt: -1,
-        mb: 0.75,
+        mb: 1.5,
         borderRadius: '4px',
         width: '350px',
         mx: 'auto',

@@ -16,7 +16,7 @@ import { getExpensesCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
 
-export default async function ExpensesByCategoriesPage({
+export default async function ExpenseCategoriesPage({
   searchParams,
 }: {
   searchParams: Promise<ExpenseCategoriesSearchParams>;

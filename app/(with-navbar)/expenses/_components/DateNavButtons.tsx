@@ -1,5 +1,6 @@
 'use client';
 
+import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -10,11 +11,24 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import type { OpUnitType, ManipulateType } from 'dayjs';
+import { useTransition } from 'react';
 
 export default function DateNavButtons() {
   const searchParams = useSearchParams();
   const [period, periodValue] = getActivePeriodEntry(searchParams);
   const router = useRouter();
+  const [isPending, startNavigation] = useTransition();
+
+  const navigatePeriod = (offset: -1 | 1) => {
+    startNavigation(() => {
+      router.push(
+        `/expenses/categories?${period}=${dayjs(periodValue)
+          .startOf(period as OpUnitType)
+          .add(offset, period as ManipulateType)
+          .format('YYYY-MM-DD')}`,
+      );
+    });
+  };
 
   return (
     <Grid
@@ -26,32 +40,23 @@ export default function DateNavButtons() {
       {period !== custom && (
         <IconButton
           aria-label="previous"
-          onClick={() => {
-            router.push(
-              `/expenses/categories?${period}=${dayjs(periodValue)
-                .startOf(period as OpUnitType)
-                .add(-1, period as ManipulateType)
-                .format('YYYY-MM-DD')}`,
-            );
-          }}
+          disabled={isPending}
+          onClick={() => navigatePeriod(-1)}
         >
           <ArrowBackIcon />
         </IconButton>
       )}
-      <Typography color="text.secondary" mx="auto">
-        {parsePeriod(searchParams)}
-      </Typography>
+      <Grid container alignItems="center" mx="auto" gap={0.75}>
+        {isPending && <CircularProgress size={14} />}
+        <Typography color="text.secondary">
+          {parsePeriod(searchParams)}
+        </Typography>
+      </Grid>
       {period !== custom && (
         <IconButton
           aria-label="next"
-          onClick={() => {
-            router.push(
-              `/expenses/categories?${period}=${dayjs(periodValue)
-                .startOf(period as OpUnitType)
-                .add(1, period as ManipulateType)
-                .format('YYYY-MM-DD')}`,
-            );
-          }}
+          disabled={isPending}
+          onClick={() => navigatePeriod(1)}
         >
           <ArrowForwardIcon />
         </IconButton>
