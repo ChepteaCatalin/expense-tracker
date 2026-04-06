@@ -1,7 +1,7 @@
 export function toCents(amount: number | '') {
-  return +amount * 100;
+  return Math.round(+amount * 100);
 }
 
 export function fromCents(amount: number) {
-  return amount / 100;
+  return parseFloat((amount / 100).toFixed(2));
 }
