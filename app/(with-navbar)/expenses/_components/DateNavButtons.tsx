@@ -27,7 +27,7 @@ export default function DateNavButtons() {
         <IconButton
           aria-label="previous"
           onClick={() => {
-            router.replace(
+            router.push(
               `/expenses/categories?${period}=${dayjs(periodValue)
                 .startOf(period as OpUnitType)
                 .add(-1, period as ManipulateType)
@@ -45,7 +45,7 @@ export default function DateNavButtons() {
         <IconButton
           aria-label="next"
           onClick={() => {
-            router.replace(
+            router.push(
               `/expenses/categories?${period}=${dayjs(periodValue)
                 .startOf(period as OpUnitType)
                 .add(1, period as ManipulateType)

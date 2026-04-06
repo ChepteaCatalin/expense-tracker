@@ -41,9 +41,7 @@ export default function PeriodsTabs() {
         value={tabIdxFromSearchParams(searchParams)}
         onChange={(_event, newValue: number) => {
           if (newValue !== customPeriodIdx) {
-            router.replace(
-              `/expenses/categories${defaultPeriodsParam(newValue)}`,
-            );
+            router.push(`/expenses/categories${defaultPeriodsParam(newValue)}`);
           }
         }}
         aria-label="periods tabs"
@@ -135,9 +133,7 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
       noValidate
       onSubmit={handleSubmit(data => {
         submitRange();
-        router.replace(
-          `/expenses/categories/?${buildCustomPeriodParams(data)}`,
-        );
+        router.push(`/expenses/categories/?${buildCustomPeriodParams(data)}`);
       })}
       p={1.5}
       spacing={1.5}
