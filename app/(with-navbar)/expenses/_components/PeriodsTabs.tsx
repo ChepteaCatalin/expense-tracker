@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { custom, customPeriodIdx, periods } from '../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
@@ -28,9 +28,6 @@ export default function PeriodsTabs() {
   const searchParams = useSearchParams();
   const id = useId();
 
-  const [selectedTabIdx, setSelectedTabIdx] = useState(() =>
-    defaultTabIdx(searchParams),
-  );
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
     null,
   );
@@ -38,17 +35,12 @@ export default function PeriodsTabs() {
   const popoverOpened = Boolean(anchorEl);
   const popoverId = popoverOpened ? 'popover' + id : undefined;
 
-  useEffect(function onUnmount() {
-    return () => setSelectedTabIdx(0);
-  }, []);
-
   return (
     <Box mb={0.75}>
       <Tabs
-        value={selectedTabIdx}
+        value={tabIdxFromSearchParams(searchParams)}
         onChange={(_event, newValue: number) => {
           if (newValue !== customPeriodIdx) {
-            setSelectedTabIdx(newValue);
             router.replace(
               `/expenses/categories${defaultPeriodsParam(newValue)}`,
             );
@@ -95,12 +87,7 @@ export default function PeriodsTabs() {
           horizontal: 'right',
         }}
       >
-        <CustomPeriodPopover
-          submitRange={() => {
-            setSelectedTabIdx(customPeriodIdx);
-            setAnchorEl(null);
-          }}
-        />
+        <CustomPeriodPopover submitRange={() => setAnchorEl(null)} />
       </Popover>
     </Box>
   );
@@ -208,7 +195,7 @@ function CustomPeriodPopover({ submitRange }: { submitRange: () => void }) {
   );
 }
 
-function defaultTabIdx(searchParams: ReadonlyURLSearchParams): number {
+function tabIdxFromSearchParams(searchParams: ReadonlyURLSearchParams): number {
   const idx = periods.findIndex(period => searchParams.has(period));
   return idx === -1 ? 0 : idx;
 }
