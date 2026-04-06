@@ -15,7 +15,6 @@ import type {
 import { getExpensesCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
-import { fromCents } from '@/utils/currency';
 
 export default async function ExpensesByCategoriesPage({
   searchParams,
@@ -47,7 +46,7 @@ export default async function ExpensesByCategoriesPage({
             currency={currency}
             data={expensesByCategory!.map(category => ({
               name: category.name,
-              value: fromCents(category.totalAmount),
+              value: category.totalAmount,
               color: category.backgroundColor,
             }))}
           />
@@ -66,7 +65,7 @@ export default async function ExpensesByCategoriesPage({
                 icon: c.icon,
                 strokeColor: c.strokeColor,
                 backgroundColor: c.backgroundColor,
-                amount: fromCents(c.totalAmount),
+                amount: c.totalAmount,
                 percentage: categoryPercentages[c.categoryId],
               }}
               currency={currency}

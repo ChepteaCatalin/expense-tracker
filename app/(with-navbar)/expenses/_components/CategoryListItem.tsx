@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { categoryIcons } from '@/utils/category-icons';
 import Grid from '@mui/material/Grid';
 import { ExpenseCategoryListItem } from '@/types/expense';
+import { fromCents } from '@/utils/currency';
 
 export default function CategoryListItem({
   category,
@@ -71,7 +72,7 @@ export default function CategoryListItem({
             color="text.pale"
             whiteSpace="nowrap"
           >
-            {`${category.amount} ${currency}`}
+            {`${fromCents(category.amount)} ${currency}`}
           </Typography>
         </Grid>
       </CardContent>

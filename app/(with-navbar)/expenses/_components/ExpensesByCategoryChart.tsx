@@ -1,6 +1,7 @@
 'use client';
 
 import { ExpenseCategoriesChartData } from '@/types/expense';
+import { fromCents } from '@/utils/currency';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
 
@@ -12,7 +13,7 @@ export default function ExpensesByCategoryChart({
   currency: string;
 }) {
   const isDesktop = useMediaQuery('(min-width: 1000px)');
-  const sum = data.reduce((sum, item) => sum + item.value, 0);
+  const sum = fromCents(data.reduce((sum, item) => sum + item.value, 0));
 
   return (
     <ReactECharts
@@ -21,7 +22,7 @@ export default function ExpensesByCategoryChart({
       option={{
         backgroundColor: 'transparent',
         title: {
-          text: `${formatNr(Math.floor(sum))} ${currency}`,
+          text: `${formatNr(sum)} ${currency}`,
           left: 'center',
           top: 'center',
           textStyle: {
@@ -43,14 +44,14 @@ export default function ExpensesByCategoryChart({
           {
             name: 'Category',
             type: 'pie',
-            radius: ['55%', '95%'],
+            radius: [innerRadius(sum), '95%'],
             itemStyle: {
               borderColor: 'rgb(227, 227, 227)',
               borderWidth: 1,
             },
             color: data.map(item => item.color),
             label: { show: false },
-            data,
+            data: data.map(item => ({ ...item, value: fromCents(item.value) })),
           },
         ],
       }}
@@ -60,4 +61,10 @@ export default function ExpensesByCategoryChart({
 
 function formatNr(value: number) {
   return new Intl.NumberFormat('en-US').format(value).replace(/,/g, ' ');
+}
+
+function innerRadius(value: number) {
+  if (value >= 1_000_000) return '65%';
+  if (value >= 100_000) return '60%';
+  return '55%';
 }
