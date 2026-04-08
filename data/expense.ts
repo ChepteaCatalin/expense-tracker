@@ -40,7 +40,7 @@ export const createExpense = authGuard(
 
       if (!createdExpense) throw new Error('Failed to create expense');
 
-      updateTag(userExpenseCategoriesTag(session.user.id));
+      updateTag('expenses/categories');
 
       return {
         id: createdExpense.id,
@@ -65,7 +65,7 @@ export const getExpenseCategories = authGuard(
     }): Promise<ExpenseCategory[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(userExpenseCategoriesTag(session.user.id));
+      cacheTag('expenses/categories');
 
       try {
         const result = await sql`
@@ -98,7 +98,3 @@ export const getExpenseCategories = authGuard(
       }
     },
 );
-
-function userExpenseCategoriesTag(userId: string) {
-  return `expenses/categories/user/${userId}`;
-}
