@@ -6,7 +6,6 @@ import type {
   ExpenseFormValues,
   ExpenseCategory,
 } from '@/types/expense';
-import { cache } from 'react';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 
@@ -57,56 +56,47 @@ export const createExpense = authGuard(
 
 export const getExpenseCategories = authGuard(
   session =>
-    ({ from, to }: { from: string; to: string }): Promise<ExpenseCategory[]> =>
-      cache(
-        async ({
-          userId,
-          from,
-          to,
-        }: {
-          userId: string;
-          from: string;
-          to: string;
-        }): Promise<ExpenseCategory[]> => {
-          'use cache';
-          cacheLife('minutes');
-          cacheTag(userExpenseCategoriesTag(userId));
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<ExpenseCategory[]> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag(userExpenseCategoriesTag(session.user.id));
 
-          try {
-            const result = await sql`
-              SELECT
-                c.id AS category_id,
-                c.name,
-                c.icon,
-                c.stroke_color,
-                c.background_color,
-                SUM(e.amount) AS total_amount
-              FROM expense e
-              JOIN category c ON e.category_id = c.id
-              WHERE e.user_id = ${userId}
-                AND e.date >= ${from}::date
-                AND e.date <= ${to}::date
-              GROUP BY c.id, c.name, c.icon, c.stroke_color, c.background_color
-              ORDER BY total_amount DESC
-            `;
+      try {
+        const result = await sql`
+          SELECT
+            c.id AS category_id,
+            c.name,
+            c.icon,
+            c.stroke_color,
+            c.background_color,
+            SUM(e.amount) AS total_amount
+          FROM expense e
+          JOIN category c ON e.category_id = c.id
+          WHERE e.user_id = ${session.user.id}
+            AND e.date >= ${from}::date
+            AND e.date <= ${to}::date
+          GROUP BY c.id, c.name, c.icon, c.stroke_color, c.background_color
+          ORDER BY total_amount DESC
+        `;
 
-            return result.map(row => ({
-              categoryId: row.category_id,
-              name: row.name,
-              icon: row.icon,
-              strokeColor: row.stroke_color,
-              backgroundColor: row.background_color,
-              totalAmount: +row.total_amount,
-            }));
-          } catch {
-            return [];
-          }
-        },
-      )({
-        userId: session.user.id,
-        from,
-        to,
-      }),
+        return result.map(row => ({
+          categoryId: row.category_id,
+          name: row.name,
+          icon: row.icon,
+          strokeColor: row.stroke_color,
+          backgroundColor: row.background_color,
+          totalAmount: +row.total_amount,
+        }));
+      } catch {
+        return [];
+      }
+    },
 );
 
 function userExpenseCategoriesTag(userId: string) {

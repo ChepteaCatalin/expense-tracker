@@ -2,7 +2,6 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { Category, CategoryFormValues, CategoryType } from '@/types/category';
-import { cache } from 'react';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 
@@ -75,65 +74,57 @@ export const deleteCategory = authGuard(
   },
 );
 
-export const getAllCategoriesByType = authGuard(session =>
-  cache(
-    (userId: string) =>
-      async (type: CategoryType): Promise<Category[] | Array<never>> => {
-        'use cache';
-        cacheLife('weeks');
-        cacheTag(`categories/type/${type}`);
+export const getAllCategoriesByType = authGuard(
+  session =>
+    async (type: CategoryType): Promise<Category[] | Array<never>> => {
+      'use cache';
+      cacheLife('weeks');
+      cacheTag(`categories/type/${type}`);
 
-        const result = await sql`
-          SELECT 
-            id,
-            name,
-            type,
-            icon,
-            stroke_color,
-            background_color,
-            user_id,
-            created_at,
-            updated_at
-          FROM category
-          WHERE user_id = ${userId} AND type = ${type}
-        `;
+      const result = await sql`
+        SELECT 
+          id,
+          name,
+          type,
+          icon,
+          stroke_color,
+          background_color,
+          user_id,
+          created_at,
+          updated_at
+        FROM category
+        WHERE user_id = ${session.user.id} AND type = ${type}
+      `;
 
-        if (!result?.length) return [];
-        return result.map(categoryFromDb);
-      },
-  )(session.user.id),
+      if (!result?.length) return [];
+      return result.map(categoryFromDb);
+    },
 );
 
 export const getCategoryById = authGuard(
   session =>
-    async (categoryId: number): Promise<Category | undefined> =>
-      cache(
-        async (
-          userId: string,
-          categoryId: number,
-        ): Promise<Category | undefined> => {
-          'use cache';
-          cacheLife('weeks');
-          cacheTag(`categories/id/${categoryId}`);
+    async (categoryId: number): Promise<Category | undefined> => {
+      'use cache';
+      cacheLife('weeks');
+      cacheTag(`categories/id/${categoryId}`);
 
-          const result = await sql`
-            SELECT 
-              id,
-              name,
-              type,
-              icon,
-              stroke_color,
-              background_color,
-              user_id,
-              created_at,
-              updated_at
-            FROM category
-            WHERE id = ${categoryId} AND user_id = ${userId}
-          `;
+      const result = await sql`
+        SELECT 
+          id,
+          name,
+          type,
+          icon,
+          stroke_color,
+          background_color,
+          user_id,
+          created_at,
+          updated_at
+        FROM category
+        WHERE id = ${categoryId} AND user_id = ${session.user.id}
+      `;
 
-          if (result[0]) return categoryFromDb(result[0]);
-        },
-      )(session.user.id, categoryId),
+      if (result[0]) return categoryFromDb(result[0]);
+    },
 );
 
 function categoryFromDb(dbResult: Record<string, any>): Category {
