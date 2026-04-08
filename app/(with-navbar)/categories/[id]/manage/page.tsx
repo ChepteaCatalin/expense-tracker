@@ -41,7 +41,7 @@ export default async function ManageCategoryPage({
         />
       }
     >
-      <Form category={category} />
+      <Form key={category.updatedAt.toString()} category={category} />
       <DeleteCategory
         id={category.id}
         type={category.type}
