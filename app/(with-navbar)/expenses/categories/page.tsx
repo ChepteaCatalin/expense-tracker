@@ -12,7 +12,7 @@ import type {
   ExpenseCategoriesSearchParams,
   ExpenseCategory,
 } from '@/types/expense';
-import { getExpensesCategories } from '@/data/expense';
+import { getExpenseCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
 
@@ -23,8 +23,9 @@ export default async function ExpenseCategoriesPage({
 }) {
   if (!validSearchParams(await searchParams)) notFound();
 
+  var expensesByCategory = [] as ExpenseCategory[];
   try {
-    var expensesByCategory = await getExpensesCategories(
+    expensesByCategory = await getExpenseCategories(
       dateFromSearchParams(await searchParams),
     );
   } catch (err) {
@@ -33,7 +34,7 @@ export default async function ExpenseCategoriesPage({
 
   const session = await getSession();
   const currency = session!.user.currency;
-  const categoryPercentages = getCategoryPercentages(expensesByCategory!);
+  const categoryPercentages = getCategoryPercentages(expensesByCategory);
 
   return (
     <Box>
@@ -44,7 +45,7 @@ export default async function ExpenseCategoriesPage({
           <DateNavButtons />
           <ExpensesByCategoryChart
             currency={currency}
-            data={expensesByCategory!.map(category => ({
+            data={expensesByCategory.map(category => ({
               name: category.name,
               value: category.totalAmount,
               color: category.backgroundColor,
@@ -53,10 +54,10 @@ export default async function ExpenseCategoriesPage({
         </CardContent>
       </Card>
       <Stack spacing={1.25} mt={2}>
-        {!expensesByCategory!.length ? (
+        {!expensesByCategory.length ? (
           <NoExpensesForPeriod />
         ) : (
-          expensesByCategory!.map(c => (
+          expensesByCategory.map(c => (
             <CategoryListItem
               key={c.categoryId}
               category={{
@@ -78,12 +79,12 @@ export default async function ExpenseCategoriesPage({
 }
 
 function getCategoryPercentages(expensesByCategory: ExpenseCategory[]) {
-  const expensesSum = expensesByCategory!.reduce(
+  const expensesSum = expensesByCategory.reduce(
     (sum, c) => sum + c.totalAmount,
     0,
   );
 
-  return expensesByCategory!.reduce(
+  return expensesByCategory.reduce(
     (acc, curr) => ({
       ...acc,
       [curr.categoryId]:

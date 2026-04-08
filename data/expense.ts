@@ -55,15 +55,9 @@ export const createExpense = authGuard(
     },
 );
 
-export const getExpensesCategories = authGuard(
+export const getExpenseCategories = authGuard(
   session =>
-    async ({
-      from,
-      to,
-    }: {
-      from: string;
-      to: string;
-    }): Promise<ExpenseCategory[]> =>
+    ({ from, to }: { from: string; to: string }): Promise<ExpenseCategory[]> =>
       cache(
         async ({
           userId,
