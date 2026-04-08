@@ -78,7 +78,6 @@ export default function Form({ category }: { category?: Category }) {
       />
       <Grid
         container
-        direction="column"
         spacing={3}
         component="form"
         noValidate
@@ -89,6 +88,7 @@ export default function Form({ category }: { category?: Category }) {
             else createCategoryAction(data);
           });
         })}
+        sx={{ flexDirection: 'column' }}
       >
         <TextField
           {...register('name')}
@@ -111,7 +111,7 @@ export default function Form({ category }: { category?: Category }) {
           />
         </Suspense>
         <Box sx={{ mt: -1.125 }}>
-          <Typography color="text.secondary">Icon</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Icon</Typography>
           <Box
             sx={{
               display: 'grid',

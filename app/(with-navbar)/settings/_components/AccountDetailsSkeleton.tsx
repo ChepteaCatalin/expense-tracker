@@ -10,11 +10,10 @@ export default function AccountDetailsSkeleton() {
         <Stack
           direction="row"
           spacing={2}
-          alignItems="center"
-          sx={{ height: '60px' }}
+          sx={{ alignItems: 'center', height: '60px' }}
         >
           <Skeleton variant="circular" width={56} height={56} />
-          <Stack spacing={0.5} flex={1}>
+          <Stack spacing={0.5} sx={{ flex: 1 }}>
             <Skeleton variant="text" width="40%" height={32} />
             <Skeleton variant="text" width="60%" height={16} />
           </Stack>

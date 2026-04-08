@@ -16,7 +16,7 @@ export default function ExpensesByCategoriesLoading() {
           />
         </CardContent>
       </Card>
-      <Stack spacing={1.25} mt={2}>
+      <Stack spacing={1.25} sx={{ mt: 2 }}>
         <CategoryListItem />
         <CategoryListItem />
         <CategoryListItem />

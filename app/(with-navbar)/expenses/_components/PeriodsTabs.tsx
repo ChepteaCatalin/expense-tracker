@@ -38,7 +38,7 @@ export default function PeriodsTabs() {
   const popoverId = popoverOpened ? 'popover' + id : undefined;
 
   return (
-    <Box mb={0.5}>
+    <Box sx={{ mb: 0.5 }}>
       <Tabs
         value={tabIdxFromSearchParams(searchParams)}
         onChange={(_event, newValue: number) => {
@@ -156,9 +156,8 @@ function CustomPeriodPopover({
       onSubmit={handleSubmit(data => {
         submitRange(buildCustomPeriodParams(data));
       })}
-      p={1.5}
       spacing={1.5}
-      sx={{ width: '260px' }}
+      sx={{ p: 1.5, width: '260px' }}
     >
       <Typography>Choose date range:</Typography>
       <Controller

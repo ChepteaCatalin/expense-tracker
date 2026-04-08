@@ -70,7 +70,7 @@ export default function SignInForm() {
           helperText={errors.password?.message}
         />
       </Grid>
-      <Grid container spacing={1.5} mt={4}>
+      <Grid container spacing={1.5} sx={{ mt: 4 }}>
         <Button
           type="submit"
           disabled={!hideApiError && !!actionErrors.api}

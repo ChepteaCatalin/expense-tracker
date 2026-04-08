@@ -17,7 +17,7 @@ export default function ExpensesByCategoriesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Box boxSizing="content-box" maxWidth="610px" mx="auto">
+    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
       <Heading title={metadata.title} subtitle={metadata.description} />
       <Suspense fallback={<PeriodTabsFallback />}>
         <PeriodsTabs />

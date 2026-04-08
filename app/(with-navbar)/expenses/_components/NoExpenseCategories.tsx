@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export function NoExpenseCategories() {
   return (
-    <Grid container direction="column" alignItems="center">
+    <Grid container sx={{ alignItems: 'center', flexDirection: 'column' }}>
       <SearchOffIcon sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }} />
       <Typography>No expense categories found</Typography>
       <Link

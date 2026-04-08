@@ -15,7 +15,7 @@ export default function TitledCardPageWrapper({
   aboveCard?: React.ReactNode;
 }) {
   return (
-    <Box boxSizing="content-box" maxWidth="610px" mx="auto">
+    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
       <Heading title={title} subtitle={subtitle} />
       {aboveCard}
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>

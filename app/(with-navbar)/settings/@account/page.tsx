@@ -12,7 +12,7 @@ export default async function AccountPage() {
   return (
     <Section title="Account">
       <Stack spacing={3}>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Avatar
             src={user.image || undefined}
             alt={user.name}
@@ -27,10 +27,12 @@ export default async function AccountPage() {
             {getInitials(user.name)}
           </Avatar>
           <Stack spacing={0.5}>
-            <Typography variant="h6" component="p" fontWeight={600}>
+            <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
               {user.name}
             </Typography>
-            <Typography color="text.secondary">{user.email}</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>
+              {user.email}
+            </Typography>
           </Stack>
         </Stack>
         <Divider />

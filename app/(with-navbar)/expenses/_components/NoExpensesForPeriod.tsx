@@ -11,7 +11,7 @@ export default function NoExpensesForPeriod() {
   return (
     <Card sx={{ borderRadius: '10px' }}>
       <CardContent>
-        <Grid container direction="column" alignItems="center">
+        <Grid container sx={{ alignItems: 'center', flexDirection: 'column' }}>
           <SearchOffIcon
             sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
           />

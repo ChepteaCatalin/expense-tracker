@@ -4,7 +4,10 @@ import Grid from '@mui/material/Grid';
 
 export default function Logo() {
   return (
-    <Grid container flexDirection="column" alignItems="center" mb={2}>
+    <Grid
+      container
+      sx={{ flexDirection: 'column', alignItems: 'center', mb: 2 }}
+    >
       <Image
         src={logo}
         alt="Expense Tracker Logo"

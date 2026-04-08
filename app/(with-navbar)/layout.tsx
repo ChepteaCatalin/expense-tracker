@@ -7,7 +7,7 @@ export default function WithNavBarLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Box component="main" py={4} px={3} mb={11.25}>
+    <Box component="main" sx={{ py: 4, px: 3, mb: 11.25 }}>
       {children}
       <NavBar />
     </Box>

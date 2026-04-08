@@ -14,7 +14,7 @@ export default async function PreferencesPage() {
 
   return (
     <Section title="Preferences">
-      <Grid container spacing={3} direction="column">
+      <Grid container spacing={3} sx={{ flexDirection: 'column' }}>
         <CurrencyAutocomplete
           key={user.id}
           defaultValue={currencies.find(c => c.code === user?.currency)}

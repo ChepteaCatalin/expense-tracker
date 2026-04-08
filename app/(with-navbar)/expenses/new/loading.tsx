@@ -17,7 +17,7 @@ export default function NewExpenseLoading() {
         height={200}
         sx={{ borderRadius: '4px', mt: 3 }}
       />
-      <Grid container direction="column" gap={3} mt={3}>
+      <Grid container sx={{ gap: 3, mt: 3, flexDirection: 'column' }}>
         <Skeleton
           variant="rectangular"
           height={40}

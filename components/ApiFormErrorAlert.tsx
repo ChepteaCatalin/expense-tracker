@@ -13,7 +13,7 @@ export default function ApiFormErrorAlert({
   if (!message || hide) return null;
 
   return (
-    <Box width="100%" sx={sx}>
+    <Box sx={{ width: '100%', ...sx }}>
       <Alert severity="error">{message}</Alert>
     </Box>
   );

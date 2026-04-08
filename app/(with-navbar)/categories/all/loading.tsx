@@ -28,7 +28,7 @@ export default function CategoriesLoading() {
           height={300}
           sx={{ borderRadius: '10px' }}
         />
-        <Grid container direction="column" spacing={3} mt={3}>
+        <Grid container spacing={3} sx={{ mt: 3, flexDirection: 'column' }}>
           <Divider />
           <Skeleton
             variant="rectangular"

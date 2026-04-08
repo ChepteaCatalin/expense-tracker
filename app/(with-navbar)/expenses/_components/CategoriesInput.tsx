@@ -73,12 +73,11 @@ export default function CategoriesInput({
                     }}
                   />
                   <Typography
-                    color="common.white"
-                    textAlign="center"
-                    mt={0.3}
-                    px={1}
-                    fontSize="0.875rem"
                     sx={{
+                      textAlign: 'center',
+                      mt: 0.3,
+                      px: 1,
+                      fontSize: '0.875rem',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
                       textOverflow: 'ellipsis',

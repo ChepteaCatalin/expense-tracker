@@ -12,7 +12,10 @@ export default function Section({
 }) {
   return (
     <Box component="section">
-      <Typography component="h2" fontSize="1.75rem" fontWeight={700} mb={0.5}>
+      <Typography
+        component="h2"
+        sx={{ fontSize: '1.75rem', fontWeight: 700, mb: 0.5 }}
+      >
         {title}
       </Typography>
       <Card sx={{ borderRadius: '10px' }}>

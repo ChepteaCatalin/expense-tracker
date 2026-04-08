@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 export default function PreferencesSkeleton() {
   return (
     <Section title="Preferences">
-      <Grid container spacing={3} direction="column" mt={1}>
+      <Grid container spacing={3} sx={{ mt: 1, flexDirection: 'column' }}>
         <Skeleton
           variant="rectangular"
           height={40}

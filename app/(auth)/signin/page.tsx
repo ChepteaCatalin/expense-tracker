@@ -18,10 +18,13 @@ export default function SignInPage() {
     <Grid
       component="main"
       container
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: `calc(100vh - ${2 * spacing * 8}px)`, my: spacing }}
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: `calc(100vh - ${2 * spacing * 8}px)`,
+        my: spacing,
+      }}
     >
       <Logo />
       <Card
@@ -40,7 +43,7 @@ export default function SignInPage() {
           Sign In
         </Typography>
         <Form />
-        <Grid container spacing={0.5} mt={-0.75}>
+        <Grid container spacing={0.5} sx={{ mt: -0.75 }}>
           <Typography>{`Don't have an account?`}</Typography>
           <Link href="/signup" className={linkStyles.link}>
             Sign Up

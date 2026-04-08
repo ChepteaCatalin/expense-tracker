@@ -35,8 +35,7 @@ export default function DateNavButtons() {
     <Grid
       container
       spacing={1}
-      justifyContent="space-between"
-      alignItems="center"
+      sx={{ justifyContent: 'space-between', alignItems: 'center' }}
     >
       {period !== custom && (
         <IconButton
@@ -47,9 +46,9 @@ export default function DateNavButtons() {
           <ArrowBackIcon />
         </IconButton>
       )}
-      <Grid container alignItems="center" mx="auto" gap={0.75}>
+      <Grid container sx={{ alignItems: 'center', mx: 'auto', gap: 0.75 }}>
         {isPending && <CircularProgress size={14} />}
-        <Typography color="text.secondary">
+        <Typography sx={{ color: 'text.secondary' }}>
           {parsePeriod(searchParams)}
         </Typography>
       </Grid>

@@ -23,7 +23,11 @@ export default function NavBar() {
       <Toolbar
         sx={{ '&.MuiToolbar-root': { minHeight: '64px', p: '8px 16px' } }}
       >
-        <Grid container justifyContent="center" flex="1" spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ justifyContent: 'center', flex: '1' }}
+        >
           <Suspense>
             <ExpensesNavLink />
             <NavLink href="/savings" Icon={SavingsIcon} text="Savings" />

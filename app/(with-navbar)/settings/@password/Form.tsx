@@ -55,7 +55,7 @@ export default function Form() {
         });
       })}
       spacing={3}
-      p={1}
+      sx={{ p: 1 }}
     >
       <ApiFormErrorAlert
         hide={hideApiError}

@@ -21,9 +21,9 @@ export default function SettingsLayout({
   preferences: React.ReactNode;
 }) {
   return (
-    <Box boxSizing="content-box" maxWidth="600px" mx="auto">
+    <Box sx={{ boxSizing: 'content-box', maxWidth: '600px', mx: 'auto' }}>
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Grid container spacing={6} flexDirection="column">
+      <Grid container spacing={6} sx={{ flexDirection: 'column' }}>
         <Suspense fallback={<AccountDetailsSkeleton />}>{account}</Suspense>
         <Suspense fallback={<ChangePasswordSkeleton />}>{password}</Suspense>
         <Suspense fallback={<PreferencesSkeleton />}>{preferences}</Suspense>

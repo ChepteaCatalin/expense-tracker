@@ -80,12 +80,12 @@ export default async function CategoriesPage({
                       }}
                     />
                     <Typography
-                      color="common.white"
-                      textAlign="center"
-                      mt={0.3}
-                      px={1}
-                      fontSize="0.875rem"
                       sx={{
+                        color: 'common.white',
+                        textAlign: 'center',
+                        mt: 0.3,
+                        px: 1,
+                        fontSize: '0.875rem',
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                         textOverflow: 'ellipsis',
@@ -99,14 +99,17 @@ export default async function CategoriesPage({
             })}
           </Box>
         ) : (
-          <Grid container direction="column" alignItems="center">
+          <Grid
+            container
+            sx={{ alignItems: 'center', flexDirection: 'column' }}
+          >
             <SearchOffIcon
               sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
             />
             <Typography>No {type} categories found</Typography>
           </Grid>
         )}
-        <Grid container direction="column" spacing={3} mt={3}>
+        <Grid container spacing={3} sx={{ mt: 3, flexDirection: 'column' }}>
           <Divider />
           <Link href={{ pathname: '/categories/new', query: { type } }}>
             <Button variant="contained" startIcon={<AddIcon />} fullWidth>

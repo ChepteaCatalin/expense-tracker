@@ -9,12 +9,17 @@ export default function Heading({
   subtitle?: string;
 }) {
   return (
-    <Box mb={6}>
-      <Typography variant="h3" component="h1" color="primary" fontWeight={700}>
+    <Box sx={{ mb: 6 }}>
+      <Typography
+        variant="h3"
+        component="h1"
+        color="primary"
+        sx={{ fontWeight: 700 }}
+      >
         {title}
       </Typography>
       {subtitle && (
-        <Typography color="text.secondary" fontWeight={600}>
+        <Typography sx={{ color: 'text.secondary', fontWeight: 600 }}>
           {subtitle}
         </Typography>
       )}

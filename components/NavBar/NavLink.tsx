@@ -28,9 +28,11 @@ export default function NavLink({
     >
       <Icon fontSize={isDesktop ? 'large' : 'medium'} />
       <Typography
-        fontSize="0.875rem"
-        fontWeight={600}
-        lineHeight={isDesktop ? 1.3 : 1.2}
+        sx={{
+          fontSize: '0.875rem',
+          fontWeight: 600,
+          lineHeight: isDesktop ? 1.3 : 1.2,
+        }}
       >
         {text}
       </Typography>
