@@ -38,7 +38,6 @@ export default function Form({
   const disabledForm = isPendingCreate;
 
   const methods = useForm<ExpenseFormValues>({
-    shouldUnregister: true,
     defaultValues: getDefaultValues(),
     resolver: zodResolver(expenseSchema),
     disabled: disabledForm,
@@ -46,7 +45,6 @@ export default function Form({
   const {
     register,
     control,
-    reset,
     subscribe,
     handleSubmit,
     formState: { errors },
@@ -61,13 +59,6 @@ export default function Form({
         callback: () => setHideApiError(true),
       }),
     [subscribe],
-  );
-
-  useEffect(
-    function resetFormOnUnmount() {
-      return reset;
-    },
-    [reset],
   );
 
   return (
