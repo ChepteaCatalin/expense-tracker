@@ -5,7 +5,7 @@ import { fromCents, readableCurrency } from '@/utils/currency';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
 
-export default function ExpensesByCategoryChart({
+export default function ExpenseCategoriesChart({
   data,
   currency,
 }: {

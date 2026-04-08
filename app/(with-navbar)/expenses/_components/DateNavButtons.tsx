@@ -15,9 +15,10 @@ import { useTransition } from 'react';
 
 export default function DateNavButtons() {
   const searchParams = useSearchParams();
-  const [period, periodValue] = getActivePeriodEntry(searchParams);
   const router = useRouter();
   const [isPending, startNavigation] = useTransition();
+
+  const [period, periodValue] = getActivePeriodEntry(searchParams);
 
   const navigatePeriod = (offset: -1 | 1) => {
     startNavigation(() => {

@@ -1,4 +1,4 @@
-import ExpensesByCategoryChart from '../_components/ExpensesByCategoryChart';
+import ExpenseCategoriesChart from '../_components/ExpenseCategoriesChart';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -43,7 +43,7 @@ export default async function ExpenseCategoriesPage({
           sx={{ p: 0, '&:last-child': { pb: 1 }, position: 'relative' }}
         >
           <DateNavButtons />
-          <ExpensesByCategoryChart
+          <ExpenseCategoriesChart
             currency={currency}
             data={expensesByCategory.map(category => ({
               name: category.name,
