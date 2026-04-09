@@ -18,7 +18,7 @@ export default function CategoriesLoading() {
         <Skeleton
           variant="rectangular"
           height={50}
-          sx={{ mb: 1, borderRadius: '10px' }}
+          sx={{ mb: 1.5, borderRadius: '10px' }}
         />
       }
     >
