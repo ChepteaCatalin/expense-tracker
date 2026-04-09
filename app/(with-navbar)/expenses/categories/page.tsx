@@ -21,12 +21,13 @@ export default async function ExpenseCategoriesPage({
 }: {
   searchParams: Promise<ExpenseCategoriesSearchParams>;
 }) {
-  if (!validSearchParams(await searchParams)) notFound();
+  const params = await searchParams;
+  if (!validSearchParams(params)) notFound();
 
   var expensesByCategory = [] as ExpenseCategory[];
   try {
     expensesByCategory = await getExpenseCategories(
-      dateFromSearchParams(await searchParams),
+      dateFromSearchParams(params),
     );
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
@@ -70,6 +71,7 @@ export default async function ExpenseCategoriesPage({
                 percentage: categoryPercentages[c.categoryId],
               }}
               currency={currency}
+              searchParams={params}
             />
           ))
         )}
