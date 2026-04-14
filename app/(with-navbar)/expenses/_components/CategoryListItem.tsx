@@ -31,7 +31,14 @@ export default function CategoryListItem({
       }}
       style={{ textDecoration: 'none' }}
     >
-      <Card role="button" sx={{ borderRadius: '10px', cursor: 'pointer' }}>
+      <Card
+        role="button"
+        sx={{
+          borderRadius: '10px',
+          cursor: 'pointer',
+          '&:hover': { bgcolor: 'action.hover' },
+        }}
+      >
         <CardContent
           sx={{
             display: 'flex',

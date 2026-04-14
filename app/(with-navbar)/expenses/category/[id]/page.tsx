@@ -3,10 +3,8 @@ import { validSearchParams } from '../../_utils/url';
 import { notFound } from 'next/navigation';
 import { validIdParam } from '@/utils/url';
 import Box from '@mui/material/Box';
-import Link from 'next/link';
-import Fab from '@/components/Fab';
 
-export default async function ExpenseCategoryPage({
+export default async function ExpensesCategoryPage({
   params,
   searchParams,
 }: {
@@ -20,11 +18,5 @@ export default async function ExpenseCategoryPage({
     notFound();
   }
 
-  return (
-    <Box>
-      <Link href="/expenses/new">
-        <Fab />
-      </Link>
-    </Box>
-  );
+  return <Box></Box>;
 }

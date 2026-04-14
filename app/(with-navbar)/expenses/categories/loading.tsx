@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 
-export default function ExpensesByCategoriesLoading() {
+export default function ExpenseCategoriesLoading() {
   return (
     <Box>
       <Card sx={{ borderRadius: '10px' }}>

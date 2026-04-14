@@ -1,3 +1,3 @@
-export default function ExpenseCategoryLoading() {
+export default function ExpensesByCategoryLoading() {
   return <p>Loading...</p>;
 }

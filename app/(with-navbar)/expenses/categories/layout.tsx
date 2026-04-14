@@ -11,7 +11,7 @@ export const metadata = {
   description: 'Track and organize your spending',
 };
 
-export default function ExpensesByCategoriesLayout({
+export default function ExpenseCategoriesLayout({
   children,
 }: {
   children: React.ReactNode;
