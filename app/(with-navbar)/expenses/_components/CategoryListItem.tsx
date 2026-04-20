@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import {
   ExpenseCategoriesSearchParams,
   ExpenseCategoryListItem,
+  SortExpenseBy,
 } from '@/types/expense';
 import { fromCents, readableCurrency } from '@/utils/currency';
 import Link from 'next/link';
@@ -27,7 +28,10 @@ export default function CategoryListItem({
     <Link
       href={{
         pathname: `/expenses/category/${category.id}`,
-        query: searchParams as Record<string, string | string[]>,
+        query: {
+          ...searchParams,
+          sortBy: 'date' satisfies SortExpenseBy,
+        } as Record<string, string | string[]>,
       }}
       style={{ textDecoration: 'none' }}
     >

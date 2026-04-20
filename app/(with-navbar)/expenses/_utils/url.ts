@@ -17,7 +17,9 @@ export function validSearchParams(
   if (
     Object.keys(searchParams || {}).some(
       key =>
-        !validPeriodParams.includes(key as (typeof validPeriodParams)[number]),
+        ![...validPeriodParams, 'sortBy'].includes(
+          key as (typeof validPeriodParams)[number],
+        ),
     )
   ) {
     return false;

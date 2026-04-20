@@ -31,6 +31,10 @@ export interface ExpenseCategoriesSearchParams {
   to?: string | null;
 }
 
+export interface ExpensesByCategorySearchParams extends ExpenseCategoriesSearchParams {
+  sortBy?: SortExpenseBy | null;
+}
+
 export interface ExpenseCategory {
   categoryId: number;
   name: string;
@@ -55,3 +59,5 @@ export type ExpenseCategoryListItem = Readonly<
     percentage: number;
   }
 >;
+
+export type SortExpenseBy = 'date' | 'amount';
