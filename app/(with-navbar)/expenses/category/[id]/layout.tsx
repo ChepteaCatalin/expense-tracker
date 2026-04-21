@@ -15,7 +15,11 @@ export default function ExpensesByCategoryLayout({
 }) {
   return (
     <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
-      <Heading title={metadata.title} subtitle={metadata.description} />
+      <Heading
+        title={metadata.title}
+        subtitle={metadata.description}
+        sx={{ mb: 5 }}
+      />
       {children}
       <Link href="/expenses/new">
         <Fab />

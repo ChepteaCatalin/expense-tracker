@@ -10,7 +10,7 @@ export default function BackToLink({
   sx,
 }: {
   href: string | UrlObject;
-  pageName: string;
+  pageName?: string;
   sx?: SxProps<Theme>;
 }) {
   return (
@@ -24,7 +24,7 @@ export default function BackToLink({
         }}
         startIcon={<ChevronLeftIcon />}
       >
-        Back to {pageName}
+        {pageName ? `Back to ${pageName}` : 'Back'}
       </Button>
     </Link>
   );

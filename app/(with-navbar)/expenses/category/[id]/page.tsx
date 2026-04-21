@@ -1,45 +1,58 @@
-import { ExpensesByCategorySearchParams, SortExpenseBy } from '@/types/expense';
-import { validSearchParams } from '../../_utils/url';
-import { notFound } from 'next/navigation';
-import { validIdParam } from '@/utils/url';
-import Box from '@mui/material/Box';
 import SortBy from './_components/SortBy';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import BackToCategoriesBtn from './_components/BackToCategoriesBtn';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import ExpensesList from './_components/Expenses';
+import { ExpensesByCategorySearchParams } from '@/types/expense';
 
-export default async function ExpensesCategoryPage({
+export default function ExpensesCategoryPage({
   params,
   searchParams,
 }: {
   params: Promise<{ id: string }>;
   searchParams: Promise<ExpensesByCategorySearchParams>;
 }) {
-  const resolvedSearchParams = await searchParams;
-
-  if (
-    !validSearchParams(resolvedSearchParams) ||
-    !validIdParam((await params).id) ||
-    !validSortBySearchParam(resolvedSearchParams.sortBy as SortExpenseBy)
-  ) {
-    notFound();
-  }
-
   return (
     <Box>
-      <Suspense
-        fallback={
-          <Skeleton
-            variant="rectangular"
-            sx={{ width: '205px', height: '40px', borderRadius: '4px' }}
-          />
-        }
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+        }}
       >
-        <SortBy />
+        <Suspense
+          fallback={
+            <Skeleton
+              variant="rectangular"
+              sx={{
+                width: '66px',
+                height: '28px',
+                borderRadius: '4px',
+              }}
+            />
+          }
+        >
+          <BackToCategoriesBtn />
+        </Suspense>
+        <Suspense
+          fallback={
+            <Skeleton
+              variant="rectangular"
+              sx={{ width: '205px', height: '40px', borderRadius: '4px' }}
+            />
+          }
+        >
+          <SortBy />
+        </Suspense>
+      </Grid>
+      <Suspense fallback="LOADING///">
+        <ExpensesList params={params} searchParams={searchParams} />
       </Suspense>
     </Box>
   );
-}
-
-function validSortBySearchParam(sortBy: SortExpenseBy) {
-  return sortBy === 'date' || sortBy === 'amount';
 }
