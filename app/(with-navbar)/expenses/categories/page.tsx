@@ -1,13 +1,13 @@
-import ExpenseCategoriesChart from '../_components/ExpenseCategoriesChart';
+import ExpenseCategoriesChart from './_components/ExpenseCategoriesChart';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import CategoryListItem from '../_components/CategoryListItem';
-import NoExpensesForPeriod from '../_components/NoExpensesForPeriod';
+import CategoryListItem from './_components/CategoryListItem';
+import NoExpensesForPeriod from './_components/NoExpensesForPeriod';
 import { dateFromSearchParams, validSearchParams } from '../_utils/url';
 import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
-import DateNavButtons from '../_components/DateNavButtons';
+import DateNavButtons from './_components/DateNavButtons';
 import type {
   ExpenseCategoriesSearchParams,
   ExpenseCategory,

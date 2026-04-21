@@ -2,7 +2,7 @@ import Fab from '@/components/Fab';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Heading from '@/components/Heading';
-import PeriodsTabs from '../_components/PeriodsTabs';
+import PeriodsTabs from './_components/PeriodsTabs';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 

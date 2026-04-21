@@ -1,6 +1,6 @@
 import Form from '../_components/Form';
 import { getAllCategoriesByType } from '@/data/category';
-import { NoExpenseCategories } from '../_components/NoExpenseCategories';
+import { NoExpenseCategories } from './_components/NoExpenseCategories';
 import { requireAuth } from '@/lib/auth-utils';
 
 export default async function NewExpense() {

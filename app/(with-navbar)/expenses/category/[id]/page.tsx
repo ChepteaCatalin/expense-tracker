@@ -3,7 +3,7 @@ import { validSearchParams } from '../../_utils/url';
 import { notFound } from 'next/navigation';
 import { validIdParam } from '@/utils/url';
 import Box from '@mui/material/Box';
-import SortBy from '../../_components/SortBy';
+import SortBy from './_components/SortBy';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 

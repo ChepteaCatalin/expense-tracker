@@ -1,5 +1,5 @@
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import BackToExpenseCategoriesBtn from '../_components/BackToExpenseCategoriesBtn';
+import BackToExpenseCategoriesBtn from './_components/BackToExpenseCategoriesBtn';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
