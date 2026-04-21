@@ -127,6 +127,23 @@ export const getCategoryById = authGuard(
     },
 );
 
+export const getCategoryNameById = authGuard(
+  session =>
+    async (categoryId: number): Promise<string | undefined> => {
+      'use cache';
+      cacheLife('weeks');
+      cacheTag(`categories/id/${categoryId}`);
+
+      const result = await sql`
+        SELECT name
+        FROM category
+        WHERE id = ${categoryId} AND user_id = ${session.user.id}
+      `;
+
+      return result[0]?.name;
+    },
+);
+
 function categoryFromDb(dbResult: Record<string, any>): Category {
   return {
     id: dbResult.id,

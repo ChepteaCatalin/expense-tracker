@@ -1,7 +1,5 @@
-import { ExpensesByCategorySearchParams, SortExpenseBy } from '@/types/expense';
-import { validSearchParams } from '../../../_utils/url';
-import { validIdParam } from '@/utils/url';
-import { notFound } from 'next/navigation';
+import type { ExpensesByCategorySearchParams } from '@/types/expense';
+import { validateParams } from '../utils';
 
 export default async function Expenses({
   params,
@@ -11,18 +9,9 @@ export default async function Expenses({
   searchParams: Promise<ExpensesByCategorySearchParams>;
 }) {
   const awaitedSearchParams = await searchParams;
+  const awaitedParams = await params;
 
-  if (
-    !validSearchParams(awaitedSearchParams) ||
-    !validIdParam((await params).id) ||
-    !validSortBySearchParam(awaitedSearchParams.sortBy as SortExpenseBy)
-  ) {
-    notFound();
-  }
+  validateParams(awaitedParams, awaitedSearchParams);
 
   return <div>Expenses List</div>;
-}
-
-function validSortBySearchParam(sortBy: SortExpenseBy) {
-  return sortBy === 'date' || sortBy === 'amount';
 }
