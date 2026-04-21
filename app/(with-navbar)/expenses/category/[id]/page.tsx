@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { validIdParam } from '@/utils/url';
 import Box from '@mui/material/Box';
 import SortBy from '../../_components/SortBy';
+import { Suspense } from 'react';
+import Skeleton from '@mui/material/Skeleton';
 
 export default async function ExpensesCategoryPage({
   params,
@@ -24,7 +26,16 @@ export default async function ExpensesCategoryPage({
 
   return (
     <Box>
-      <SortBy />
+      <Suspense
+        fallback={
+          <Skeleton
+            variant="rectangular"
+            sx={{ width: '205px', height: '40px', borderRadius: '4px' }}
+          />
+        }
+      >
+        <SortBy />
+      </Suspense>
     </Box>
   );
 }

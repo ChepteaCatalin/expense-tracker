@@ -35,7 +35,7 @@ export default function SortBy() {
           labelId={labelId}
           id={selectId}
           disabled={isNavigating}
-          value={searchParams.get('sortBy')}
+          value={searchParams.get('sortBy') || ('date' satisfies SortExpenseBy)}
           input={
             <OutlinedInput
               endAdornment={
