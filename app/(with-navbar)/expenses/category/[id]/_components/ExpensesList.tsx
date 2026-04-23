@@ -1,7 +1,7 @@
 import type { ExpensesByCategorySearchParams } from '@/types/expense';
 import { validateParams } from '../utils';
 
-export default async function Expenses({
+export default async function ExpensesList({
   params,
   searchParams,
 }: {

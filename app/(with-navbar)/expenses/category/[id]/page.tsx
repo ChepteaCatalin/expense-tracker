@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import Box from '@mui/material/Box';
-import Expenses from './_components/Expenses';
+import ExpensesList from './_components/ExpensesList';
 import { ExpensesByCategorySearchParams } from '@/types/expense';
 import Overview from './_components/Overview';
 import Heading from './_components/Heading';
@@ -29,7 +29,7 @@ export default function ExpensesCategoryPage({
         <Overview params={params} searchParams={searchParams} />
       </Suspense>
       <Suspense fallback="LOADING///">
-        <Expenses params={params} searchParams={searchParams} />
+        <ExpensesList params={params} searchParams={searchParams} />
       </Suspense>
     </Box>
   );
