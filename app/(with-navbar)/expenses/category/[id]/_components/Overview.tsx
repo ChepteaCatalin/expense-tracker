@@ -71,7 +71,7 @@ export default async function Overview({
           direction="row"
           sx={{ justifyContent: 'space-between', alignItems: 'center' }}
         >
-          <Stack spacing={0.75}>
+          <Stack spacing={0.75} sx={{ minWidth: 0, flex: 1 }}>
             <Typography
               variant="overline"
               sx={{ letterSpacing: 1.1, color: 'rgba(255, 255, 255, 0.75)' }}
@@ -81,7 +81,13 @@ export default async function Overview({
             <Typography
               variant="h5"
               component="p"
-              sx={{ lineHeight: 1.15, fontWeight: 700 }}
+              sx={{
+                lineHeight: 1.15,
+                fontWeight: 700,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
             >
               {categoryName}
             </Typography>
