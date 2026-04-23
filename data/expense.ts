@@ -41,6 +41,7 @@ export const createExpense = authGuard(
       if (!createdExpense) throw new Error('Failed to create expense');
 
       updateTag('expenses/categories');
+      updateTag(`expenses/category/${expense.categoryId}`);
 
       return {
         id: createdExpense.id,
@@ -112,7 +113,7 @@ export const getExpenseCategoryTotal = authGuard(
     }): Promise<number> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag('expenses/categories');
+      cacheTag(`expenses/category/${categoryId}`);
 
       try {
         const result = await sql`
