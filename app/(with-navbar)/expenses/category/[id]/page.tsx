@@ -4,6 +4,7 @@ import Expenses from './_components/Expenses';
 import { ExpensesByCategorySearchParams } from '@/types/expense';
 import Overview from './_components/Overview';
 import Heading from './_components/Heading';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function ExpensesCategoryPage({
   params,
@@ -15,7 +16,16 @@ export default function ExpensesCategoryPage({
   return (
     <Box>
       <Heading />
-      <Suspense fallback="LOADING///">
+      <Suspense
+        fallback={
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={209}
+            sx={{ borderRadius: '12px' }}
+          />
+        }
+      >
         <Overview params={params} searchParams={searchParams} />
       </Suspense>
       <Suspense fallback="LOADING///">
