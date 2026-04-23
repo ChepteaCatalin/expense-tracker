@@ -12,7 +12,7 @@ export default function Heading() {
       sx={{
         justifyContent: 'space-between',
         alignItems: 'center',
-        mb: 2,
+        mb: 1.25,
       }}
     >
       <Suspense

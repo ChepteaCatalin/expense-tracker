@@ -1,5 +1,6 @@
 import type { ExpenseCategoriesSearchParams } from '@/types/expense';
 import dayjs from 'dayjs';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 
 export const day = 'day';
 export const week = 'week';
@@ -102,4 +103,39 @@ function parseURLDate(date: string | null | undefined) {
   }
 
   return parsedDate;
+}
+
+export function getActivePeriodEntry(
+  searchParams: ReadonlyURLSearchParams,
+): [string, string] | [] {
+  return (
+    Array.from(searchParams.entries()).find(([key]) =>
+      periods.includes(key as (typeof periods)[number]),
+    ) || []
+  );
+}
+
+export function parsePeriod(searchParams: ReadonlyURLSearchParams): string {
+  const [period, periodValue] = getActivePeriodEntry(searchParams);
+
+  if (!period) return '';
+  if (period === custom) {
+    return (
+      dayjs(searchParams.get('from')).format('D MMM YYYY') +
+      ' - ' +
+      dayjs(searchParams.get('to')).format('D MMM YYYY')
+    );
+  }
+
+  return (
+    {
+      [day]: dayjs(periodValue).format('ddd D MMM YYYY'),
+      [week]:
+        dayjs(periodValue).startOf('week').format('D MMM') +
+        ' - ' +
+        dayjs(periodValue).endOf('week').format('D MMM YYYY'),
+      [month]: dayjs(periodValue).startOf('month').format('MMM YYYY'),
+      [year]: dayjs(periodValue).startOf('year').format('YYYY'),
+    }[period] || ''
+  );
 }

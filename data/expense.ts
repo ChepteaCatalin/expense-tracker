@@ -98,3 +98,35 @@ export const getExpenseCategories = authGuard(
       }
     },
 );
+
+export const getExpenseCategoryTotal = authGuard(
+  session =>
+    async ({
+      categoryId,
+      from,
+      to,
+    }: {
+      categoryId: string;
+      from: string;
+      to: string;
+    }): Promise<number> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag('expenses/categories');
+
+      try {
+        const result = await sql`
+          SELECT COALESCE(SUM(amount), 0) AS total_amount
+          FROM expense
+          WHERE user_id = ${session.user.id}
+            AND category_id = ${categoryId}
+            AND date >= ${from}::date
+            AND date <= ${to}::date
+        `;
+
+        return +(result[0]?.total_amount ?? 0);
+      } catch {
+        return 0;
+      }
+    },
+);
