@@ -65,6 +65,7 @@ export type SortExpenseBy = 'date' | 'amount';
 export interface ExpensesByDate {
   date: Date;
   expenses: Expense[];
+  categoryName: string;
   icon: string;
   strokeColor: string;
   backgroundColor: string;

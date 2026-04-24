@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import { getSession } from '@/data/auth';
 import { getExpenseCategoryTotal } from '@/data/expense';
 import { dateFromSearchParams, parsePeriod } from '../../../_utils/url';
-import { fromCents, readableCurrency } from '@/utils/currency';
+import { readableCurrency } from '@/utils/currency';
 import Stack from '@mui/material/Stack';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 
@@ -107,7 +107,7 @@ export default async function Overview({
           component="p"
           sx={{ mt: 2.5, lineHeight: 1, fontWeight: 800 }}
         >
-          {readableCurrency(fromCents(categoryTotal!))}
+          {readableCurrency(categoryTotal!)}
           <Box
             component="span"
             sx={{

@@ -8,7 +8,8 @@ import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
 import { getExpensesByCategory } from '@/data/expense';
 import { dateFromSearchParams } from '../../../_utils/url';
-import { fromCents } from '@/utils/currency';
+import Stack from '@mui/material/Stack';
+import ExpenseListItem from './ExpenseListItem';
 
 export default async function ExpensesList({
   params,
@@ -33,17 +34,11 @@ export default async function ExpensesList({
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
-  //TODO: Handle no expenses (with manual URL)
-
   return (
-    <div>
+    <Stack spacing={2} sx={{ mt: 3 }}>
       {expenses.map(expense => (
-        <div key={expense.date.toISOString()}>
-          <p>{expense.date.toISOString()}</p>
-          <p>{expense.expenses.map(e => e.description).join(', ')}</p>
-          <p>{expense.expenses.map(e => fromCents(e.amount)).join(', ')}</p>
-        </div>
+        <ExpenseListItem key={expense.date.toISOString()} expense={expense} />
       ))}
-    </div>
+    </Stack>
   );
 }

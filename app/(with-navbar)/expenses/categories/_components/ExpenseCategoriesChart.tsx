@@ -1,7 +1,7 @@
 'use client';
 
 import { ExpenseCategoriesChartData } from '@/types/expense';
-import { fromCents, readableCurrency } from '@/utils/currency';
+import { readableCurrency } from '@/utils/currency';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
 
@@ -13,7 +13,7 @@ export default function ExpenseCategoriesChart({
   currency: string;
 }) {
   const isDesktop = useMediaQuery('(min-width: 1000px)');
-  const sum = fromCents(data.reduce((sum, item) => sum + item.value, 0));
+  const sum = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <ReactECharts
@@ -51,7 +51,7 @@ export default function ExpenseCategoriesChart({
             },
             color: data.map(item => item.color),
             label: { show: false },
-            data: data.map(item => ({ ...item, value: fromCents(item.value) })),
+            data: data.map(item => ({ ...item, value: item.value })),
           },
         ],
       }}

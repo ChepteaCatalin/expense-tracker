@@ -8,7 +8,7 @@ import {
   ExpenseCategoryListItem,
   SortExpenseBy,
 } from '@/types/expense';
-import { fromCents, readableCurrency } from '@/utils/currency';
+import { readableCurrency } from '@/utils/currency';
 import Link from 'next/link';
 
 export default function CategoryListItem({
@@ -38,9 +38,21 @@ export default function CategoryListItem({
       <Card
         role="button"
         sx={{
-          borderRadius: '10px',
+          borderRadius: '12px',
           cursor: 'pointer',
-          '&:hover': { bgcolor: 'action.hover' },
+          border: '1px solid',
+          borderColor: 'rgba(255, 255, 255, 0.08)',
+          background:
+            'linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)',
+          boxShadow: '0 8px 20px rgba(0, 0, 0, 0.16)',
+          transition:
+            'transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease',
+          '&:hover': {
+            bgcolor: 'action.hover',
+            borderColor: 'rgba(255, 255, 255, 0.14)',
+            transform: 'translateY(-1px)',
+            boxShadow: '0 12px 28px rgba(0, 0, 0, 0.22)',
+          },
         }}
       >
         <CardContent
@@ -49,20 +61,20 @@ export default function CategoryListItem({
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 2,
-            p: 1.25,
-            '&:last-child': { pb: 1.25 },
+            p: 1.35,
+            '&:last-child': { pb: 1.35 },
           }}
         >
           <Grid
             container
-            sx={{ alignItems: 'center', gap: 1, flexWrap: 'nowrap' }}
+            sx={{ alignItems: 'center', gap: 1.1, flexWrap: 'nowrap' }}
           >
             {Icon && (
               <Icon
                 style={{
                   width: '32px',
                   height: '32px',
-                  fontWeight: '32px',
+                  fontSize: '32px',
                   padding: '3px',
                   borderRadius: '50%',
                   backgroundColor: category.backgroundColor,
@@ -75,7 +87,8 @@ export default function CategoryListItem({
               sx={{
                 color: 'text.pale',
                 fontSize: '0.875rem',
-                fontWeight: 500,
+                fontWeight: 600,
+                letterSpacing: 0.15,
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
@@ -84,13 +97,27 @@ export default function CategoryListItem({
               {category.name}
             </Typography>
           </Grid>
-          <Grid container sx={{ gap: 2.5, flexWrap: 'nowrap', flex: 'none' }}>
+          <Grid
+            container
+            sx={{
+              gap: 1.25,
+              flexWrap: 'nowrap',
+              flex: 'none',
+              alignItems: 'center',
+            }}
+          >
             <Typography
               sx={{
                 fontSize: '0.8125rem',
-                color: 'text.secondary',
+                color: 'rgba(123, 211, 137, 0.95)',
                 whiteSpace: 'nowrap',
-                lineHeight: '21px',
+                lineHeight: 1,
+                fontWeight: 600,
+                px: 0.7,
+                py: 0.3,
+                borderRadius: 999,
+                bgcolor: 'rgba(30, 215, 96, 0.14)',
+                border: '1px solid rgba(30, 215, 96, 0.24)',
               }}
             >
               {category.percentage.toFixed(2)}%
@@ -98,12 +125,12 @@ export default function CategoryListItem({
             <Typography
               sx={{
                 fontSize: '0.875rem',
-                fontWeight: 500,
-                color: 'text.pale',
+                fontWeight: 700,
+                color: 'success.light',
                 whiteSpace: 'nowrap',
               }}
             >
-              {`${readableCurrency(fromCents(category.amount))} ${currency}`}
+              {`${readableCurrency(category.amount)} ${currency}`}
             </Typography>
           </Grid>
         </CardContent>

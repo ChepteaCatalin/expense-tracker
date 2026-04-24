@@ -14,7 +14,7 @@ export default function ExpensesCategoryPage({
   searchParams: Promise<ExpensesByCategorySearchParams>;
 }) {
   return (
-    <Box>
+    <Box sx={{ pb: 3 }}>
       <Heading />
       <Suspense
         fallback={

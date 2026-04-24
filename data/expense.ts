@@ -157,10 +157,12 @@ export const getExpensesByCategory = authGuard(
             e.id,
             e.amount,
             e.category_id,
+            c.name,
             to_char(e.date, 'YYYY-MM-DD') AS date,
             e.description,
             e.created_at,
             e.updated_at,
+            c.icon,
             c.stroke_color,
             c.background_color
           FROM expense e
@@ -191,6 +193,7 @@ export const getExpensesByCategory = authGuard(
             {
               date: new Date(date),
               expenses,
+              categoryName: rows[0]!.name,
               icon: rows[0]!.icon,
               strokeColor: rows[0]!.stroke_color,
               backgroundColor: rows[0]!.background_color,

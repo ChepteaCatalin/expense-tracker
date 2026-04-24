@@ -39,7 +39,18 @@ export default async function ExpenseCategoriesPage({
 
   return (
     <Box>
-      <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
+      <Card
+        sx={{
+          borderRadius: '12px',
+          pt: 1,
+          px: 1,
+          border: '1px solid',
+          borderColor: 'rgba(255, 255, 255, 0.08)',
+          background:
+            'linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)',
+          boxShadow: '0 8px 20px rgba(0, 0, 0, 0.16)',
+        }}
+      >
         <CardContent
           sx={{ p: 0, '&:last-child': { pb: 1 }, position: 'relative' }}
         >

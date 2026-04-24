@@ -7,5 +7,7 @@ export function fromCents(amount: number) {
 }
 
 export function readableCurrency(value: number) {
-  return new Intl.NumberFormat('en-US').format(value).replace(/,/g, ' ');
+  return new Intl.NumberFormat('en-US')
+    .format(fromCents(value))
+    .replace(/,/g, ' ');
 }
