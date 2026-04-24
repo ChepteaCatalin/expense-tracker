@@ -61,3 +61,11 @@ export type ExpenseCategoryListItem = Readonly<
 >;
 
 export type SortExpenseBy = 'date' | 'amount';
+
+export interface ExpensesByDate {
+  date: Date;
+  expenses: Expense[];
+  icon: string;
+  strokeColor: string;
+  backgroundColor: string;
+}

@@ -5,6 +5,8 @@ import type {
   Expense,
   ExpenseFormValues,
   ExpenseCategory,
+  ExpensesByDate,
+  SortExpenseBy,
 } from '@/types/expense';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
@@ -131,3 +133,86 @@ export const getExpenseCategoryTotal = authGuard(
       }
     },
 );
+
+export const getExpensesByCategory = authGuard(
+  session =>
+    async ({
+      categoryId,
+      from,
+      to,
+      sortBy = 'date',
+    }: {
+      categoryId: string;
+      from: string;
+      to: string;
+      sortBy?: SortExpenseBy;
+    }): Promise<ExpensesByDate[]> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag(`expenses/category/${categoryId}`);
+
+      try {
+        const result = await sql`
+          SELECT
+            e.id,
+            e.amount,
+            e.category_id,
+            to_char(e.date, 'YYYY-MM-DD') AS date,
+            e.description,
+            e.created_at,
+            e.updated_at,
+            c.stroke_color,
+            c.background_color
+          FROM expense e
+          JOIN category c ON e.category_id = c.id
+          WHERE e.user_id = ${session.user.id}
+            AND e.category_id = ${categoryId}
+            AND e.date >= ${from}::date
+            AND e.date <= ${to}::date
+          ORDER BY e.date DESC, e.amount DESC
+        `;
+
+        const groupedByDate = Object.groupBy(result, row => row.date);
+
+        const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
+          if (!rows) return [];
+
+          const expenses = rows.map(row => ({
+            id: row.id,
+            amount: +row.amount,
+            categoryId: row.category_id,
+            date: new Date(row.date),
+            description: row.description,
+            createdAt: new Date(row.created_at),
+            updatedAt: new Date(row.updated_at),
+          }));
+
+          return [
+            {
+              date: new Date(date),
+              expenses,
+              icon: rows[0]!.icon,
+              strokeColor: rows[0]!.stroke_color,
+              backgroundColor: rows[0]!.background_color,
+            },
+          ];
+        });
+
+        if (sortBy === 'amount') {
+          days.sort(
+            (a, b) => getExpensesSum(b.expenses) - getExpensesSum(a.expenses),
+          );
+        } else {
+          days.sort((a, b) => b.date.getTime() - a.date.getTime());
+        }
+
+        return days;
+      } catch {
+        return [];
+      }
+    },
+);
+
+function getExpensesSum(expenses: Expense[]): number {
+  return expenses.reduce((sum, exp) => sum + exp.amount, 0);
+}
