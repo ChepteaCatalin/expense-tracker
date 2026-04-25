@@ -102,6 +102,46 @@ export const getExpenseCategories = authGuard(
     },
 );
 
+export const getExpenseById = authGuard(
+  session =>
+    async (expenseId: number): Promise<Expense | undefined> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag(`expenses/id/${expenseId}`);
+
+      try {
+        const result = await sql`
+          SELECT
+            id,
+            amount,
+            category_id,
+            to_char(date, 'YYYY-MM-DD') AS date,
+            description,
+            created_at,
+            updated_at
+          FROM expense
+          WHERE id = ${expenseId}
+            AND user_id = ${session.user.id}
+        `;
+
+        const row = result[0];
+        if (!row) return undefined;
+
+        return {
+          id: row.id,
+          amount: row.amount,
+          categoryId: row.category_id,
+          date: new Date(row.date),
+          description: row.description,
+          createdAt: new Date(row.created_at),
+          updatedAt: new Date(row.updated_at),
+        };
+      } catch {
+        return undefined;
+      }
+    },
+);
+
 export const getExpenseCategoryTotal = authGuard(
   session =>
     async ({
