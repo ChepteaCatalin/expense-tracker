@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import { Suspense } from 'react';
+import BackToCategoriesBtn from './BackToCategoriesBtn';
 import SortBy from './SortBy';
-import NavigateBackBtn from '@/components/NavigateBackBtn';
 
 export default function Heading() {
   return (
@@ -27,7 +27,7 @@ export default function Heading() {
           />
         }
       >
-        <NavigateBackBtn />
+        <BackToCategoriesBtn />
       </Suspense>
       <Suspense
         fallback={

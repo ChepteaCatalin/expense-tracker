@@ -1,7 +1,7 @@
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
+import BackToExpenseCategoriesBtn from './_components/BackToExpenseCategoriesBtn';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import NavigateBackBtn from '@/components/NavigateBackBtn';
 
 export const metadata = {
   title: 'New Expense',
@@ -31,7 +31,7 @@ export default function NewExpenseLayout({
             />
           }
         >
-          <NavigateBackBtn />
+          <BackToExpenseCategoriesBtn />
         </Suspense>
       }
     >
