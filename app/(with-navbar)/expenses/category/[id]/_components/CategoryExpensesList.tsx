@@ -9,9 +9,9 @@ import { redirect } from 'next/navigation';
 import { getExpensesByCategory } from '@/data/expense';
 import { dateFromSearchParams } from '../../../_utils/url';
 import Stack from '@mui/material/Stack';
-import ExpenseListItem from './ExpenseListItem';
+import DayExpenses from './DayExpenses';
 
-export default async function ExpensesList({
+export default async function CategoryExpensesList({
   params,
   searchParams,
 }: {
@@ -37,7 +37,7 @@ export default async function ExpensesList({
   return (
     <Stack spacing={2} sx={{ mt: 3 }}>
       {expenses.map(expense => (
-        <ExpenseListItem key={expense.date.toISOString()} expense={expense} />
+        <DayExpenses key={expense.date.toISOString()} dayExpenses={expense} />
       ))}
     </Stack>
   );

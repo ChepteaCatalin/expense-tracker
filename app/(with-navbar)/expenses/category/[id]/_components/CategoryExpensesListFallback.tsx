@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 
-export default function ExpensesListFallback() {
+export default function CategoryExpensesListFallback() {
   return (
     <Box sx={{ mt: 3 }}>
       <Skeleton

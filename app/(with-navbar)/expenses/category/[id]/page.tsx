@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import Box from '@mui/material/Box';
-import ExpensesList from './_components/ExpensesList';
+import CategoryExpensesList from './_components/CategoryExpensesList';
 import { ExpensesByCategorySearchParams } from '@/types/expense';
 import Overview from './_components/Overview';
 import Heading from './_components/Heading';
 import Skeleton from '@mui/material/Skeleton';
-import ExpensesListFallback from './_components/ExpensesListFallback';
+import CategoryExpensesListFallback from './_components/CategoryExpensesListFallback';
 
 export default function ExpensesCategoryPage({
   params,
@@ -29,8 +29,8 @@ export default function ExpensesCategoryPage({
       >
         <Overview params={params} searchParams={searchParams} />
       </Suspense>
-      <Suspense fallback={<ExpensesListFallback />}>
-        <ExpensesList params={params} searchParams={searchParams} />
+      <Suspense fallback={<CategoryExpensesListFallback />}>
+        <CategoryExpensesList params={params} searchParams={searchParams} />
       </Suspense>
     </Box>
   );

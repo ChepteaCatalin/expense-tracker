@@ -11,13 +11,15 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 
-export default async function ExpenseListItem({
-  expense,
+export default async function DayExpenses({
+  dayExpenses,
 }: {
-  expense: ExpensesByDate;
+  dayExpenses: ExpensesByDate;
 }) {
   const currency = (await getSession())?.user.currency;
-  const Icon = categoryIcons.find(icon => icon.src === expense.icon)?.Component;
+  const Icon = categoryIcons.find(
+    icon => icon.src === dayExpenses.icon,
+  )?.Component;
 
   return (
     <Box>
@@ -30,7 +32,7 @@ export default async function ExpenseListItem({
           letterSpacing: 0.2,
         }}
       >
-        {dayjs(expense.date).format('DD MMMM YYYY')}
+        {dayjs(dayExpenses.date).format('DD MMMM YYYY')}
       </Typography>
       <Card
         sx={{
@@ -44,7 +46,7 @@ export default async function ExpenseListItem({
       >
         <CardContent sx={{ '&.MuiCardContent-root': { p: 1.25 } }}>
           <Stack spacing={0.5}>
-            {expense.expenses.map((expenseItem, index) => (
+            {dayExpenses.expenses.map((expenseItem, index) => (
               <Box key={expenseItem.id}>
                 <Box
                   role="button"
@@ -84,8 +86,8 @@ export default async function ExpenseListItem({
                             fontSize: '32px',
                             padding: '3px',
                             borderRadius: '50%',
-                            backgroundColor: expense.backgroundColor,
-                            fill: expense.strokeColor,
+                            backgroundColor: dayExpenses.backgroundColor,
+                            fill: dayExpenses.strokeColor,
                             flex: 'none',
                           }}
                         />
@@ -99,7 +101,7 @@ export default async function ExpenseListItem({
                           textOverflow: 'ellipsis',
                         }}
                       >
-                        {expense.categoryName}
+                        {dayExpenses.categoryName}
                       </Typography>
                     </Grid>
                     <Typography
@@ -122,7 +124,7 @@ export default async function ExpenseListItem({
                     {expenseItem.description}
                   </Typography>
                 </Box>
-                {index !== expense.expenses.length - 1 && (
+                {index !== dayExpenses.expenses.length - 1 && (
                   <Divider
                     sx={{ mt: 0.5, borderColor: 'rgba(255, 255, 255, 0.08)' }}
                   />
