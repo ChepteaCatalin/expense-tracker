@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 export default async function DayExpenses({
   dayExpenses,
@@ -48,82 +49,87 @@ export default async function DayExpenses({
           <Stack spacing={0.5}>
             {dayExpenses.expenses.map((expenseItem, index) => (
               <Box key={expenseItem.id}>
-                <Box
-                  role="button"
-                  sx={{
-                    cursor: 'pointer',
-                    px: 0.75,
-                    py: 0.5,
-                    borderRadius: 1.5,
-                    transition:
-                      'background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease',
-                    '&:hover': {
-                      bgcolor: 'action.hover',
-                      transform: 'translateX(2px)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                    },
-                  }}
+                <Link
+                  href={`/expenses/${expenseItem.id}/edit`}
+                  style={{ textDecoration: 'none' }}
                 >
-                  <Grid
-                    container
-                    spacing={2}
+                  <Box
+                    role="button"
                     sx={{
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      flexWrap: 'nowrap',
+                      cursor: 'pointer',
+                      px: 0.75,
+                      py: 0.5,
+                      borderRadius: 1.5,
+                      transition:
+                        'background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease',
+                      '&:hover': {
+                        bgcolor: 'action.hover',
+                        transform: 'translateX(2px)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                      },
                     }}
                   >
                     <Grid
                       container
-                      spacing={1}
-                      sx={{ flexWrap: 'nowrap', alignItems: 'center' }}
+                      spacing={2}
+                      sx={{
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexWrap: 'nowrap',
+                      }}
                     >
-                      {Icon && (
-                        <Icon
-                          style={{
-                            width: '32px',
-                            height: '32px',
-                            fontSize: '32px',
-                            padding: '3px',
-                            borderRadius: '50%',
-                            backgroundColor: dayExpenses.backgroundColor,
-                            fill: dayExpenses.strokeColor,
-                            flex: 'none',
+                      <Grid
+                        container
+                        spacing={1}
+                        sx={{ flexWrap: 'nowrap', alignItems: 'center' }}
+                      >
+                        {Icon && (
+                          <Icon
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              fontSize: '32px',
+                              padding: '3px',
+                              borderRadius: '50%',
+                              backgroundColor: dayExpenses.backgroundColor,
+                              fill: dayExpenses.strokeColor,
+                              flex: 'none',
+                            }}
+                          />
+                        )}
+                        <Typography
+                          sx={{
+                            color: 'text.pale',
+                            fontWeight: 500,
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
                           }}
-                        />
-                      )}
+                        >
+                          {dayExpenses.categoryName}
+                        </Typography>
+                      </Grid>
                       <Typography
                         sx={{
-                          color: 'text.pale',
-                          fontWeight: 500,
-                          overflow: 'hidden',
+                          fontWeight: 700,
+                          color: 'success.light',
                           whiteSpace: 'nowrap',
-                          textOverflow: 'ellipsis',
                         }}
                       >
-                        {dayExpenses.categoryName}
+                        {`${readableCurrency(expenseItem.amount)} ${currency}`}
                       </Typography>
                     </Grid>
                     <Typography
                       sx={{
-                        fontWeight: 700,
-                        color: 'success.light',
-                        whiteSpace: 'nowrap',
+                        color: 'text.secondary',
+                        fontSize: '0.8125rem',
+                        mt: 0.25,
                       }}
                     >
-                      {`${readableCurrency(expenseItem.amount)} ${currency}`}
+                      {expenseItem.description}
                     </Typography>
-                  </Grid>
-                  <Typography
-                    sx={{
-                      color: 'text.secondary',
-                      fontSize: '0.8125rem',
-                      mt: 0.25,
-                    }}
-                  >
-                    {expenseItem.description}
-                  </Typography>
-                </Box>
+                  </Box>
+                </Link>
                 {index !== dayExpenses.expenses.length - 1 && (
                   <Divider
                     sx={{ mt: 0.5, borderColor: 'rgba(255, 255, 255, 0.08)' }}
