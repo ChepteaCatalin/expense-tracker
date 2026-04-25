@@ -27,7 +27,7 @@ export default function Form({
   currency,
   categories,
 }: {
-  currency: string;
+  currency?: string;
   categories: Category[];
 }) {
   const [createExpenseErrors, createExpenseAction, isPendingCreate] =
