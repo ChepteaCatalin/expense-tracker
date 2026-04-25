@@ -9,7 +9,15 @@ import AddIcon from '@mui/icons-material/Add';
 
 export default function NoExpensesForDay() {
   return (
-    <Card sx={{ borderRadius: '12px', mt: 3 }}>
+    <Card
+      sx={{
+        borderRadius: '12px',
+        mt: 3,
+        background:
+          'linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+      }}
+    >
       <CardContent>
         <Grid container sx={{ alignItems: 'center', flexDirection: 'column' }}>
           <SearchOffIcon
