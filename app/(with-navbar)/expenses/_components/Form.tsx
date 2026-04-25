@@ -1,6 +1,6 @@
 'use client';
 
-import { ExpenseFormValues } from '@/types/expense';
+import { Expense, ExpenseFormValues } from '@/types/expense';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { expenseSchema } from '../validation';
@@ -22,13 +22,16 @@ import {
 import InputAdornment from '@mui/material/InputAdornment';
 import { createExpense } from '../actions';
 import dayjs from 'dayjs';
+import { fromCents } from '@/utils/currency';
 
 export default function Form({
   currency,
   categories,
+  expense,
 }: {
   currency?: string;
   categories: Category[];
+  expense: Expense;
 }) {
   const [createExpenseErrors, createExpenseAction, isPendingCreate] =
     useActionState(createExpense, {});
@@ -38,7 +41,7 @@ export default function Form({
   const disabledForm = isPendingCreate;
 
   const methods = useForm<ExpenseFormValues>({
-    defaultValues: getDefaultValues(),
+    defaultValues: getDefaultValues(expense),
     resolver: zodResolver(expenseSchema),
     disabled: disabledForm,
   });
@@ -163,7 +166,16 @@ export default function Form({
   );
 }
 
-function getDefaultValues(): ExpenseFormValues {
+function getDefaultValues(expense?: Expense): ExpenseFormValues {
+  if (expense) {
+    return {
+      amount: fromCents(expense.amount),
+      categoryId: expense.categoryId,
+      date: dayjs(expense.date).toISOString(),
+      description: expense.description,
+    };
+  }
+
   return {
     amount: '',
     categoryId: '',

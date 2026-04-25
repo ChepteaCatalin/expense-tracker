@@ -29,5 +29,5 @@ export default async function EditExpense({
 
   const currency = (await getSession())?.user.currency;
 
-  return <Form currency={currency} categories={categories} />;
+  return <Form expense={expense} currency={currency} categories={categories} />;
 }
