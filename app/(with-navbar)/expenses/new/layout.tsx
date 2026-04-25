@@ -1,5 +1,5 @@
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import BackToExpenseCategoriesBtn from './_components/BackToExpenseCategoriesBtn';
+import NavigateBackBtn from '@/components/NavigateBackBtn';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
@@ -31,7 +31,7 @@ export default function NewExpenseLayout({
             />
           }
         >
-          <BackToExpenseCategoriesBtn />
+          <NavigateBackBtn />
         </Suspense>
       }
     >
