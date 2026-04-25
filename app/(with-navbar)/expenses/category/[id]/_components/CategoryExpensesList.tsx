@@ -10,6 +10,7 @@ import { getExpensesByCategory } from '@/data/expense';
 import { dateFromSearchParams } from '../../../_utils/url';
 import Stack from '@mui/material/Stack';
 import DayExpenses from './DayExpenses';
+import NoExpensesForDay from './NoExpensesForDay';
 
 export default async function CategoryExpensesList({
   params,
@@ -23,9 +24,9 @@ export default async function CategoryExpensesList({
 
   validateParams(awaitedParams, awaitedSearchParams);
 
-  var expenses: ExpensesByDate[] = [];
+  var expensesByDate: ExpensesByDate[] = [];
   try {
-    expenses = await getExpensesByCategory({
+    expensesByDate = await getExpensesByCategory({
       categoryId: awaitedParams.id,
       ...dateFromSearchParams(awaitedSearchParams),
       sortBy: (awaitedSearchParams.sortBy as SortExpenseBy) || 'date',
@@ -34,9 +35,11 @@ export default async function CategoryExpensesList({
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
+  if (!expensesByDate.length) return <NoExpensesForDay />;
+
   return (
     <Stack spacing={2} sx={{ mt: 3 }}>
-      {expenses.map(expense => (
+      {expensesByDate.map(expense => (
         <DayExpenses key={expense.date.toISOString()} dayExpenses={expense} />
       ))}
     </Stack>
