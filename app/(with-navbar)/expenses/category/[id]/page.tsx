@@ -5,6 +5,7 @@ import { ExpensesByCategorySearchParams } from '@/types/expense';
 import Overview from './_components/Overview';
 import Heading from './_components/Heading';
 import Skeleton from '@mui/material/Skeleton';
+import ExpensesListFallback from './_components/ExpensesListFallback';
 
 export default function ExpensesCategoryPage({
   params,
@@ -28,7 +29,7 @@ export default function ExpensesCategoryPage({
       >
         <Overview params={params} searchParams={searchParams} />
       </Suspense>
-      <Suspense fallback="LOADING///">
+      <Suspense fallback={<ExpensesListFallback />}>
         <ExpensesList params={params} searchParams={searchParams} />
       </Suspense>
     </Box>
