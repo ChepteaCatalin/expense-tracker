@@ -94,6 +94,7 @@ export const getAllCategoriesByType = authGuard(
           updated_at
         FROM category
         WHERE user_id = ${session.user.id} AND type = ${type}
+        ORDER BY LOWER(name) ASC
       `;
 
       if (!result?.length) return [];
