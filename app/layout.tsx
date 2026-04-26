@@ -10,7 +10,13 @@ import '@/lib/dayjs';
 export const metadata: Metadata = {
   title: 'Expense Tracker',
   description: 'Manage your finances with ease',
-  appleWebApp: { title: 'Expense Tracker' },
+  appleWebApp: {
+    title: 'Expense Tracker',
+    capable: true,
+  },
+  icons: {
+    apple: '/web-app-manifest-192x192.png',
+  },
 };
 
 const geist = Geist({ variable: '--font-geist', subsets: ['latin'] });
