@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
   icons: {
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };
@@ -31,7 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={geist.variable}>
       <head>
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
       </head>
       <body>
         <AppRouterCacheProvider>
