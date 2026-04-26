@@ -20,7 +20,7 @@ import {
   handleDatePickerChange,
 } from '@/lib/MuiDatePicker/utils';
 import InputAdornment from '@mui/material/InputAdornment';
-import { createExpense } from '../actions';
+import { createExpense, updateExpense } from '../actions';
 import dayjs from 'dayjs';
 import { fromCents } from '@/utils/currency';
 
@@ -31,14 +31,16 @@ export default function Form({
 }: {
   currency?: string;
   categories: Category[];
-  expense: Expense;
+  expense?: Expense;
 }) {
+  const isEditMode = !!expense;
+
   const [createExpenseErrors, createExpenseAction, isPendingCreate] =
     useActionState(createExpense, {});
+  const [updateExpenseErrors, updateExpenseAction, isPendingUpdate] =
+    useActionState(updateExpense, {});
 
-  //TODO: create the edit expense page
-  const isEditMode = false;
-  const disabledForm = isPendingCreate;
+  const disabledForm = isPendingCreate || isPendingUpdate;
 
   const methods = useForm<ExpenseFormValues>({
     defaultValues: getDefaultValues(expense),
@@ -50,6 +52,7 @@ export default function Form({
     control,
     subscribe,
     handleSubmit,
+    reset,
     formState: { errors },
   } = methods;
 
@@ -64,11 +67,19 @@ export default function Form({
     [subscribe],
   );
 
+  useEffect(
+    function resetFormOnMount() {
+      reset(getDefaultValues(expense));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return (
     <FormProvider {...methods}>
       <ApiFormErrorAlert
         hide={hideApiError}
-        message={createExpenseErrors.api}
+        message={createExpenseErrors.api || updateExpenseErrors.api}
         sx={{ mb: 3 }}
       />
       <Stack
@@ -78,7 +89,8 @@ export default function Form({
         onSubmit={handleSubmit(data => {
           startTransition(() => {
             setHideApiError(false);
-            createExpenseAction(data);
+            if (isEditMode) updateExpenseAction({ ...data, id: expense.id });
+            else createExpenseAction(data);
           });
         })}
       >
@@ -152,8 +164,11 @@ export default function Form({
         </Link>
         <Button
           type="submit"
-          disabled={!hideApiError && !!createExpenseErrors.api}
-          loading={isPendingCreate}
+          disabled={
+            !hideApiError &&
+            (!!createExpenseErrors.api || !!updateExpenseErrors.api)
+          }
+          loading={isPendingCreate || isPendingUpdate}
           loadingPosition="start"
           startIcon={<SaveIcon />}
           variant="contained"

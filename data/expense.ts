@@ -7,6 +7,7 @@ import type {
   ExpenseCategory,
   ExpensesByDate,
   SortExpenseBy,
+  ExpenseFormValuesWithId,
 } from '@/types/expense';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
@@ -53,6 +54,50 @@ export const createExpense = authGuard(
         description: createdExpense.description,
         createdAt: new Date(createdExpense.created_at),
         updatedAt: new Date(createdExpense.updated_at),
+      };
+    },
+);
+
+export const updateExpense = authGuard(
+  session =>
+    async (expense: ExpenseFormValuesWithId): Promise<Expense> => {
+      const result = await sql`
+        UPDATE expense
+        SET
+          amount = ${expense.amount},
+          category_id = ${expense.categoryId},
+          date = ${expense.date},
+          description = ${expense.description},
+          updated_at = NOW()
+        WHERE
+          id = ${expense.id}
+          AND user_id = ${session.user.id}
+        RETURNING
+          id,
+          amount,
+          category_id,
+          to_char(date, 'YYYY-MM-DD') AS date,
+          description,
+          created_at,
+          updated_at
+      `;
+
+      const editedExpense = result[0];
+
+      if (!editedExpense) throw new Error('Failed to edit expense');
+
+      updateTag('expenses/categories');
+      updateTag(`expenses/category/${expense.categoryId}`);
+      updateTag(`expenses/id/${expense.id}`);
+
+      return {
+        id: editedExpense.id,
+        amount: editedExpense.amount,
+        categoryId: editedExpense.category_id,
+        date: new Date(editedExpense.date),
+        description: editedExpense.description,
+        createdAt: new Date(editedExpense.created_at),
+        updatedAt: new Date(editedExpense.updated_at),
       };
     },
 );

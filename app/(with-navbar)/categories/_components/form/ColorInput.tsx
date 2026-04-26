@@ -24,6 +24,7 @@ export default function ColorInput({
   const open = !!anchorEl;
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocalValue(value);
   }, [value]);
 

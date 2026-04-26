@@ -1,11 +1,18 @@
 'use server';
 
 import { getFormErrors } from '@/lib/zod';
-import { ExpenseFormErrors, ExpenseFormValues } from '@/types/expense';
+import {
+  ExpenseFormValuesWithId,
+  ExpenseFormErrors,
+  ExpenseFormValues,
+} from '@/types/expense';
 import { expenseSchema } from './validation';
 import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
-import { createExpense as createNewExpense } from '@/data/expense';
+import {
+  createExpense as createNewExpense,
+  updateExpense as updateExistingExpense,
+} from '@/data/expense';
 import { toCents } from '@/utils/currency';
 import dayjs from 'dayjs';
 
@@ -24,6 +31,31 @@ export async function createExpense(
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     return { api: 'Failed to add the expense' };
+  }
+
+  redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);
+}
+
+export async function updateExpense(
+  _: ExpenseFormErrors,
+  expense: ExpenseFormValuesWithId,
+): Promise<ExpenseFormErrors> {
+  const errors = getFormErrors(expenseSchema, {
+    ...expense,
+    amount: +expense.amount,
+    categoryId: +expense.categoryId,
+    date: String(expense.date),
+  });
+  if (errors) return errors;
+
+  try {
+    await updateExistingExpense({
+      ...expense,
+      amount: toCents(expense.amount),
+    });
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return { api: 'Failed to edit the expense' };
   }
 
   redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);

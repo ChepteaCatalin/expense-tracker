@@ -19,6 +19,10 @@ export interface ExpenseFormValues {
   description: string;
 }
 
+export interface ExpenseFormValuesWithId extends ExpenseFormValues {
+  id: number;
+}
+
 export type ExpenseFormErrors = FormErrors<ExpenseFormValues>;
 
 export interface ExpenseCategoriesSearchParams {
