@@ -12,6 +12,7 @@ import { redirect } from 'next/navigation';
 import {
   createExpense as createNewExpense,
   updateExpense as updateExistingExpense,
+  deleteExpense as deleteExistingExpense,
 } from '@/data/expense';
 import { toCents } from '@/utils/currency';
 import dayjs from 'dayjs';
@@ -56,6 +57,17 @@ export async function updateExpense(
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     return { api: 'Failed to edit the expense' };
+  }
+
+  redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);
+}
+
+export async function deleteExpense(_: string, { id }: { id: number }) {
+  try {
+    await deleteExistingExpense(id);
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return 'Failed to delete expense';
   }
 
   redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);

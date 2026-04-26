@@ -102,6 +102,26 @@ export const updateExpense = authGuard(
     },
 );
 
+export const deleteExpense = authGuard(
+  session =>
+    async (expenseId: number): Promise<void> => {
+      const result = await sql`
+        DELETE FROM expense
+        WHERE id = ${expenseId}
+          AND user_id = ${session.user.id}
+        RETURNING id, category_id
+      `;
+
+      const deletedExpense = result[0];
+
+      if (!deletedExpense) throw new Error('Failed to delete expense');
+
+      updateTag('expenses/categories');
+      updateTag(`expenses/category/${deletedExpense.category_id}`);
+      updateTag(`expenses/id/${expenseId}`);
+    },
+);
+
 export const getExpenseCategories = authGuard(
   session =>
     async ({

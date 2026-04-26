@@ -23,6 +23,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { createExpense, updateExpense } from '../actions';
 import dayjs from 'dayjs';
 import { fromCents } from '@/utils/currency';
+import DeleteExpense from './DeleteExpense';
 
 export default function Form({
   currency,
@@ -176,6 +177,7 @@ export default function Form({
         >
           Save
         </Button>
+        {isEditMode && <DeleteExpense id={expense.id} />}
       </Stack>
     </FormProvider>
   );

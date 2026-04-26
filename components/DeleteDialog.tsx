@@ -13,7 +13,7 @@ import ApiFormErrorAlert from './ApiFormErrorAlert';
 interface DeleteDialogProps {
   open: boolean;
   type: string;
-  name: string;
+  name?: string;
   isPending: boolean;
   error: string;
   hideError: boolean;
@@ -46,7 +46,8 @@ export default function DeleteDialog({
       <DialogContent>
         <ApiFormErrorAlert message={error} hide={hideError} sx={{ mb: 2 }} />
         <DialogContentText id={contentId}>
-          Are you sure you want to delete <b>{`"${name}"`}</b> {type}? <br />
+          Are you sure you want to delete {name ? <b>{`"${name}" `}</b> : ''}
+          {type}? <br />
           This action cannot be undone.
         </DialogContentText>
       </DialogContent>

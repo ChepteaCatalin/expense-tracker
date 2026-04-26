@@ -3,7 +3,11 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
-export default function ExpenseFormFallback() {
+export default function ExpenseFormFallback({
+  isEditMode,
+}: {
+  isEditMode?: boolean;
+}) {
   return (
     <Box>
       <Skeleton
@@ -39,6 +43,13 @@ export default function ExpenseFormFallback() {
           height={40}
           sx={{ borderRadius: '4px' }}
         />
+        {isEditMode && (
+          <Skeleton
+            variant="rectangular"
+            height={40}
+            sx={{ borderRadius: '4px' }}
+          />
+        )}
       </Grid>
     </Box>
   );
