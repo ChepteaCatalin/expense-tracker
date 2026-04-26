@@ -8,9 +8,7 @@ export default async function RootPage() {
     <div>
       <h1>Dashboard</h1>
       <Box>
-        <Link
-          href={`/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`}
-        >
+        <Link href={`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`}>
           Go to Expenses by category
         </Link>
       </Box>
