@@ -15,7 +15,9 @@ export const metadata: Metadata = {
     capable: true,
   },
   icons: {
-    apple: '/web-app-manifest-192x192.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '192x192', type: 'image/png' },
+    ],
   },
 };
 
