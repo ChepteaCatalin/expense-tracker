@@ -20,6 +20,8 @@ export default async function ManageCategoryPage({
   try {
     var category = await getCategoryById(+id);
   } catch (err) {
+    console.error('🚀 ~ err:', err);
+
     if (err instanceof UnauthorizedError) redirect('/signin');
     notFound();
   }
