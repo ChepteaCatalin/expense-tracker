@@ -44,7 +44,7 @@ export default function PeriodsTabs() {
           if (newValue !== custom) {
             startNavigation(() => {
               router.push(
-                `/expenses/categories$?${newValue}=${
+                `/expenses/categories?${newValue}=${
                   {
                     [day]: dayjs().format('YYYY-MM-DD'),
                     [week]: dayjs().startOf('week').format('YYYY-MM-DD'),
