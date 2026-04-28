@@ -8,7 +8,6 @@ export const month = 'month';
 export const year = 'year';
 export const custom = 'custom';
 export const periods = [day, week, month, year, custom] as const;
-export const customPeriodIdx = periods.findIndex(x => x === custom);
 const validPeriodParams = [...periods, 'from', 'to'] as const;
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 

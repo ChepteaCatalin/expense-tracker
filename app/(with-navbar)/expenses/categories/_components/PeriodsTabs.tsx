@@ -4,9 +4,8 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useId, useState, useTransition } from 'react';
-import { custom, customPeriodIdx, periods } from '../../_utils/url';
+import { custom, day, month, periods, week, year } from '../../_utils/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Controller, useForm } from 'react-hook-form';
@@ -40,12 +39,19 @@ export default function PeriodsTabs() {
   return (
     <Box sx={{ mb: 0.5 }}>
       <Tabs
-        value={tabIdxFromSearchParams(searchParams)}
-        onChange={(_event, newValue: number) => {
-          if (newValue !== customPeriodIdx) {
+        value={periods.find(period => searchParams.has(period)) ?? periods[0]}
+        onChange={(_event, newValue: string) => {
+          if (newValue !== custom) {
             startNavigation(() => {
               router.push(
-                `/expenses/categories${defaultPeriodsParam(newValue)}`,
+                `/expenses/categories$?${newValue}=${
+                  {
+                    [day]: dayjs().format('YYYY-MM-DD'),
+                    [week]: dayjs().startOf('week').format('YYYY-MM-DD'),
+                    [month]: dayjs().startOf('month').format('YYYY-MM-DD'),
+                    [year]: dayjs().startOf('year').format('YYYY-MM-DD'),
+                  }[newValue]
+                }`,
               );
             });
           }
@@ -69,11 +75,12 @@ export default function PeriodsTabs() {
           <Tab
             key={period}
             disabled={isPending}
+            value={period}
             label={period}
             id={`tab-${id}-${index}`}
             aria-controls={`tabpanel-${id}-${index}`}
             onClick={event => {
-              if (index === customPeriodIdx) setAnchorEl(event.currentTarget);
+              if (period === custom) setAnchorEl(event.currentTarget);
             }}
           />
         ))}
@@ -209,15 +216,6 @@ function CustomPeriodPopover({
       </Button>
     </Stack>
   );
-}
-
-function tabIdxFromSearchParams(searchParams: ReadonlyURLSearchParams): number {
-  const idx = periods.findIndex(period => searchParams.has(period));
-  return idx === -1 ? 0 : idx;
-}
-
-function defaultPeriodsParam(periodIdx: number) {
-  return `?${periods[periodIdx]}=${[dayjs().format('YYYY-MM-DD'), dayjs().startOf('week').format('YYYY-MM-DD'), dayjs().startOf('month').format('YYYY-MM-DD'), dayjs().startOf('year').format('YYYY-MM-DD')][periodIdx]}`;
 }
 
 function buildCustomPeriodParams(data: {
