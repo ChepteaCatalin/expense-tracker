@@ -12,12 +12,6 @@ export default async function RootPage() {
           Go to Expenses by category
         </Link>
       </Box>
-      <Box>
-        <Link href="/settings">Go to settings</Link>
-      </Box>
-      <Box>
-        <Link href="/categories/all?type=expense">Go to category</Link>
-      </Box>
     </div>
   );
 }
