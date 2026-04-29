@@ -33,7 +33,7 @@ export default async function DayExpenses({
           letterSpacing: 0.2,
         }}
       >
-        {dayjs(dayExpenses.date).format('DD MMMM YYYY')}
+        {dayjs(dayExpenses.date).format('D MMMM YYYY')}
       </Typography>
       <Card
         sx={{
