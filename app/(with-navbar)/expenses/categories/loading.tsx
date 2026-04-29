@@ -33,7 +33,7 @@ function CategoryListItem() {
       <CardContent sx={{ p: 1.25, '&:last-child': { pb: 1.25 } }}>
         <Skeleton
           variant="rectangular"
-          height={32}
+          height={36}
           sx={{ borderRadius: '4px' }}
         />
       </CardContent>
