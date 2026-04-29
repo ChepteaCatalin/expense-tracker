@@ -3,7 +3,7 @@
 import Box from '@mui/material/Box';
 import LinkLabel from './LinkLabel';
 import { CategoryType } from '@/types/category';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -14,6 +14,8 @@ const CATEGORY_TYPES = [
 
 export default function TypeToggle() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [isNavigating, startNavigation] = useTransition();
 
   return (
@@ -34,11 +36,13 @@ export default function TypeToggle() {
             key={categoryType.value}
             role="button"
             onClick={() => {
-              startNavigation(() => {
-                router.push(`/categories/all?type=${categoryType.value}`);
-              });
+              if (searchParams.get('type') !== categoryType.value) {
+                startNavigation(() => {
+                  router.push(`/categories/all?type=${categoryType.value}`);
+                });
+              }
             }}
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, cursor: 'pointer', userSelect: 'none' }}
           >
             <LinkLabel
               href={`/categories/all?type=${categoryType.value}`}
