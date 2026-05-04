@@ -35,7 +35,9 @@ export default async function CategoryExpensesList({
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
-  if (!expensesByDate.length) return <NoExpensesForDay />;
+  if (!expensesByDate.length) {
+    return <NoExpensesForDay searchParams={awaitedSearchParams} />;
+  }
 
   return (
     <Stack spacing={2} sx={{ mt: 3 }}>

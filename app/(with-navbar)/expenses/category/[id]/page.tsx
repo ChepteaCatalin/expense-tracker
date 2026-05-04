@@ -6,6 +6,7 @@ import Overview from './_components/Overview';
 import Heading from './_components/Heading';
 import Skeleton from '@mui/material/Skeleton';
 import CategoryExpensesListFallback from './_components/CategoryExpensesListFallback';
+import NewExpenseFab from '../../_components/NewExpenseFab';
 
 export default function ExpensesCategoryPage({
   params,
@@ -31,6 +32,9 @@ export default function ExpensesCategoryPage({
       </Suspense>
       <Suspense fallback={<CategoryExpensesListFallback />}>
         <CategoryExpensesList params={params} searchParams={searchParams} />
+      </Suspense>
+      <Suspense>
+        <NewExpenseFab searchParams={searchParams} />
       </Suspense>
     </Box>
   );

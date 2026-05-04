@@ -85,6 +85,22 @@ export function dateFromSearchParams(
   );
 }
 
+export function stringifySearchParams<T extends object>(searchParams: {
+  [K in keyof T]: SearchParamValue;
+}): string {
+  const entries: Array<[string, string]> = [];
+
+  for (const [key, value] of Object.entries(searchParams) as Array<
+    [string, SearchParamValue]
+  >) {
+    if (value != null) {
+      entries.push([key, value]);
+    }
+  }
+
+  return new URLSearchParams(entries).toString();
+}
+
 function getActivePeriod(searchParams: ExpenseCategoriesSearchParams) {
   return (
     (Object.entries(searchParams || {}) || []).find(([key]) =>
@@ -138,3 +154,5 @@ export function parsePeriod(searchParams: ReadonlyURLSearchParams): string {
     }[period] || ''
   );
 }
+
+type SearchParamValue = string | null | undefined;

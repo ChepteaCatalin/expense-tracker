@@ -6,8 +6,14 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import { ExpenseCategoriesSearchParams } from '@/types/expense';
+import { stringifySearchParams } from '@/app/(with-navbar)/expenses/_utils/url';
 
-export default function NoExpensesForPeriod() {
+export default function NoExpensesForPeriod({
+  searchParams,
+}: {
+  searchParams: ExpenseCategoriesSearchParams;
+}) {
   return (
     <Card
       sx={{
@@ -23,7 +29,7 @@ export default function NoExpensesForPeriod() {
             sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
           />
           <Typography>There are no expenses for the selected period</Typography>
-          <Link href="/expenses/new">
+          <Link href={`/expenses/new?${stringifySearchParams(searchParams)}`}>
             <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
               Add Expense
             </Button>

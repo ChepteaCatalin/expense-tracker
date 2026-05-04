@@ -1,5 +1,3 @@
-import Fab from '@/components/Fab';
-import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Heading from '@/components/Heading';
 import PeriodsTabs from './_components/PeriodsTabs';
@@ -23,9 +21,6 @@ export default function ExpenseCategoriesLayout({
         <PeriodsTabs />
       </Suspense>
       {children}
-      <Link href="/expenses/new">
-        <Fab />
-      </Link>
     </Box>
   );
 }

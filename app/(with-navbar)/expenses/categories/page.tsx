@@ -15,6 +15,7 @@ import type {
 import { getExpenseCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
+import NewExpenseFab from '../_components/NewExpenseFab';
 
 export default async function ExpenseCategoriesPage({
   searchParams,
@@ -67,7 +68,7 @@ export default async function ExpenseCategoriesPage({
       </Card>
       <Stack spacing={1.25} sx={{ mt: 2 }}>
         {!expensesByCategory.length ? (
-          <NoExpensesForPeriod />
+          <NoExpensesForPeriod searchParams={params} />
         ) : (
           expensesByCategory.map(c => (
             <CategoryListItem
@@ -87,6 +88,7 @@ export default async function ExpenseCategoriesPage({
           ))
         )}
       </Stack>
+      <NewExpenseFab searchParams={params} />
     </Box>
   );
 }

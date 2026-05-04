@@ -1,7 +1,5 @@
 import Heading from '@/components/Heading';
 import Box from '@mui/material/Box';
-import Link from 'next/link';
-import Fab from '@/components/Fab';
 
 export const metadata = {
   title: 'Expenses',
@@ -21,9 +19,6 @@ export default function ExpensesByCategoryLayout({
         sx={{ mb: 5 }}
       />
       {children}
-      <Link href="/expenses/new">
-        <Fab />
-      </Link>
     </Box>
   );
 }

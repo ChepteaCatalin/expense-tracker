@@ -6,8 +6,14 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
+import { ExpensesByCategorySearchParams } from '@/types/expense';
+import { stringifySearchParams } from '../../../_utils/url';
 
-export default function NoExpensesForDay() {
+export default function NoExpensesForDay({
+  searchParams,
+}: {
+  searchParams: ExpensesByCategorySearchParams;
+}) {
   return (
     <Card
       sx={{
@@ -24,7 +30,7 @@ export default function NoExpensesForDay() {
             sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
           />
           <Typography>No expenses for this day</Typography>
-          <Link href="/expenses/new">
+          <Link href={`/expenses/new?${stringifySearchParams(searchParams)}`}>
             <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
               Add Expenses
             </Button>
