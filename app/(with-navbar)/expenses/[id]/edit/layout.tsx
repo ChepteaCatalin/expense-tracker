@@ -1,5 +1,5 @@
 import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import NavigateBackBtn from '@/components/NavigateBackBtn';
+import FormNavigateBackBtn from '../../_components/FormNavigateBackBtn';
 import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
@@ -31,7 +31,7 @@ export default function EditExpenseLayout({
             />
           }
         >
-          <NavigateBackBtn />
+          <FormNavigateBackBtn />
         </Suspense>
       }
     >

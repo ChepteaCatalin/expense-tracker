@@ -7,12 +7,23 @@ import type { SxProps, Theme } from '@mui/material/styles';
 
 export default function NavigateBackBtn({
   pageName,
+  fallbackHref = '/',
   sx,
 }: {
   pageName?: string;
+  fallbackHref?: string;
   sx?: SxProps<Theme>;
 }) {
   const router = useRouter();
+
+  const navigateBack = () => {
+    if (window.history.length > 2) {
+      router.back();
+      return;
+    }
+
+    router.push(fallbackHref);
+  };
 
   return (
     <Button
@@ -24,7 +35,7 @@ export default function NavigateBackBtn({
         ...sx,
       }}
       startIcon={<ChevronLeftIcon />}
-      onClick={() => router.back()}
+      onClick={navigateBack}
     >
       {pageName ? `Back to ${pageName}` : 'Back'}
     </Button>
