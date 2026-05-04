@@ -60,20 +60,26 @@ export async function updateExpense(
     return { api: 'Failed to edit the expense' };
   }
 
-  redirect(
-    searchParams
-      ? `/expenses/category/${expense.categoryId}?${searchParams}`
-      : `/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`,
-  );
+  redirect(toPreviousPage(searchParams, +expense.categoryId));
 }
 
-export async function deleteExpense(_: string, { id }: { id: number }) {
+export async function deleteExpense(
+  searchParams: string,
+  _: string,
+  { id }: { id: number },
+) {
   try {
-    await deleteExistingExpense(id);
+    var { categoryId } = await deleteExistingExpense(id);
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     return 'Failed to delete expense';
   }
 
-  redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);
+  redirect(toPreviousPage(searchParams, categoryId));
+}
+
+function toPreviousPage(searchParams: string, categoryId: number) {
+  return searchParams
+    ? `/expenses/category/${categoryId}?${searchParams}`
+    : `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`;
 }

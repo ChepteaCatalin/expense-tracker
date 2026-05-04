@@ -104,7 +104,7 @@ export const updateExpense = authGuard(
 
 export const deleteExpense = authGuard(
   session =>
-    async (expenseId: number): Promise<void> => {
+    async (expenseId: number): Promise<{ id: number; categoryId: number }> => {
       const result = await sql`
         DELETE FROM expense
         WHERE id = ${expenseId}
@@ -119,6 +119,8 @@ export const deleteExpense = authGuard(
       updateTag('expenses/categories');
       updateTag(`expenses/category/${deletedExpense.category_id}`);
       updateTag(`expenses/id/${expenseId}`);
+
+      return { id: deletedExpense.id, categoryId: deletedExpense.category_id };
     },
 );
 

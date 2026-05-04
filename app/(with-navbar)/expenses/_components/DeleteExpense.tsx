@@ -5,13 +5,16 @@ import Button from '@mui/material/Button';
 import { startTransition, useActionState, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteExpense } from '../actions';
+import { useSearchParams } from 'next/navigation';
 
 export default function DeleteExpense({ id }: { id: number }) {
+  const searchParams = useSearchParams();
+
   const [open, setOpen] = useState(false);
   const [hideError, setHideError] = useState(false);
 
   const [actionError, deleteAction, isPending] = useActionState(
-    deleteExpense,
+    deleteExpense.bind(null, searchParams.toString()),
     '',
   );
 
