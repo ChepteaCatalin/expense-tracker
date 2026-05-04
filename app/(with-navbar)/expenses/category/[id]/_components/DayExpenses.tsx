@@ -14,8 +14,10 @@ import Link from 'next/link';
 
 export default async function DayExpenses({
   dayExpenses,
+  searchParams,
 }: {
   dayExpenses: ExpensesByDate;
+  searchParams: string;
 }) {
   const currency = (await getSession())?.user.currency;
   const Icon = categoryIcons.find(
@@ -50,7 +52,7 @@ export default async function DayExpenses({
             {dayExpenses.expenses.map((expenseItem, index) => (
               <Box key={expenseItem.id}>
                 <Link
-                  href={`/expenses/${expenseItem.id}/edit`}
+                  href={`/expenses/${expenseItem.id}/edit?${searchParams}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <Box

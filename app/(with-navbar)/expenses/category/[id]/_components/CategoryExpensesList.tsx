@@ -40,7 +40,13 @@ export default async function CategoryExpensesList({
   return (
     <Stack spacing={2} sx={{ mt: 3 }}>
       {expensesByDate.map(expense => (
-        <DayExpenses key={expense.date.toISOString()} dayExpenses={expense} />
+        <DayExpenses
+          key={expense.date.toISOString()}
+          dayExpenses={expense}
+          searchParams={new URLSearchParams(
+            awaitedSearchParams as Record<string, string>,
+          ).toString()}
+        />
       ))}
     </Stack>
   );

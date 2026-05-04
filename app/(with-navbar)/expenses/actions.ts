@@ -38,6 +38,7 @@ export async function createExpense(
 }
 
 export async function updateExpense(
+  searchParams: string,
   _: ExpenseFormErrors,
   expense: ExpenseFormValuesWithId,
 ): Promise<ExpenseFormErrors> {
@@ -59,7 +60,11 @@ export async function updateExpense(
     return { api: 'Failed to edit the expense' };
   }
 
-  redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);
+  redirect(
+    searchParams
+      ? `/expenses/category/${expense.categoryId}?${searchParams}`
+      : `/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`,
+  );
 }
 
 export async function deleteExpense(_: string, { id }: { id: number }) {

@@ -24,6 +24,7 @@ import { createExpense, updateExpense } from '../actions';
 import dayjs from 'dayjs';
 import { fromCents } from '@/utils/currency';
 import DeleteExpense from './DeleteExpense';
+import { useSearchParams } from 'next/navigation';
 
 export default function Form({
   currency,
@@ -34,12 +35,14 @@ export default function Form({
   categories: Category[];
   expense?: Expense;
 }) {
+  const searchParams = useSearchParams();
+
   const isEditMode = !!expense;
 
   const [createExpenseErrors, createExpenseAction, isPendingCreate] =
     useActionState(createExpense, {});
   const [updateExpenseErrors, updateExpenseAction, isPendingUpdate] =
-    useActionState(updateExpense, {});
+    useActionState(updateExpense.bind(null, searchParams.toString()), {});
 
   const disabledForm = isPendingCreate || isPendingUpdate;
 
