@@ -40,7 +40,7 @@ export default function Form({
   const isEditMode = !!expense;
 
   const [createExpenseErrors, createExpenseAction, isPendingCreate] =
-    useActionState(createExpense, {});
+    useActionState(createExpense.bind(null, searchParams.toString()), {});
   const [updateExpenseErrors, updateExpenseAction, isPendingUpdate] =
     useActionState(updateExpense.bind(null, searchParams.toString()), {});
 

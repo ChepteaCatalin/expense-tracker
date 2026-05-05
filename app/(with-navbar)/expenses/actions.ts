@@ -18,6 +18,7 @@ import { toCents } from '@/utils/currency';
 import dayjs from 'dayjs';
 
 export async function createExpense(
+  searchParams: string,
   _: ExpenseFormErrors,
   expense: ExpenseFormValues,
 ): Promise<ExpenseFormErrors> {
@@ -34,7 +35,15 @@ export async function createExpense(
     return { api: 'Failed to add the expense' };
   }
 
-  redirect(`/expenses/categories?day=${dayjs().format('YYYY-MM-DD')}`);
+  if (searchParams.includes('sortBy')) {
+    redirect(toExpensesCategoryPage(searchParams, +expense.categoryId));
+  } else {
+    redirect(
+      searchParams
+        ? `/expenses/categories?${searchParams}`
+        : `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`,
+    );
+  }
 }
 
 export async function updateExpense(
@@ -60,7 +69,7 @@ export async function updateExpense(
     return { api: 'Failed to edit the expense' };
   }
 
-  redirect(toPreviousPage(searchParams, +expense.categoryId));
+  redirect(toExpensesCategoryPage(searchParams, +expense.categoryId));
 }
 
 export async function deleteExpense(
@@ -75,10 +84,10 @@ export async function deleteExpense(
     return 'Failed to delete expense';
   }
 
-  redirect(toPreviousPage(searchParams, categoryId));
+  redirect(toExpensesCategoryPage(searchParams, categoryId));
 }
 
-function toPreviousPage(searchParams: string, categoryId: number) {
+function toExpensesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/expenses/category/${categoryId}?${searchParams}`
     : `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`;
