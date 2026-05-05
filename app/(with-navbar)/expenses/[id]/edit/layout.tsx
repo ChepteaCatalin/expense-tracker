@@ -23,7 +23,7 @@ export default function EditExpenseLayout({
             <Skeleton
               variant="rectangular"
               sx={{
-                width: '260px',
+                width: '66px',
                 height: '28px',
                 mb: 0.5,
                 borderRadius: '4px',

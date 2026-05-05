@@ -4,11 +4,11 @@ import { Suspense } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
 export const metadata = {
-  title: 'New Expense',
-  description: 'Add a new expense to your tracker',
+  title: 'New Income',
+  description: 'Add a new income to your tracker',
 };
 
-export default function NewExpenseLayout({
+export default function NewIncomeLayout({
   children,
 }: {
   children: React.ReactNode;
