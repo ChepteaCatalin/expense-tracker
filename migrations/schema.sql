@@ -3,7 +3,7 @@
 --
 
 
--- Dumped from database version 17.8 (a284a84)
+-- Dumped from database version 17.8 (92d3c18)
 -- Dumped by pg_dump version 18.3
 
 SET statement_timeout = 0;
@@ -19,12 +19,18 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS "session_userId_fkey";
+ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_user;
+ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_category;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_user;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_category;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS fk_category_user;
 ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS "account_userId_fkey";
 DROP INDEX IF EXISTS public.verification_identifier_idx;
 DROP INDEX IF EXISTS public."session_userId_idx";
+DROP INDEX IF EXISTS public.idx_income_user_id;
+DROP INDEX IF EXISTS public.idx_income_user_date;
+DROP INDEX IF EXISTS public.idx_income_date;
+DROP INDEX IF EXISTS public.idx_income_category_id;
 DROP INDEX IF EXISTS public.idx_expense_user_id;
 DROP INDEX IF EXISTS public.idx_expense_user_date;
 DROP INDEX IF EXISTS public.idx_expense_date;
@@ -39,12 +45,14 @@ ALTER TABLE IF EXISTS ONLY public."user" DROP CONSTRAINT IF EXISTS user_email_ke
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS uk_category_name_user;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_token_key;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey;
+ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS income_pkey;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS expense_pkey;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS category_pkey;
 ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS account_pkey;
 DROP TABLE IF EXISTS public.verification;
 DROP TABLE IF EXISTS public."user";
 DROP TABLE IF EXISTS public.session;
+DROP TABLE IF EXISTS public.income;
 DROP TABLE IF EXISTS public.expense;
 DROP TABLE IF EXISTS public.category;
 DROP TABLE IF EXISTS public.account;
@@ -335,6 +343,37 @@ ALTER TABLE public.expense ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: income; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.income (
+    id integer NOT NULL,
+    amount integer NOT NULL,
+    category_id integer NOT NULL,
+    user_id text NOT NULL,
+    date date NOT NULL,
+    description character varying(500),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT income_amount_check CHECK ((amount > 0))
+);
+
+
+--
+-- Name: income_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.income ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.income_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: session; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -402,6 +441,14 @@ ALTER TABLE ONLY public.category
 
 ALTER TABLE ONLY public.expense
     ADD CONSTRAINT expense_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: income income_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.income
+    ADD CONSTRAINT income_pkey PRIMARY KEY (id);
 
 
 --
@@ -509,6 +556,34 @@ CREATE INDEX idx_expense_user_id ON public.expense USING btree (user_id);
 
 
 --
+-- Name: idx_income_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_income_category_id ON public.income USING btree (category_id);
+
+
+--
+-- Name: idx_income_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_income_date ON public.income USING btree (date);
+
+
+--
+-- Name: idx_income_user_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_income_user_date ON public.income USING btree (user_id, date);
+
+
+--
+-- Name: idx_income_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_income_user_id ON public.income USING btree (user_id);
+
+
+--
 -- Name: session_userId_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -552,6 +627,22 @@ ALTER TABLE ONLY public.expense
 
 ALTER TABLE ONLY public.expense
     ADD CONSTRAINT fk_expense_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: income fk_income_category; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.income
+    ADD CONSTRAINT fk_income_category FOREIGN KEY (category_id) REFERENCES public.category(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: income fk_income_user; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.income
+    ADD CONSTRAINT fk_income_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
