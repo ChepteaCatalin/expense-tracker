@@ -1,14 +1,5 @@
 import type { Category } from '@/types/category';
-
-export interface Expense {
-  id: number;
-  amount: number;
-  categoryId: number;
-  date: Date;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Transaction } from './transaction';
 
 export interface ExpenseCategoriesSearchParams {
   day?: string | null;
@@ -53,7 +44,7 @@ export type SortExpenseBy = 'date' | 'amount';
 
 export interface ExpensesByDate {
   date: Date;
-  expenses: Expense[];
+  expenses: Transaction[];
   categoryName: string;
   icon: string;
   strokeColor: string;

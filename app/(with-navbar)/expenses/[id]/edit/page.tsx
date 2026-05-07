@@ -5,7 +5,7 @@ import { getExpenseById } from '@/data/expense';
 import { validIdParam } from '@/utils/url';
 import { notFound, redirect } from 'next/navigation';
 import type { Category } from '@/types/category';
-import type { Expense } from '@/types/expense';
+import { Transaction } from '@/types/transaction';
 import { UnauthorizedError } from '@/utils/error';
 import { updateExpense, deleteExpense } from '../../actions';
 
@@ -17,7 +17,7 @@ export default async function EditExpense({
   if (!validIdParam(id)) notFound();
 
   var categories: Category[] = [];
-  var expense: Expense | undefined = undefined;
+  var expense: Transaction | undefined = undefined;
   try {
     [categories, expense] = await Promise.all([
       await getAllCategoriesByType('expense'),
@@ -34,7 +34,7 @@ export default async function EditExpense({
     <Form
       key={expense.updatedAt.toISOString()}
       type="expense"
-      expense={expense}
+      transaction={expense}
       currency={currency}
       categories={categories}
       updateAction={updateExpense}

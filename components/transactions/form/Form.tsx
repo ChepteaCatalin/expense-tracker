@@ -1,6 +1,6 @@
 'use client';
 
-import { Expense } from '@/types/expense';
+import { Transaction } from '@/types/transaction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { transactionSchema } from '@/utils/validation';
@@ -33,12 +33,13 @@ import {
   TransactionType,
   UpdateTransactionAction,
 } from '@/types/transaction';
+import { capitalizeFirstLetter } from '@/utils/string';
 
 interface FormProps {
   type: TransactionType;
   currency?: string;
   categories: Category[];
-  expense?: Expense;
+  transaction?: Transaction;
   createAction?: CreateTransactionAction;
   updateAction?: UpdateTransactionAction;
   deleteAction?: DeleteTransactionAction;
@@ -48,22 +49,22 @@ export default function Form({
   type,
   currency,
   categories,
-  expense,
+  transaction,
   createAction,
   updateAction,
   deleteAction,
 }: FormProps) {
   const searchParams = useSearchParams();
 
-  const isEditMode = !!expense;
+  const isEditMode = !!transaction;
 
-  const [createExpenseErrors, createExpenseAction, isPendingCreate] =
+  const [createTransactionErrors, createTransactionAction, isPendingCreate] =
     useActionState(
       createAction?.bind(null, searchParams.toString()) ??
         noopTransactionAction,
       {},
     );
-  const [updateExpenseErrors, updateExpenseAction, isPendingUpdate] =
+  const [updateTransactionErrors, updateTransactionAction, isPendingUpdate] =
     useActionState(
       updateAction?.bind(null, searchParams.toString()) ??
         noopTransactionAction,
@@ -73,7 +74,7 @@ export default function Form({
   const disabledForm = isPendingCreate || isPendingUpdate;
 
   const methods = useForm<TransactionFormValues>({
-    defaultValues: getDefaultValues(expense),
+    defaultValues: getDefaultValues(transaction),
     resolver: zodResolver(transactionSchema),
     disabled: disabledForm,
   });
@@ -99,7 +100,7 @@ export default function Form({
 
   useEffect(
     function resetFormOnMount() {
-      reset(getDefaultValues(expense));
+      reset(getDefaultValues(transaction));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -109,7 +110,7 @@ export default function Form({
     <FormProvider {...methods}>
       <ApiFormErrorAlert
         hide={hideApiError}
-        message={createExpenseErrors.api || updateExpenseErrors.api}
+        message={createTransactionErrors.api || updateTransactionErrors.api}
         sx={{ mb: 3 }}
       />
       <Stack
@@ -119,8 +120,9 @@ export default function Form({
         onSubmit={handleSubmit(data => {
           startTransition(() => {
             setHideApiError(false);
-            if (isEditMode) updateExpenseAction({ ...data, id: expense.id });
-            else createExpenseAction(data);
+            if (isEditMode)
+              updateTransactionAction({ ...data, id: transaction.id });
+            else createTransactionAction(data);
           });
         })}
       >
@@ -185,18 +187,18 @@ export default function Form({
         <Link
           href={{
             pathname: '/categories/all',
-            query: { type: 'expense' },
+            query: { type },
           }}
         >
           <Button variant="outlined" fullWidth>
-            Manage Expense Categories
+            Manage {capitalizeFirstLetter(type)} Categories
           </Button>
         </Link>
         <Button
           type="submit"
           disabled={
             !hideApiError &&
-            (!!createExpenseErrors.api || !!updateExpenseErrors.api)
+            (!!createTransactionErrors.api || !!updateTransactionErrors.api)
           }
           loading={isPendingCreate || isPendingUpdate}
           loadingPosition="start"
@@ -208,7 +210,7 @@ export default function Form({
         </Button>
         {isEditMode && (
           <DeleteTransaction
-            id={expense.id}
+            id={transaction.id}
             type={type}
             action={deleteAction!}
           />
@@ -218,13 +220,13 @@ export default function Form({
   );
 }
 
-function getDefaultValues(expense?: Expense): TransactionFormValues {
-  if (expense) {
+function getDefaultValues(transaction?: Transaction): TransactionFormValues {
+  if (transaction) {
     return {
-      amount: fromCents(expense.amount),
-      categoryId: expense.categoryId,
-      date: dayjs(expense.date).toISOString(),
-      description: expense.description,
+      amount: fromCents(transaction.amount),
+      categoryId: transaction.categoryId,
+      date: dayjs(transaction.date).toISOString(),
+      description: transaction.description,
     };
   }
 

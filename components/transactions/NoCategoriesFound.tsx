@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import { CategoryType } from '@/types/category';
+import { capitalizeFirstLetter } from '@/utils/string';
 
 export default function NoCategoriesFound({ type }: { type: CategoryType }) {
   return (
@@ -18,8 +19,4 @@ export default function NoCategoriesFound({ type }: { type: CategoryType }) {
       </Link>
     </Grid>
   );
-}
-
-function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }

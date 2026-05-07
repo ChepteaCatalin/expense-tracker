@@ -1,6 +1,16 @@
 import { FormDateTime } from '@/lib/MuiDatePicker/types';
 import { FormErrors } from './form';
 
+export interface Transaction {
+  id: number;
+  amount: number;
+  categoryId: number;
+  date: Date;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface TransactionFormValues {
   amount: number | '';
   categoryId: number | '';
