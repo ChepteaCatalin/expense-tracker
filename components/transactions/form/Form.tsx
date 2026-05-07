@@ -1,9 +1,9 @@
 'use client';
 
-import { Expense, ExpenseFormValues } from '@/types/expense';
+import { Expense } from '@/types/expense';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { expenseSchema } from '../validation';
+import { transactionSchema } from '@/utils/validation';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import Stack from '@mui/material/Stack';
@@ -20,35 +20,61 @@ import {
   handleDatePickerChange,
 } from '@/lib/MuiDatePicker/utils';
 import InputAdornment from '@mui/material/InputAdornment';
-import { createExpense, updateExpense } from '../actions';
 import dayjs from 'dayjs';
 import { fromCents } from '@/utils/currency';
-import DeleteExpense from './DeleteExpense';
+import DeleteTransaction from './DeleteTransaction';
 import { useSearchParams } from 'next/navigation';
+import {
+  CreateTransactionAction,
+  DeleteTransactionAction,
+  TransactionFormErrors,
+  TransactionFormValues,
+  TransactionFormValuesWithId,
+  TransactionType,
+  UpdateTransactionAction,
+} from '@/types/transaction';
 
-export default function Form({
-  currency,
-  categories,
-  expense,
-}: {
+interface FormProps {
+  type: TransactionType;
   currency?: string;
   categories: Category[];
   expense?: Expense;
-}) {
+  createAction?: CreateTransactionAction;
+  updateAction?: UpdateTransactionAction;
+  deleteAction?: DeleteTransactionAction;
+}
+
+export default function Form({
+  type,
+  currency,
+  categories,
+  expense,
+  createAction,
+  updateAction,
+  deleteAction,
+}: FormProps) {
   const searchParams = useSearchParams();
 
   const isEditMode = !!expense;
 
   const [createExpenseErrors, createExpenseAction, isPendingCreate] =
-    useActionState(createExpense.bind(null, searchParams.toString()), {});
+    useActionState(
+      createAction?.bind(null, searchParams.toString()) ??
+        noopTransactionAction,
+      {},
+    );
   const [updateExpenseErrors, updateExpenseAction, isPendingUpdate] =
-    useActionState(updateExpense.bind(null, searchParams.toString()), {});
+    useActionState(
+      updateAction?.bind(null, searchParams.toString()) ??
+        noopTransactionAction,
+      {},
+    );
 
   const disabledForm = isPendingCreate || isPendingUpdate;
 
-  const methods = useForm<ExpenseFormValues>({
+  const methods = useForm<TransactionFormValues>({
     defaultValues: getDefaultValues(expense),
-    resolver: zodResolver(expenseSchema),
+    resolver: zodResolver(transactionSchema),
     disabled: disabledForm,
   });
   const {
@@ -180,13 +206,19 @@ export default function Form({
         >
           Save
         </Button>
-        {isEditMode && <DeleteExpense id={expense.id} />}
+        {isEditMode && (
+          <DeleteTransaction
+            id={expense.id}
+            type={type}
+            action={deleteAction!}
+          />
+        )}
       </Stack>
     </FormProvider>
   );
 }
 
-function getDefaultValues(expense?: Expense): ExpenseFormValues {
+function getDefaultValues(expense?: Expense): TransactionFormValues {
   if (expense) {
     return {
       amount: fromCents(expense.amount),
@@ -210,4 +242,13 @@ function normalizeNumberInput(value: string): number | '' {
   if (!normalized) return '';
 
   return +normalized;
+}
+
+async function noopTransactionAction(
+  state: TransactionFormErrors,
+  payload: TransactionFormValues | TransactionFormValuesWithId,
+): Promise<TransactionFormErrors> {
+  void state;
+  void payload;
+  return {};
 }

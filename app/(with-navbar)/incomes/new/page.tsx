@@ -1,3 +1,4 @@
+import Form from '@/components/transactions/form/Form';
 import NoCategoriesFound from '@/components/transactions/NoCategoriesFound';
 import { getAllCategoriesByType } from '@/data/category';
 import { requireAuth } from '@/lib/auth-utils';
@@ -10,6 +11,5 @@ export default async function NewIncome() {
 
   if (!categories.length) return <NoCategoriesFound type="income" />;
 
-  // TODO:
-  // return <Form currency={currency} categories={categories} />;
+  return <Form type="income" currency={currency} categories={categories} />;
 }

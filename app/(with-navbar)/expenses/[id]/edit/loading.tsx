@@ -1,5 +1,5 @@
-import ExpenseFormFallback from '../../_components/ExpenseFormFallback';
+import FormFallback from '@/components/transactions/form/FormFallback';
 
-export default function NewExpenseLoading() {
-  return <ExpenseFormFallback isEditMode />;
+export default function ExistingExpenseLoading() {
+  return <FormFallback isEditMode />;
 }

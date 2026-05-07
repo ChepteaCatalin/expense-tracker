@@ -1,5 +1,3 @@
-import { FormDateTime } from '@/lib/MuiDatePicker/types';
-import { FormErrors } from './form';
 import type { Category } from '@/types/category';
 
 export interface Expense {
@@ -11,19 +9,6 @@ export interface Expense {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export interface ExpenseFormValues {
-  amount: number | '';
-  categoryId: number | '';
-  date: FormDateTime;
-  description: string;
-}
-
-export interface ExpenseFormValuesWithId extends ExpenseFormValues {
-  id: number;
-}
-
-export type ExpenseFormErrors = FormErrors<ExpenseFormValues>;
 
 export interface ExpenseCategoriesSearchParams {
   day?: string | null;

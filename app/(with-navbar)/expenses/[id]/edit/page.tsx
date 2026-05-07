@@ -1,5 +1,5 @@
 import { getSession } from '@/data/auth';
-import Form from '../../_components/Form';
+import Form from '@/components/transactions/form/Form';
 import { getAllCategoriesByType } from '@/data/category';
 import { getExpenseById } from '@/data/expense';
 import { validIdParam } from '@/utils/url';
@@ -7,6 +7,7 @@ import { notFound, redirect } from 'next/navigation';
 import type { Category } from '@/types/category';
 import type { Expense } from '@/types/expense';
 import { UnauthorizedError } from '@/utils/error';
+import { updateExpense, deleteExpense } from '../../actions';
 
 export default async function EditExpense({
   params,
@@ -32,9 +33,12 @@ export default async function EditExpense({
   return (
     <Form
       key={expense.updatedAt.toISOString()}
+      type="expense"
       expense={expense}
       currency={currency}
       categories={categories}
+      updateAction={updateExpense}
+      deleteAction={deleteExpense}
     />
   );
 }

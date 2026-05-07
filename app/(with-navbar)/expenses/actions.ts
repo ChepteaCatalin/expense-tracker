@@ -2,11 +2,11 @@
 
 import { getFormErrors } from '@/lib/zod';
 import {
-  ExpenseFormValuesWithId,
-  ExpenseFormErrors,
-  ExpenseFormValues,
-} from '@/types/expense';
-import { expenseSchema } from './validation';
+  TransactionFormValuesWithId,
+  TransactionFormErrors,
+  TransactionFormValues,
+} from '@/types/transaction';
+import { transactionSchema } from '@/utils/validation';
 import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
 import {
@@ -19,10 +19,10 @@ import dayjs from 'dayjs';
 
 export async function createExpense(
   searchParams: string,
-  _: ExpenseFormErrors,
-  expense: ExpenseFormValues,
-): Promise<ExpenseFormErrors> {
-  const errors = getFormErrors(expenseSchema, expense);
+  _: TransactionFormErrors,
+  expense: TransactionFormValues,
+): Promise<TransactionFormErrors> {
+  const errors = getFormErrors(transactionSchema, expense);
   if (errors) return errors;
 
   try {
@@ -48,10 +48,10 @@ export async function createExpense(
 
 export async function updateExpense(
   searchParams: string,
-  _: ExpenseFormErrors,
-  expense: ExpenseFormValuesWithId,
-): Promise<ExpenseFormErrors> {
-  const errors = getFormErrors(expenseSchema, {
+  _: TransactionFormErrors,
+  expense: TransactionFormValuesWithId,
+): Promise<TransactionFormErrors> {
+  const errors = getFormErrors(transactionSchema, {
     ...expense,
     amount: +expense.amount,
     categoryId: +expense.categoryId,

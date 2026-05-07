@@ -3,11 +3,7 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
-export default function ExpenseFormFallback({
-  isEditMode,
-}: {
-  isEditMode?: boolean;
-}) {
+export default function FormFallback({ isEditMode }: { isEditMode?: boolean }) {
   return (
     <Box>
       <Skeleton

@@ -3,18 +3,20 @@ import 'server-only';
 import { sql } from '@/lib/neon';
 import type {
   Expense,
-  ExpenseFormValues,
   ExpenseCategory,
   ExpensesByDate,
   SortExpenseBy,
-  ExpenseFormValuesWithId,
 } from '@/types/expense';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
+import {
+  TransactionFormValues,
+  TransactionFormValuesWithId,
+} from '@/types/transaction';
 
 export const createExpense = authGuard(
   session =>
-    async (expense: ExpenseFormValues): Promise<Expense> => {
+    async (expense: TransactionFormValues): Promise<Expense> => {
       const result = await sql`
         INSERT INTO expense (
           amount,
@@ -60,7 +62,7 @@ export const createExpense = authGuard(
 
 export const updateExpense = authGuard(
   session =>
-    async (expense: ExpenseFormValuesWithId): Promise<Expense> => {
+    async (expense: TransactionFormValuesWithId): Promise<Expense> => {
       const result = await sql`
         UPDATE expense
         SET

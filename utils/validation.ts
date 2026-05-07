@@ -1,7 +1,7 @@
 import { validDate } from '@/lib/MuiDatePicker/utils';
 import z from 'zod';
 
-export const expenseSchema = z.object({
+export const transactionSchema = z.object({
   amount: z
     .any()
     .refine(v => v !== '', { message: 'Required field' })

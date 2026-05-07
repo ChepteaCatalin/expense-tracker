@@ -1,7 +1,8 @@
-import Form from '../_components/Form';
+import Form from '@/components/transactions/form/Form';
 import { getAllCategoriesByType } from '@/data/category';
 import NoCategoriesFound from '@/components/transactions/NoCategoriesFound';
 import { requireAuth } from '@/lib/auth-utils';
+import { createExpense } from '../actions';
 
 export default async function NewExpense() {
   const {
@@ -10,5 +11,12 @@ export default async function NewExpense() {
   const categories = await getAllCategoriesByType('expense');
 
   if (!categories.length) return <NoCategoriesFound type="expense" />;
-  return <Form currency={currency} categories={categories} />;
+  return (
+    <Form
+      type="expense"
+      currency={currency}
+      categories={categories}
+      createAction={createExpense}
+    />
+  );
 }

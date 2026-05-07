@@ -4,17 +4,27 @@ import DeleteDialog from '@/components/DeleteDialog';
 import Button from '@mui/material/Button';
 import { startTransition, useActionState, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { deleteExpense } from '../actions';
 import { useSearchParams } from 'next/navigation';
+import { DeleteTransactionAction, TransactionType } from '@/types/transaction';
 
-export default function DeleteExpense({ id }: { id: number }) {
+interface DeleteTransactionProps {
+  id: number;
+  type: TransactionType;
+  action: DeleteTransactionAction;
+}
+
+export default function DeleteTransaction({
+  id,
+  type,
+  action,
+}: DeleteTransactionProps) {
   const searchParams = useSearchParams();
 
   const [open, setOpen] = useState(false);
   const [hideError, setHideError] = useState(false);
 
   const [actionError, deleteAction, isPending] = useActionState(
-    deleteExpense.bind(null, searchParams.toString()),
+    action.bind(null, searchParams.toString()),
     '',
   );
 
@@ -32,7 +42,7 @@ export default function DeleteExpense({ id }: { id: number }) {
       </Button>
       <DeleteDialog
         open={open}
-        type="this expense"
+        type={type}
         isPending={isPending}
         error={actionError}
         hideError={hideError}
