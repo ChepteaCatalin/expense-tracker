@@ -2,7 +2,6 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import type {
-  Expense,
   ExpenseCategory,
   ExpensesByDate,
   SortExpenseBy,
@@ -10,13 +9,14 @@ import type {
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 import {
+  Transaction,
   TransactionFormValues,
   TransactionFormValuesWithId,
 } from '@/types/transaction';
 
 export const createExpense = authGuard(
   session =>
-    async (expense: TransactionFormValues): Promise<Expense> => {
+    async (expense: TransactionFormValues): Promise<Transaction> => {
       const result = await sql`
         INSERT INTO expense (
           amount,
@@ -62,7 +62,7 @@ export const createExpense = authGuard(
 
 export const updateExpense = authGuard(
   session =>
-    async (expense: TransactionFormValuesWithId): Promise<Expense> => {
+    async (expense: TransactionFormValuesWithId): Promise<Transaction> => {
       const result = await sql`
         UPDATE expense
         SET
@@ -173,7 +173,7 @@ export const getExpenseCategories = authGuard(
 
 export const getExpenseById = authGuard(
   session =>
-    async (expenseId: number): Promise<Expense | undefined> => {
+    async (expenseId: number): Promise<Transaction | undefined> => {
       'use cache';
       cacheLife('minutes');
       cacheTag(`expenses/id/${expenseId}`);
@@ -325,6 +325,6 @@ export const getExpensesByCategory = authGuard(
     },
 );
 
-function getExpensesSum(expenses: Expense[]): number {
+function getExpensesSum(expenses: Transaction[]): number {
   return expenses.reduce((sum, exp) => sum + exp.amount, 0);
 }
