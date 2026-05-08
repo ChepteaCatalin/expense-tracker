@@ -3,9 +3,14 @@
 import {
   TransactionFormErrors,
   TransactionFormValues,
+  TransactionFormValuesWithId,
 } from '@/types/transaction';
 import { transactionSchema } from '@/utils/validation';
-import { createIncome as createNewIncome } from '@/data/income';
+import {
+  createIncome as createNewIncome,
+  updateIncome as updateExistingIncome,
+  deleteIncome as deleteExistingIncome,
+} from '@/data/income';
 import { toCents } from '@/utils/currency';
 import { getFormErrors } from '@/lib/zod';
 import dayjs from 'dayjs';
@@ -39,6 +44,47 @@ export async function createIncome(
         : `/incomes/categories?month=${dayjs().format('YYYY-MM-DD')}`,
     );
   }
+}
+
+export async function updateIncome(
+  searchParams: string,
+  _: TransactionFormErrors,
+  income: TransactionFormValuesWithId,
+): Promise<TransactionFormErrors> {
+  const errors = getFormErrors(transactionSchema, {
+    ...income,
+    amount: +income.amount,
+    categoryId: +income.categoryId,
+    date: String(income.date),
+  });
+  if (errors) return errors;
+
+  try {
+    await updateExistingIncome({
+      ...income,
+      amount: toCents(income.amount),
+    });
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return { api: 'Failed to edit the income' };
+  }
+
+  redirect(toIncomesCategoryPage(searchParams, +income.categoryId));
+}
+
+export async function deleteIncome(
+  searchParams: string,
+  _: string,
+  { id }: { id: number },
+) {
+  try {
+    var { categoryId } = await deleteExistingIncome(id);
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return 'Failed to delete income';
+  }
+
+  redirect(toIncomesCategoryPage(searchParams, categoryId));
 }
 
 // FIXME: test this
