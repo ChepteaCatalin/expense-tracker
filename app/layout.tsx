@@ -6,6 +6,7 @@ import theme from './theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import DatePickerProvider from '@/lib/MuiDatePicker/DatePickerProvider';
 import '@/lib/dayjs';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: 'Expense Tracker',
@@ -29,6 +30,7 @@ export default function RootLayout({
             <DatePickerProvider>{children}</DatePickerProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
