@@ -4,14 +4,15 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from './_components/CategoryListItem';
 import NoExpensesForPeriod from './_components/NoExpensesForPeriod';
-import { dateFromSearchParams, validSearchParams } from '../_utils/url';
+import {
+  dateFromSearchParams,
+  validSearchParams,
+} from '@/utils/transactions/url';
 import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from './_components/DateNavButtons';
-import type {
-  ExpenseCategoriesSearchParams,
-  ExpenseCategory,
-} from '@/types/expense';
+import type { ExpenseCategory } from '@/types/expense';
+import { TransactionCategoriesSearchParams } from '@/types/transaction';
 import { getExpenseCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
@@ -20,7 +21,7 @@ import NewExpenseFab from '../_components/NewExpenseFab';
 export default async function ExpenseCategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<ExpenseCategoriesSearchParams>;
+  searchParams: Promise<TransactionCategoriesSearchParams>;
 }) {
   const params = await searchParams;
   if (!validSearchParams(params)) notFound();

@@ -1,6 +1,6 @@
 'use client';
 
-import { SortExpenseBy } from '@/types/expense';
+import { SortTransactionBy } from '@/types/transaction';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -35,7 +35,9 @@ export default function SortBy() {
           labelId={labelId}
           id={selectId}
           disabled={isNavigating}
-          value={searchParams.get('sortBy') || ('date' satisfies SortExpenseBy)}
+          value={
+            searchParams.get('sortBy') || ('date' satisfies SortTransactionBy)
+          }
           input={
             <OutlinedInput
               endAdornment={
@@ -48,7 +50,7 @@ export default function SortBy() {
             />
           }
           onChange={event => {
-            const value = event.target.value as SortExpenseBy;
+            const value = event.target.value as SortTransactionBy;
 
             const params = new URLSearchParams(searchParams.toString());
             params.set('sortBy', value);

@@ -5,7 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import IconButton from '@mui/material/IconButton';
-import { custom, getActivePeriodEntry, parsePeriod } from '../../_utils/url';
+import {
+  custom,
+  getActivePeriodEntry,
+  parsePeriod,
+} from '@/utils/transactions/url';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';

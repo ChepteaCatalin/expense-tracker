@@ -7,7 +7,7 @@ import { ChangePasswordFormValues } from '../types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchema } from '../validation';
-import PasswordInput from '@/app/(auth)/_components/PasswordInput';
+import PasswordInput from '@/components/PasswordInput';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import { updatePassword } from '../actions';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';

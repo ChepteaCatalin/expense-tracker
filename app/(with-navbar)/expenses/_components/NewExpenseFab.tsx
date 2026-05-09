@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import Fab from '@/components/Fab';
-import type { ExpenseCategoriesSearchParams } from '@/types/expense';
-import { stringifySearchParams } from '../_utils/url';
+import type { TransactionCategoriesSearchParams } from '@/types/transaction';
+import { stringifySearchParams } from '@/utils/transactions/url';
 
 export default async function NewExpenseFab({
   searchParams,
 }: {
   searchParams:
-    | ExpenseCategoriesSearchParams
-    | Promise<ExpenseCategoriesSearchParams>;
+    | TransactionCategoriesSearchParams
+    | Promise<TransactionCategoriesSearchParams>;
 }) {
   return (
     <Link

@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Box from '@mui/material/Box';
 import CategoryExpensesList from './_components/CategoryExpensesList';
-import { ExpensesByCategorySearchParams } from '@/types/expense';
+import { TransactionByCategorySearchParams } from '@/types/transaction';
 import Overview from './_components/Overview';
 import Heading from './_components/Heading';
 import Skeleton from '@mui/material/Skeleton';
@@ -13,7 +13,7 @@ export default function ExpensesCategoryPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<ExpensesByCategorySearchParams>;
+  searchParams: Promise<TransactionByCategorySearchParams>;
 }) {
   return (
     <Box sx={{ pb: 3 }}>

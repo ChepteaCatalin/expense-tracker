@@ -5,7 +5,14 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useId, useState, useTransition } from 'react';
-import { custom, day, month, periods, week, year } from '../../_utils/url';
+import {
+  custom,
+  day,
+  month,
+  periods,
+  week,
+  year,
+} from '@/utils/transactions/url';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Controller, useForm } from 'react-hook-form';
@@ -23,7 +30,11 @@ import dayjs from 'dayjs';
 import { FormDateTime } from '@/lib/MuiDatePicker/types';
 import LinearProgress from '@mui/material/LinearProgress';
 
-export default function PeriodsTabs() {
+export default function PeriodsTabs({
+  type,
+}: {
+  type: 'expenses' | 'incomes';
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = useId();
@@ -44,7 +55,7 @@ export default function PeriodsTabs() {
           if (newValue !== custom) {
             startNavigation(() => {
               router.push(
-                `/expenses/categories?${newValue}=${
+                `/${type}/categories?${newValue}=${
                   {
                     [day]: dayjs().format('YYYY-MM-DD'),
                     [week]: dayjs().startOf('week').format('YYYY-MM-DD'),
@@ -103,7 +114,7 @@ export default function PeriodsTabs() {
           submitRange={params => {
             setAnchorEl(null);
             startNavigation(() => {
-              router.push(`/expenses/categories/?${params}`);
+              router.push(`/${type}/categories/?${params}`);
             });
           }}
         />

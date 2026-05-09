@@ -3,13 +3,13 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { categoryIcons } from '@/utils/category-icons';
 import Grid from '@mui/material/Grid';
-import {
-  ExpenseCategoriesSearchParams,
-  ExpenseCategoryListItem,
-  SortExpenseBy,
-} from '@/types/expense';
+import { ExpenseCategoryListItem } from '@/types/expense';
 import { readableCurrency } from '@/utils/currency';
 import Link from 'next/link';
+import {
+  SortTransactionBy,
+  TransactionCategoriesSearchParams,
+} from '@/types/transaction';
 
 export default function CategoryListItem({
   category,
@@ -18,7 +18,7 @@ export default function CategoryListItem({
 }: {
   category: ExpenseCategoryListItem;
   currency: string;
-  searchParams: ExpenseCategoriesSearchParams;
+  searchParams: TransactionCategoriesSearchParams;
 }) {
   const Icon = categoryIcons.find(
     icon => icon.src === category.icon,
@@ -30,7 +30,7 @@ export default function CategoryListItem({
         pathname: `/expenses/category/${category.id}`,
         query: {
           ...searchParams,
-          sortBy: 'date' satisfies SortExpenseBy,
+          sortBy: 'date' satisfies SortTransactionBy,
         } as Record<string, string | string[]>,
       }}
       style={{ textDecoration: 'none' }}

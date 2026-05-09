@@ -6,13 +6,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
-import { ExpensesByCategorySearchParams } from '@/types/expense';
-import { stringifySearchParams } from '../../../_utils/url';
+import { TransactionByCategorySearchParams } from '@/types/transaction';
+import { stringifySearchParams } from '@/utils/transactions/url';
 
 export default function NoExpensesForDay({
   searchParams,
 }: {
-  searchParams: ExpensesByCategorySearchParams;
+  searchParams: TransactionByCategorySearchParams;
 }) {
   return (
     <Card

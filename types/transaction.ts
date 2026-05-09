@@ -43,3 +43,19 @@ export type DeleteTransactionAction = (
 ) => Promise<string>;
 
 export type TransactionType = 'expense' | 'income';
+
+export interface TransactionCategoriesSearchParams {
+  day?: string | null;
+  week?: string | null;
+  month?: string | null;
+  year?: string | null;
+  custom?: string | null;
+  from?: string | null;
+  to?: string | null;
+}
+
+export interface TransactionByCategorySearchParams extends TransactionCategoriesSearchParams {
+  sortBy?: SortTransactionBy | null;
+}
+
+export type SortTransactionBy = 'date' | 'amount';

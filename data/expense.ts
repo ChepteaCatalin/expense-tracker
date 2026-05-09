@@ -1,14 +1,11 @@
 import 'server-only';
 
 import { sql } from '@/lib/neon';
-import type {
-  ExpenseCategory,
-  ExpensesByDate,
-  SortExpenseBy,
-} from '@/types/expense';
+import type { ExpenseCategory, ExpensesByDate } from '@/types/expense';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 import {
+  SortTransactionBy,
   Transaction,
   TransactionFormValues,
   TransactionFormValuesWithId,
@@ -254,7 +251,7 @@ export const getExpensesByCategory = authGuard(
       categoryId: string;
       from: string;
       to: string;
-      sortBy?: SortExpenseBy;
+      sortBy?: SortTransactionBy;
     }): Promise<ExpensesByDate[]> => {
       'use cache';
       cacheLife('minutes');

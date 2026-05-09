@@ -1,24 +1,24 @@
 import { notFound } from 'next/navigation';
-import { validSearchParams } from '../../_utils/url';
+import { validSearchParams } from '@/utils/transactions/url';
 import { validIdParam } from '@/utils/url';
 import type {
-  ExpensesByCategorySearchParams,
-  SortExpenseBy,
-} from '@/types/expense';
+  TransactionByCategorySearchParams,
+  SortTransactionBy,
+} from '@/types/transaction';
 
 export function validateParams(
   params: { id: string },
-  searchParams: ExpensesByCategorySearchParams,
+  searchParams: TransactionByCategorySearchParams,
 ) {
   if (
     !validSearchParams(searchParams) ||
     !validIdParam(params.id) ||
-    !validSortBySearchParam(searchParams.sortBy as SortExpenseBy)
+    !validSortBySearchParam(searchParams.sortBy as SortTransactionBy)
   ) {
     notFound();
   }
 }
 
-function validSortBySearchParam(sortBy: SortExpenseBy) {
+function validSortBySearchParam(sortBy: SortTransactionBy) {
   return sortBy === 'date' || sortBy === 'amount';
 }

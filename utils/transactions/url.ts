@@ -1,4 +1,4 @@
-import type { ExpenseCategoriesSearchParams } from '@/types/expense';
+import type { TransactionCategoriesSearchParams } from '@/types/transaction';
 import dayjs from 'dayjs';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 
@@ -12,7 +12,7 @@ const validPeriodParams = [...periods, 'from', 'to'] as const;
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 export function validSearchParams(
-  searchParams: ExpenseCategoriesSearchParams,
+  searchParams: TransactionCategoriesSearchParams,
 ): boolean {
   if (
     Object.keys(searchParams || {}).some(
@@ -54,7 +54,7 @@ export function validSearchParams(
 }
 
 export function dateFromSearchParams(
-  searchParams: ExpenseCategoriesSearchParams,
+  searchParams: TransactionCategoriesSearchParams,
 ): { from: string; to: string } {
   const [period, periodValue] = getActivePeriod(searchParams);
 
@@ -101,7 +101,7 @@ export function stringifySearchParams<T extends object>(searchParams: {
   return new URLSearchParams(entries).toString();
 }
 
-function getActivePeriod(searchParams: ExpenseCategoriesSearchParams) {
+function getActivePeriod(searchParams: TransactionCategoriesSearchParams) {
   return (
     (Object.entries(searchParams || {}) || []).find(([key]) =>
       periods.includes(key as (typeof periods)[number]),

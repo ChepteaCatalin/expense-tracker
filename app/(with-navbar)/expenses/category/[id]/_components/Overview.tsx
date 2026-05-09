@@ -1,4 +1,4 @@
-import { ExpensesByCategorySearchParams } from '@/types/expense';
+import { TransactionByCategorySearchParams } from '@/types/transaction';
 import { validateParams } from '../utils';
 import { getCategoryNameById } from '@/data/category';
 import { notFound, redirect } from 'next/navigation';
@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { getSession } from '@/data/auth';
 import { getExpenseCategoryTotal } from '@/data/expense';
-import { dateFromSearchParams, parsePeriod } from '../../../_utils/url';
+import { dateFromSearchParams, parsePeriod } from '@/utils/transactions/url';
 import { readableCurrency } from '@/utils/currency';
 import Stack from '@mui/material/Stack';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
@@ -19,7 +19,7 @@ export default async function Overview({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<ExpensesByCategorySearchParams>;
+  searchParams: Promise<TransactionByCategorySearchParams>;
 }) {
   const awaitedParams = await params;
   const awaitedSearchParams = await searchParams;

@@ -3,7 +3,7 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import PasswordInput from '../_components/PasswordInput';
+import PasswordInput from '@/components/PasswordInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signUpSchema } from '../validation';
@@ -11,7 +11,7 @@ import { signUp } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import { SignUpFormValues } from '../types';
-import ApiFormErrorAlert from '../../../components/ApiFormErrorAlert';
+import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
 export default function SignUpForm() {
   const {

@@ -6,13 +6,13 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { ExpenseCategoriesSearchParams } from '@/types/expense';
-import { stringifySearchParams } from '@/app/(with-navbar)/expenses/_utils/url';
+import { TransactionCategoriesSearchParams } from '@/types/transaction';
+import { stringifySearchParams } from '@/utils/transactions/url';
 
 export default function NoExpensesForPeriod({
   searchParams,
 }: {
-  searchParams: ExpenseCategoriesSearchParams;
+  searchParams: TransactionCategoriesSearchParams;
 }) {
   return (
     <Card
