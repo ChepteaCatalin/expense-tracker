@@ -21,7 +21,7 @@ export default function TypeRadioGroup({
   error: boolean;
 }) {
   const searchParams = useSearchParams();
-  const urlCategoryType = searchParams?.get('type');
+  const urlCategoryType = searchParams.get('type');
   const { setValue } = useFormContext();
 
   const radioGroupId = useId();
@@ -37,6 +37,7 @@ export default function TypeRadioGroup({
   return (
     <Controller
       name="type"
+      {...(!isEditMode && { defaultValue: urlCategoryType })}
       render={({ field: { onChange, onBlur, value, ref, disabled } }) => (
         <FormControl
           onBlur={onBlur}
