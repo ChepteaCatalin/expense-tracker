@@ -6,6 +6,7 @@ import SavingsIcon from '@mui/icons-material/Savings';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Suspense } from 'react';
 import ExpensesNavLink from './ExpensesNavLink';
+import IncomeNavLink from './IncomeNavLink';
 
 export default function NavBar() {
   return (
@@ -30,6 +31,7 @@ export default function NavBar() {
         >
           <Suspense>
             <ExpensesNavLink />
+            <IncomeNavLink />
             <NavLink href="/savings" Icon={SavingsIcon} text="Savings" />
             <NavLink href="/settings" Icon={SettingsIcon} text="Settings" />
           </Suspense>
