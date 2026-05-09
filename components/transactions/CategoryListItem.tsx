@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { categoryIcons } from '@/utils/category-icons';
 import Grid from '@mui/material/Grid';
-import { ExpenseCategoryListItem } from '@/types/expense';
+import { TransactionCategoryListItem } from '@/types/transaction';
 import { readableCurrency } from '@/utils/currency';
 import Link from 'next/link';
 import {
@@ -12,11 +12,13 @@ import {
 } from '@/types/transaction';
 
 export default function CategoryListItem({
+  type,
   category,
   currency,
   searchParams,
 }: {
-  category: ExpenseCategoryListItem;
+  type: 'expenses' | 'incomes';
+  category: TransactionCategoryListItem;
   currency: string;
   searchParams: TransactionCategoriesSearchParams;
 }) {
@@ -27,7 +29,7 @@ export default function CategoryListItem({
   return (
     <Link
       href={{
-        pathname: `/expenses/category/${category.id}`,
+        pathname: `/${type}/category/${category.id}`,
         query: {
           ...searchParams,
           sortBy: 'date' satisfies SortTransactionBy,

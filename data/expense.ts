@@ -1,7 +1,10 @@
 import 'server-only';
 
 import { sql } from '@/lib/neon';
-import type { ExpenseCategory, ExpensesByDate } from '@/types/expense';
+import type {
+  TransactionsByDate,
+  TransactionCategory,
+} from '@/types/transaction';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 import {
@@ -131,7 +134,7 @@ export const getExpenseCategories = authGuard(
     }: {
       from: string;
       to: string;
-    }): Promise<ExpenseCategory[]> => {
+    }): Promise<TransactionCategory[]> => {
       'use cache';
       cacheLife('minutes');
       cacheTag('expenses/categories');
@@ -252,7 +255,7 @@ export const getExpensesByCategory = authGuard(
       from: string;
       to: string;
       sortBy?: SortTransactionBy;
-    }): Promise<ExpensesByDate[]> => {
+    }): Promise<TransactionsByDate[]> => {
       'use cache';
       cacheLife('minutes');
       cacheTag(`expenses/category/${categoryId}`);

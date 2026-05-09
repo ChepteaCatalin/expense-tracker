@@ -1,4 +1,4 @@
-import type { ExpensesByDate } from '@/types/expense';
+import type { TransactionsByDate } from '@/types/transaction';
 import {
   SortTransactionBy,
   TransactionByCategorySearchParams,
@@ -24,7 +24,7 @@ export default async function CategoryExpensesList({
 
   validateParams(awaitedParams, awaitedSearchParams);
 
-  var expensesByDate: ExpensesByDate[] = [];
+  var expensesByDate: TransactionsByDate[] = [];
   try {
     expensesByDate = await getExpensesByCategory({
       categoryId: awaitedParams.id,

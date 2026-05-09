@@ -1,5 +1,6 @@
-import { FormDateTime } from '@/lib/MuiDatePicker/types';
-import { FormErrors } from './form';
+import type { FormDateTime } from '@/lib/MuiDatePicker/types';
+import type { FormErrors } from './form';
+import type { Category } from './category';
 
 export interface Transaction {
   id: number;
@@ -59,3 +60,37 @@ export interface TransactionByCategorySearchParams extends TransactionCategories
 }
 
 export type SortTransactionBy = 'date' | 'amount';
+
+export interface TransactionCategory {
+  categoryId: number;
+  name: string;
+  icon: string;
+  strokeColor: string;
+  backgroundColor: string;
+  totalAmount: number;
+}
+
+interface TransactionCategoryChartItem {
+  readonly name: string;
+  readonly value: number;
+  readonly color: string;
+}
+
+export type TransactionCategoriesChartData =
+  ReadonlyArray<TransactionCategoryChartItem>;
+
+export type TransactionCategoryListItem = Readonly<
+  Pick<Category, 'id' | 'name' | 'icon' | 'strokeColor' | 'backgroundColor'> & {
+    amount: number;
+    percentage: number;
+  }
+>;
+
+export interface TransactionsByDate {
+  date: Date;
+  expenses: Transaction[];
+  categoryName: string;
+  icon: string;
+  strokeColor: string;
+  backgroundColor: string;
+}

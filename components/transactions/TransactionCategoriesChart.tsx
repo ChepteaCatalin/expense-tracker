@@ -1,15 +1,15 @@
 'use client';
 
-import { ExpenseCategoriesChartData } from '@/types/expense';
+import type { TransactionCategoriesChartData } from '@/types/transaction';
 import { readableCurrency } from '@/utils/currency';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
 
-export default function ExpenseCategoriesChart({
+export default function TransactionCategoriesChart({
   data,
   currency,
 }: {
-  data: ExpenseCategoriesChartData;
+  data: TransactionCategoriesChartData;
   currency: string;
 }) {
   const isDesktop = useMediaQuery('(min-width: 1000px)');

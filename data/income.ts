@@ -3,6 +3,7 @@ import 'server-only';
 import { authGuard } from '@/lib/auth-utils';
 import {
   Transaction,
+  TransactionCategory,
   TransactionFormValues,
   TransactionFormValuesWithId,
 } from '@/types/transaction';
@@ -159,5 +160,50 @@ export const deleteIncome = authGuard(
       updateTag(`incomes/id/${incomeId}`);
 
       return { id: deletedIncome.id, categoryId: deletedIncome.category_id };
+    },
+);
+
+export const getIncomeCategories = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<TransactionCategory[]> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag('incomes/categories');
+
+      try {
+        const result = await sql`
+          SELECT
+            c.id AS category_id,
+            c.name,
+            c.icon,
+            c.stroke_color,
+            c.background_color,
+            SUM(i.amount) AS total_amount
+          FROM income i
+          JOIN category c ON i.category_id = c.id
+          WHERE i.user_id = ${session.user.id}
+            AND i.date >= ${from}::date
+            AND i.date <= ${to}::date
+          GROUP BY c.id, c.name, c.icon, c.stroke_color, c.background_color
+          ORDER BY total_amount DESC
+        `;
+
+        return result.map(row => ({
+          categoryId: row.category_id,
+          name: row.name,
+          icon: row.icon,
+          strokeColor: row.stroke_color,
+          backgroundColor: row.background_color,
+          totalAmount: +row.total_amount,
+        }));
+      } catch {
+        return [];
+      }
     },
 );

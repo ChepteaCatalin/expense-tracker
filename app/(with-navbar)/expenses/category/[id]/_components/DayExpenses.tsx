@@ -1,5 +1,5 @@
 import { getSession } from '@/data/auth';
-import type { ExpensesByDate } from '@/types/expense';
+import type { TransactionsByDate } from '@/types/transaction';
 import { categoryIcons } from '@/utils/category-icons';
 import { readableCurrency } from '@/utils/currency';
 import Box from '@mui/material/Box';
@@ -16,7 +16,7 @@ export default async function DayExpenses({
   dayExpenses,
   searchParams,
 }: {
-  dayExpenses: ExpensesByDate;
+  dayExpenses: TransactionsByDate;
   searchParams: string;
 }) {
   const currency = (await getSession())?.user.currency;

@@ -16,7 +16,11 @@ import dayjs from 'dayjs';
 import type { OpUnitType, ManipulateType } from 'dayjs';
 import { useTransition } from 'react';
 
-export default function DateNavButtons() {
+export default function DateNavButtons({
+  type,
+}: {
+  type: 'expenses' | 'incomes';
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startNavigation] = useTransition();
@@ -26,7 +30,7 @@ export default function DateNavButtons() {
   const navigatePeriod = (offset: -1 | 1) => {
     startNavigation(() => {
       router.push(
-        `/expenses/categories?${period}=${dayjs(periodValue)
+        `/${type}/categories?${period}=${dayjs(periodValue)
           .startOf(period as OpUnitType)
           .add(offset, period as ManipulateType)
           .format('YYYY-MM-DD')}`,

@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import CategoryListItem from '@/components/transactions/CategoryListItem';
-import NoExpensesForPeriod from './_components/NoExpensesForPeriod';
+import NoIncomesForPeriod from './_components/NoIncomesForPeriod';
 import {
   dateFromSearchParams,
   validSearchParams,
@@ -11,15 +11,17 @@ import {
 import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '@/components/transactions/DateNavButtons';
-import type { TransactionCategory } from '@/types/transaction';
-import { TransactionCategoriesSearchParams } from '@/types/transaction';
-import { getExpenseCategories } from '@/data/expense';
+import type {
+  TransactionCategory,
+  TransactionCategoriesSearchParams,
+} from '@/types/transaction';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
-import NewExpenseFab from '../_components/NewExpenseFab';
+import NewIncomeFab from '../_components/NewIncomeFab';
 import { getCategoryPercentages } from '@/utils/transactions/misc';
+import { getIncomeCategories } from '@/data/income';
 
-export default async function ExpenseCategoriesPage({
+export default async function IncomeCategoriesPage({
   searchParams,
 }: {
   searchParams: Promise<TransactionCategoriesSearchParams>;
@@ -27,18 +29,16 @@ export default async function ExpenseCategoriesPage({
   const params = await searchParams;
   if (!validSearchParams(params)) notFound();
 
-  var expensesByCategory = [] as TransactionCategory[];
+  var incomesByCategory = [] as TransactionCategory[];
   try {
-    expensesByCategory = await getExpenseCategories(
-      dateFromSearchParams(params),
-    );
+    incomesByCategory = await getIncomeCategories(dateFromSearchParams(params));
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
   const session = await getSession();
   const currency = session!.user.currency;
-  const categoryPercentages = getCategoryPercentages(expensesByCategory);
+  const categoryPercentages = getCategoryPercentages(incomesByCategory);
 
   return (
     <Box>
@@ -57,10 +57,10 @@ export default async function ExpenseCategoriesPage({
         <CardContent
           sx={{ p: 0, '&:last-child': { pb: 1 }, position: 'relative' }}
         >
-          <DateNavButtons type="expenses" />
+          <DateNavButtons type="incomes" />
           <TransactionCategoriesChart
             currency={currency}
-            data={expensesByCategory.map(category => ({
+            data={incomesByCategory.map(category => ({
               name: category.name,
               value: category.totalAmount,
               color: category.backgroundColor,
@@ -69,13 +69,13 @@ export default async function ExpenseCategoriesPage({
         </CardContent>
       </Card>
       <Stack spacing={1.25} sx={{ mt: 2 }}>
-        {!expensesByCategory.length ? (
-          <NoExpensesForPeriod searchParams={params} />
+        {!incomesByCategory.length ? (
+          <NoIncomesForPeriod searchParams={params} />
         ) : (
-          expensesByCategory.map(c => (
+          incomesByCategory.map(c => (
             <CategoryListItem
               key={c.categoryId}
-              type="expenses"
+              type="incomes"
               category={{
                 id: c.categoryId,
                 name: c.name,
@@ -91,7 +91,7 @@ export default async function ExpenseCategoriesPage({
           ))
         )}
       </Stack>
-      <NewExpenseFab searchParams={params} />
+      <NewIncomeFab searchParams={params} />
     </Box>
   );
 }
