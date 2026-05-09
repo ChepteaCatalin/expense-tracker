@@ -111,6 +111,7 @@ export default function PeriodsTabs({
         }}
       >
         <CustomPeriodPopover
+          type={type}
           submitRange={params => {
             setAnchorEl(null);
             startNavigation(() => {
@@ -129,8 +130,10 @@ export default function PeriodsTabs({
 }
 
 function CustomPeriodPopover({
+  type,
   submitRange,
 }: {
+  type: 'expenses' | 'incomes';
   submitRange: (params: string) => void;
 }) {
   const searchParams = useSearchParams();
@@ -223,7 +226,7 @@ function CustomPeriodPopover({
         )}
       />
       <Button type="submit" variant="contained">
-        View Expenses
+        View {type === 'expenses' ? 'Expenses' : 'Income'}
       </Button>
     </Stack>
   );

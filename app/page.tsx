@@ -14,8 +14,12 @@ export default async function RootPage() {
           Go to Expenses by category
         </Link>
       </Box>
-      <Box>
-        <Link href={`/incomes/new`}>New Income</Link>
+      <Box sx={{ mt: 3 }}>
+        <Link
+          href={`/incomes/categories?month=${dayjs().format('YYYY-MM-DD')}`}
+        >
+          Go to Income by category
+        </Link>
       </Box>
     </div>
   );
