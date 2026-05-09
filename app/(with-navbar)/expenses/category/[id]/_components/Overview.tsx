@@ -1,4 +1,4 @@
-import { TransactionByCategorySearchParams } from '@/types/transaction';
+import { type TransactionByCategorySearchParams } from '@/types/transaction';
 import { validateParams } from '../utils';
 import { getCategoryNameById } from '@/data/category';
 import { notFound, redirect } from 'next/navigation';

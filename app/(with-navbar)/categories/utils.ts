@@ -1,4 +1,4 @@
-import { CategoryType } from '@/types/category';
+import { type CategoryType } from '@/types/category';
 
 export function isValidCategoryType(
   value: string | null | undefined,

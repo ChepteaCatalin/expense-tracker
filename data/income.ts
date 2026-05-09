@@ -2,10 +2,10 @@ import 'server-only';
 
 import { authGuard } from '@/lib/auth-utils';
 import {
-  Transaction,
-  TransactionCategory,
-  TransactionFormValues,
-  TransactionFormValuesWithId,
+  type Transaction,
+  type TransactionCategory,
+  type TransactionFormValues,
+  type TransactionFormValuesWithId,
 } from '@/types/transaction';
 import { sql } from '@/lib/neon';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';

@@ -10,7 +10,7 @@ import { signIn } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import PasswordInput from '@/components/PasswordInput';
 import { startTransition, useActionState, useEffect, useState } from 'react';
-import { SignInFormValues } from '../types';
+import { type SignInFormValues } from '../types';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
 export default function SignInForm() {

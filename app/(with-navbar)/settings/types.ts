@@ -1,4 +1,4 @@
-import { FormErrors } from '@/types/form';
+import { type FormErrors } from '@/types/form';
 
 export interface ChangePasswordFormValues {
   currentPassword: string;

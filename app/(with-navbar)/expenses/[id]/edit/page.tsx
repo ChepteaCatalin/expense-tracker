@@ -5,7 +5,7 @@ import { getExpenseById } from '@/data/expense';
 import { validIdParam } from '@/utils/url';
 import { notFound, redirect } from 'next/navigation';
 import type { Category } from '@/types/category';
-import { Transaction } from '@/types/transaction';
+import { type Transaction } from '@/types/transaction';
 import { UnauthorizedError } from '@/utils/error';
 import { updateExpense, deleteExpense } from '../../actions';
 

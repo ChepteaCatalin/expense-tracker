@@ -3,9 +3,9 @@
 import { changePassword, signOut as signOutUser } from '@/data/auth';
 import { redirect } from 'next/navigation';
 import {
-  ChangeCurrencyError,
-  ChangePasswordFormErrors,
-  ChangePasswordFormValues,
+  type ChangeCurrencyError,
+  type ChangePasswordFormErrors,
+  type ChangePasswordFormValues,
 } from './types';
 import { changePasswordSchema } from './validation';
 import { getFormErrors } from '@/lib/zod';

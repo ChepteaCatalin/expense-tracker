@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { TransactionCategoriesSearchParams } from '@/types/transaction';
+import { type TransactionCategoriesSearchParams } from '@/types/transaction';
 import { stringifySearchParams } from '@/utils/transactions/url';
 
 export default function NoExpensesForPeriod({

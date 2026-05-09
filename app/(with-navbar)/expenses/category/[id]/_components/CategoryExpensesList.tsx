@@ -1,7 +1,7 @@
 import type { TransactionsByDate } from '@/types/transaction';
 import {
-  SortTransactionBy,
-  TransactionByCategorySearchParams,
+  type SortTransactionBy,
+  type TransactionByCategorySearchParams,
 } from '@/types/transaction';
 import { validateParams } from '../utils';
 import { UnauthorizedError } from '@/utils/error';

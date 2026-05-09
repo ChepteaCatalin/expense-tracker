@@ -3,7 +3,7 @@
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import { ChangePasswordFormValues } from '../types';
+import { type ChangePasswordFormValues } from '../types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchema } from '../validation';

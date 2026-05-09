@@ -1,6 +1,6 @@
 'use client';
 
-import { SortTransactionBy } from '@/types/transaction';
+import { type SortTransactionBy } from '@/types/transaction';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';

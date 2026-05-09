@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Box from '@mui/material/Box';
 import CategoryExpensesList from './_components/CategoryExpensesList';
-import { TransactionByCategorySearchParams } from '@/types/transaction';
+import { type TransactionByCategorySearchParams } from '@/types/transaction';
 import Overview from './_components/Overview';
 import Heading from './_components/Heading';
 import Skeleton from '@mui/material/Skeleton';

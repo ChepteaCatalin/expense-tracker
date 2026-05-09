@@ -9,7 +9,7 @@ import { notFound, useSearchParams } from 'next/navigation';
 import { useEffect, useId } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { isValidCategoryType } from '../../utils';
-import { CategoryType } from '@/types/category';
+import { type CategoryType } from '@/types/category';
 
 export default function TypeRadioGroup({
   isEditMode,

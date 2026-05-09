@@ -1,4 +1,4 @@
-import { CategoryIcon } from '@/types/category';
+import { type CategoryIcon } from '@/types/category';
 import { Controller, useWatch } from 'react-hook-form';
 import Box from '@mui/material/Box';
 

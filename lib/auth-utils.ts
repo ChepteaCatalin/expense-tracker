@@ -4,7 +4,7 @@ import { getSession } from '@/data/auth';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { UnauthorizedError } from '@/utils/error';
-import { Session } from './auth';
+import { type Session } from './auth';
 
 export const requireAuth = cache(async () => {
   const session = await getSession();

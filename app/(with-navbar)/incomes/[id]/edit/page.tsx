@@ -4,7 +4,7 @@ import { getAllCategoriesByType } from '@/data/category';
 import { validIdParam } from '@/utils/url';
 import { notFound, redirect } from 'next/navigation';
 import type { Category } from '@/types/category';
-import { Transaction } from '@/types/transaction';
+import { type Transaction } from '@/types/transaction';
 import { UnauthorizedError } from '@/utils/error';
 import { getIncomeById } from '@/data/income';
 import { deleteIncome, updateIncome } from '../../actions';

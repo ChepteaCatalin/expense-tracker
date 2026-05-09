@@ -2,7 +2,7 @@
 
 import TextField from '@mui/material/TextField';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { Category, CategoryFormValues } from '@/types/category';
+import { type Category, type CategoryFormValues } from '@/types/category';
 import {
   startTransition,
   Suspense,

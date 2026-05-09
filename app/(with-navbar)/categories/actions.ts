@@ -2,10 +2,10 @@
 
 import { getFormErrors } from '@/lib/zod';
 import {
-  Category,
-  CategoryFormErrors,
-  CategoryFormValues,
-  CategoryType,
+  type Category,
+  type CategoryFormErrors,
+  type CategoryFormValues,
+  type CategoryType,
 } from '@/types/category';
 import { categorySchema } from './validation';
 import { redirect } from 'next/navigation';

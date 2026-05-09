@@ -2,9 +2,9 @@
 
 import { getFormErrors } from '@/lib/zod';
 import {
-  TransactionFormValuesWithId,
-  TransactionFormErrors,
-  TransactionFormValues,
+  type TransactionFormValuesWithId,
+  type TransactionFormErrors,
+  type TransactionFormValues,
 } from '@/types/transaction';
 import { transactionSchema } from '@/utils/validation';
 import { UnauthorizedError } from '@/utils/error';

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import { startTransition, useActionState, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSearchParams } from 'next/navigation';
-import { DeleteTransactionAction, TransactionType } from '@/types/transaction';
+import { type DeleteTransactionAction, type TransactionType } from '@/types/transaction';
 
 interface DeleteTransactionProps {
   id: number;

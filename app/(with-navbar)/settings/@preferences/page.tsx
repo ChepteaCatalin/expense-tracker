@@ -4,7 +4,7 @@ import CurrencyAutocomplete from './CurrencyAutocomplete';
 import { requireAuth } from '@/lib/auth-utils';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { CategoryType } from '@/types/category';
+import { type CategoryType } from '@/types/category';
 import Link from 'next/link';
 
 const DEFAULT_CATEGORY_TYPE: CategoryType = 'expense';

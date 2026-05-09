@@ -4,7 +4,7 @@ import DeleteDialog from '@/components/DeleteDialog';
 import Button from '@mui/material/Button';
 import { startTransition, useActionState, useState } from 'react';
 import { deleteCategory } from '../actions';
-import { CategoryType } from '@/types/category';
+import { type CategoryType } from '@/types/category';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function DeleteCategory({

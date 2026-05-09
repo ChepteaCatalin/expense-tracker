@@ -10,7 +10,7 @@ import { signUpSchema } from '../validation';
 import { signUp } from '../actions';
 import GoogleAuthButton from '../_components/GoogleAuthButton';
 import { startTransition, useActionState, useEffect, useState } from 'react';
-import { SignUpFormValues } from '../types';
+import { type SignUpFormValues } from '../types';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 
 export default function SignUpForm() {

@@ -27,7 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
-import { FormDateTime } from '@/lib/MuiDatePicker/types';
+import { type FormDateTime } from '@/lib/MuiDatePicker/types';
 import LinearProgress from '@mui/material/LinearProgress';
 
 export default function PeriodsTabs({

@@ -2,10 +2,10 @@
 
 import { signInEmail, signUpEmail } from '@/data/auth';
 import {
-  SignInFormErrors,
-  SignInFormValues,
-  SignUpFormErrors,
-  SignUpFormValues,
+  type SignInFormErrors,
+  type SignInFormValues,
+  type SignUpFormErrors,
+  type SignUpFormValues,
 } from './types';
 import { signInSchema, signUpSchema } from './validation';
 import { getFormErrors } from '@/lib/zod';

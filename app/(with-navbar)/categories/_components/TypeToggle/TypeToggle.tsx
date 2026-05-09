@@ -2,7 +2,7 @@
 
 import Box from '@mui/material/Box';
 import LinkLabel from './LinkLabel';
-import { CategoryType } from '@/types/category';
+import { type CategoryType } from '@/types/category';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';

@@ -12,7 +12,7 @@ import { notFound, redirect } from 'next/navigation';
 import Box from '@mui/material/Box';
 import DateNavButtons from '@/components/transactions/DateNavButtons';
 import type { TransactionCategory } from '@/types/transaction';
-import { TransactionCategoriesSearchParams } from '@/types/transaction';
+import { type TransactionCategoriesSearchParams } from '@/types/transaction';
 import { getExpenseCategories } from '@/data/expense';
 import { UnauthorizedError } from '@/utils/error';
 import { getSession } from '@/data/auth';
