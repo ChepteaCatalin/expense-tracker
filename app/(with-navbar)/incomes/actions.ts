@@ -87,7 +87,6 @@ export async function deleteIncome(
   redirect(toIncomesCategoryPage(searchParams, categoryId));
 }
 
-// FIXME: test this
 function toIncomesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/incomes/category/${categoryId}?${searchParams}`

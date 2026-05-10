@@ -43,7 +43,6 @@ export const createIncome = authGuard(
 
       if (!createdIncome) throw new Error('Failed to create income');
 
-      //TODO: check these
       updateTag('incomes/categories');
       updateTag(`incomes/category/${income.categoryId}`);
 
