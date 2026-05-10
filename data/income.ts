@@ -2,6 +2,8 @@ import 'server-only';
 
 import { authGuard } from '@/lib/auth-utils';
 import {
+  type SortTransactionBy,
+  type TransactionsByDate,
   type Transaction,
   type TransactionCategory,
   type TransactionFormValues,
@@ -207,3 +209,122 @@ export const getIncomeCategories = authGuard(
       }
     },
 );
+
+export const getIncomesByCategory = authGuard(
+  session =>
+    async ({
+      categoryId,
+      from,
+      to,
+      sortBy = 'date',
+    }: {
+      categoryId: string;
+      from: string;
+      to: string;
+      sortBy?: SortTransactionBy;
+    }): Promise<TransactionsByDate[]> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag(`incomes/category/${categoryId}`);
+
+      try {
+        const result = await sql`
+          SELECT
+            i.id,
+            i.amount,
+            i.category_id,
+            c.name,
+            to_char(i.date, 'YYYY-MM-DD') AS date,
+            i.description,
+            i.created_at,
+            i.updated_at,
+            c.icon,
+            c.stroke_color,
+            c.background_color
+          FROM income i
+          JOIN category c ON i.category_id = c.id
+          WHERE i.user_id = ${session.user.id}
+            AND i.category_id = ${categoryId}
+            AND i.date >= ${from}::date
+            AND i.date <= ${to}::date
+          ORDER BY i.date DESC, i.amount DESC
+        `;
+
+        const groupedByDate = Object.groupBy(result, row => row.date);
+
+        const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
+          if (!rows) return [];
+
+          const transactions = rows.map(row => ({
+            id: row.id,
+            amount: +row.amount,
+            categoryId: row.category_id,
+            date: new Date(row.date),
+            description: row.description,
+            createdAt: new Date(row.created_at),
+            updatedAt: new Date(row.updated_at),
+          }));
+
+          return [
+            {
+              date: new Date(date),
+              transactions,
+              categoryName: rows[0]!.name,
+              icon: rows[0]!.icon,
+              strokeColor: rows[0]!.stroke_color,
+              backgroundColor: rows[0]!.background_color,
+            },
+          ];
+        });
+
+        if (sortBy === 'amount') {
+          days.sort(
+            (a, b) =>
+              getIncomesSum(b.transactions) - getIncomesSum(a.transactions),
+          );
+        } else {
+          days.sort((a, b) => b.date.getTime() - a.date.getTime());
+        }
+
+        return days;
+      } catch {
+        return [];
+      }
+    },
+);
+
+export const getIncomeCategoryTotal = authGuard(
+  session =>
+    async ({
+      categoryId,
+      from,
+      to,
+    }: {
+      categoryId: string;
+      from: string;
+      to: string;
+    }): Promise<number> => {
+      'use cache';
+      cacheLife('minutes');
+      cacheTag(`incomes/category/${categoryId}`);
+
+      try {
+        const result = await sql`
+          SELECT COALESCE(SUM(amount), 0) AS total_amount
+          FROM income
+          WHERE user_id = ${session.user.id}
+            AND category_id = ${categoryId}
+            AND date >= ${from}::date
+            AND date <= ${to}::date
+        `;
+
+        return +(result[0]?.total_amount ?? 0);
+      } catch {
+        return 0;
+      }
+    },
+);
+
+function getIncomesSum(incomes: Transaction[]): number {
+  return incomes.reduce((sum, inc) => sum + inc.amount, 0);
+}

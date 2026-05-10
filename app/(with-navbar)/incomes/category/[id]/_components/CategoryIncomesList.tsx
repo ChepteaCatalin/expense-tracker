@@ -5,16 +5,16 @@ import {
 } from '@/types/transaction';
 import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
-import { getExpensesByCategory } from '@/data/expense';
 import {
   dateFromSearchParams,
   notFoundOnInvalidParams,
 } from '@/utils/transactions/url';
 import Stack from '@mui/material/Stack';
+import { getIncomesByCategory } from '@/data/income';
 import PeriodTransactions from '@/components/transactions/PeriodTransactions';
 import NoTransactionsForPeriod from '@/components/transactions/NoTransactionsForPeriod';
 
-export default async function CategoryExpensesList({
+export default async function CategoryIncomesList({
   params,
   searchParams,
 }: {
@@ -26,9 +26,9 @@ export default async function CategoryExpensesList({
 
   notFoundOnInvalidParams(awaitedParams, awaitedSearchParams);
 
-  var expensesByDate: TransactionsByDate[] = [];
+  var incomesByDate: TransactionsByDate[] = [];
   try {
-    expensesByDate = await getExpensesByCategory({
+    incomesByDate = await getIncomesByCategory({
       categoryId: awaitedParams.id,
       ...dateFromSearchParams(awaitedSearchParams),
       sortBy: (awaitedSearchParams.sortBy as SortTransactionBy) || 'date',
@@ -37,10 +37,10 @@ export default async function CategoryExpensesList({
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
-  if (!expensesByDate.length) {
+  if (!incomesByDate.length) {
     return (
       <NoTransactionsForPeriod
-        type="expenses"
+        type="incomes"
         searchParams={awaitedSearchParams}
       />
     );
@@ -48,11 +48,11 @@ export default async function CategoryExpensesList({
 
   return (
     <Stack spacing={2} sx={{ mt: 3 }}>
-      {expensesByDate.map(expense => (
+      {incomesByDate.map(income => (
         <PeriodTransactions
-          key={expense.date.toISOString()}
-          type="expenses"
-          transactions={expense}
+          key={income.date.toISOString()}
+          type="incomes"
+          transactions={income}
           searchParams={new URLSearchParams(
             awaitedSearchParams as Record<string, string>,
           ).toString()}

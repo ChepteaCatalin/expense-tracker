@@ -1,44 +1,23 @@
 import { type TransactionByCategorySearchParams } from '@/types/transaction';
-import { validateParams } from '../utils';
-import { getCategoryNameById } from '@/data/category';
-import { notFound, redirect } from 'next/navigation';
-import { UnauthorizedError } from '@/utils/error';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { getSession } from '@/data/auth';
-import { getExpenseCategoryTotal } from '@/data/expense';
-import { dateFromSearchParams, parsePeriod } from '@/utils/transactions/url';
+import { parsePeriod } from '@/utils/transactions/url';
 import { readableCurrency } from '@/utils/currency';
 import Stack from '@mui/material/Stack';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
+import { getSession } from '@/data/auth';
 
 export default async function Overview({
-  params,
   searchParams,
+  categoryName,
+  categoryTotal,
 }: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<TransactionByCategorySearchParams>;
+  searchParams: TransactionByCategorySearchParams;
+  categoryName: string | undefined;
+  categoryTotal: number;
 }) {
-  const awaitedParams = await params;
-  const awaitedSearchParams = await searchParams;
-
-  validateParams(awaitedParams, awaitedSearchParams);
-
-  try {
-    var [categoryName, categoryTotal] = await Promise.all([
-      getCategoryNameById(+awaitedParams.id),
-      getExpenseCategoryTotal({
-        categoryId: awaitedParams.id,
-        ...dateFromSearchParams(awaitedSearchParams),
-      }),
-    ]);
-  } catch (err) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-  }
-  if (!categoryName) notFound();
-
   const currency = (await getSession())?.user.currency;
 
   return (
@@ -94,7 +73,7 @@ export default async function Overview({
             <Typography variant="caption" color="text.secondary">
               {parsePeriod(
                 new URLSearchParams(
-                  Object.entries(awaitedSearchParams).flatMap(([key, value]) =>
+                  Object.entries(searchParams).flatMap(([key, value]) =>
                     typeof value === 'string' ? [[key, value]] : [],
                   ),
                 ) as unknown as ReadonlyURLSearchParams,

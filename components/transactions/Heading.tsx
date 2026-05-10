@@ -1,10 +1,10 @@
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import { Suspense } from 'react';
-import BackToCategoriesBtn from './BackToCategoriesBtn';
-import SortBy from './SortBy';
+import BackToCategoriesBtn from '@/components/transactions/BackToCategoriesBtn';
+import SortBy from '@/components/transactions/SortBy';
 
-export default function Heading() {
+export default function Heading({ type }: { type: 'incomes' | 'expenses' }) {
   return (
     <Grid
       container
@@ -27,7 +27,7 @@ export default function Heading() {
           />
         }
       >
-        <BackToCategoriesBtn />
+        <BackToCategoriesBtn type={type} />
       </Suspense>
       <Suspense
         fallback={

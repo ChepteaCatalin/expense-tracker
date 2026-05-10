@@ -8,10 +8,13 @@ import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import { type TransactionByCategorySearchParams } from '@/types/transaction';
 import { stringifySearchParams } from '@/utils/transactions/url';
+import { capitalizeFirstLetter } from '@/utils/string';
 
-export default function NoExpensesForDay({
+export default function NoTransactionsForPeriod({
+  type,
   searchParams,
 }: {
+  type: 'expenses' | 'incomes';
   searchParams: TransactionByCategorySearchParams;
 }) {
   return (
@@ -29,10 +32,10 @@ export default function NoExpensesForDay({
           <SearchOffIcon
             sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
           />
-          <Typography>No expenses for this day</Typography>
-          <Link href={`/expenses/new?${stringifySearchParams(searchParams)}`}>
+          <Typography>No {type} for this period</Typography>
+          <Link href={`/${type}/new?${stringifySearchParams(searchParams)}`}>
             <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
-              Add Expenses
+              Add {capitalizeFirstLetter(type)}
             </Button>
           </Link>
         </Grid>

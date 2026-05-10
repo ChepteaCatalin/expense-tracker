@@ -1,14 +1,14 @@
 import { Suspense } from 'react';
 import Box from '@mui/material/Box';
-import CategoryExpensesList from './_components/CategoryExpensesList';
 import { type TransactionByCategorySearchParams } from '@/types/transaction';
-import CategoryExpensesOverview from './_components/CategoryExpensesOverview';
-import Heading from '@/components/transactions/Heading';
 import Skeleton from '@mui/material/Skeleton';
+import CategoryIncomesList from './_components/CategoryIncomesList';
+import Heading from '@/components/transactions/Heading';
+import CategoryIncomesOverview from './_components/CategoryIncomesOverview';
 import CategoryTransactionsListFallback from '@/components/transactions/CategoryTransactionsListFallback';
-import NewExpenseFab from '../../_components/NewExpenseFab';
+import NewIncomeFab from '../../_components/NewIncomeFab';
 
-export default function ExpensesCategoryPage({
+export default function IncomesCategoryPage({
   params,
   searchParams,
 }: {
@@ -17,7 +17,7 @@ export default function ExpensesCategoryPage({
 }) {
   return (
     <Box sx={{ pb: 3 }}>
-      <Heading type="expenses" />
+      <Heading type="incomes" />
       <Suspense
         fallback={
           <Skeleton
@@ -28,13 +28,13 @@ export default function ExpensesCategoryPage({
           />
         }
       >
-        <CategoryExpensesOverview params={params} searchParams={searchParams} />
+        <CategoryIncomesOverview params={params} searchParams={searchParams} />
       </Suspense>
       <Suspense fallback={<CategoryTransactionsListFallback />}>
-        <CategoryExpensesList params={params} searchParams={searchParams} />
+        <CategoryIncomesList params={params} searchParams={searchParams} />
       </Suspense>
       <Suspense>
-        <NewExpenseFab searchParams={searchParams} />
+        <NewIncomeFab searchParams={searchParams} />
       </Suspense>
     </Box>
   );

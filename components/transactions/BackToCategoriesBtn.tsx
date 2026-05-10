@@ -3,7 +3,11 @@
 import BackToLink from '@/components/BackToLink';
 import { useSearchParams } from 'next/navigation';
 
-export default function BackToCategoriesBtn() {
+export default function BackToCategoriesBtn({
+  type,
+}: {
+  type: 'expenses' | 'incomes';
+}) {
   const searchParams = useSearchParams();
 
   const backBtnSearchParams = new URLSearchParams(searchParams.toString());
@@ -11,7 +15,7 @@ export default function BackToCategoriesBtn() {
 
   return (
     <BackToLink
-      href={`/expenses/categories?${backBtnSearchParams.toString()}`}
+      href={`/${type}/categories?${backBtnSearchParams.toString()}`}
     />
   );
 }

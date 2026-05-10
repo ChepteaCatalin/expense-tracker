@@ -288,7 +288,7 @@ export const getExpensesByCategory = authGuard(
         const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
           if (!rows) return [];
 
-          const expenses = rows.map(row => ({
+          const transactions = rows.map(row => ({
             id: row.id,
             amount: +row.amount,
             categoryId: row.category_id,
@@ -301,7 +301,7 @@ export const getExpensesByCategory = authGuard(
           return [
             {
               date: new Date(date),
-              expenses,
+              transactions,
               categoryName: rows[0]!.name,
               icon: rows[0]!.icon,
               strokeColor: rows[0]!.stroke_color,
@@ -312,7 +312,8 @@ export const getExpensesByCategory = authGuard(
 
         if (sortBy === 'amount') {
           days.sort(
-            (a, b) => getExpensesSum(b.expenses) - getExpensesSum(a.expenses),
+            (a, b) =>
+              getExpensesSum(b.transactions) - getExpensesSum(a.transactions),
           );
         } else {
           days.sort((a, b) => b.date.getTime() - a.date.getTime());

@@ -88,7 +88,7 @@ export type TransactionCategoryListItem = Readonly<
 
 export interface TransactionsByDate {
   date: Date;
-  expenses: Transaction[];
+  transactions: Transaction[];
   categoryName: string;
   icon: string;
   strokeColor: string;

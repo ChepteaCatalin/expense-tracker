@@ -1,6 +1,12 @@
 import type { TransactionCategoriesSearchParams } from '@/types/transaction';
 import dayjs from 'dayjs';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
+import { validIdParam } from '@/utils/url';
+import type {
+  TransactionByCategorySearchParams,
+  SortTransactionBy,
+} from '@/types/transaction';
 
 export const day = 'day';
 export const week = 'week';
@@ -153,6 +159,23 @@ export function parsePeriod(searchParams: ReadonlyURLSearchParams): string {
       [year]: dayjs(periodValue).startOf('year').format('YYYY'),
     }[period] || ''
   );
+}
+
+function validSortBySearchParam(sortBy: SortTransactionBy) {
+  return sortBy === 'date' || sortBy === 'amount';
+}
+
+export function notFoundOnInvalidParams(
+  params: { id: string },
+  searchParams: TransactionByCategorySearchParams,
+) {
+  if (
+    !validSearchParams(searchParams) ||
+    !validIdParam(params.id) ||
+    !validSortBySearchParam(searchParams.sortBy as SortTransactionBy)
+  ) {
+    notFound();
+  }
 }
 
 type SearchParamValue = string | null | undefined;

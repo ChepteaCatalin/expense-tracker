@@ -12,16 +12,18 @@ import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 
-export default async function DayExpenses({
-  dayExpenses,
+export default async function PeriodTransactions({
+  type,
+  transactions,
   searchParams,
 }: {
-  dayExpenses: TransactionsByDate;
+  type: 'incomes' | 'expenses';
+  transactions: TransactionsByDate;
   searchParams: string;
 }) {
   const currency = (await getSession())?.user.currency;
   const Icon = categoryIcons.find(
-    icon => icon.src === dayExpenses.icon,
+    icon => icon.src === transactions.icon,
   )?.Component;
 
   return (
@@ -35,7 +37,7 @@ export default async function DayExpenses({
           letterSpacing: 0.2,
         }}
       >
-        {dayjs(dayExpenses.date).format('D MMMM YYYY')}
+        {dayjs(transactions.date).format('D MMMM YYYY')}
       </Typography>
       <Card
         sx={{
@@ -49,10 +51,10 @@ export default async function DayExpenses({
       >
         <CardContent sx={{ '&.MuiCardContent-root': { p: 1.25 } }}>
           <Stack spacing={0.5}>
-            {dayExpenses.expenses.map((expenseItem, index) => (
-              <Box key={expenseItem.id}>
+            {transactions.transactions.map((transactionItem, index) => (
+              <Box key={transactionItem.id}>
                 <Link
-                  href={`/expenses/${expenseItem.id}/edit?${searchParams}`}
+                  href={`/${type}/${transactionItem.id}/edit?${searchParams}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <Box
@@ -93,8 +95,8 @@ export default async function DayExpenses({
                               fontSize: '32px',
                               padding: '3px',
                               borderRadius: '50%',
-                              backgroundColor: dayExpenses.backgroundColor,
-                              fill: dayExpenses.strokeColor,
+                              backgroundColor: transactions.backgroundColor,
+                              fill: transactions.strokeColor,
                               flex: 'none',
                             }}
                           />
@@ -108,7 +110,7 @@ export default async function DayExpenses({
                             textOverflow: 'ellipsis',
                           }}
                         >
-                          {dayExpenses.categoryName}
+                          {transactions.categoryName}
                         </Typography>
                       </Grid>
                       <Typography
@@ -118,7 +120,7 @@ export default async function DayExpenses({
                           whiteSpace: 'nowrap',
                         }}
                       >
-                        {`${readableCurrency(expenseItem.amount)} ${currency}`}
+                        {`${readableCurrency(transactionItem.amount)} ${currency}`}
                       </Typography>
                     </Grid>
                     <Typography
@@ -128,11 +130,11 @@ export default async function DayExpenses({
                         mt: 0.25,
                       }}
                     >
-                      {expenseItem.description}
+                      {transactionItem.description}
                     </Typography>
                   </Box>
                 </Link>
-                {index !== dayExpenses.expenses.length - 1 && (
+                {index !== transactions.transactions.length - 1 && (
                   <Divider
                     sx={{ mt: 0.5, borderColor: 'rgba(255, 255, 255, 0.08)' }}
                   />
