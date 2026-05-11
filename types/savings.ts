@@ -7,4 +7,5 @@ export interface SavingsGoal {
   startDate: Date;
   completedDate?: Date;
   note?: string;
+  currency: string;
 }

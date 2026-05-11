@@ -15,6 +15,7 @@ export default function SavingsPage() {
           targetAmount: 100000,
           note: 'This is a sample savings goal for demonstration purposes.',
           startDate: new Date('2024-01-01'),
+          currency: 'USD',
           // completedDate: new Date('2026-05-15'),
         }}
       />
@@ -27,6 +28,7 @@ export default function SavingsPage() {
           targetAmount: 100000,
           startDate: new Date('2024-01-01'),
           completedDate: new Date('2026-05-15'),
+          currency: 'EUR',
         }}
       />
       {/* TODO: implement this navigation */}

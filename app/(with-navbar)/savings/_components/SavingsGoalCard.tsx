@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 export default function SavingsGoalCard({
   goal: {
     name,
+    currency,
     initialAmount,
     currentAmount,
     targetAmount,
@@ -23,6 +24,8 @@ export default function SavingsGoalCard({
   const progress = Math.min((currentAmount / targetAmount) * 100, 100);
   const isCompleted = !!completedDate;
   const remaining = targetAmount - currentAmount;
+
+  const formatAmount = formatAmountWithCurrency(currency);
 
   return (
     <Box
@@ -58,14 +61,20 @@ export default function SavingsGoalCard({
       >
         {[
           initialAmount !== 0
-            ? { label: 'Initial', value: fromCents(initialAmount) }
+            ? {
+                label: 'Initial',
+                value: formatAmount(initialAmount),
+              }
             : null,
           {
             label: 'Current',
-            value: fromCents(currentAmount),
+            value: formatAmount(currentAmount),
             highlight: true,
           },
-          { label: 'Target', value: fromCents(targetAmount) },
+          {
+            label: 'Target',
+            value: formatAmount(targetAmount),
+          },
         ]
           .filter(item => item !== null)
           .map(({ label, value, highlight }) => (
@@ -78,7 +87,7 @@ export default function SavingsGoalCard({
           ))}
       </Box>
       {!isCompleted && remaining > 0 && (
-        <RemainingAmount remaining={remaining} />
+        <RemainingAmount remaining={formatAmount(remaining)} />
       )}
       <Divider sx={{ borderColor: 'rgba(255,255,255,0.07)' }} />
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
@@ -205,7 +214,7 @@ function AmountCard({
   highlight,
 }: {
   label: string;
-  value: number;
+  value: string;
   highlight?: boolean;
 }) {
   return (
@@ -240,7 +249,7 @@ function AmountCard({
   );
 }
 
-function RemainingAmount({ remaining }: { remaining: number }) {
+function RemainingAmount({ remaining }: { remaining: string }) {
   return (
     <Box sx={{ textAlign: 'center' }}>
       <Typography
@@ -248,7 +257,7 @@ function RemainingAmount({ remaining }: { remaining: number }) {
         variant="body2"
         sx={{ color: 'text.primary', fontWeight: 600 }}
       >
-        {fromCents(remaining)}{' '}
+        {remaining}{' '}
       </Typography>
       <Typography
         component="span"
@@ -292,4 +301,8 @@ function DateRow({
       </Typography>
     </Box>
   );
+}
+
+function formatAmountWithCurrency(currency: string) {
+  return (amountInCents: number) => `${fromCents(amountInCents)} ${currency}`;
 }
