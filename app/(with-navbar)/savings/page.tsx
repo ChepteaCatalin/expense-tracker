@@ -32,7 +32,7 @@ export default function SavingsPage() {
         }}
       />
       {/* TODO: implement this navigation */}
-      <Link href="/savings/goals/new">
+      <Link href="/savings/new">
         <Fab />
       </Link>
     </Stack>

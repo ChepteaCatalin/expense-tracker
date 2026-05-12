@@ -6,6 +6,7 @@ import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import AmountCardWrapper from './AmountCardWrapper';
 
 export default function SavingsGoalCard({
   goal: {
@@ -52,13 +53,7 @@ export default function SavingsGoalCard({
     >
       <Heading name={name} isCompleted={isCompleted} />
       <Progress progress={progress} isCompleted={isCompleted} />
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${initialAmount !== 0 ? 3 : 2}, 1fr)`,
-          gap: 1.5,
-        }}
-      >
+      <AmountCardWrapper initialAmount={initialAmount}>
         {[
           initialAmount !== 0
             ? {
@@ -85,7 +80,7 @@ export default function SavingsGoalCard({
               highlight={highlight}
             />
           ))}
-      </Box>
+      </AmountCardWrapper>
       {!isCompleted && remaining > 0 && (
         <RemainingAmount remaining={formatAmount(remaining)} />
       )}
