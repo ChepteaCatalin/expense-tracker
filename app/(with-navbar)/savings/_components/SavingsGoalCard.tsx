@@ -1,5 +1,5 @@
 import { type SavingsGoal } from '@/types/savings';
-import { fromCents } from '@/utils/currency';
+import { readableCurrency } from '@/utils/currency';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
@@ -304,5 +304,6 @@ function DateRow({
 }
 
 function formatAmountWithCurrency(currency: string) {
-  return (amountInCents: number) => `${fromCents(amountInCents)} ${currency}`;
+  return (amountInCents: number) =>
+    `${readableCurrency(amountInCents)} ${currency}`;
 }
