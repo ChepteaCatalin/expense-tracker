@@ -2,8 +2,8 @@
 
 import type { TransactionCategoriesChartData } from '@/types/transaction';
 import { readableCurrency } from '@/utils/currency';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import ReactECharts from 'echarts-for-react';
+import styles from './TransactionCategoriesChart.module.css';
 
 export default function TransactionCategoriesChart({
   data,
@@ -12,50 +12,51 @@ export default function TransactionCategoriesChart({
   data: TransactionCategoriesChartData;
   currency: string;
 }) {
-  const isDesktop = useMediaQuery('(min-width: 1000px)');
   const sum = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <ReactECharts
-      style={{ height: isDesktop ? '300px' : '250px', width: '100%' }}
-      theme="dark"
-      option={{
-        backgroundColor: 'transparent',
-        title: {
-          text: `${readableCurrency(sum)} ${currency}`,
-          left: 'center',
-          top: 'center',
-          textStyle: {
-            color: 'rgb(227, 227, 227)',
-            fontSize: 18,
-            fontWeight: 700,
-          },
-        },
-        tooltip: {
-          trigger: 'item',
-          position: 'inside',
-          confine: true,
-          formatter: (params: any) =>
-            `${params.marker} <b>${params.name}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
-          textStyle: { color: 'rgb(227, 227, 227)' },
-          extraCssText: 'white-space: normal',
-        },
-        series: [
-          {
-            name: 'Category',
-            type: 'pie',
-            radius: [innerRadius(sum), '95%'],
-            itemStyle: {
-              borderColor: 'rgb(227, 227, 227)',
-              borderWidth: 1,
+    <div className={styles.chart}>
+      <ReactECharts
+        style={{ height: '100%' }}
+        theme="dark"
+        option={{
+          backgroundColor: 'transparent',
+          title: {
+            text: `${readableCurrency(sum)} ${currency}`,
+            left: 'center',
+            top: 'center',
+            textStyle: {
+              color: 'rgb(227, 227, 227)',
+              fontSize: 18,
+              fontWeight: 700,
             },
-            color: data.map(item => item.color),
-            label: { show: false },
-            data: data.map(item => ({ ...item, value: item.value })),
           },
-        ],
-      }}
-    />
+          tooltip: {
+            trigger: 'item',
+            position: 'inside',
+            confine: true,
+            formatter: (params: any) =>
+              `${params.marker} <b>${params.name}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
+            textStyle: { color: 'rgb(227, 227, 227)' },
+            extraCssText: 'white-space: normal',
+          },
+          series: [
+            {
+              name: 'Category',
+              type: 'pie',
+              radius: [innerRadius(sum), '95%'],
+              itemStyle: {
+                borderColor: 'rgb(227, 227, 227)',
+                borderWidth: 1,
+              },
+              color: data.map(item => item.color),
+              label: { show: false },
+              data: data.map(item => ({ ...item, value: item.value })),
+            },
+          ],
+        }}
+      />
+    </div>
   );
 }
 
