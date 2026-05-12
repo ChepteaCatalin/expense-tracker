@@ -5,6 +5,7 @@ export interface SavingsGoal {
   currentAmount: number;
   targetAmount: number;
   startDate: Date;
+  isCompleted: boolean;
   completedDate?: Date;
   note?: string;
   currency: string;

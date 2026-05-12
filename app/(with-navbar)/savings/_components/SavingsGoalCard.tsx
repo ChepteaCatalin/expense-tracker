@@ -15,13 +15,13 @@ export default function SavingsGoalCard({
     currentAmount,
     targetAmount,
     startDate,
+    isCompleted,
     completedDate,
     note,
   },
 }: {
   goal: SavingsGoal;
 }) {
-  const isCompleted = !!completedDate;
   const remaining = targetAmount - currentAmount;
 
   const formatAmount = formatAmountWithCurrency(currency);

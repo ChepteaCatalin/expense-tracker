@@ -29,6 +29,7 @@ export default function SavingsPage() {
             note: 'This is a sample savings goal for demonstration purposes.',
             startDate: new Date('2024-01-01'),
             currency: 'USD',
+            isCompleted: false,
             // completedDate: new Date('2026-05-15'),
           }}
         />
@@ -40,6 +41,7 @@ export default function SavingsPage() {
             currentAmount: 123000,
             targetAmount: 100000,
             startDate: new Date('2024-01-01'),
+            isCompleted: true,
             completedDate: new Date('2026-05-15'),
             currency: 'EUR',
           }}
