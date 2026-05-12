@@ -23,8 +23,8 @@ export default function SavingsPage() {
         goal={{
           id: 1,
           name: 'Completed',
-          initialAmount: 100000,
-          currentAmount: 1_000_000,
+          initialAmount: 1000,
+          currentAmount: 123000,
           targetAmount: 100000,
           startDate: new Date('2024-01-01'),
           completedDate: new Date('2026-05-15'),

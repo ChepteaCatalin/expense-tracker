@@ -21,7 +21,6 @@ export default function SavingsGoalCard({
 }: {
   goal: SavingsGoal;
 }) {
-  const progress = Math.min((currentAmount / targetAmount) * 100, 100);
   const isCompleted = !!completedDate;
   const remaining = targetAmount - currentAmount;
 
@@ -51,7 +50,11 @@ export default function SavingsGoalCard({
       }}
     >
       <Heading name={name} isCompleted={isCompleted} />
-      <Progress progress={progress} isCompleted={isCompleted} />
+      <Progress
+        current={currentAmount}
+        target={targetAmount}
+        isCompleted={isCompleted}
+      />
       <Box
         sx={{
           display: 'grid',
@@ -167,10 +170,12 @@ function Heading({
 }
 
 function Progress({
-  progress,
+  current,
+  target,
   isCompleted,
 }: {
-  progress: number;
+  current: number;
+  target: number;
   isCompleted: boolean;
 }) {
   return (
@@ -189,12 +194,12 @@ function Progress({
             color: isCompleted ? 'primary.main' : 'text.primary',
           }}
         >
-          {progress.toFixed(2)}%
+          {((current / target) * 100).toFixed(2)}%
         </Typography>
       </Box>
       <LinearProgress
         variant="determinate"
-        value={progress}
+        value={Math.min((current / target) * 100, 100)}
         sx={{
           height: 8,
           borderRadius: 4,
