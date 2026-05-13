@@ -34,6 +34,7 @@ import {
   type UpdateTransactionAction,
 } from '@/types/transaction';
 import { capitalizeFirstLetter } from '@/utils/string';
+import { normalizeAmountNumberInput } from '@/utils/input';
 
 interface FormProps {
   type: TransactionType;
@@ -127,7 +128,7 @@ export default function Form({
         })}
       >
         <TextField
-          {...register('amount', { setValueAs: normalizeNumberInput })}
+          {...register('amount', { setValueAs: normalizeAmountNumberInput })}
           label="Amount"
           required
           autoComplete="off"
@@ -236,14 +237,6 @@ function getDefaultValues(transaction?: Transaction): TransactionFormValues {
     date: dayjs().toISOString(),
     description: '',
   };
-}
-
-function normalizeNumberInput(value: string): number | '' {
-  const normalized = String(value).trim().replace(',', '.');
-
-  if (!normalized) return '';
-
-  return +normalized;
 }
 
 async function noopTransactionAction(

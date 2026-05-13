@@ -6,4 +6,16 @@ export const savingsGoalSchema = z.object({
     .trim()
     .min(1, 'Name is required')
     .max(100, 'Name must be at most 100 characters'),
+  initialAmount: z
+    .any()
+    .refine(v => v !== '', { message: 'Required field' })
+    .pipe(
+      z
+        .number({ message: 'Must be a number' })
+        .gte(0, 'Must be zero or greater')
+        .lte(10_000_000, "You aren't so rich")
+        .refine(v => /^\d+(\.\d{1,2})?$/.test(String(v)), {
+          message: 'Must have at most 2 decimal places',
+        }),
+    ),
 });
