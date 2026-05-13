@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { savingsGoalSchema } from '../_utils/validation';
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
+import { normalizeAmountNumberInput } from '@/utils/input';
 
 export default function GoalsForm() {
   // TODO:
@@ -46,12 +47,29 @@ export default function GoalsForm() {
         required
         autoComplete="off"
         spellCheck="false"
-        multiline
-        maxRows={3}
         error={!!errors.name}
         helperText={errors.name?.message}
         slotProps={{
           inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+        }}
+      />
+      <TextField
+        {...register('initialAmount', {
+          setValueAs: normalizeAmountNumberInput,
+        })}
+        label="Initial Amount"
+        required
+        autoComplete="off"
+        spellCheck="false"
+        error={!!errors.initialAmount}
+        helperText={errors.initialAmount?.message}
+        slotProps={{
+          htmlInput: {
+            inputMode: 'decimal',
+            onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+              e.currentTarget.select(),
+          },
+          inputLabel: { shrink: true },
         }}
       />
       <Button
@@ -78,5 +96,6 @@ function getDefaultValues(): SavingsGoalFormValues {
   // TODO: handle edit mode
   return {
     name: '',
+    initialAmount: 0,
   };
 }

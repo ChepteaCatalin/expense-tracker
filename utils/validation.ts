@@ -1,19 +1,21 @@
 import { validDate } from '@/lib/MuiDatePicker/utils';
 import z from 'zod';
 
+export const amountValidation = z
+  .any()
+  .refine(v => v !== '', { message: 'Required field' })
+  .pipe(
+    z
+      .number({ message: 'Must be a number' })
+      .gt(0, 'Must be greater than zero')
+      .lte(10_000_000, "You aren't so rich")
+      .refine(v => /^\d+(\.\d{1,2})?$/.test(String(v)), {
+        message: 'Must have at most 2 decimal places',
+      }),
+  );
+
 export const transactionSchema = z.object({
-  amount: z
-    .any()
-    .refine(v => v !== '', { message: 'Required field' })
-    .pipe(
-      z
-        .number({ message: 'Must be a number' })
-        .gt(0, 'Must be greater than zero')
-        .lte(10_000_000, "You aren't so rich")
-        .refine(v => /^\d+(\.\d{1,2})?$/.test(String(v)), {
-          message: 'Must have at most 2 decimal places',
-        }),
-    ),
+  amount: amountValidation,
   categoryId: z
     .any()
     .refine(v => v !== '', { message: 'Category is required' })
