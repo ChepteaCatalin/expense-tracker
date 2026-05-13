@@ -9,6 +9,7 @@ import { savingsGoalSchema } from '../_utils/validation';
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import { normalizeAmountNumberInput } from '@/utils/input';
+import Box from '@mui/material/Box';
 
 export default function GoalsForm() {
   // TODO:
@@ -46,6 +47,8 @@ export default function GoalsForm() {
         label="Name"
         fullWidth
         required
+        multiline
+        maxRows={3}
         autoComplete="off"
         spellCheck="false"
         error={!!errors.name}
