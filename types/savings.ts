@@ -10,3 +10,7 @@ export interface SavingsGoal {
   note?: string;
   currency: string;
 }
+
+export interface SavingsGoalFormValues {
+  name: string;
+}
