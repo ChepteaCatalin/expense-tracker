@@ -14,4 +14,5 @@ export interface SavingsGoal {
 export interface SavingsGoalFormValues {
   name: string;
   initialAmount: number;
+  targetAmount: number | '';
 }

@@ -18,6 +18,7 @@ export default function GoalsForm() {
   const {
     register,
     handleSubmit,
+    trigger,
     formState: { errors },
   } = useForm<SavingsGoalFormValues>({
     shouldUnregister: true,
@@ -56,6 +57,7 @@ export default function GoalsForm() {
       <TextField
         {...register('initialAmount', {
           setValueAs: normalizeAmountNumberInput,
+          onChange: () => trigger('targetAmount'),
         })}
         label="Initial Amount"
         required
@@ -63,6 +65,25 @@ export default function GoalsForm() {
         spellCheck="false"
         error={!!errors.initialAmount}
         helperText={errors.initialAmount?.message}
+        slotProps={{
+          htmlInput: {
+            inputMode: 'decimal',
+            onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+              e.currentTarget.select(),
+          },
+          inputLabel: { shrink: true },
+        }}
+      />
+      <TextField
+        {...register('targetAmount', {
+          setValueAs: normalizeAmountNumberInput,
+        })}
+        label="Target Amount"
+        required
+        autoComplete="off"
+        spellCheck="false"
+        error={!!errors.targetAmount}
+        helperText={errors.targetAmount?.message}
         slotProps={{
           htmlInput: {
             inputMode: 'decimal',
@@ -97,5 +118,6 @@ function getDefaultValues(): SavingsGoalFormValues {
   return {
     name: '',
     initialAmount: 0,
+    targetAmount: '',
   };
 }
