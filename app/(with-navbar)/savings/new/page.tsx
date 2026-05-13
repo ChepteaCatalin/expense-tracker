@@ -2,6 +2,7 @@ import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
+import GoalsForm from '../_components/GoalsForm';
 
 export const metadata = {
   title: 'New Goal',
@@ -15,7 +16,7 @@ export default function NewSavingGoalPage() {
       subtitle={metadata.description}
       aboveCard={<BackToSavingsLink />}
     >
-      content
+      <GoalsForm />
     </TitledCardPageWrapper>
   );
 }
