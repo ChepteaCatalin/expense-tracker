@@ -7,8 +7,8 @@ export const savingsGoalSchema = z
     name: z
       .string()
       .trim()
-      .min(1, 'Name is required')
-      .max(100, 'Name must be at most 100 characters'),
+      .min(1, 'Required field')
+      .max(100, 'Must be at most 100 characters'),
     initialAmount: z
       .any()
       .refine(v => v !== '', { message: 'Required field' })
@@ -23,7 +23,7 @@ export const savingsGoalSchema = z
       ),
     targetAmount: amountValidation,
     currency: z.any().refine(v => !!v?.code, {
-      message: 'Currency is required',
+      message: 'Required field',
     }),
     startDate: validDate,
     notes: z.string().max(500, 'Must be at most 500 characters'),
