@@ -6,11 +6,7 @@ import { startTransition, useActionState, useState } from 'react';
 import { updateCurrency } from '../actions';
 import Box from '@mui/material/Box';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-
-type CurrencyOption = {
-  code: string;
-  currency: string;
-};
+import { type CurrencyOption } from '@/types/currency';
 
 export default function CurrencyAutocomplete({
   defaultValue,
