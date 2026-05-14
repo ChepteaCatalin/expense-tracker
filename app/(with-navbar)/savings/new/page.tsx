@@ -2,7 +2,8 @@ import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import GoalsForm from '../_components/GoalsForm';
+import GoalForm from '../_components/GoalForm/GoalForm';
+import SuspenseCurrencyAutocomplete from '../_components/GoalForm/SuspenseCurrencyAutocomplete';
 
 export const metadata = {
   title: 'New Goal',
@@ -16,7 +17,7 @@ export default function NewSavingGoalPage() {
       subtitle={metadata.description}
       aboveCard={<BackToSavingsLink />}
     >
-      <GoalsForm />
+      <GoalForm currencyAutocomplete={<SuspenseCurrencyAutocomplete />} />
     </TitledCardPageWrapper>
   );
 }

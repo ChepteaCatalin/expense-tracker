@@ -21,6 +21,9 @@ export const savingsGoalSchema = z
           }),
       ),
     targetAmount: amountValidation,
+    currency: z.any().refine(v => !!v?.code, {
+      message: 'Currency is required',
+    }),
   })
   .superRefine(({ initialAmount, targetAmount }, ctx) => {
     if (targetAmount <= initialAmount) {

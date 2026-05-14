@@ -1,3 +1,5 @@
+import { type CurrencyOption } from './currency';
+
 export interface SavingsGoal {
   id: number;
   name: string;
@@ -15,4 +17,5 @@ export interface SavingsGoalFormValues {
   name: string;
   initialAmount: number;
   targetAmount: number | '';
+  currency: CurrencyOption;
 }
