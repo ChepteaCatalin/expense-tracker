@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import GoalForm from '../_components/GoalForm/GoalForm';
 import SuspenseCurrencyAutocomplete from '../_components/GoalForm/SuspenseCurrencyAutocomplete';
+import SuspenseStartDateField from '../_components/GoalForm/SuspenseStartDateField';
 
 export const metadata = {
   title: 'New Goal',
@@ -17,7 +18,10 @@ export default function NewSavingGoalPage() {
       subtitle={metadata.description}
       aboveCard={<BackToSavingsLink />}
     >
-      <GoalForm currencyAutocomplete={<SuspenseCurrencyAutocomplete />} />
+      <GoalForm
+        currencyAutocomplete={<SuspenseCurrencyAutocomplete />}
+        startDateField={<SuspenseStartDateField />}
+      />
     </TitledCardPageWrapper>
   );
 }

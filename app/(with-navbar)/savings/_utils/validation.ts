@@ -1,3 +1,4 @@
+import { validDate } from '@/lib/MuiDatePicker/utils';
 import { amountValidation } from '@/utils/validation';
 import z from 'zod';
 
@@ -24,6 +25,7 @@ export const savingsGoalSchema = z
     currency: z.any().refine(v => !!v?.code, {
       message: 'Currency is required',
     }),
+    startDate: validDate,
   })
   .superRefine(({ initialAmount, targetAmount }, ctx) => {
     if (targetAmount <= initialAmount) {
