@@ -108,6 +108,19 @@ export default function GoalForm({
           />
         </Grid>
         {startDateField}
+        <TextField
+          {...register('notes')}
+          label="Notes"
+          autoComplete="off"
+          spellCheck="false"
+          error={!!errors.notes}
+          helperText={errors.notes?.message}
+          multiline
+          maxRows={10}
+          slotProps={{
+            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+          }}
+        />
         <Button
           type="submit"
           //TODO:
@@ -135,5 +148,6 @@ function getDefaultValues(): SavingsGoalFormValues {
     name: '',
     initialAmount: 0,
     targetAmount: '',
+    notes: '',
   } as SavingsGoalFormValues;
 }

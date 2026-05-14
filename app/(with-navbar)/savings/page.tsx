@@ -26,7 +26,7 @@ export default function SavingsPage() {
             initialAmount: 50000,
             currentAmount: 43256,
             targetAmount: 100000,
-            note: 'This is a sample savings goal for demonstration purposes.',
+            notes: 'This is a sample savings goal for demonstration purposes.',
             startDate: new Date('2024-01-01'),
             currency: 'USD',
             isCompleted: false,
