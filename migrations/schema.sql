@@ -3,7 +3,7 @@
 --
 
 
--- Dumped from database version 17.8 (92d3c18)
+-- Dumped from database version 17.8 (9c8634e)
 -- Dumped by pg_dump version 18.3
 
 SET statement_timeout = 0;
@@ -19,6 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS "session_userId_fkey";
+ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS fk_savings_goal_user;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_user;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_category;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_user;
@@ -27,6 +28,8 @@ ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS fk_category
 ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS "account_userId_fkey";
 DROP INDEX IF EXISTS public.verification_identifier_idx;
 DROP INDEX IF EXISTS public."session_userId_idx";
+DROP INDEX IF EXISTS public.idx_savings_goal_user_id;
+DROP INDEX IF EXISTS public.idx_savings_goal_user_completed;
 DROP INDEX IF EXISTS public.idx_income_user_id;
 DROP INDEX IF EXISTS public.idx_income_user_date;
 DROP INDEX IF EXISTS public.idx_income_date;
@@ -45,6 +48,7 @@ ALTER TABLE IF EXISTS ONLY public."user" DROP CONSTRAINT IF EXISTS user_email_ke
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS uk_category_name_user;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_token_key;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey;
+ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS savings_goal_pkey;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS income_pkey;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS expense_pkey;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS category_pkey;
@@ -52,6 +56,7 @@ ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS account_pkey
 DROP TABLE IF EXISTS public.verification;
 DROP TABLE IF EXISTS public."user";
 DROP TABLE IF EXISTS public.session;
+DROP TABLE IF EXISTS public.savings_goal;
 DROP TABLE IF EXISTS public.income;
 DROP TABLE IF EXISTS public.expense;
 DROP TABLE IF EXISTS public.category;
@@ -374,6 +379,45 @@ ALTER TABLE public.income ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: savings_goal; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.savings_goal (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    initial_amount integer DEFAULT 0 NOT NULL,
+    current_amount integer DEFAULT 0 NOT NULL,
+    target_amount integer NOT NULL,
+    start_date date NOT NULL,
+    is_completed boolean DEFAULT false NOT NULL,
+    completed_date date,
+    notes character varying(500),
+    currency public.currency_code NOT NULL,
+    user_id text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT savings_goal_current_amount_check CHECK (((current_amount >= 0) AND (current_amount <= 1000000000))),
+    CONSTRAINT savings_goal_initial_amount_check CHECK (((initial_amount >= 0) AND (initial_amount <= 1000000000))),
+    CONSTRAINT savings_goal_target_amount_check CHECK (((target_amount > 0) AND (target_amount <= 1000000000))),
+    CONSTRAINT savings_goal_target_gt_initial_check CHECK ((target_amount > initial_amount))
+);
+
+
+--
+-- Name: savings_goal_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.savings_goal ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.savings_goal_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: session; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -449,6 +493,14 @@ ALTER TABLE ONLY public.expense
 
 ALTER TABLE ONLY public.income
     ADD CONSTRAINT income_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: savings_goal savings_goal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.savings_goal
+    ADD CONSTRAINT savings_goal_pkey PRIMARY KEY (id);
 
 
 --
@@ -584,6 +636,20 @@ CREATE INDEX idx_income_user_id ON public.income USING btree (user_id);
 
 
 --
+-- Name: idx_savings_goal_user_completed; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_savings_goal_user_completed ON public.savings_goal USING btree (user_id, is_completed);
+
+
+--
+-- Name: idx_savings_goal_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_savings_goal_user_id ON public.savings_goal USING btree (user_id);
+
+
+--
 -- Name: session_userId_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -643,6 +709,14 @@ ALTER TABLE ONLY public.income
 
 ALTER TABLE ONLY public.income
     ADD CONSTRAINT fk_income_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: savings_goal fk_savings_goal_user; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.savings_goal
+    ADD CONSTRAINT fk_savings_goal_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
