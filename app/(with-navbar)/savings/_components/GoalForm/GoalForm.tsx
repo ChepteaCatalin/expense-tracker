@@ -13,8 +13,10 @@ import Grid from '@mui/material/Grid';
 
 export default function GoalForm({
   currencyAutocomplete,
+  startDateField,
 }: {
   currencyAutocomplete: React.ReactNode;
+  startDateField: React.ReactNode;
 }) {
   // TODO:
   const isEditMode = false;
@@ -105,6 +107,7 @@ export default function GoalForm({
             sx={{ flex: 1 }}
           />
         </Grid>
+        {startDateField}
         <Button
           type="submit"
           //TODO:
