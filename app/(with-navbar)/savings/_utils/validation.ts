@@ -33,7 +33,7 @@ export const savingsGoalSchema = z
       ctx.addIssue({
         code: 'custom',
         path: ['targetAmount'],
-        message: 'Target amount must be greater than initial amount',
+        message: 'Must be greater than initial amount',
       });
     }
   });
