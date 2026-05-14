@@ -26,6 +26,7 @@ export const savingsGoalSchema = z
       message: 'Currency is required',
     }),
     startDate: validDate,
+    notes: z.string().max(500, 'Must be at most 500 characters'),
   })
   .superRefine(({ initialAmount, targetAmount }, ctx) => {
     if (targetAmount <= initialAmount) {

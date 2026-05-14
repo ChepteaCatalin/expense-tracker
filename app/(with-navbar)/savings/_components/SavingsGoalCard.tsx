@@ -17,7 +17,7 @@ export default function SavingsGoalCard({
     startDate,
     isCompleted,
     completedDate,
-    note,
+    notes,
   },
 }: {
   goal: SavingsGoal;
@@ -102,7 +102,7 @@ export default function SavingsGoalCard({
           <DateRow label="Completed" value={completedDate} accent />
         )}
       </Box>
-      {note && (
+      {notes && (
         <Typography
           variant="body2"
           color="text.secondary"
@@ -116,7 +116,7 @@ export default function SavingsGoalCard({
             borderColor: 'primary.main',
           }}
         >
-          {note}
+          {notes}
         </Typography>
       )}
     </Box>

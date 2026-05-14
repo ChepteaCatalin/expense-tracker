@@ -10,7 +10,7 @@ export interface SavingsGoal {
   startDate: Date;
   isCompleted: boolean;
   completedDate?: Date;
-  note?: string;
+  notes?: string;
   currency: string;
 }
 
@@ -20,4 +20,5 @@ export interface SavingsGoalFormValues {
   targetAmount: number | '';
   currency: CurrencyOption;
   startDate: FormDateTime;
+  notes: string;
 }
