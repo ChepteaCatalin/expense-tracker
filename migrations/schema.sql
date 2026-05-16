@@ -45,6 +45,7 @@ DROP INDEX IF EXISTS public."account_userId_idx";
 ALTER TABLE IF EXISTS ONLY public.verification DROP CONSTRAINT IF EXISTS verification_pkey;
 ALTER TABLE IF EXISTS ONLY public."user" DROP CONSTRAINT IF EXISTS user_pkey;
 ALTER TABLE IF EXISTS ONLY public."user" DROP CONSTRAINT IF EXISTS user_email_key;
+ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS uk_savings_goal_name;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS uk_category_name_user;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_token_key;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey;
@@ -523,6 +524,14 @@ ALTER TABLE ONLY public.session
 
 ALTER TABLE ONLY public.category
     ADD CONSTRAINT uk_category_name_user UNIQUE (user_id, name);
+
+
+--
+-- Name: savings_goal uk_savings_goal_name; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.savings_goal
+    ADD CONSTRAINT uk_savings_goal_name UNIQUE (name);
 
 
 --

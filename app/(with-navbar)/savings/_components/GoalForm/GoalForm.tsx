@@ -84,7 +84,6 @@ export default function GoalForm({
             // if (isEditMode)
             //   updateTransactionAction({ ...data, id: transaction.id });
             // else
-
             createGoalAction(data);
           });
         })}

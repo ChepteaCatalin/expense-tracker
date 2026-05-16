@@ -9,6 +9,7 @@ import { getFormErrors } from '@/lib/zod';
 import { isUniqueViolationError, UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
 import { createSavingsGoal as createNewSavingsGoal } from '@/data/savings';
+import { toCents } from '@/utils/currency';
 
 export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
@@ -16,9 +17,9 @@ export async function createSavingsGoal(
 ): Promise<SavingsGoalFormErrors> {
   const errors = getFormErrors(savingsGoalSchema, {
     ...goal,
-    targetAmount: +goal.targetAmount,
-    initialAmount: +goal.initialAmount,
-    startDate: goal.startDate!.toString(),
+    targetAmount: toCents(goal.targetAmount),
+    initialAmount: toCents(goal.initialAmount),
+    startDate: String(goal.startDate),
   });
   if (errors) return errors;
 
