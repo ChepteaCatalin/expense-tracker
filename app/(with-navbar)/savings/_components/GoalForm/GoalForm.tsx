@@ -116,6 +116,7 @@ export default function GoalForm({
           error={!!errors.notes}
           helperText={errors.notes?.message}
           multiline
+          minRows={2}
           maxRows={10}
           slotProps={{
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
