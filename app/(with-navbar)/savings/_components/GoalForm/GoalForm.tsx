@@ -42,7 +42,6 @@ export default function GoalForm({
     handleSubmit,
     trigger,
     subscribe,
-    reset,
     formState: { errors },
   } = methods;
 
@@ -55,14 +54,6 @@ export default function GoalForm({
         callback: () => setHideApiError(true),
       }),
     [subscribe],
-  );
-
-  useEffect(
-    function resetFormOnMount() {
-      reset(getDefaultValues()); //TODO: handle edit mode
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
   );
 
   return (

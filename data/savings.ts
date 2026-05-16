@@ -49,7 +49,7 @@ export const createSavingsGoal = authGuard(
         id: created.id,
         name: created.name,
         initialAmount: created.initial_amount,
-        currentAmount: 0,
+        currentAmount: created.initial_amount,
         targetAmount: created.target_amount,
         startDate: new Date(created.start_date),
         isCompleted: created.is_completed,
