@@ -17,14 +17,18 @@ export async function createSavingsGoal(
 ): Promise<SavingsGoalFormErrors> {
   const errors = getFormErrors(savingsGoalSchema, {
     ...goal,
-    targetAmount: toCents(goal.targetAmount),
-    initialAmount: toCents(goal.initialAmount),
+    targetAmount: +goal.targetAmount,
+    initialAmount: +goal.initialAmount,
     startDate: String(goal.startDate),
   });
   if (errors) return errors;
 
   try {
-    await createNewSavingsGoal(goal);
+    await createNewSavingsGoal({
+      ...goal,
+      targetAmount: toCents(goal.targetAmount),
+      initialAmount: toCents(goal.initialAmount),
+    });
   } catch (err: any) {
     // TODO: check these errors
     if (err instanceof UnauthorizedError) redirect('/signin');
