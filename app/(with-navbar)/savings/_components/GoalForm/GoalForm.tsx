@@ -18,7 +18,6 @@ export default function GoalForm({
   currencyAutocomplete: React.ReactNode;
   startDateField: React.ReactNode;
 }) {
-  // TODO:
   const isEditMode = false;
   const disabledForm = false;
 
