@@ -30,12 +30,11 @@ export async function createSavingsGoal(
       initialAmount: toCents(goal.initialAmount),
     });
   } catch (err: any) {
-    // TODO: check these errors
     if (err instanceof UnauthorizedError) redirect('/signin');
     if (isUniqueViolationError(err)) {
-      return { api: 'A savings goal with this name already exists' };
+      return { api: 'A goal with this name already exists' };
     }
-    return { api: 'Failed to create savings goal' };
+    return { api: 'Failed to create the goal' };
   }
 
   redirect(`/savings`);
