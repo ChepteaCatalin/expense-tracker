@@ -24,11 +24,12 @@ export async function createSavingsGoal(
   if (errors) return errors;
 
   try {
-    await createNewSavingsGoal({
+    const result = await createNewSavingsGoal({
       ...goal,
       targetAmount: toCents(goal.targetAmount),
       initialAmount: toCents(goal.initialAmount),
     });
+    console.log('🚀 ~ result:', result);
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     if (isUniqueViolationError(err)) {
