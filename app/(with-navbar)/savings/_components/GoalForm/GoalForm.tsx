@@ -102,7 +102,7 @@ export default function GoalForm({
                 onClick: (e: React.MouseEvent<HTMLInputElement>) =>
                   e.currentTarget.select(),
               },
-              inputLabel: { shrink: true },
+              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
             }}
             sx={{ flex: 1 }}
           />
