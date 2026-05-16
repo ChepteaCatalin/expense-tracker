@@ -5,13 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { FormProvider, useForm } from 'react-hook-form';
-import { savingsGoalSchema } from '../../_utils/validation';
+import { savingsGoalSchema } from '../../validation';
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import { normalizeAmountNumberInput } from '@/utils/input';
 import Grid from '@mui/material/Grid';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
+import { createSavingsGoal } from '../../actions';
 
 interface FormProps {
   currencyAutocomplete: React.ReactNode;
@@ -25,7 +26,7 @@ export default function GoalForm({
   const isEditMode = false; // TODO:
 
   const [createGoalErrors, createGoalAction, isPendingCreate] = useActionState(
-    createAction,
+    createSavingsGoal,
     {},
   );
 
