@@ -1,5 +1,6 @@
 import { type FormDateTime } from '@/lib/MuiDatePicker/types';
 import { type CurrencyOption } from './currency';
+import { type FormErrors } from './form';
 
 export interface SavingsGoal {
   id: number;
@@ -22,3 +23,5 @@ export interface SavingsGoalFormValues {
   startDate: FormDateTime;
   notes: string;
 }
+
+export type SavingsGoalFormErrors = FormErrors<SavingsGoalFormValues>;
