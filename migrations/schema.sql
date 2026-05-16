@@ -531,7 +531,7 @@ ALTER TABLE ONLY public.category
 --
 
 ALTER TABLE ONLY public.savings_goal
-    ADD CONSTRAINT uk_savings_goal_name UNIQUE (name);
+    ADD CONSTRAINT uk_savings_goal_name UNIQUE (user_id, name);
 
 
 --
