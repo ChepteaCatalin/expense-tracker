@@ -8,6 +8,7 @@ import { savingsGoalSchema } from './validation';
 import { getFormErrors } from '@/lib/zod';
 import { isUniqueViolationError, UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
+import { createSavingsGoal as createNewSavingsGoal } from '@/data/savings';
 
 export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
@@ -22,7 +23,7 @@ export async function createSavingsGoal(
   if (errors) return errors;
 
   try {
-    // await createNewCategory(category);
+    await createNewSavingsGoal(goal);
   } catch (err: any) {
     // TODO: check these errors
     if (err instanceof UnauthorizedError) redirect('/signin');
