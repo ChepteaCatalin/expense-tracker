@@ -128,6 +128,7 @@ export default function GoalForm({
           <TextField
             {...register('targetAmount', {
               setValueAs: normalizeAmountNumberInput,
+              onChange: () => trigger('targetAmount'),
             })}
             label="Target Amount"
             required

@@ -386,7 +386,6 @@ CREATE TABLE public.savings_goal (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
     initial_amount integer DEFAULT 0 NOT NULL,
-    current_amount integer DEFAULT 0 NOT NULL,
     target_amount integer NOT NULL,
     start_date date NOT NULL,
     is_completed boolean DEFAULT false NOT NULL,
@@ -396,7 +395,6 @@ CREATE TABLE public.savings_goal (
     user_id text NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT savings_goal_current_amount_check CHECK (((current_amount >= 0) AND (current_amount <= 1000000000))),
     CONSTRAINT savings_goal_initial_amount_check CHECK (((initial_amount >= 0) AND (initial_amount <= 1000000000))),
     CONSTRAINT savings_goal_target_amount_check CHECK (((target_amount > 0) AND (target_amount <= 1000000000))),
     CONSTRAINT savings_goal_target_gt_initial_check CHECK ((target_amount > initial_amount))
