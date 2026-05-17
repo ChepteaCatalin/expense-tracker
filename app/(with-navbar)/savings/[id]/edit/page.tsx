@@ -8,7 +8,6 @@ import SuspenseStartDateField from '../../_components/GoalForm/SuspenseStartDate
 import { validIdParam } from '@/utils/url';
 import { currencies } from '@/data/currency';
 import type { CurrencyOption } from '@/types/currency';
-import dayjs from 'dayjs';
 
 export default async function EditSavingsGoalPage({
   params,
@@ -29,20 +28,14 @@ export default async function EditSavingsGoalPage({
   const defaultCurrency: CurrencyOption | undefined = currencies.find(
     c => c.code === goal?.currency,
   );
-  const defaultStartDate: string | undefined = dayjs(
-    goal.startDate,
-  ).toISOString();
 
   return (
     <GoalForm
       key={goal.updatedAt.toISOString()}
       goal={goal}
-      currencyAutocomplete={
-        <SuspenseCurrencyAutocomplete defaultValue={defaultCurrency} />
-      }
-      startDateField={
-        <SuspenseStartDateField defaultValue={defaultStartDate} />
-      }
+      currencyAutocomplete={<SuspenseCurrencyAutocomplete isEditMode />}
+      startDateField={<SuspenseStartDateField isEditMode />}
+      defaultCurrency={defaultCurrency}
     />
   );
 }

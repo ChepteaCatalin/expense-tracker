@@ -1,12 +1,11 @@
 import Skeleton from '@mui/material/Skeleton';
 import { Suspense } from 'react';
 import CurrencyAutocomplete from './CurrencyAutocomplete';
-import type { CurrencyOption } from '@/types/currency';
 
 export default function SuspenseCurrencyAutocomplete({
-  defaultValue,
+  isEditMode,
 }: {
-  defaultValue?: CurrencyOption;
+  isEditMode: boolean;
 }) {
   return (
     <Suspense
@@ -18,7 +17,7 @@ export default function SuspenseCurrencyAutocomplete({
         />
       }
     >
-      <CurrencyAutocomplete defaultValue={defaultValue} />
+      <CurrencyAutocomplete isEditMode={isEditMode} />
     </Suspense>
   );
 }

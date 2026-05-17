@@ -8,14 +8,16 @@ import { Controller } from 'react-hook-form';
 export default function CurrencyAutocompleteField({
   currencyOptions,
   defaultValue,
+  isEditMode,
 }: {
   currencyOptions: CurrencyOption[];
-  defaultValue: CurrencyOption;
+  defaultValue?: CurrencyOption;
+  isEditMode: boolean;
 }) {
   return (
     <Controller
       name="currency"
-      defaultValue={defaultValue}
+      {...(!isEditMode && { defaultValue })}
       render={({ field: { value, onChange, disabled } }) => (
         <Autocomplete
           renderInput={params => <TextField {...params} label="Currency" />}

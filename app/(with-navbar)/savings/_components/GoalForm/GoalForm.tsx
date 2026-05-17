@@ -15,15 +15,19 @@ import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import { createSavingsGoal } from '../../actions';
 import Divider from '@mui/material/Divider';
 import { fromCents } from '@/utils/currency';
+import type { CurrencyOption } from '@/types/currency';
+import dayjs from 'dayjs';
 
 interface FormProps {
   goal?: SavingsGoal;
+  defaultCurrency?: CurrencyOption;
   currencyAutocomplete: React.ReactNode;
   startDateField: React.ReactNode;
 }
 
 export default function GoalForm({
   goal,
+  defaultCurrency,
   currencyAutocomplete,
   startDateField,
 }: FormProps) {
@@ -37,7 +41,7 @@ export default function GoalForm({
   const disabledForm = isPendingCreate; //TODO: || isPendingUpdate;
 
   const methods = useForm<SavingsGoalFormValues>({
-    defaultValues: getDefaultValues(goal),
+    defaultValues: getDefaultValues(goal, defaultCurrency),
     resolver: zodResolver(savingsGoalSchema),
     disabled: disabledForm,
   });
@@ -46,6 +50,7 @@ export default function GoalForm({
     handleSubmit,
     trigger,
     subscribe,
+    reset,
     formState: { errors },
   } = methods;
 
@@ -58,6 +63,14 @@ export default function GoalForm({
         callback: () => setHideApiError(true),
       }),
     [subscribe],
+  );
+
+  useEffect(
+    function resetFormOnMount() {
+      if (isEditMode) reset(getDefaultValues(goal, defaultCurrency));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   return (
@@ -173,14 +186,19 @@ export default function GoalForm({
   );
 }
 
-function getDefaultValues(goal?: SavingsGoal): SavingsGoalFormValues {
+function getDefaultValues(
+  goal?: SavingsGoal,
+  defaultCurrency?: CurrencyOption,
+): SavingsGoalFormValues {
   if (goal) {
     return {
       name: goal.name,
       initialAmount: fromCents(goal.initialAmount),
       targetAmount: fromCents(goal.targetAmount),
       notes: goal.notes || '',
-    } as SavingsGoalFormValues;
+      currency: defaultCurrency!,
+      startDate: dayjs(goal.startDate).toISOString(),
+    };
   }
 
   return {
