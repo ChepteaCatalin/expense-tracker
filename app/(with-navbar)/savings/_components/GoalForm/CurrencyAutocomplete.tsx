@@ -1,8 +1,13 @@
 import { currencies } from '@/data/currency';
 import CurrencyAutocompleteField from './CurrencyAutocompleteField';
 import { getSession } from '@/data/auth';
+import type { CurrencyOption } from '@/types/currency';
 
-export default async function CurrencyAutocomplete() {
+export default async function CurrencyAutocomplete({
+  defaultValue,
+}: {
+  defaultValue?: CurrencyOption;
+}) {
   const currency =
     (await getSession().catch(() => null))?.user?.currency ?? 'MDL';
 
@@ -12,7 +17,7 @@ export default async function CurrencyAutocomplete() {
         code,
         currency,
       }))}
-      defaultValue={currencies.find(c => c.code === currency)!}
+      defaultValue={defaultValue ?? currencies.find(c => c.code === currency)!}
     />
   );
 }
