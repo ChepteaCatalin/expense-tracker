@@ -15,6 +15,7 @@ import {
   deleteCategory as deleteExistingCategory,
 } from '@/data/category';
 import { isUniqueViolationError, UnauthorizedError } from '@/utils/error';
+import { categoryIcons } from '@/utils/category-icons';
 
 export async function createCategory(
   _: CategoryFormErrors,
@@ -22,6 +23,10 @@ export async function createCategory(
 ): Promise<CategoryFormErrors> {
   const errors = getFormErrors(categorySchema, category);
   if (errors) return errors;
+
+  if (!categoryIcons.some(({ src }) => src === category.icon)) {
+    return { icon: 'Must be a valid icon' };
+  }
 
   try {
     await createNewCategory(category);
@@ -42,6 +47,10 @@ export async function updateCategory(
 ): Promise<CategoryFormErrors> {
   const errors = getFormErrors(categorySchema, category);
   if (errors) return errors;
+
+  if (!categoryIcons.some(({ src }) => src === category.icon)) {
+    return { icon: 'Must be a valid icon' };
+  }
 
   try {
     await updateExistingCategory(category);

@@ -1,11 +1,4 @@
 import z from 'zod';
-import { categoryIcons } from '@/utils/category-icons';
-
-type ValidIconSrc = (typeof categoryIcons)[number]['src'];
-const VALID_ICONS = categoryIcons.map(({ src }) => src) as [
-  ValidIconSrc,
-  ...ValidIconSrc[],
-];
 
 const colorSchema = z
   .string()
@@ -33,10 +26,9 @@ export const categorySchema = z.object({
   type: z.enum(['expense', 'income']),
   icon: z
     .string()
-    .refine(
-      val => (VALID_ICONS as string[]).includes(val),
-      'Must be a valid icon',
-    ),
+    .trim()
+    .min(1, 'Icon is required')
+    .max(100, 'Icon must be at most 100 characters'),
   strokeColor: colorSchema,
   backgroundColor: colorSchema,
 });
