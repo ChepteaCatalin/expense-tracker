@@ -13,6 +13,8 @@ export interface SavingsGoal {
   completedDate?: Date;
   notes?: string;
   currency: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface SavingsGoalFormValues {
