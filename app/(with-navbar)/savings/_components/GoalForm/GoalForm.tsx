@@ -1,6 +1,6 @@
 'use client';
 
-import { type SavingsGoalFormValues } from '@/types/savings';
+import type { SavingsGoal, SavingsGoalFormValues } from '@/types/savings';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -13,17 +13,20 @@ import Grid from '@mui/material/Grid';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import { createSavingsGoal } from '../../actions';
+import Divider from '@mui/material/Divider';
 
 interface FormProps {
+  goal?: SavingsGoal;
   currencyAutocomplete: React.ReactNode;
   startDateField: React.ReactNode;
 }
 
 export default function GoalForm({
+  goal,
   currencyAutocomplete,
   startDateField,
 }: FormProps) {
-  const isEditMode = false; // TODO:
+  const isEditMode = !!goal;
 
   const [createGoalErrors, createGoalAction, isPendingCreate] = useActionState(
     createSavingsGoal,
@@ -152,6 +155,7 @@ export default function GoalForm({
             inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
           }}
         />
+        <Divider />
         <Button
           type="submit"
           disabled={!hideApiError && !!createGoalErrors.api} //TODO: handle edit
