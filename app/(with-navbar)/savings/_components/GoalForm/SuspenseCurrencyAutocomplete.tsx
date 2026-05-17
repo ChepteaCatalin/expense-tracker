@@ -1,8 +1,13 @@
 import Skeleton from '@mui/material/Skeleton';
 import { Suspense } from 'react';
 import CurrencyAutocomplete from './CurrencyAutocomplete';
+import type { CurrencyOption } from '@/types/currency';
 
-export default function SuspenseCurrencyAutocomplete() {
+export default function SuspenseCurrencyAutocomplete({
+  defaultValue,
+}: {
+  defaultValue?: CurrencyOption;
+}) {
   return (
     <Suspense
       fallback={
@@ -13,7 +18,7 @@ export default function SuspenseCurrencyAutocomplete() {
         />
       }
     >
-      <CurrencyAutocomplete />
+      <CurrencyAutocomplete defaultValue={defaultValue} />
     </Suspense>
   );
 }

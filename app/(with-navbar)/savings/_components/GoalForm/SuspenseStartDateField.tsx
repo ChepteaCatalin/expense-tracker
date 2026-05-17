@@ -2,7 +2,11 @@ import { Suspense } from 'react';
 import StartDateField from './StartDateField';
 import Skeleton from '@mui/material/Skeleton';
 
-export default function SuspenseStartDateField() {
+export default function SuspenseStartDateField({
+  defaultValue,
+}: {
+  defaultValue?: string;
+}) {
   return (
     <Suspense
       fallback={
@@ -13,7 +17,7 @@ export default function SuspenseStartDateField() {
         />
       }
     >
-      <StartDateField />
+      <StartDateField defaultValue={defaultValue} />
     </Suspense>
   );
 }

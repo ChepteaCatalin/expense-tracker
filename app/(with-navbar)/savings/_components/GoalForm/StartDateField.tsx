@@ -8,11 +8,15 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { Controller } from 'react-hook-form';
 
-export default function StartDateField() {
+export default function StartDateField({
+  defaultValue,
+}: {
+  defaultValue?: string;
+}) {
   return (
     <Controller
       name="startDate"
-      defaultValue={dayjs().toISOString()}
+      defaultValue={defaultValue ?? dayjs().toISOString()}
       render={({
         field: { name, value, onChange, disabled },
         fieldState: { error },

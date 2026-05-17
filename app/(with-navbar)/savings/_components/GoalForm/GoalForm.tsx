@@ -14,6 +14,7 @@ import { startTransition, useActionState, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import { createSavingsGoal } from '../../actions';
 import Divider from '@mui/material/Divider';
+import { fromCents } from '@/utils/currency';
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -36,7 +37,7 @@ export default function GoalForm({
   const disabledForm = isPendingCreate; //TODO: || isPendingUpdate;
 
   const methods = useForm<SavingsGoalFormValues>({
-    defaultValues: getDefaultValues(), //TODO: handle edit mode
+    defaultValues: getDefaultValues(goal),
     resolver: zodResolver(savingsGoalSchema),
     disabled: disabledForm,
   });
@@ -172,8 +173,16 @@ export default function GoalForm({
   );
 }
 
-function getDefaultValues(): SavingsGoalFormValues {
-  // TODO: handle edit mode
+function getDefaultValues(goal?: SavingsGoal): SavingsGoalFormValues {
+  if (goal) {
+    return {
+      name: goal.name,
+      initialAmount: fromCents(goal.initialAmount),
+      targetAmount: fromCents(goal.targetAmount),
+      notes: goal.notes || '',
+    } as SavingsGoalFormValues;
+  }
+
   return {
     name: '',
     initialAmount: 0,

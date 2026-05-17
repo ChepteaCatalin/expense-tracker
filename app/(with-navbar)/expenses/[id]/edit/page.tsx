@@ -26,7 +26,7 @@ export default async function EditExpense({
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
-  if (!categories.length || !expense) return notFound();
+  if (!categories.length || !expense) notFound();
 
   const currency = (await getSession())?.user.currency;
 

@@ -26,7 +26,7 @@ export default async function EditIncome({
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
-  if (!categories.length || !income) return notFound();
+  if (!categories.length || !income) notFound();
 
   const currency = (await getSession())?.user.currency;
 
