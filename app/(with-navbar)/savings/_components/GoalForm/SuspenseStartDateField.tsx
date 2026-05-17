@@ -3,9 +3,9 @@ import StartDateField from './StartDateField';
 import Skeleton from '@mui/material/Skeleton';
 
 export default function SuspenseStartDateField({
-  defaultValue,
+  isEditMode,
 }: {
-  defaultValue?: string;
+  isEditMode: boolean;
 }) {
   return (
     <Suspense
@@ -17,7 +17,7 @@ export default function SuspenseStartDateField({
         />
       }
     >
-      <StartDateField defaultValue={defaultValue} />
+      <StartDateField isEditMode={isEditMode} />
     </Suspense>
   );
 }

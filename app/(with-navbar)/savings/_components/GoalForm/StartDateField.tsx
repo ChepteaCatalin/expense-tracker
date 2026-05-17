@@ -9,14 +9,14 @@ import dayjs from 'dayjs';
 import { Controller } from 'react-hook-form';
 
 export default function StartDateField({
-  defaultValue,
+  isEditMode,
 }: {
-  defaultValue?: string;
+  isEditMode: boolean;
 }) {
   return (
     <Controller
       name="startDate"
-      defaultValue={defaultValue ?? dayjs().toISOString()}
+      {...(!isEditMode && { defaultValue: dayjs().toISOString() })}
       render={({
         field: { name, value, onChange, disabled },
         fieldState: { error },
