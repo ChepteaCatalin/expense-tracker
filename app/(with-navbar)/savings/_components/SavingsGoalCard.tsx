@@ -1,4 +1,4 @@
-import { type SavingsGoal } from '@/types/savings';
+import type { SavingsGoal } from '@/types/savings';
 import { readableCurrency } from '@/utils/currency';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
