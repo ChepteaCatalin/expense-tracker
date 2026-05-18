@@ -48,7 +48,7 @@ export const createSavingsGoal = authGuard(
 
       if (!created) throw new Error('Failed to create savings goal');
 
-      updateTag('savings-goals/list'); //TODO: check if it works
+      updateTag(`savings-goals/list/user/${session.user.id}`); //TODO: check if it works
 
       return savingsGoalFromDb(created, created.initial_amount);
     },
@@ -120,7 +120,7 @@ export const updateSavingsGoal = authGuard(
       if (!updated) throw new Error('Failed to update savings goal');
 
       updateTag(`savings-goals/id/${goal.id}/user/${session.user.id}`); //TODO: check if it works
-      updateTag('savings-goals/list'); //TODO: check if it works
+      updateTag(`savings-goals/list/user/${session.user.id}`); //TODO: check if it works
 
       return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals
     },
