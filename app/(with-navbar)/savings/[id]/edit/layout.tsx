@@ -45,7 +45,6 @@ async function SavingsGoalDetailsLink({
   const { id } = await params;
 
   return (
-    // TODO: check if this link works
     <Link href={`/savings/${id}/details`}>
       <Button
         sx={{
@@ -56,8 +55,7 @@ async function SavingsGoalDetailsLink({
         }}
         startIcon={<ChevronLeftIcon />}
       >
-        Savings Goal Details
-        {/*TODO: should match the real page title + check skeleton width */}
+        Goal Details
       </Button>
     </Link>
   );
