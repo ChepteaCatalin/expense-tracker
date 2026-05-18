@@ -30,6 +30,8 @@ export default function SavingsPage() {
             startDate: new Date('2024-01-01'),
             currency: 'USD',
             isCompleted: false,
+            createdAt: new Date('2024-01-01'),
+            updatedAt: new Date('2024-01-01'),
             // completedDate: new Date('2026-05-15'),
           }}
         />
@@ -44,6 +46,8 @@ export default function SavingsPage() {
             isCompleted: true,
             completedDate: new Date('2026-05-15'),
             currency: 'EUR',
+            createdAt: new Date('2024-01-01'),
+            updatedAt: new Date('2024-01-01'),
           }}
         />
         <Link href="/savings/new">
