@@ -82,22 +82,7 @@ export const getSavingsGoalById = authGuard(
       const row = result[0];
       if (!row) return null;
 
-      return {
-        id: row.id,
-        name: row.name,
-        initialAmount: row.initial_amount,
-        currentAmount: row.initial_amount, //TODO: real target amount, based on savings goals
-        targetAmount: row.target_amount,
-        startDate: new Date(row.start_date),
-        isCompleted: row.is_completed,
-        completedDate: row.completed_date
-          ? new Date(row.completed_date)
-          : undefined,
-        notes: row.notes ?? undefined,
-        currency: row.currency,
-        createdAt: new Date(row.created_at),
-        updatedAt: new Date(row.updated_at),
-      };
+      return savingsGoalFromDb(row, row.initial_amount); //TODO: real current amount, based on savings goals
     },
 );
 
