@@ -71,29 +71,12 @@ export const updateCategory = authGuard(
 export const deleteCategory = authGuard(
   session => async (categoryId: number) => {
     const result = await sql`
-      WITH tx_ids AS (
-        SELECT id
-        FROM expense
-        WHERE category_id = ${categoryId} AND user_id = ${session.user.id}
-        UNION ALL
-        SELECT id
-        FROM income
-        WHERE category_id = ${categoryId} AND user_id = ${session.user.id}
-      ),
-      deleted_cat AS (
-        DELETE FROM category
-        WHERE id = ${categoryId} AND user_id = ${session.user.id}
-        RETURNING type
-      )
-      SELECT (SELECT type FROM deleted_cat) AS type, tx_ids.id AS tx_id
-      FROM tx_ids
-      UNION ALL
-      SELECT (SELECT type FROM deleted_cat) AS type, NULL AS tx_id
-      WHERE NOT EXISTS (SELECT 1 FROM tx_ids)
+      DELETE FROM category
+      WHERE id = ${categoryId} AND user_id = ${session.user.id}
+      RETURNING id, type
     `;
 
-    if (!result[0] || result[0].type === null)
-      throw new Error('Category not found or delete failed');
+    if (!result[0]) throw new Error('Category not found or delete failed');
 
     const categoryType: CategoryType = result[0].type;
     const txPrefix = transactionPrefix(categoryType);
@@ -102,12 +85,6 @@ export const deleteCategory = authGuard(
     updateTag(`categories/id/${categoryId}/user/${session.user.id}`);
     updateTag(`${txPrefix}/categories/user/${session.user.id}`);
     updateTag(`${txPrefix}/category/${categoryId}/user/${session.user.id}`);
-
-    for (const row of result) {
-      if (row.tx_id !== null) {
-        updateTag(`${txPrefix}/id/${row.tx_id}/user/${session.user.id}`);
-      }
-    }
   },
 );
 

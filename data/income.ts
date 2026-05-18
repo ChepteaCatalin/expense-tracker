@@ -85,6 +85,8 @@ export const getIncomeById = authGuard(
         const row = result[0];
         if (!row) return undefined;
 
+        cacheTag(`incomes/category/${row.category_id}/user/${session.user.id}`);
+
         return {
           id: row.id,
           amount: row.amount,
