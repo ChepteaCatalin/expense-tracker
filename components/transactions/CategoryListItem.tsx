@@ -3,12 +3,12 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { categoryIcons } from '@/utils/category-icons';
 import Grid from '@mui/material/Grid';
-import { type TransactionCategoryListItem } from '@/types/transaction';
+import type { TransactionCategoryListItem } from '@/types/transaction';
 import { readableCurrency } from '@/utils/currency';
 import Link from 'next/link';
-import {
-  type SortTransactionBy,
-  type TransactionCategoriesSearchParams,
+import type {
+  SortTransactionBy,
+  TransactionCategoriesSearchParams,
 } from '@/types/transaction';
 
 export default function CategoryListItem({

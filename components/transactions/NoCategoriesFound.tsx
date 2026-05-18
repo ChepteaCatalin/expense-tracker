@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
-import { type CategoryType } from '@/types/category';
+import type { CategoryType } from '@/types/category';
 import { capitalizeFirstLetter } from '@/utils/string';
 
 export default function NoCategoriesFound({ type }: { type: CategoryType }) {

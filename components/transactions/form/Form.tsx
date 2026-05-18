@@ -1,6 +1,6 @@
 'use client';
 
-import { type Transaction } from '@/types/transaction';
+import type { Transaction } from '@/types/transaction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { transactionSchema } from '@/utils/validation';
@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
-import { type Category } from '@/types/category';
+import type { Category } from '@/types/category';
 import CategoriesInput from './CategoriesInput';
 import Link from 'next/link';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -24,14 +24,14 @@ import dayjs from 'dayjs';
 import { fromCents } from '@/utils/currency';
 import DeleteTransaction from './DeleteTransaction';
 import { useSearchParams } from 'next/navigation';
-import {
-  type CreateTransactionAction,
-  type DeleteTransactionAction,
-  type TransactionFormErrors,
-  type TransactionFormValues,
-  type TransactionFormValuesWithId,
-  type TransactionType,
-  type UpdateTransactionAction,
+import type {
+  CreateTransactionAction,
+  DeleteTransactionAction,
+  TransactionFormErrors,
+  TransactionFormValues,
+  TransactionFormValuesWithId,
+  TransactionType,
+  UpdateTransactionAction,
 } from '@/types/transaction';
 import { capitalizeFirstLetter } from '@/utils/string';
 import { normalizeAmountNumberInput } from '@/utils/input';

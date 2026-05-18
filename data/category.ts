@@ -1,7 +1,11 @@
 import 'server-only';
 
 import { sql } from '@/lib/neon';
-import { type Category, type CategoryFormValues, type CategoryType } from '@/types/category';
+import type {
+  Category,
+  CategoryFormValues,
+  CategoryType,
+} from '@/types/category';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 
