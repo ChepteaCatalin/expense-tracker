@@ -2,7 +2,11 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
-import type { SavingsGoal, SavingsGoalFormValues } from '@/types/savings';
+import type {
+  SavingsGoal,
+  SavingsGoalFormValues,
+  SavingsGoalFormValuesWithId,
+} from '@/types/savings';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 
 export const createSavingsGoal = authGuard(
@@ -47,22 +51,7 @@ export const createSavingsGoal = authGuard(
       //TODO: invalidate list (add this cache key to it)
       updateTag('savings-goals/list');
 
-      return {
-        id: created.id,
-        name: created.name,
-        initialAmount: created.initial_amount,
-        currentAmount: created.initial_amount,
-        targetAmount: created.target_amount,
-        startDate: new Date(created.start_date),
-        isCompleted: created.is_completed,
-        completedDate: created.completed_date
-          ? new Date(created.completed_date)
-          : undefined,
-        notes: created.notes ?? undefined,
-        currency: created.currency,
-        createdAt: new Date(created.created_at),
-        updatedAt: new Date(created.updated_at),
-      };
+      return savingsGoalFromDb(created, created.initial_amount);
     },
 );
 
@@ -112,3 +101,65 @@ export const getSavingsGoalById = authGuard(
       };
     },
 );
+
+export const updateSavingsGoal = authGuard(
+  session =>
+    async (goal: SavingsGoalFormValuesWithId): Promise<SavingsGoal> => {
+      const result = await sql`
+        UPDATE savings_goal
+        SET
+          name = ${goal.name},
+          initial_amount = ${goal.initialAmount || 0},
+          target_amount = ${goal.targetAmount},
+          start_date = ${goal.startDate},
+          notes = ${goal.notes || null},
+          currency = ${goal.currency.code},
+          updated_at = NOW()
+        WHERE id = ${goal.id}
+          AND user_id = ${session.user.id}
+        RETURNING
+          id,
+          name,
+          initial_amount,
+          target_amount,
+          to_char(start_date, 'YYYY-MM-DD') AS start_date,
+          is_completed,
+          to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
+          notes,
+          currency,
+          created_at,
+          updated_at
+      `;
+
+      const updated = result[0];
+
+      if (!updated) throw new Error('Failed to update savings goal');
+
+      updateTag(`savings-goals/id/${goal.id}`); //TODO: check if it works
+      updateTag('savings-goals/list'); //TODO: check if it works
+
+      return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals
+    },
+);
+
+function savingsGoalFromDb(
+  dbResult: Record<string, any>,
+  currentAmount: number,
+): SavingsGoal {
+  return {
+    id: dbResult.id,
+    name: dbResult.name,
+    initialAmount: dbResult.initial_amount,
+    currentAmount: currentAmount,
+    targetAmount: dbResult.target_amount,
+    startDate: new Date(dbResult.start_date),
+    isCompleted: dbResult.is_completed,
+    completedDate: dbResult.completed_date
+      ? new Date(dbResult.completed_date)
+      : undefined,
+    notes: dbResult.notes ?? undefined,
+    currency: dbResult.currency,
+    createdAt: new Date(dbResult.created_at),
+    updatedAt: new Date(dbResult.updated_at),
+  };
+}
