@@ -59,6 +59,10 @@ export const updateCategory = authGuard(
       updateTag(`categories/type/${category.type}/user/${session.user.id}`);
       updateTag(`categories/id/${category.id}/user/${session.user.id}`);
 
+      const txPrefix = transactionPrefix(category.type);
+      updateTag(`${txPrefix}/categories/user/${session.user.id}`);
+      updateTag(`${txPrefix}/category/${category.id}/user/${session.user.id}`);
+
       return categoryFromDb(result[0]);
     },
 );
@@ -75,6 +79,10 @@ export const deleteCategory = authGuard(
 
     updateTag(`categories/type/${result[0].type}/user/${session.user.id}`);
     updateTag(`categories/id/${categoryId}/user/${session.user.id}`);
+
+    const txPrefix = transactionPrefix(result[0].type);
+    updateTag(`${txPrefix}/categories/user/${session.user.id}`);
+    updateTag(`${txPrefix}/category/${categoryId}/user/${session.user.id}`);
   },
 );
 
@@ -148,6 +156,10 @@ export const getCategoryNameById = authGuard(
       return result[0]?.name;
     },
 );
+
+function transactionPrefix(categoryType: CategoryType): 'expenses' | 'incomes' {
+  return categoryType === 'expense' ? 'expenses' : 'incomes';
+}
 
 function categoryFromDb(dbResult: Record<string, any>): Category {
   return {

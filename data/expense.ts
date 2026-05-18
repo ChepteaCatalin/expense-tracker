@@ -66,6 +66,11 @@ export const updateExpense = authGuard(
   session =>
     async (expense: TransactionFormValuesWithId): Promise<Transaction> => {
       const result = await sql`
+        WITH before AS (
+          SELECT category_id AS old_category_id
+          FROM expense
+          WHERE id = ${expense.id} AND user_id = ${session.user.id}
+        )
         UPDATE expense
         SET
           amount = ${expense.amount},
@@ -83,7 +88,8 @@ export const updateExpense = authGuard(
           to_char(date, 'YYYY-MM-DD') AS date,
           description,
           created_at,
-          updated_at
+          updated_at,
+          (SELECT old_category_id FROM before) AS old_category_id
       `;
 
       const editedExpense = result[0];
@@ -94,6 +100,11 @@ export const updateExpense = authGuard(
       updateTag(
         `expenses/category/${expense.categoryId}/user/${session.user.id}`,
       );
+      if (editedExpense.old_category_id !== expense.categoryId) {
+        updateTag(
+          `expenses/category/${editedExpense.old_category_id}/user/${session.user.id}`,
+        );
+      }
       updateTag(`expenses/id/${expense.id}/user/${session.user.id}`);
 
       return {
