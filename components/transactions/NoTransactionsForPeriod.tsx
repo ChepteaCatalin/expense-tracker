@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
-import { type TransactionByCategorySearchParams } from '@/types/transaction';
+import type { TransactionByCategorySearchParams } from '@/types/transaction';
 import { stringifySearchParams } from '@/utils/transactions/url';
 import { capitalizeFirstLetter } from '@/utils/string';
 

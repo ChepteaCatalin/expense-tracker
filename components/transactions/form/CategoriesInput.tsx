@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { categoryIcons } from '@/utils/category-icons';
-import { type Category } from '@/types/category';
+import type { Category } from '@/types/category';
 import Typography from '@mui/material/Typography';
 import { Controller, useFormState } from 'react-hook-form';
 

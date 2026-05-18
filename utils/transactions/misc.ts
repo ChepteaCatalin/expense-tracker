@@ -1,4 +1,4 @@
-import { type TransactionCategory } from '@/types/transaction';
+import type { TransactionCategory } from '@/types/transaction';
 
 export function getCategoryPercentages(
   transactionCategories: TransactionCategory[],

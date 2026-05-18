@@ -7,11 +7,11 @@ import type {
 } from '@/types/transaction';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
-import {
-  type SortTransactionBy,
-  type Transaction,
-  type TransactionFormValues,
-  type TransactionFormValuesWithId,
+import type {
+  SortTransactionBy,
+  Transaction,
+  TransactionFormValues,
+  TransactionFormValuesWithId,
 } from '@/types/transaction';
 
 export const createExpense = authGuard(
