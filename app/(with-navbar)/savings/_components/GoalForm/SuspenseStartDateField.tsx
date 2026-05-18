@@ -5,7 +5,7 @@ import Skeleton from '@mui/material/Skeleton';
 export default function SuspenseStartDateField({
   isEditMode,
 }: {
-  isEditMode: boolean;
+  isEditMode?: boolean;
 }) {
   return (
     <Suspense

@@ -12,7 +12,7 @@ export default function CurrencyAutocompleteField({
 }: {
   currencyOptions: CurrencyOption[];
   defaultValue?: CurrencyOption;
-  isEditMode: boolean;
+  isEditMode?: boolean;
 }) {
   return (
     <Controller

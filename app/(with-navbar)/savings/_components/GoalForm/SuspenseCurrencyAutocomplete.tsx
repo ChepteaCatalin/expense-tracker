@@ -5,7 +5,7 @@ import CurrencyAutocomplete from './CurrencyAutocomplete';
 export default function SuspenseCurrencyAutocomplete({
   isEditMode,
 }: {
-  isEditMode: boolean;
+  isEditMode?: boolean;
 }) {
   return (
     <Suspense

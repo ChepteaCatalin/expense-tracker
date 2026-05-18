@@ -11,7 +11,7 @@ import { Controller } from 'react-hook-form';
 export default function StartDateField({
   isEditMode,
 }: {
-  isEditMode: boolean;
+  isEditMode?: boolean;
 }) {
   return (
     <Controller
