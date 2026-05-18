@@ -12,7 +12,7 @@ import { normalizeAmountNumberInput } from '@/utils/input';
 import Grid from '@mui/material/Grid';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import { createSavingsGoal } from '../../actions';
+import { createSavingsGoal, updateSavingsGoal } from '../../actions';
 import Divider from '@mui/material/Divider';
 import { fromCents } from '@/utils/currency';
 import type { CurrencyOption } from '@/types/currency';
@@ -37,13 +37,17 @@ export default function GoalForm({
     createSavingsGoal,
     {},
   );
+  const [updateGoalErrors, updateGoalAction, isPendingUpdate] = useActionState(
+    updateSavingsGoal,
+    {},
+  );
 
-  const disabledForm = isPendingCreate; //TODO: || isPendingUpdate;
+  const isMutating = isPendingCreate || isPendingUpdate;
 
   const methods = useForm<SavingsGoalFormValues>({
     defaultValues: getDefaultValues(goal, defaultCurrency),
     resolver: zodResolver(savingsGoalSchema),
-    disabled: disabledForm,
+    disabled: isMutating,
   });
   const {
     register,
@@ -77,7 +81,7 @@ export default function GoalForm({
     <FormProvider {...methods}>
       <ApiFormErrorAlert
         hide={hideApiError}
-        message={createGoalErrors.api} //TODO: handle edit
+        message={createGoalErrors.api || updateGoalErrors.api}
         sx={{ mb: 3 }}
       />
       <Stack
@@ -87,12 +91,8 @@ export default function GoalForm({
         onSubmit={handleSubmit(data => {
           startTransition(() => {
             setHideApiError(false);
-
-            //TODO:
-            // if (isEditMode)
-            //   updateTransactionAction({ ...data, id: transaction.id });
-            // else
-            createGoalAction(data);
+            if (isEditMode) updateGoalAction({ ...data, id: goal.id });
+            else createGoalAction(data);
           });
         })}
       >
@@ -172,8 +172,10 @@ export default function GoalForm({
         <Divider />
         <Button
           type="submit"
-          disabled={!hideApiError && !!createGoalErrors.api} //TODO: handle edit
-          loading={isPendingCreate} //TODO: handle edit
+          disabled={
+            !hideApiError && (!!createGoalErrors.api || !!updateGoalErrors.api)
+          }
+          loading={isMutating}
           loadingPosition="start"
           startIcon={<SaveIcon />}
           variant="contained"
