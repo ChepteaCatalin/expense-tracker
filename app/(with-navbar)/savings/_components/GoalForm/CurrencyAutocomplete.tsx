@@ -5,7 +5,7 @@ import { getSession } from '@/data/auth';
 export default async function CurrencyAutocomplete({
   isEditMode,
 }: {
-  isEditMode: boolean;
+  isEditMode?: boolean;
 }) {
   const currency =
     (await getSession().catch(() => null))?.user?.currency ?? 'MDL';
