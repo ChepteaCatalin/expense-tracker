@@ -31,7 +31,6 @@ export default async function EditSavingsGoalPage({
 
   return (
     <GoalForm
-      key={goal.updatedAt.toISOString()}
       goal={goal}
       currencyAutocomplete={<SuspenseCurrencyAutocomplete isEditMode />}
       startDateField={<SuspenseStartDateField isEditMode />}
