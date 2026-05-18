@@ -26,4 +26,8 @@ export interface SavingsGoalFormValues {
   notes: string;
 }
 
+export interface SavingsGoalFormValuesWithId extends SavingsGoalFormValues {
+  id: number;
+}
+
 export type SavingsGoalFormErrors = FormErrors<SavingsGoalFormValues>;
