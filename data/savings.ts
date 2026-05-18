@@ -59,7 +59,7 @@ export const getSavingsGoalById = authGuard(
     async (id: number): Promise<SavingsGoal | null> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`savings-goals/id/${id}`);
+      cacheTag(`savings-goals/id/${id}/user/${session.user.id}`);
 
       const result = await sql`
         SELECT
@@ -119,7 +119,7 @@ export const updateSavingsGoal = authGuard(
 
       if (!updated) throw new Error('Failed to update savings goal');
 
-      updateTag(`savings-goals/id/${goal.id}`); //TODO: check if it works
+      updateTag(`savings-goals/id/${goal.id}/user/${session.user.id}`); //TODO: check if it works
       updateTag('savings-goals/list'); //TODO: check if it works
 
       return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals

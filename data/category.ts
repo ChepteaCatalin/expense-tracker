@@ -33,7 +33,7 @@ export const createCategory = authGuard(
 
       if (!result[0]) throw new Error('Failed to create category');
 
-      updateTag(`categories/type/${category.type}`);
+      updateTag(`categories/type/${category.type}/user/${session.user.id}`);
 
       return categoryFromDb(result[0]);
     },
@@ -56,8 +56,8 @@ export const updateCategory = authGuard(
 
       if (!result[0]) throw new Error('Category not found or update failed');
 
-      updateTag(`categories/type/${category.type}`);
-      updateTag(`categories/id/${category.id}`);
+      updateTag(`categories/type/${category.type}/user/${session.user.id}`);
+      updateTag(`categories/id/${category.id}/user/${session.user.id}`);
 
       return categoryFromDb(result[0]);
     },
@@ -73,8 +73,8 @@ export const deleteCategory = authGuard(
 
     if (!result[0]) throw new Error('Category not found or delete failed');
 
-    updateTag(`categories/type/${result[0].type}`);
-    updateTag(`categories/id/${categoryId}`);
+    updateTag(`categories/type/${result[0].type}/user/${session.user.id}`);
+    updateTag(`categories/id/${categoryId}/user/${session.user.id}`);
   },
 );
 
@@ -83,7 +83,7 @@ export const getAllCategoriesByType = authGuard(
     async (type: CategoryType): Promise<Category[] | Array<never>> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`categories/type/${type}`);
+      cacheTag(`categories/type/${type}/user/${session.user.id}`);
 
       const result = await sql`
         SELECT 
@@ -111,7 +111,7 @@ export const getCategoryById = authGuard(
     async (categoryId: number): Promise<Category | undefined> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`categories/id/${categoryId}`);
+      cacheTag(`categories/id/${categoryId}/user/${session.user.id}`);
 
       const result = await sql`
         SELECT 
@@ -137,7 +137,7 @@ export const getCategoryNameById = authGuard(
     async (categoryId: number): Promise<string | undefined> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`categories/id/${categoryId}`);
+      cacheTag(`categories/id/${categoryId}/user/${session.user.id}`);
 
       const result = await sql`
         SELECT name

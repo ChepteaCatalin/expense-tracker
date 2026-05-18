@@ -45,8 +45,10 @@ export const createExpense = authGuard(
 
       if (!createdExpense) throw new Error('Failed to create expense');
 
-      updateTag('expenses/categories');
-      updateTag(`expenses/category/${expense.categoryId}`);
+      updateTag(`expenses/categories/user/${session.user.id}`);
+      updateTag(
+        `expenses/category/${expense.categoryId}/user/${session.user.id}`,
+      );
 
       return {
         id: createdExpense.id,
@@ -88,9 +90,11 @@ export const updateExpense = authGuard(
 
       if (!editedExpense) throw new Error('Failed to edit expense');
 
-      updateTag('expenses/categories');
-      updateTag(`expenses/category/${expense.categoryId}`);
-      updateTag(`expenses/id/${expense.id}`);
+      updateTag(`expenses/categories/user/${session.user.id}`);
+      updateTag(
+        `expenses/category/${expense.categoryId}/user/${session.user.id}`,
+      );
+      updateTag(`expenses/id/${expense.id}/user/${session.user.id}`);
 
       return {
         id: editedExpense.id,
@@ -118,9 +122,11 @@ export const deleteExpense = authGuard(
 
       if (!deletedExpense) throw new Error('Failed to delete expense');
 
-      updateTag('expenses/categories');
-      updateTag(`expenses/category/${deletedExpense.category_id}`);
-      updateTag(`expenses/id/${expenseId}`);
+      updateTag(`expenses/categories/user/${session.user.id}`);
+      updateTag(
+        `expenses/category/${deletedExpense.category_id}/user/${session.user.id}`,
+      );
+      updateTag(`expenses/id/${expenseId}/user/${session.user.id}`);
 
       return { id: deletedExpense.id, categoryId: deletedExpense.category_id };
     },
@@ -137,7 +143,7 @@ export const getExpenseCategories = authGuard(
     }): Promise<TransactionCategory[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag('expenses/categories');
+      cacheTag(`expenses/categories/user/${session.user.id}`);
 
       try {
         const result = await sql`
@@ -176,7 +182,7 @@ export const getExpenseById = authGuard(
     async (expenseId: number): Promise<Transaction | undefined> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`expenses/id/${expenseId}`);
+      cacheTag(`expenses/id/${expenseId}/user/${session.user.id}`);
 
       try {
         const result = await sql`
@@ -224,7 +230,7 @@ export const getExpenseCategoryTotal = authGuard(
     }): Promise<number> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`expenses/category/${categoryId}`);
+      cacheTag(`expenses/category/${categoryId}/user/${session.user.id}`);
 
       try {
         const result = await sql`
@@ -258,7 +264,7 @@ export const getExpensesByCategory = authGuard(
     }): Promise<TransactionsByDate[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`expenses/category/${categoryId}`);
+      cacheTag(`expenses/category/${categoryId}/user/${session.user.id}`);
 
       try {
         const result = await sql`

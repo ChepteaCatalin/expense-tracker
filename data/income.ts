@@ -43,8 +43,10 @@ export const createIncome = authGuard(
 
       if (!createdIncome) throw new Error('Failed to create income');
 
-      updateTag('incomes/categories');
-      updateTag(`incomes/category/${income.categoryId}`);
+      updateTag(`incomes/categories/user/${session.user.id}`);
+      updateTag(
+        `incomes/category/${income.categoryId}/user/${session.user.id}`,
+      );
 
       return {
         id: createdIncome.id,
@@ -63,7 +65,7 @@ export const getIncomeById = authGuard(
     async (incomeId: number): Promise<Transaction | undefined> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`incomes/id/${incomeId}`);
+      cacheTag(`incomes/id/${incomeId}/user/${session.user.id}`);
 
       try {
         const result = await sql`
@@ -126,9 +128,11 @@ export const updateIncome = authGuard(
 
       if (!editedIncome) throw new Error('Failed to edit income');
 
-      updateTag('incomes/categories');
-      updateTag(`incomes/category/${income.categoryId}`);
-      updateTag(`incomes/id/${income.id}`);
+      updateTag(`incomes/categories/user/${session.user.id}`);
+      updateTag(
+        `incomes/category/${income.categoryId}/user/${session.user.id}`,
+      );
+      updateTag(`incomes/id/${income.id}/user/${session.user.id}`);
 
       return {
         id: editedIncome.id,
@@ -156,9 +160,11 @@ export const deleteIncome = authGuard(
 
       if (!deletedIncome) throw new Error('Failed to delete income');
 
-      updateTag('incomes/categories');
-      updateTag(`incomes/category/${deletedIncome.category_id}`);
-      updateTag(`incomes/id/${incomeId}`);
+      updateTag(`incomes/categories/user/${session.user.id}`);
+      updateTag(
+        `incomes/category/${deletedIncome.category_id}/user/${session.user.id}`,
+      );
+      updateTag(`incomes/id/${incomeId}/user/${session.user.id}`);
 
       return { id: deletedIncome.id, categoryId: deletedIncome.category_id };
     },
@@ -175,7 +181,7 @@ export const getIncomeCategories = authGuard(
     }): Promise<TransactionCategory[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag('incomes/categories');
+      cacheTag(`incomes/categories/user/${session.user.id}`);
 
       try {
         const result = await sql`
@@ -224,7 +230,7 @@ export const getIncomesByCategory = authGuard(
     }): Promise<TransactionsByDate[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`incomes/category/${categoryId}`);
+      cacheTag(`incomes/category/${categoryId}/user/${session.user.id}`);
 
       try {
         const result = await sql`
@@ -305,7 +311,7 @@ export const getIncomeCategoryTotal = authGuard(
     }): Promise<number> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`incomes/category/${categoryId}`);
+      cacheTag(`incomes/category/${categoryId}/user/${session.user.id}`);
 
       try {
         const result = await sql`
