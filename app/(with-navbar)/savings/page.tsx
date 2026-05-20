@@ -9,11 +9,9 @@ import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
 import type { SavingsGoal } from '@/types/savings';
 import NoSavingsGoals from './_components/NoSavingsGoals';
+import { metadata } from './constants';
 
-export const metadata = {
-  title: 'Savings',
-  description: 'Set goals and watch your wealth grow',
-};
+export { metadata };
 
 export default async function SavingsPage() {
   let savingsGoals: SavingsGoal[] = [];
