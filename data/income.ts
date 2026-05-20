@@ -13,7 +13,7 @@ import { sql } from '@/lib/neon';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 
 export const createIncome = authGuard(
-  session =>
+  (session, userTag) =>
     async (income: TransactionFormValues): Promise<Transaction> => {
       const result = await sql`
         INSERT INTO income (
@@ -43,8 +43,8 @@ export const createIncome = authGuard(
 
       if (!createdIncome) throw new Error('Failed to create income');
 
-      updateTag('incomes/categories');
-      updateTag(`incomes/category/${income.categoryId}`);
+      updateTag(userTag('incomes/categories'));
+      updateTag(userTag(`incomes/category/${income.categoryId}`));
 
       return {
         id: createdIncome.id,
@@ -59,11 +59,11 @@ export const createIncome = authGuard(
 );
 
 export const getIncomeById = authGuard(
-  session =>
+  (session, userTag) =>
     async (incomeId: number): Promise<Transaction | undefined> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`incomes/id/${incomeId}`);
+      cacheTag(userTag(`incomes/id/${incomeId}`));
 
       try {
         const result = await sql`
@@ -99,7 +99,7 @@ export const getIncomeById = authGuard(
 );
 
 export const updateIncome = authGuard(
-  session =>
+  (session, userTag) =>
     async (income: TransactionFormValuesWithId): Promise<Transaction> => {
       const result = await sql`
         UPDATE income
@@ -126,9 +126,9 @@ export const updateIncome = authGuard(
 
       if (!editedIncome) throw new Error('Failed to edit income');
 
-      updateTag('incomes/categories');
-      updateTag(`incomes/category/${income.categoryId}`);
-      updateTag(`incomes/id/${income.id}`);
+      updateTag(userTag('incomes/categories'));
+      updateTag(userTag(`incomes/category/${income.categoryId}`));
+      updateTag(userTag(`incomes/id/${income.id}`));
 
       return {
         id: editedIncome.id,
@@ -143,7 +143,7 @@ export const updateIncome = authGuard(
 );
 
 export const deleteIncome = authGuard(
-  session =>
+  (session, userTag) =>
     async (incomeId: number): Promise<{ id: number; categoryId: number }> => {
       const result = await sql`
         DELETE FROM income
@@ -156,16 +156,16 @@ export const deleteIncome = authGuard(
 
       if (!deletedIncome) throw new Error('Failed to delete income');
 
-      updateTag('incomes/categories');
-      updateTag(`incomes/category/${deletedIncome.category_id}`);
-      updateTag(`incomes/id/${incomeId}`);
+      updateTag(userTag('incomes/categories'));
+      updateTag(userTag(`incomes/category/${deletedIncome.category_id}`));
+      updateTag(userTag(`incomes/id/${incomeId}`));
 
       return { id: deletedIncome.id, categoryId: deletedIncome.category_id };
     },
 );
 
 export const getIncomeCategories = authGuard(
-  session =>
+  (session, userTag) =>
     async ({
       from,
       to,
@@ -175,7 +175,7 @@ export const getIncomeCategories = authGuard(
     }): Promise<TransactionCategory[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag('incomes/categories');
+      cacheTag(userTag('incomes/categories'));
 
       try {
         const result = await sql`
@@ -210,7 +210,7 @@ export const getIncomeCategories = authGuard(
 );
 
 export const getIncomesByCategory = authGuard(
-  session =>
+  (session, userTag) =>
     async ({
       categoryId,
       from,
@@ -224,7 +224,7 @@ export const getIncomesByCategory = authGuard(
     }): Promise<TransactionsByDate[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`incomes/category/${categoryId}`);
+      cacheTag(userTag(`incomes/category/${categoryId}`));
 
       try {
         const result = await sql`
@@ -293,7 +293,7 @@ export const getIncomesByCategory = authGuard(
 );
 
 export const getIncomeCategoryTotal = authGuard(
-  session =>
+  (session, userTag) =>
     async ({
       categoryId,
       from,
@@ -305,7 +305,7 @@ export const getIncomeCategoryTotal = authGuard(
     }): Promise<number> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`incomes/category/${categoryId}`);
+      cacheTag(userTag(`incomes/category/${categoryId}`));
 
       try {
         const result = await sql`

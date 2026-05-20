@@ -15,7 +15,7 @@ import type {
 } from '@/types/transaction';
 
 export const createExpense = authGuard(
-  session =>
+  (session, userTag) =>
     async (expense: TransactionFormValues): Promise<Transaction> => {
       const result = await sql`
         INSERT INTO expense (
@@ -45,8 +45,8 @@ export const createExpense = authGuard(
 
       if (!createdExpense) throw new Error('Failed to create expense');
 
-      updateTag('expenses/categories');
-      updateTag(`expenses/category/${expense.categoryId}`);
+      updateTag(userTag('expenses/categories'));
+      updateTag(userTag(`expenses/category/${expense.categoryId}`));
 
       return {
         id: createdExpense.id,
@@ -61,7 +61,7 @@ export const createExpense = authGuard(
 );
 
 export const updateExpense = authGuard(
-  session =>
+  (session, userTag) =>
     async (expense: TransactionFormValuesWithId): Promise<Transaction> => {
       const result = await sql`
         UPDATE expense
@@ -88,9 +88,9 @@ export const updateExpense = authGuard(
 
       if (!editedExpense) throw new Error('Failed to edit expense');
 
-      updateTag('expenses/categories');
-      updateTag(`expenses/category/${expense.categoryId}`);
-      updateTag(`expenses/id/${expense.id}`);
+      updateTag(userTag('expenses/categories'));
+      updateTag(userTag(`expenses/category/${expense.categoryId}`));
+      updateTag(userTag(`expenses/id/${expense.id}`));
 
       return {
         id: editedExpense.id,
@@ -105,7 +105,7 @@ export const updateExpense = authGuard(
 );
 
 export const deleteExpense = authGuard(
-  session =>
+  (session, userTag) =>
     async (expenseId: number): Promise<{ id: number; categoryId: number }> => {
       const result = await sql`
         DELETE FROM expense
@@ -118,16 +118,16 @@ export const deleteExpense = authGuard(
 
       if (!deletedExpense) throw new Error('Failed to delete expense');
 
-      updateTag('expenses/categories');
-      updateTag(`expenses/category/${deletedExpense.category_id}`);
-      updateTag(`expenses/id/${expenseId}`);
+      updateTag(userTag('expenses/categories'));
+      updateTag(userTag(`expenses/category/${deletedExpense.category_id}`));
+      updateTag(userTag(`expenses/id/${expenseId}`));
 
       return { id: deletedExpense.id, categoryId: deletedExpense.category_id };
     },
 );
 
 export const getExpenseCategories = authGuard(
-  session =>
+  (session, userTag) =>
     async ({
       from,
       to,
@@ -137,7 +137,7 @@ export const getExpenseCategories = authGuard(
     }): Promise<TransactionCategory[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag('expenses/categories');
+      cacheTag(userTag('expenses/categories'));
 
       try {
         const result = await sql`
@@ -172,11 +172,11 @@ export const getExpenseCategories = authGuard(
 );
 
 export const getExpenseById = authGuard(
-  session =>
+  (session, userTag) =>
     async (expenseId: number): Promise<Transaction | undefined> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`expenses/id/${expenseId}`);
+      cacheTag(userTag(`expenses/id/${expenseId}`));
 
       try {
         const result = await sql`
@@ -212,7 +212,7 @@ export const getExpenseById = authGuard(
 );
 
 export const getExpenseCategoryTotal = authGuard(
-  session =>
+  (session, userTag) =>
     async ({
       categoryId,
       from,
@@ -224,7 +224,7 @@ export const getExpenseCategoryTotal = authGuard(
     }): Promise<number> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`expenses/category/${categoryId}`);
+      cacheTag(userTag(`expenses/category/${categoryId}`));
 
       try {
         const result = await sql`
@@ -244,7 +244,7 @@ export const getExpenseCategoryTotal = authGuard(
 );
 
 export const getExpensesByCategory = authGuard(
-  session =>
+  (session, userTag) =>
     async ({
       categoryId,
       from,
@@ -258,7 +258,7 @@ export const getExpensesByCategory = authGuard(
     }): Promise<TransactionsByDate[]> => {
       'use cache';
       cacheLife('minutes');
-      cacheTag(`expenses/category/${categoryId}`);
+      cacheTag(userTag(`expenses/category/${categoryId}`));
 
       try {
         const result = await sql`

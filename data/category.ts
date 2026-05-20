@@ -10,7 +10,7 @@ import { cacheLife, cacheTag, updateTag } from 'next/cache';
 import { authGuard } from '@/lib/auth-utils';
 
 export const createCategory = authGuard(
-  session =>
+  (session, userTag) =>
     async (category: CategoryFormValues): Promise<Category> => {
       const result = await sql`
         INSERT INTO category (
@@ -33,14 +33,14 @@ export const createCategory = authGuard(
 
       if (!result[0]) throw new Error('Failed to create category');
 
-      updateTag(`categories/type/${category.type}`);
+      updateTag(userTag(`categories/type/${category.type}`));
 
       return categoryFromDb(result[0]);
     },
 );
 
 export const updateCategory = authGuard(
-  session =>
+  (session, userTag) =>
     async (category: Category): Promise<Category> => {
       const result = await sql`
         UPDATE category 
@@ -56,15 +56,15 @@ export const updateCategory = authGuard(
 
       if (!result[0]) throw new Error('Category not found or update failed');
 
-      updateTag(`categories/type/${category.type}`);
-      updateTag(`categories/id/${category.id}`);
+      updateTag(userTag(`categories/type/${category.type}`));
+      updateTag(userTag(`categories/id/${category.id}`));
 
       return categoryFromDb(result[0]);
     },
 );
 
 export const deleteCategory = authGuard(
-  session => async (categoryId: number) => {
+  (session, userTag) => async (categoryId: number) => {
     const result = await sql`
       DELETE FROM category
       WHERE id = ${categoryId} AND user_id = ${session.user.id}
@@ -73,17 +73,17 @@ export const deleteCategory = authGuard(
 
     if (!result[0]) throw new Error('Category not found or delete failed');
 
-    updateTag(`categories/type/${result[0].type}`);
-    updateTag(`categories/id/${categoryId}`);
+    updateTag(userTag(`categories/type/${result[0].type}`));
+    updateTag(userTag(`categories/id/${categoryId}`));
   },
 );
 
 export const getAllCategoriesByType = authGuard(
-  session =>
+  (session, userTag) =>
     async (type: CategoryType): Promise<Category[] | Array<never>> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`categories/type/${type}`);
+      cacheTag(userTag(`categories/type/${type}`));
 
       const result = await sql`
         SELECT 
@@ -107,11 +107,11 @@ export const getAllCategoriesByType = authGuard(
 );
 
 export const getCategoryById = authGuard(
-  session =>
+  (session, userTag) =>
     async (categoryId: number): Promise<Category | undefined> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`categories/id/${categoryId}`);
+      cacheTag(userTag(`categories/id/${categoryId}`));
 
       const result = await sql`
         SELECT 
@@ -133,11 +133,11 @@ export const getCategoryById = authGuard(
 );
 
 export const getCategoryNameById = authGuard(
-  session =>
+  (session, userTag) =>
     async (categoryId: number): Promise<string | undefined> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(`categories/id/${categoryId}`);
+      cacheTag(userTag(`categories/id/${categoryId}`));
 
       const result = await sql`
         SELECT name
