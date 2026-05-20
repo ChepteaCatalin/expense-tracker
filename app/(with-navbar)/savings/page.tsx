@@ -31,7 +31,13 @@ export default async function SavingsPage() {
       <Stack spacing={3}>
         {savingsGoals.length ? (
           savingsGoals.map(goal => (
-            <SavingsGoalCard key={goal.id} goal={goal} />
+            <Link
+              key={goal.id}
+              href={`/savings/${goal.id}/details`}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <SavingsGoalCard goal={goal} />
+            </Link>
           ))
         ) : (
           <NoSavingsGoals />
