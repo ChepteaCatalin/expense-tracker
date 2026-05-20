@@ -14,31 +14,22 @@ export const requireAuth = cache(async () => {
   return session;
 });
 
-type UserTag = (tag: string) => string;
-
 export function authGuard<Result>(
-  fn: (session: Session, userTag: UserTag) => Promise<Result>,
+  fn: (session: Session) => Promise<Result>,
 ): () => Promise<Result>;
 export function authGuard<Args extends unknown[], Result>(
-  fn: (
-    session: Session,
-    userTag: UserTag,
-  ) => (...args: Args) => Promise<Result>,
+  fn: (session: Session) => (...args: Args) => Promise<Result>,
 ): (...args: Args) => Promise<Result>;
 export function authGuard<Args extends unknown[], Result>(
   fn:
-    | ((session: Session, userTag: UserTag) => Promise<Result>)
-    | ((
-        session: Session,
-        userTag: UserTag,
-      ) => (...args: Args) => Promise<Result>),
+    | ((session: Session) => Promise<Result>)
+    | ((session: Session) => (...args: Args) => Promise<Result>),
 ) {
   return async (...args: Args): Promise<Result> => {
     const session = await getSession();
     if (!session) throw new UnauthorizedError();
 
-    const userTag: UserTag = tag => `user/${session.user.id}/${tag}`;
-    const guarded = fn(session, userTag);
+    const guarded = fn(session);
 
     if (typeof guarded == 'function') return guarded(...args);
     return guarded;

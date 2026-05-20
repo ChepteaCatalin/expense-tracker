@@ -2,6 +2,7 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
+import { userTag } from '@/utils/cache';
 import type {
   SavingsGoal,
   SavingsGoalFormValues,
@@ -10,7 +11,7 @@ import type {
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 
 export const createSavingsGoal = authGuard(
-  (session, userTag) =>
+  session =>
     async (goal: SavingsGoalFormValues): Promise<SavingsGoal> => {
       const result = await sql`
         INSERT INTO savings_goal (
@@ -48,18 +49,18 @@ export const createSavingsGoal = authGuard(
 
       if (!created) throw new Error('Failed to create savings goal');
 
-      updateTag(userTag('savings-goals/list')); //TODO: check if it works
+      updateTag(userTag(session.user.id)('savings-goals/list')); //TODO: check if it works
 
       return savingsGoalFromDb(created, created.initial_amount);
     },
 );
 
 export const getSavingsGoalById = authGuard(
-  (session, userTag) =>
+  session =>
     async (id: number): Promise<SavingsGoal | null> => {
       'use cache';
       cacheLife('weeks');
-      cacheTag(userTag(`savings-goals/id/${id}`));
+      cacheTag(userTag(session.user.id)(`savings-goals/id/${id}`));
 
       const result = await sql`
         SELECT
@@ -87,7 +88,7 @@ export const getSavingsGoalById = authGuard(
 );
 
 export const updateSavingsGoal = authGuard(
-  (session, userTag) =>
+  session =>
     async (goal: SavingsGoalFormValuesWithId): Promise<SavingsGoal> => {
       const result = await sql`
         UPDATE savings_goal
@@ -119,8 +120,9 @@ export const updateSavingsGoal = authGuard(
 
       if (!updated) throw new Error('Failed to update savings goal');
 
-      updateTag(userTag(`savings-goals/id/${goal.id}`)); //TODO: check if it works
-      updateTag(userTag('savings-goals/list')); //TODO: check if it works
+      const tag = userTag(session.user.id);
+      updateTag(tag(`savings-goals/id/${goal.id}`)); //TODO: check if it works
+      updateTag(tag('savings-goals/list')); //TODO: check if it works
 
       return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals
     },
