@@ -82,6 +82,10 @@ export const deleteCategory = authGuard(
     const tag = userTag(session.user.id);
     updateTag(tag(`categories/type/${result[0].type}`));
     updateTag(tag(`categories/id/${categoryId}`));
+    updateTag(tag('expenses/categories'));
+    updateTag(tag('incomes/categories'));
+    updateTag(tag(`expenses/category/${categoryId}`));
+    updateTag(tag(`incomes/category/${categoryId}`));
   },
 );
 
