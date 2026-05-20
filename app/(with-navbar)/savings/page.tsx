@@ -4,13 +4,25 @@ import Link from 'next/dist/client/link';
 import SavingsGoalCard from './_components/SavingsGoalCard';
 import Heading from '@/components/Heading';
 import Box from '@mui/material/Box';
+import { getAllSavingsGoals } from '@/data/savings';
+import { UnauthorizedError } from '@/utils/error';
+import { redirect } from 'next/navigation';
+import type { SavingsGoal } from '@/types/savings';
+import NoSavingsGoals from './_components/NoSavingsGoals';
 
 export const metadata = {
   title: 'Savings',
   description: 'Set goals and watch your wealth grow',
 };
 
-export default function SavingsPage() {
+export default async function SavingsPage() {
+  let savingsGoals: SavingsGoal[] = [];
+  try {
+    savingsGoals = await getAllSavingsGoals();
+  } catch (err) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+  }
+
   return (
     <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
       <Heading
@@ -19,37 +31,13 @@ export default function SavingsPage() {
         sx={{ mb: 5 }}
       />
       <Stack spacing={3}>
-        <SavingsGoalCard
-          goal={{
-            id: 1,
-            name: 'Sample Savings Goal',
-            initialAmount: 50000,
-            currentAmount: 43256,
-            targetAmount: 100000,
-            notes: 'This is a sample savings goal for demonstration purposes.',
-            startDate: new Date('2024-01-01'),
-            currency: 'USD',
-            isCompleted: false,
-            createdAt: new Date('2024-01-01'),
-            updatedAt: new Date('2024-01-01'),
-            // completedDate: new Date('2026-05-15'),
-          }}
-        />
-        <SavingsGoalCard
-          goal={{
-            id: 1,
-            name: 'Completed',
-            initialAmount: 1000,
-            currentAmount: 123000,
-            targetAmount: 100000,
-            startDate: new Date('2024-01-01'),
-            isCompleted: true,
-            completedDate: new Date('2026-05-15'),
-            currency: 'EUR',
-            createdAt: new Date('2024-01-01'),
-            updatedAt: new Date('2024-01-01'),
-          }}
-        />
+        {savingsGoals.length > 0 ? (
+          savingsGoals.map(goal => (
+            <SavingsGoalCard key={goal.id} goal={goal} />
+          ))
+        ) : (
+          <NoSavingsGoals />
+        )}
         <Link href="/savings/new">
           <Fab />
         </Link>
