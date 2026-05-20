@@ -60,6 +60,10 @@ export const updateCategory = authGuard(
       const tag = userTag(session.user.id);
       updateTag(tag(`categories/type/${category.type}`));
       updateTag(tag(`categories/id/${category.id}`));
+      updateTag(tag('expenses/categories'));
+      updateTag(tag('incomes/categories'));
+      updateTag(tag(`expenses/category/${category.id}`));
+      updateTag(tag(`incomes/category/${category.id}`));
 
       return categoryFromDb(result[0]);
     },
