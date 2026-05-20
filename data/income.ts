@@ -44,10 +44,9 @@ export const createIncome = authGuard(
 
       if (!createdIncome) throw new Error('Failed to create income');
 
-      updateTag(userTag(session.user.id)('incomes/categories'));
-      updateTag(
-        userTag(session.user.id)(`incomes/category/${income.categoryId}`),
-      );
+      const tag = userTag(session.user.id);
+      updateTag(tag('incomes/categories'));
+      updateTag(tag(`incomes/category/${income.categoryId}`));
 
       return {
         id: createdIncome.id,
