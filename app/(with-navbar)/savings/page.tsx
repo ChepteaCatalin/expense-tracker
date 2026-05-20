@@ -1,6 +1,6 @@
 import Fab from '@/components/Fab';
 import Stack from '@mui/material/Stack';
-import Link from 'next/dist/client/link';
+import Link from 'next/link';
 import SavingsGoalCard from './_components/SavingsGoalCard';
 import Heading from '@/components/Heading';
 import Box from '@mui/material/Box';
