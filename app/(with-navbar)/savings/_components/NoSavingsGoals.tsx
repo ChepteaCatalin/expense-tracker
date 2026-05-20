@@ -22,9 +22,7 @@ export default function NoSavingsGoals() {
           <SearchOffIcon
             sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
           />
-          <Typography>
-            There are no savings goals for the selected period
-          </Typography>
+          <Typography>There are no savings goals yet</Typography>
           <Link href="/savings/new">
             <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
               Add Savings Goal
