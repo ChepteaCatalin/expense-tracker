@@ -49,7 +49,7 @@ export const createSavingsGoal = authGuard(
 
       if (!created) throw new Error('Failed to create savings goal');
 
-      updateTag(userTag(session.user.id)('savings-goals/list'));
+      updateTag(userTag(session.user.id)('savings-goals/list')); //TODO: check if it works
 
       return savingsGoalFromDb(created, created.initial_amount);
     },
