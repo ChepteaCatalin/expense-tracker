@@ -46,10 +46,9 @@ export const createExpense = authGuard(
 
       if (!createdExpense) throw new Error('Failed to create expense');
 
-      updateTag(userTag(session.user.id)('expenses/categories'));
-      updateTag(
-        userTag(session.user.id)(`expenses/category/${expense.categoryId}`),
-      );
+      const tag = userTag(session.user.id);
+      updateTag(tag('expenses/categories'));
+      updateTag(tag(`expenses/category/${expense.categoryId}`));
 
       return {
         id: createdExpense.id,
