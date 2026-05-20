@@ -49,7 +49,7 @@ export const createSavingsGoal = authGuard(
 
       if (!created) throw new Error('Failed to create savings goal');
 
-      updateTag(userTag(session.user.id)('savings-goals/list')); //TODO: check if it works
+      updateTag(userTag(session.user.id)('savings-goals/list'));
 
       return savingsGoalFromDb(created, created.initial_amount);
     },
@@ -87,6 +87,38 @@ export const getSavingsGoalById = authGuard(
     },
 );
 
+export const getAllSavingsGoals = authGuard(
+  session => async (): Promise<SavingsGoal[]> => {
+    'use cache';
+    cacheLife('weeks');
+    cacheTag(userTag(session.user.id)('savings-goals/list'));
+
+    try {
+      const result = await sql`
+        SELECT
+          id,
+          name,
+          initial_amount,
+          target_amount,
+          to_char(start_date, 'YYYY-MM-DD') AS start_date,
+          is_completed,
+          to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
+          notes,
+          currency,
+          created_at,
+          updated_at
+        FROM savings_goal
+        WHERE user_id = ${session.user.id}
+        ORDER BY start_date DESC
+      `;
+
+      return result.map(row => savingsGoalFromDb(row, 0)); //TODO: real current amount, based on savings goals
+    } catch {
+      return [];
+    }
+  },
+);
+
 export const updateSavingsGoal = authGuard(
   session =>
     async (goal: SavingsGoalFormValuesWithId): Promise<SavingsGoal> => {
@@ -121,8 +153,8 @@ export const updateSavingsGoal = authGuard(
       if (!updated) throw new Error('Failed to update savings goal');
 
       const tag = userTag(session.user.id);
-      updateTag(tag(`savings-goals/id/${goal.id}`)); //TODO: check if it works
-      updateTag(tag('savings-goals/list')); //TODO: check if it works
+      updateTag(tag(`savings-goals/id/${goal.id}`));
+      updateTag(tag('savings-goals/list'));
 
       return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals
     },
