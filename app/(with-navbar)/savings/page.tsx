@@ -29,7 +29,7 @@ export default async function SavingsPage() {
         sx={{ mb: 5 }}
       />
       <Stack spacing={3}>
-        {savingsGoals.length > 0 ? (
+        {savingsGoals.length ? (
           savingsGoals.map(goal => (
             <SavingsGoalCard key={goal.id} goal={goal} />
           ))
