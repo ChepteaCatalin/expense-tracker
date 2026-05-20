@@ -153,8 +153,8 @@ export const updateSavingsGoal = authGuard(
       if (!updated) throw new Error('Failed to update savings goal');
 
       const tag = userTag(session.user.id);
-      updateTag(tag(`savings-goals/id/${goal.id}`));
-      updateTag(tag('savings-goals/list'));
+      updateTag(tag(`savings-goals/id/${goal.id}`)); //TODO: check if it works
+      updateTag(tag('savings-goals/list')); //TODO: check if it works
 
       return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals
     },
