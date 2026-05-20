@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function SavingsGoalDetailsPage() {
   // TODO: validate params
   //TODO: back button
-  //TODO: check key
+  //TODO: check key 2
   return (
     <div>
       <p>Savings Goal Details</p>
