@@ -31,7 +31,7 @@ export default function GitHubLink() {
         }}
       >
         <GitHubIcon sx={{ fontSize: '1.1rem' }} />
-        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+        <Typography variant="body2" component="span" sx={{ fontWeight: 500 }}>
           View source code on GitHub
         </Typography>
       </Link>
