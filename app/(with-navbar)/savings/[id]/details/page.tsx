@@ -27,6 +27,7 @@ export default async function SavingsGoalDetailsPage({
     goal = await getSavingsGoalById(+id);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
+    notFound();
   }
 
   if (!goal) notFound();
