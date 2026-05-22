@@ -6,10 +6,11 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import { metadata } from './constants';
+import PageWrapper from '@/components/PageWrapper';
 
 export default function ManageCategoryLoading() {
   return (
-    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
+    <PageWrapper>
       <Heading title={metadata.title} subtitle={metadata.description} />
       <Skeleton
         variant="rectangular"
@@ -60,6 +61,6 @@ export default function ManageCategoryLoading() {
           </Grid>
         </CardContent>
       </Card>
-    </Box>
+    </PageWrapper>
   );
 }

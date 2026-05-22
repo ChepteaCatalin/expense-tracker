@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading';
-import Box from '@mui/material/Box';
+import PageWrapper from '@/components/PageWrapper';
 
 export const metadata = {
   title: 'Expenses',
@@ -12,13 +12,13 @@ export default function ExpensesByCategoryLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
+    <PageWrapper>
       <Heading
         title={metadata.title}
         subtitle={metadata.description}
         sx={{ mb: 5 }}
       />
       {children}
-    </Box>
+    </PageWrapper>
   );
 }

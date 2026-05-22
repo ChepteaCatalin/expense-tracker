@@ -1,12 +1,12 @@
 import Heading from '@/components/Heading';
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { metadata } from './constants';
 import Skeleton from '@mui/material/Skeleton';
+import PageWrapper from '@/components/PageWrapper';
 
 export default function SavingsGoalsLoading() {
   return (
-    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
+    <PageWrapper>
       <Heading
         title={metadata.title}
         subtitle={metadata.description}
@@ -16,7 +16,7 @@ export default function SavingsGoalsLoading() {
         <SavingsGoalCard />
         <SavingsGoalCard />
       </Stack>
-    </Box>
+    </PageWrapper>
   );
 }
 
