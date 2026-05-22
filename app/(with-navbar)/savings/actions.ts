@@ -12,9 +12,9 @@ import { redirect } from 'next/navigation';
 import {
   createSavingsGoal as createNewSavingsGoal,
   updateSavingsGoal as updateExistingSavingsGoal,
+  deleteSavingsGoal as deleteExistingSavingsGoal,
 } from '@/data/savings';
 import { toCents } from '@/utils/currency';
-import { deleteSavingsGoal as deleteExistingSavingsGoal } from '@/data/savings';
 
 export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
