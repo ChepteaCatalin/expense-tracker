@@ -3,12 +3,12 @@ import { validIdParam } from '@/utils/url';
 import type { SavingsGoal } from '@/types/savings';
 import { UnauthorizedError } from '@/utils/error';
 import { getSavingsGoalById } from '@/data/savings';
-import Box from '@mui/material/Box';
 import Heading from '@/components/Heading';
 import Stack from '@mui/material/Stack';
 import SavingsGoalCard from '../../_components/SavingsGoalCard';
 import ActionsButtons from './_components/ActionsButtons';
 import { BackToSavingsLink } from '../../_components/BackToSavingsLink';
+import PageWrapper from '@/components/PageWrapper';
 
 export const metadata = {
   title: 'Goal Details',
@@ -33,7 +33,7 @@ export default async function SavingsGoalDetailsPage({
   if (!goal) notFound();
 
   return (
-    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
+    <PageWrapper>
       <Heading
         title={metadata.title}
         subtitle={metadata.description}
@@ -44,6 +44,6 @@ export default async function SavingsGoalDetailsPage({
         <SavingsGoalCard goal={goal} />
         <ActionsButtons id={goal.id} name={goal.name} />
       </Stack>
-    </Box>
+    </PageWrapper>
   );
 }

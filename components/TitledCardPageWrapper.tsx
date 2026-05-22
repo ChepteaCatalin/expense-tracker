@@ -1,7 +1,7 @@
 import Heading from '@/components/Heading';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import PageWrapper from './PageWrapper';
 
 export default function TitledCardPageWrapper({
   title,
@@ -15,12 +15,12 @@ export default function TitledCardPageWrapper({
   aboveCard?: React.ReactNode;
 }) {
   return (
-    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
+    <PageWrapper>
       <Heading title={title} subtitle={subtitle} />
       {aboveCard}
       <Card sx={{ borderRadius: '10px', pt: 1, px: 1 }}>
         <CardContent>{children}</CardContent>
       </Card>
-    </Box>
+    </PageWrapper>
   );
 }
