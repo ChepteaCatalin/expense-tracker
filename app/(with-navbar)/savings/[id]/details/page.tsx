@@ -1,6 +1,17 @@
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
 import { validIdParam } from '@/utils/url';
+import type { SavingsGoal } from '@/types/savings';
+import { UnauthorizedError } from '@/utils/error';
+import { getSavingsGoalById } from '@/data/savings';
+import Box from '@mui/material/Box';
+import Heading from '@/components/Heading';
+import Stack from '@mui/material/Stack';
+import SavingsGoalCard from '../../_components/SavingsGoalCard';
+
+export const metadata = {
+  title: 'Goal Details',
+  description: 'Progress and details for your savings goal',
+};
 
 export default async function SavingsGoalDetailsPage({
   params,
@@ -9,11 +20,25 @@ export default async function SavingsGoalDetailsPage({
 
   if (!validIdParam(id)) notFound();
 
-  return (
-    <div>
-      <p>Savings Goal Details</p>
+  let goal: SavingsGoal | null = null;
+  try {
+    goal = await getSavingsGoalById(+id);
+  } catch (err) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+  }
 
-      <Link href="/savings/33/edit">Edit 33</Link>
-    </div>
+  if (!goal) notFound();
+
+  return (
+    <Box sx={{ boxSizing: 'content-box', maxWidth: '610px', mx: 'auto' }}>
+      <Heading
+        title={metadata.title}
+        subtitle={metadata.description}
+        sx={{ mb: 5 }}
+      />
+      <Stack spacing={3}>
+        <SavingsGoalCard goal={goal} />
+      </Stack>
+    </Box>
   );
 }
