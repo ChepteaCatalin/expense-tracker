@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Heading from '@/components/Heading';
 import Stack from '@mui/material/Stack';
 import SavingsGoalCard from '../../_components/SavingsGoalCard';
+import ActionsButtons from './_components/ActionsButtons';
 
 export const metadata = {
   title: 'Goal Details',
@@ -38,6 +39,7 @@ export default async function SavingsGoalDetailsPage({
       />
       <Stack spacing={3}>
         <SavingsGoalCard goal={goal} />
+        <ActionsButtons />
       </Stack>
     </Box>
   );
