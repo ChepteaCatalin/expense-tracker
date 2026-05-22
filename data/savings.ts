@@ -160,6 +160,22 @@ export const updateSavingsGoal = authGuard(
     },
 );
 
+export const deleteSavingsGoal = authGuard(
+  session => async (goalId: number) => {
+    const result = await sql`
+      DELETE FROM savings_goal
+      WHERE id = ${goalId} AND user_id = ${session.user.id}
+      RETURNING id
+    `;
+
+    if (!result[0]) throw new Error('Savings goal not found or delete failed');
+
+    const tag = userTag(session.user.id);
+    updateTag(tag(`savings-goals/id/${goalId}`));
+    updateTag(tag('savings-goals/list'));
+  },
+);
+
 function savingsGoalFromDb(
   dbResult: Record<string, any>,
   currentAmount: number,

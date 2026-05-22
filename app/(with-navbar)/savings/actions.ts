@@ -14,6 +14,7 @@ import {
   updateSavingsGoal as updateExistingSavingsGoal,
 } from '@/data/savings';
 import { toCents } from '@/utils/currency';
+import { deleteSavingsGoal as deleteExistingSavingsGoal } from '@/data/savings';
 
 export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
@@ -71,4 +72,15 @@ export async function updateSavingsGoal(
   }
 
   redirect(`/savings/${goal.id}/details`);
+}
+
+export async function deleteSavingsGoal(_: string, id: number) {
+  try {
+    await deleteExistingSavingsGoal(id);
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return 'Failed to delete savings goal';
+  }
+
+  redirect(`/savings`);
 }

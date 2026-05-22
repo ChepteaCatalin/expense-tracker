@@ -8,6 +8,7 @@ import Heading from '@/components/Heading';
 import Stack from '@mui/material/Stack';
 import SavingsGoalCard from '../../_components/SavingsGoalCard';
 import ActionsButtons from './_components/ActionsButtons';
+import { BackToSavingsLink } from '../../_components/BackToSavingsLink';
 
 export const metadata = {
   title: 'Goal Details',
@@ -37,9 +38,10 @@ export default async function SavingsGoalDetailsPage({
         subtitle={metadata.description}
         sx={{ mb: 5 }}
       />
+      <BackToSavingsLink />
       <Stack spacing={3}>
         <SavingsGoalCard goal={goal} />
-        <ActionsButtons />
+        <ActionsButtons id={goal.id} name={goal.name} />
       </Stack>
     </Box>
   );

@@ -1,11 +1,17 @@
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import DeleteSavingsGoalBtn from './DeleteSavingsGoalBtn';
 
-export default function ActionsButtons() {
+export default function ActionsButtons({
+  id,
+  name,
+}: {
+  id: number;
+  name: string;
+}) {
   return (
     <Box
       sx={{
@@ -31,14 +37,7 @@ export default function ActionsButtons() {
         <Button variant="contained" startIcon={<AddIcon />} fullWidth>
           Add Deposit
         </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          startIcon={<DeleteIcon />}
-          fullWidth
-        >
-          Delete Goal
-        </Button>
+        <DeleteSavingsGoalBtn id={id} name={name} />
       </Stack>
     </Box>
   );
