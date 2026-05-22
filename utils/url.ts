@@ -1,4 +1,4 @@
-export function validIdParam(id: unknown): boolean {
+export function validIdParam(id: string): boolean {
   if (typeof id != 'string') return false;
   const s = id.trim();
   if (!/^[0-9]+$/.test(s)) return false;
