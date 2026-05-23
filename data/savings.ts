@@ -7,6 +7,8 @@ import type {
   SavingsGoal,
   SavingsGoalFormValues,
   SavingsGoalFormValuesWithId,
+  SavingsDeposit,
+  SavingsDepositFormValuesWithId,
 } from '@/types/savings';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 
@@ -193,6 +195,62 @@ function savingsGoalFromDb(
       : undefined,
     notes: dbResult.notes ?? undefined,
     currency: dbResult.currency,
+    createdAt: new Date(dbResult.created_at),
+    updatedAt: new Date(dbResult.updated_at),
+  };
+}
+
+export const createSavingsDeposit = authGuard(
+  session =>
+    async (
+      deposit: SavingsDepositFormValuesWithId,
+    ): Promise<SavingsDeposit> => {
+      const result = await sql`
+        INSERT INTO savings_deposit (
+          savings_goal_id,
+          amount,
+          date,
+          notes
+        )
+        SELECT
+          ${deposit.id},
+          ${deposit.amount},
+          ${deposit.date},
+          ${deposit.notes || null}
+        WHERE EXISTS (
+          SELECT 1 FROM savings_goal
+          WHERE id = ${deposit.id} AND user_id = ${session.user.id}
+        )
+        RETURNING
+          id,
+          savings_goal_id,
+          amount,
+          to_char(date, 'YYYY-MM-DD') AS date,
+          notes,
+          created_at,
+          updated_at
+      `;
+
+      const created = result[0];
+
+      if (!created) throw new Error('Failed to create goal deposit');
+
+      const tag = userTag(session.user.id);
+      //TODO: REDO THIS TO UPDATE ONLY THE CURRENT AMOUNT FOR THE GOAL
+      updateTag(tag(`savings-goals/id/${deposit.id}`));
+      updateTag(tag('savings-goals/list'));
+
+      return savingsDepositFromDb(created);
+    },
+);
+
+function savingsDepositFromDb(dbResult: Record<string, any>): SavingsDeposit {
+  return {
+    id: dbResult.id,
+    goalId: dbResult.savings_goal_id,
+    amount: dbResult.amount,
+    date: new Date(dbResult.date),
+    notes: dbResult.notes ?? undefined,
     createdAt: new Date(dbResult.created_at),
     updatedAt: new Date(dbResult.updated_at),
   };

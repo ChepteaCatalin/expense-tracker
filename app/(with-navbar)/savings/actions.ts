@@ -1,11 +1,13 @@
 'use server';
 
 import type {
+  SavingsDepositFormErrors,
+  SavingsDepositFormValuesWithId,
   SavingsGoalFormErrors,
   SavingsGoalFormValues,
   SavingsGoalFormValuesWithId,
 } from '@/types/savings';
-import { savingsGoalSchema } from './validation';
+import { savingsDepositSchema, savingsGoalSchema } from './validation';
 import { getFormErrors } from '@/lib/zod';
 import { isUniqueViolationError, UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
@@ -13,6 +15,7 @@ import {
   createSavingsGoal as createNewSavingsGoal,
   updateSavingsGoal as updateExistingSavingsGoal,
   deleteSavingsGoal as deleteExistingSavingsGoal,
+  createSavingsDeposit as createNewSavingsDeposit,
 } from '@/data/savings';
 import { toCents } from '@/utils/currency';
 
@@ -83,4 +86,28 @@ export async function deleteSavingsGoal(_: string, id: number) {
   }
 
   redirect(`/savings`);
+}
+
+export async function createSavingsDeposit(
+  _: SavingsDepositFormErrors,
+  deposit: SavingsDepositFormValuesWithId,
+): Promise<SavingsDepositFormErrors> {
+  const errors = getFormErrors(savingsDepositSchema, {
+    ...deposit,
+    amount: +deposit.amount,
+    date: String(deposit.date),
+  });
+  if (errors) return errors;
+
+  try {
+    await createNewSavingsDeposit({
+      ...deposit,
+      amount: toCents(deposit.amount),
+    });
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return { api: 'Failed to create goal deposit' };
+  }
+
+  return {};
 }

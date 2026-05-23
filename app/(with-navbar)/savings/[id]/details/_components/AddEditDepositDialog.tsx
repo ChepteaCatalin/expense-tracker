@@ -13,6 +13,7 @@ import {
   useActionState,
   useEffect,
   useId,
+  useRef,
   useState,
 } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -29,6 +30,7 @@ import {
   handleDatePickerChange,
   toDatePickerValue,
 } from '@/lib/MuiDatePicker/utils';
+import { createSavingsDeposit } from '../../../actions';
 
 interface AddEditDepositDialogProps {
   handleClose: () => void;
@@ -36,9 +38,6 @@ interface AddEditDepositDialogProps {
   currency?: string;
   deposit?: SavingsDeposit;
 }
-
-//TODO:
-const createSavingsDeposit = async (formData: FormData | object) => formData;
 
 //TODO:
 const updateSavingsDeposit = async (formData: FormData | object) => formData;
@@ -73,6 +72,7 @@ export default function AddEditDepositDialog({
 
   const [hideApiError, setHideApiError] = useState(false);
   const formId = useId();
+  const prevMutatingRef = useRef(false);
 
   useEffect(
     () =>
@@ -81,6 +81,22 @@ export default function AddEditDepositDialog({
         callback: () => setHideApiError(true),
       }),
     [subscribe],
+  );
+
+  useEffect(
+    function closeDialogOnSuccess() {
+      const wasM = prevMutatingRef.current;
+      prevMutatingRef.current = isMutating;
+
+      const finishedMutating = wasM && !isMutating;
+      if (!finishedMutating) return;
+
+      const hasErrors =
+        Object.keys(createDepositErrors).length > 0 ||
+        Object.keys(updateDepositErrors).length > 0;
+      if (!hasErrors) handleClose();
+    },
+    [isMutating, createDepositErrors, updateDepositErrors, handleClose],
   );
 
   return (
@@ -102,10 +118,10 @@ export default function AddEditDepositDialog({
           onSubmit={handleSubmit(data => {
             startTransition(() => {
               setHideApiError(false);
-
-              //TODO:
-              // if (isEditMode) updateDepositAction({ ...data, id: goalId });
-              // else createDepositAction(data);
+              (isEditMode ? updateDepositAction : createDepositAction)({
+                ...data,
+                id: goalId,
+              });
             });
           })}
           sx={{ mt: 1 }}
