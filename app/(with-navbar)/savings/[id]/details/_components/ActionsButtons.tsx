@@ -1,4 +1,3 @@
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -6,14 +5,18 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DeleteSavingsGoalBtn from './DeleteSavingsGoalBtn';
 import Link from 'next/link';
+import AddDepositBtn from './AddDepositBtn';
+import { getSession } from '@/data/auth';
 
-export default function ActionsButtons({
+export default async function ActionsButtons({
   id,
   name,
 }: {
   id: number;
   name: string;
 }) {
+  const currency = (await getSession())?.user.currency;
+
   return (
     <Box
       sx={{
@@ -36,9 +39,7 @@ export default function ActionsButtons({
         Keep this goal moving or remove it if you no longer need it.
       </Typography>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-        <Button variant="contained" startIcon={<AddIcon />} fullWidth>
-          Add Deposit
-        </Button>
+        <AddDepositBtn id={id} currency={currency} />
         <Link href={`/savings/${id}/edit`} style={{ width: '100%' }}>
           <Button variant="outlined" startIcon={<EditIcon />} fullWidth>
             Edit Goal

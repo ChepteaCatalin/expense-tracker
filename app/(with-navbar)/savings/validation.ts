@@ -37,3 +37,9 @@ export const savingsGoalSchema = z
       });
     }
   });
+
+export const savingsDepositSchema = z.object({
+  amount: amountValidation,
+  date: validDate,
+  notes: z.string().max(500, 'Must be at most 500 characters'),
+});
