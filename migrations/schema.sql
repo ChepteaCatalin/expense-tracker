@@ -20,6 +20,7 @@ SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS "session_userId_fkey";
 ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS fk_savings_goal_user;
+ALTER TABLE IF EXISTS ONLY public.savings_deposit DROP CONSTRAINT IF EXISTS fk_savings_deposit_savings_goal;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_user;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_category;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_user;
@@ -30,6 +31,9 @@ DROP INDEX IF EXISTS public.verification_identifier_idx;
 DROP INDEX IF EXISTS public."session_userId_idx";
 DROP INDEX IF EXISTS public.idx_savings_goal_user_id;
 DROP INDEX IF EXISTS public.idx_savings_goal_user_completed;
+DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_id;
+DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_date;
+DROP INDEX IF EXISTS public.idx_savings_deposit_date;
 DROP INDEX IF EXISTS public.idx_income_user_id;
 DROP INDEX IF EXISTS public.idx_income_user_date;
 DROP INDEX IF EXISTS public.idx_income_date;
@@ -50,6 +54,7 @@ ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS uk_category
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_token_key;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey;
 ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS savings_goal_pkey;
+ALTER TABLE IF EXISTS ONLY public.savings_deposit DROP CONSTRAINT IF EXISTS savings_deposit_pkey;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS income_pkey;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS expense_pkey;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS category_pkey;
@@ -58,6 +63,7 @@ DROP TABLE IF EXISTS public.verification;
 DROP TABLE IF EXISTS public."user";
 DROP TABLE IF EXISTS public.session;
 DROP TABLE IF EXISTS public.savings_goal;
+DROP TABLE IF EXISTS public.savings_deposit;
 DROP TABLE IF EXISTS public.income;
 DROP TABLE IF EXISTS public.expense;
 DROP TABLE IF EXISTS public.category;
@@ -380,6 +386,36 @@ ALTER TABLE public.income ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: savings_deposit; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.savings_deposit (
+    id integer NOT NULL,
+    savings_goal_id integer NOT NULL,
+    amount integer NOT NULL,
+    date date NOT NULL,
+    notes character varying(500),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT savings_deposit_amount_check CHECK (((amount > 0) AND (amount <= 1000000000)))
+);
+
+
+--
+-- Name: savings_deposit_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.savings_deposit ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.savings_deposit_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: savings_goal; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -493,6 +529,14 @@ ALTER TABLE ONLY public.expense
 
 ALTER TABLE ONLY public.income
     ADD CONSTRAINT income_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: savings_deposit savings_deposit_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.savings_deposit
+    ADD CONSTRAINT savings_deposit_pkey PRIMARY KEY (id);
 
 
 --
@@ -644,6 +688,27 @@ CREATE INDEX idx_income_user_id ON public.income USING btree (user_id);
 
 
 --
+-- Name: idx_savings_deposit_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_savings_deposit_date ON public.savings_deposit USING btree (date);
+
+
+--
+-- Name: idx_savings_deposit_savings_goal_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_savings_deposit_savings_goal_date ON public.savings_deposit USING btree (savings_goal_id, date);
+
+
+--
+-- Name: idx_savings_deposit_savings_goal_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_savings_deposit_savings_goal_id ON public.savings_deposit USING btree (savings_goal_id);
+
+
+--
 -- Name: idx_savings_goal_user_completed; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -717,6 +782,14 @@ ALTER TABLE ONLY public.income
 
 ALTER TABLE ONLY public.income
     ADD CONSTRAINT fk_income_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: savings_deposit fk_savings_deposit_savings_goal; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.savings_deposit
+    ADD CONSTRAINT fk_savings_deposit_savings_goal FOREIGN KEY (savings_goal_id) REFERENCES public.savings_goal(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
