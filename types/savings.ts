@@ -48,8 +48,8 @@ export interface SavingsDepositFormValues {
   notes: string;
 }
 
-export interface SavingsDepositFormValuesWithId extends SavingsDepositFormValues {
-  id: number;
+export interface SavingsDepositFormValuesWithGoalId extends SavingsDepositFormValues {
+  goalId: number;
 }
 
 export type SavingsDepositFormErrors = FormErrors<SavingsDepositFormValues>;

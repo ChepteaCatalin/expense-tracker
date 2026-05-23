@@ -118,10 +118,10 @@ export default function AddEditDepositDialog({
           onSubmit={handleSubmit(data => {
             startTransition(() => {
               setHideApiError(false);
-              (isEditMode ? updateDepositAction : createDepositAction)({
-                ...data,
-                id: goalId,
-              });
+              if (isEditMode) {
+              } else {
+                createDepositAction({ ...data, goalId });
+              }
             });
           })}
           sx={{ mt: 1 }}

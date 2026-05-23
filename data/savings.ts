@@ -8,7 +8,7 @@ import type {
   SavingsGoalFormValues,
   SavingsGoalFormValuesWithId,
   SavingsDeposit,
-  SavingsDepositFormValuesWithId,
+  SavingsDepositFormValuesWithGoalId,
 } from '@/types/savings';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 
@@ -203,7 +203,7 @@ function savingsGoalFromDb(
 export const createSavingsDeposit = authGuard(
   session =>
     async (
-      deposit: SavingsDepositFormValuesWithId,
+      deposit: SavingsDepositFormValuesWithGoalId,
     ): Promise<SavingsDeposit> => {
       const result = await sql`
         INSERT INTO savings_deposit (
@@ -213,13 +213,13 @@ export const createSavingsDeposit = authGuard(
           notes
         )
         SELECT
-          ${deposit.id},
+          ${deposit.goalId},
           ${deposit.amount},
           ${deposit.date},
           ${deposit.notes || null}
         WHERE EXISTS (
           SELECT 1 FROM savings_goal
-          WHERE id = ${deposit.id} AND user_id = ${session.user.id}
+          WHERE id = ${deposit.goalId} AND user_id = ${session.user.id}
         )
         RETURNING
           id,
@@ -237,7 +237,7 @@ export const createSavingsDeposit = authGuard(
 
       const tag = userTag(session.user.id);
       //TODO: REDO THIS TO UPDATE ONLY THE CURRENT AMOUNT FOR THE GOAL
-      updateTag(tag(`savings-goals/id/${deposit.id}`));
+      updateTag(tag(`savings-goals/id/${deposit.goalId}`));
       updateTag(tag('savings-goals/list'));
 
       return savingsDepositFromDb(created);
