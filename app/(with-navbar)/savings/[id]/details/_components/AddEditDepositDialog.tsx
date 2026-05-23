@@ -107,7 +107,7 @@ export default function AddEditDepositDialog({
       <DialogContent>
         <ApiFormErrorAlert
           hide={hideApiError}
-          message={createDepositErrors.api || updateDepositErrors.api}
+          message={createDepositErrors.api} //TODO:|| updateDepositErrors.api
           sx={{ mb: 2 }}
         />
         <Stack
@@ -194,8 +194,7 @@ export default function AddEditDepositDialog({
           type="submit"
           form={formId}
           disabled={
-            !hideApiError &&
-            (!!createDepositErrors.api || !!updateDepositErrors.api)
+            !hideApiError && !!createDepositErrors.api // TODO: !hideApiError && (!!createDepositErrors.api || !!updateDepositErrors.api)
           }
           loading={isMutating}
           loadingPosition="start"

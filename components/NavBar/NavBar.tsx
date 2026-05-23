@@ -4,9 +4,11 @@ import Grid from '@mui/material/Grid';
 import NavLink from './NavLink';
 import SavingsIcon from '@mui/icons-material/Savings';
 import SettingsIcon from '@mui/icons-material/Settings';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { Suspense } from 'react';
 import ExpensesNavLink from './ExpensesNavLink';
 import IncomeNavLink from './IncomeNavLink';
+import styles from './NavLink.module.css';
 
 export default function NavBar() {
   return (
@@ -29,7 +31,7 @@ export default function NavBar() {
           spacing={2}
           sx={{ justifyContent: 'center', flex: '1' }}
         >
-          <Suspense>
+          <Suspense fallback={<NavBarFallback />}>
             <ExpensesNavLink />
             <IncomeNavLink />
             <NavLink href="/savings" Icon={SavingsIcon} text="Savings" />
@@ -38,5 +40,14 @@ export default function NavBar() {
         </Grid>
       </Toolbar>
     </AppBar>
+  );
+}
+
+function NavBarFallback() {
+  return (
+    <a className={styles.link} aria-hidden style={{ visibility: 'hidden' }}>
+      <MonetizationOnIcon className={styles.icon} />
+      <span className={styles.label}>Expenses</span>
+    </a>
   );
 }
