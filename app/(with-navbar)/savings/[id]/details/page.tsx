@@ -7,8 +7,6 @@ import Stack from '@mui/material/Stack';
 import SavingsGoalCard from '../../_components/SavingsGoalCard';
 import ActionsButtons from './_components/ActionsButtons';
 import { BackToSavingsLink } from '../../_components/BackToSavingsLink';
-import { Suspense } from 'react';
-import Skeleton from '@mui/material/Skeleton';
 
 export default async function SavingsGoalDetailsPage({
   params,
@@ -32,21 +30,8 @@ export default async function SavingsGoalDetailsPage({
       <BackToSavingsLink />
       <Stack spacing={3}>
         <SavingsGoalCard goal={goal} />
-        <Suspense fallback={<ActionsButtonsFallback />}>
-          <ActionsButtons id={goal.id} name={goal.name} />
-        </Suspense>
+        <ActionsButtons id={goal.id} name={goal.name} />
       </Stack>
     </>
-  );
-}
-
-function ActionsButtonsFallback() {
-  return (
-    <Skeleton
-      variant="rectangular"
-      width="100%"
-      height={150}
-      sx={{ borderRadius: 3 }}
-    />
   );
 }
