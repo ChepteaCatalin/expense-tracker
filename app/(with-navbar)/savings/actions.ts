@@ -2,7 +2,7 @@
 
 import type {
   SavingsDepositFormErrors,
-  SavingsDepositFormValuesWithId,
+  SavingsDepositFormValuesWithGoalId,
   SavingsGoalFormErrors,
   SavingsGoalFormValues,
   SavingsGoalFormValuesWithId,
@@ -90,7 +90,7 @@ export async function deleteSavingsGoal(_: string, id: number) {
 
 export async function createSavingsDeposit(
   _: SavingsDepositFormErrors,
-  deposit: SavingsDepositFormValuesWithId,
+  deposit: SavingsDepositFormValuesWithGoalId,
 ): Promise<SavingsDepositFormErrors> {
   const errors = getFormErrors(savingsDepositSchema, {
     ...deposit,
