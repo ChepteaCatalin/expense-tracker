@@ -51,3 +51,5 @@ export interface SavingsDepositFormValues {
 export interface SavingsDepositFormValuesWithId extends SavingsDepositFormValues {
   id: number;
 }
+
+export type SavingsDepositFormErrors = FormErrors<SavingsDepositFormValues>;
