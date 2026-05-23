@@ -31,3 +31,23 @@ export interface SavingsGoalFormValuesWithId extends SavingsGoalFormValues {
 }
 
 export type SavingsGoalFormErrors = FormErrors<SavingsGoalFormValues>;
+
+export interface SavingsDeposit {
+  id: number;
+  goalId: number;
+  amount: number;
+  date: Date;
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SavingsDepositFormValues {
+  amount: number | '';
+  date: FormDateTime;
+  notes: string;
+}
+
+export interface SavingsDepositFormValuesWithId extends SavingsDepositFormValues {
+  id: number;
+}
