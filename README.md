@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Next.js app for tracking my personal expenses, subscriptions, savings, and income.
+Next.js app for tracking personal expenses, savings, and income.
 
 ## Running Locally
 
