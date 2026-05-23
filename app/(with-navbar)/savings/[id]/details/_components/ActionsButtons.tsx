@@ -1,9 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DeleteSavingsGoalBtn from './DeleteSavingsGoalBtn';
+import Link from 'next/link';
 
 export default function ActionsButtons({
   id,
@@ -37,6 +39,11 @@ export default function ActionsButtons({
         <Button variant="contained" startIcon={<AddIcon />} fullWidth>
           Add Deposit
         </Button>
+        <Link href={`/savings/${id}/edit`} style={{ width: '100%' }}>
+          <Button variant="outlined" startIcon={<EditIcon />} fullWidth>
+            Edit Goal
+          </Button>
+        </Link>
         <DeleteSavingsGoalBtn id={id} name={name} />
       </Stack>
     </Box>

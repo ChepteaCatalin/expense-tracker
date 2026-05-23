@@ -34,7 +34,7 @@ export default function DeleteSavingsGoalBtn({
       </Button>
       <DeleteDialog
         open={open}
-        type="savings goal"
+        type="goal"
         name={name}
         isPending={isPending}
         error={actionError}
