@@ -71,6 +71,7 @@ export default function AddEditDepositDialog({
   } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
+  const titleId = useId();
   const formId = useId();
   const prevMutatingRef = useRef(false);
 
@@ -100,8 +101,17 @@ export default function AddEditDepositDialog({
   );
 
   return (
-    <Dialog open fullWidth maxWidth="xs" onClose={handleClose}>
-      <DialogTitle sx={{ pb: 1, fontWeight: 600, fontSize: '1.5rem' }}>
+    <Dialog
+      open
+      fullWidth
+      maxWidth="xs"
+      onClose={handleClose}
+      aria-labelledby={titleId}
+    >
+      <DialogTitle
+        id={titleId}
+        sx={{ pb: 1, fontWeight: 600, fontSize: '1.5rem' }}
+      >
         {isEditMode ? 'Edit' : 'Add'} Deposit
       </DialogTitle>
       <DialogContent>
