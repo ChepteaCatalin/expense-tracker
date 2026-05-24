@@ -7,6 +7,8 @@ import Stack from '@mui/material/Stack';
 import SavingsGoalCard from '../../_components/SavingsGoalCard';
 import ActionsButtons from './_components/ActionsButtons';
 import { BackToSavingsLink } from '../../_components/BackToSavingsLink';
+import { Suspense } from 'react';
+import SavingsDepositsList from './_components/SavingsDepositsList';
 
 export default async function SavingsGoalDetailsPage({
   params,
@@ -31,6 +33,12 @@ export default async function SavingsGoalDetailsPage({
       <Stack spacing={3}>
         <SavingsGoalCard goal={goal} />
         <ActionsButtons goal={goal} />
+        <Suspense fallback={<div>Loading deposits...</div>}>
+          <SavingsDepositsList
+            goalId={goal.id}
+            isCompleted={goal.isCompleted}
+          />
+        </Suspense>
       </Stack>
     </>
   );

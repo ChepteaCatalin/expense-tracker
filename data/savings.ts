@@ -118,7 +118,7 @@ export const getAllSavingsGoals = authGuard(
         LEFT JOIN savings_deposit sd ON sd.savings_goal_id = sg.id
         WHERE sg.user_id = ${session.user.id}
         GROUP BY sg.id
-        ORDER BY sg.start_date DESC
+        ORDER BY sg.is_completed ASC, sg.start_date DESC
       `;
 
       return result.map(row => savingsGoalFromDb(row));
@@ -303,6 +303,37 @@ export const createSavingsDeposit = authGuard(
       updateTag(tag('savings-goals/list'));
 
       return savingsDepositFromDb(created);
+    },
+);
+
+export const getSavingsDepositsByGoalId = authGuard(
+  session =>
+    async (goalId: number): Promise<SavingsDeposit[]> => {
+      'use cache';
+      cacheLife('weeks');
+      cacheTag(userTag(session.user.id)(`savings-deposits/goal/${goalId}`));
+
+      try {
+        const result = await sql`
+          SELECT
+            sd.id,
+            sd.savings_goal_id,
+            sd.amount,
+            to_char(sd.date, 'YYYY-MM-DD') AS date,
+            sd.notes,
+            sd.created_at,
+            sd.updated_at
+          FROM savings_deposit sd
+          INNER JOIN savings_goal sg ON sg.id = sd.savings_goal_id
+          WHERE sd.savings_goal_id = ${goalId}
+            AND sg.user_id = ${session.user.id}
+          ORDER BY sd.date DESC
+        `;
+
+        return result.map(savingsDepositFromDb);
+      } catch {
+        return [];
+      }
     },
 );
 
