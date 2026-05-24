@@ -39,7 +39,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
           {goal.isCompleted ? (
             <ReopenGoalBtn id={goal.id} />
           ) : (
-            <CompleteGoalBtn id={goal.id} />
+            <CompleteGoalBtn id={goal.id} startDate={goal.startDate} />
           )}
         </Grid>
         <Grid container spacing={1.5} sx={{ flex: 1 }}>
