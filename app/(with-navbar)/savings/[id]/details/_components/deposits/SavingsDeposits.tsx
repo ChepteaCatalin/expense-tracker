@@ -1,5 +1,7 @@
 import type { SavingsDeposit } from '@/types/savings';
 import { readableCurrency } from '@/utils/currency';
+import Delete from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -9,6 +11,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import NoSavingsDeposits from './NoSavingsDeposits';
+import IconButton from '@mui/material/IconButton';
 
 export default async function SavingsDeposits({
   deposits,
@@ -18,18 +21,6 @@ export default async function SavingsDeposits({
   isGoalCompleted: boolean;
 }) {
   if (!deposits.length) return <NoSavingsDeposits />;
-
-  const totalAmount = deposits.reduce(
-    (sum, deposit) => sum + deposit.amount,
-    0,
-  );
-  const avgAmount = totalAmount / deposits.length;
-  const minDeposit = deposits.reduce((min, deposit) =>
-    deposit.amount < min.amount ? deposit : min,
-  );
-  const maxDeposit = deposits.reduce((max, deposit) =>
-    deposit.amount > max.amount ? deposit : max,
-  );
 
   return (
     <Card
@@ -62,28 +53,7 @@ export default async function SavingsDeposits({
             />
           </Stack>
           <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-              gap: 1.25,
-              '@media (max-width: 700px)': {
-                gridTemplateColumns: '1fr',
-              },
-            }}
-          >
-            <StatCard label="Average" value={readableCurrency(avgAmount)} />
-            <StatCard
-              label="Minimum"
-              value={readableCurrency(minDeposit.amount)}
-              date={minDeposit.date}
-            />
-            <StatCard
-              label="Maximum"
-              value={readableCurrency(maxDeposit.amount)}
-              date={maxDeposit.date}
-            />
-          </Box>
+          <Stats deposits={deposits} />
           <Stack spacing={1.25}>
             {deposits.map(deposit => (
               <Stack
@@ -93,6 +63,7 @@ export default async function SavingsDeposits({
                   borderRadius: 2,
                   px: 1.5,
                   py: 1.25,
+                  pr: 0.875,
                   border: '1px solid rgba(255,255,255,0.12)',
                   background:
                     'linear-gradient(125deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
@@ -108,19 +79,37 @@ export default async function SavingsDeposits({
                 >
                   <Typography
                     sx={{
-                      fontSize: '1.05rem',
                       fontWeight: 700,
                       color: 'primary.main',
                     }}
                   >
                     +{readableCurrency(deposit.amount)}
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: 'text.secondary', fontWeight: 500 }}
+                  <Stack
+                    direction="row"
+                    sx={{
+                      alignItems: 'center',
+                      gap: 0.5,
+                    }}
                   >
-                    {dayjs(deposit.date).format('D MMM YYYY')}
-                  </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'text.secondary',
+                        fontWeight: 500,
+                        borderRight: '1px solid rgba(255,255,255,0.3)',
+                        pr: 1.125,
+                      }}
+                    >
+                      {dayjs(deposit.date).format('D MMM YYYY')}
+                    </Typography>
+                    <IconButton size="small" aria-label="edit">
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton size="small" aria-label="delete">
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Stack>
                 </Stack>
                 {deposit.notes && (
                   <Typography
@@ -140,6 +129,45 @@ export default async function SavingsDeposits({
         </Stack>
       </CardContent>
     </Card>
+  );
+}
+
+function Stats({ deposits }: { deposits: SavingsDeposit[] }) {
+  const totalAmount = deposits.reduce(
+    (sum, deposit) => sum + deposit.amount,
+    0,
+  );
+  const avgAmount = totalAmount / deposits.length;
+  const minDeposit = deposits.reduce((min, deposit) =>
+    deposit.amount < min.amount ? deposit : min,
+  );
+  const maxDeposit = deposits.reduce((max, deposit) =>
+    deposit.amount > max.amount ? deposit : max,
+  );
+
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: 1.25,
+        '@media (max-width: 700px)': {
+          gridTemplateColumns: '1fr',
+        },
+      }}
+    >
+      <StatCard label="Average" value={readableCurrency(avgAmount)} />
+      <StatCard
+        label="Minimum"
+        value={readableCurrency(minDeposit.amount)}
+        date={minDeposit.date}
+      />
+      <StatCard
+        label="Maximum"
+        value={readableCurrency(maxDeposit.amount)}
+        date={maxDeposit.date}
+      />
+    </Box>
   );
 }
 
