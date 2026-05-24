@@ -31,7 +31,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       <Grid container spacing={1.5}>
         <Grid container spacing={1.5} sx={{ flex: 1 }}>
           <AddDepositBtn id={goal.id} currency={goal.currency} />
-          <CompleteGoalBtn />
+          <CompleteGoalBtn id={goal.id} />
         </Grid>
         <Grid container spacing={1.5} sx={{ flex: 1 }}>
           <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>

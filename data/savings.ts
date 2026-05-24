@@ -195,6 +195,28 @@ export const deleteSavingsGoal = authGuard(
   },
 );
 
+export const completeSavingsGoal = authGuard(
+  session =>
+    async (goalId: number): Promise<void> => {
+      const result = await sql`
+        UPDATE savings_goal
+        SET
+          is_completed = true,
+          completed_date = CURRENT_DATE,
+          updated_at = NOW()
+        WHERE id = ${goalId}
+          AND user_id = ${session.user.id}
+        RETURNING id
+      `;
+
+      if (!result[0]) throw new Error('Failed to complete savings goal');
+
+      const tag = userTag(session.user.id);
+      updateTag(tag(`savings-goals/id/${goalId}`));
+      updateTag(tag('savings-goals/list'));
+    },
+);
+
 function savingsGoalFromDb(dbResult: Record<string, any>): SavingsGoal {
   return {
     id: dbResult.id,
