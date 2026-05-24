@@ -301,6 +301,7 @@ export const createSavingsDeposit = authGuard(
       const tag = userTag(session.user.id);
       updateTag(tag(`savings-goals/id/${deposit.goalId}`));
       updateTag(tag('savings-goals/list'));
+      updateTag(tag(`savings-deposits/goal/${deposit.goalId}`));
 
       return savingsDepositFromDb(created);
     },
