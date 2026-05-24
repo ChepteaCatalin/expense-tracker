@@ -98,23 +98,26 @@ export const getAllSavingsGoals = authGuard(
     try {
       const result = await sql`
         SELECT
-          id,
-          name,
-          initial_amount,
-          target_amount,
-          to_char(start_date, 'YYYY-MM-DD') AS start_date,
-          is_completed,
-          to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
-          notes,
-          currency,
-          created_at,
-          updated_at
-        FROM savings_goal
-        WHERE user_id = ${session.user.id}
-        ORDER BY start_date DESC
+          sg.id,
+          sg.name,
+          sg.initial_amount,
+          sg.target_amount,
+          to_char(sg.start_date, 'YYYY-MM-DD') AS start_date,
+          sg.is_completed,
+          to_char(sg.completed_date, 'YYYY-MM-DD') AS completed_date,
+          sg.notes,
+          sg.currency,
+          sg.created_at,
+          sg.updated_at,
+          sg.initial_amount + COALESCE(SUM(sd.amount), 0) AS current_amount
+        FROM savings_goal sg
+        LEFT JOIN savings_deposit sd ON sd.savings_goal_id = sg.id
+        WHERE sg.user_id = ${session.user.id}
+        GROUP BY sg.id
+        ORDER BY sg.start_date DESC
       `;
 
-      return result.map(row => savingsGoalFromDb(row, 0)); //TODO: real current amount, based on savings goals
+      return result.map(row => savingsGoalFromDb(row, row.current_amount));
     } catch {
       return [];
     }
