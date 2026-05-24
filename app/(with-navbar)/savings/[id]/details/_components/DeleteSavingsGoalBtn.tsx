@@ -9,11 +9,9 @@ import { deleteSavingsGoal } from '../../../actions';
 export default function DeleteSavingsGoalBtn({
   id,
   name,
-  disabled,
 }: {
   id: number;
   name: string;
-  disabled: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [hideError, setHideError] = useState(false);
@@ -31,7 +29,6 @@ export default function DeleteSavingsGoalBtn({
         startIcon={<DeleteIcon />}
         fullWidth
         onClick={() => setOpen(true)}
-        disabled={disabled}
       >
         Delete Goal
       </Button>

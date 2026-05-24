@@ -52,11 +52,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
               <EditGoalBtn />
             </Link>
           )}
-          <DeleteSavingsGoalBtn
-            id={goal.id}
-            name={goal.name}
-            disabled={goal.isCompleted}
-          />
+          <DeleteSavingsGoalBtn id={goal.id} name={goal.name} />
         </Grid>
       </Grid>
     </Box>
