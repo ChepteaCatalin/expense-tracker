@@ -2,7 +2,7 @@
 
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
-import { useId, useState } from 'react';
+import { startTransition, useId, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
@@ -10,8 +10,10 @@ import DialogContent from '@mui/material/DialogContent';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
+import { useActionState, useEffect } from 'react';
+import { completeSavingsGoal } from '../../../actions';
 
-export default function CompleteGoalBtn() {
+export default function CompleteGoalBtn({ id }: { id: number }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -24,30 +26,36 @@ export default function CompleteGoalBtn() {
       >
         Complete Goal
       </Button>
-      <CompleteGoalDialog open={open} handleClose={() => setOpen(false)} />
+      {open && (
+        <CompleteGoalDialog id={id} handleClose={() => setOpen(false)} />
+      )}
     </>
   );
 }
 
 function CompleteGoalDialog({
-  open,
+  id,
   handleClose,
 }: {
-  open: boolean;
+  id: number;
   handleClose: () => void;
 }) {
+  const [error, completeGoalAction, isPending] = useActionState(
+    completeSavingsGoal,
+    '',
+  );
+
   const titleId = useId();
   const contentId = useId();
   const [hideError, setHideError] = useState(false);
 
-  //TODO:
-  const handleDelete = () => {};
-  const isPending = false;
-  const error = '';
+  useEffect(() => {
+    if (!isPending && error === undefined) handleClose();
+  }, [isPending, error, handleClose]);
 
   return (
     <Dialog
-      open={open}
+      open
       onClose={handleClose}
       aria-labelledby={titleId}
       aria-describedby={contentId}
@@ -70,7 +78,13 @@ function CompleteGoalDialog({
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button
-          onClick={handleDelete}
+          onClick={() => {
+            setHideError(true);
+            startTransition(() => {
+              setHideError(false);
+              completeGoalAction(id);
+            });
+          }}
           variant="contained"
           loadingPosition="start"
           loading={isPending}
