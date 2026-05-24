@@ -3,7 +3,7 @@ import SearchOffIcon from '@mui/icons-material/SearchOff';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import AddDepositOutlinedBtn from '../actions/AddDepositOutinedBtn';
+import AddDepositOutlinedBtn from '../actions/AddDepositOutlinedBtn';
 
 export default function NoSavingsDeposits({
   goalId,
