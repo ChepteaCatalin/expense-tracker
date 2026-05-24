@@ -8,6 +8,7 @@ import Link from 'next/link';
 import AddDepositBtn from './AddDepositBtn';
 import type { SavingsGoal } from '@/types/savings';
 import CompleteGoalBtn from './CompleteGoalBtn';
+import ReopenGoalBtn from './ReopenGoalBtn';
 
 export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
   return (
@@ -30,18 +31,47 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       </Typography>
       <Grid container spacing={1.5}>
         <Grid container spacing={1.5} sx={{ flex: 1 }}>
-          <AddDepositBtn id={goal.id} currency={goal.currency} />
-          <CompleteGoalBtn id={goal.id} />
+          <AddDepositBtn
+            id={goal.id}
+            currency={goal.currency}
+            disabled={goal.isCompleted}
+          />
+          {goal.isCompleted ? (
+            <ReopenGoalBtn id={goal.id} />
+          ) : (
+            <CompleteGoalBtn id={goal.id} />
+          )}
         </Grid>
         <Grid container spacing={1.5} sx={{ flex: 1 }}>
-          <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
-            <Button variant="outlined" startIcon={<EditIcon />} fullWidth>
-              Edit Goal
-            </Button>
-          </Link>
-          <DeleteSavingsGoalBtn id={goal.id} name={goal.name} />
+          {goal.isCompleted ? (
+            <Box sx={{ width: '100%' }}>
+              <EditGoalBtn disabled />
+            </Box>
+          ) : (
+            <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
+              <EditGoalBtn />
+            </Link>
+          )}
+          <DeleteSavingsGoalBtn
+            id={goal.id}
+            name={goal.name}
+            disabled={goal.isCompleted}
+          />
         </Grid>
       </Grid>
     </Box>
+  );
+}
+
+function EditGoalBtn({ disabled }: { disabled?: boolean }) {
+  return (
+    <Button
+      variant="outlined"
+      startIcon={<EditIcon />}
+      fullWidth
+      disabled={disabled}
+    >
+      Edit Goal
+    </Button>
   );
 }

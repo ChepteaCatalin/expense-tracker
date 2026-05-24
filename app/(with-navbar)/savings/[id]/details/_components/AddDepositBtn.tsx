@@ -8,9 +8,11 @@ import AddEditDepositDialog from './AddEditDepositDialog';
 export default function AddDepositBtn({
   id,
   currency,
+  disabled,
 }: {
   id: number;
   currency?: string;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -21,6 +23,7 @@ export default function AddDepositBtn({
         startIcon={<AddIcon />}
         onClick={() => setOpen(true)}
         fullWidth
+        disabled={disabled}
       >
         Add Deposit
       </Button>
