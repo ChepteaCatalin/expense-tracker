@@ -39,6 +39,7 @@ export default async function SavingsGoalDetailsPage({
         <SavingsDeposits
           deposits={deposits}
           isGoalCompleted={goal.isCompleted}
+          goalCurrency={goal.currency}
         />
       </Stack>
     </>
