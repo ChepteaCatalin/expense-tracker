@@ -144,6 +144,7 @@ export const updateSavingsGoal = authGuard(
             updated_at = NOW()
           WHERE id = ${goal.id}
             AND user_id = ${session.user.id}
+            AND is_completed = false
           RETURNING
             id,
             name,
@@ -277,7 +278,9 @@ export const createSavingsDeposit = authGuard(
           ${deposit.notes || null}
         WHERE EXISTS (
           SELECT 1 FROM savings_goal
-          WHERE id = ${deposit.goalId} AND user_id = ${session.user.id}
+          WHERE id = ${deposit.goalId}
+            AND user_id = ${session.user.id}
+            AND is_completed = false
         )
         RETURNING
           id,
