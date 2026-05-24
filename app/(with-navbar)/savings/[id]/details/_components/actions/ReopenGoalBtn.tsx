@@ -16,7 +16,7 @@ export default function ReopenGoalBtn({ id }: { id: number }) {
         fullWidth
         onClick={() => setOpen(true)}
       >
-        Reopen Goal
+        Reopen
       </Button>
       {open && <ReopenGoalDialog id={id} handleClose={() => setOpen(false)} />}
     </>

@@ -30,7 +30,7 @@ export default function DeleteGoalBtn({
         fullWidth
         onClick={() => setOpen(true)}
       >
-        Delete Goal
+        Delete
       </Button>
       <DeleteDialog
         open={open}
