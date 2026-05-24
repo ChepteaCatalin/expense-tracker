@@ -30,7 +30,7 @@ export default async function SavingsGoalDetailsPage({
       <BackToSavingsLink />
       <Stack spacing={3}>
         <SavingsGoalCard goal={goal} />
-        <ActionsButtons id={goal.id} name={goal.name} />
+        <ActionsButtons goal={goal} />
       </Stack>
     </>
   );
