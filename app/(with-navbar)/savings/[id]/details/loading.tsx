@@ -1,4 +1,21 @@
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
+
 export default function SavingsGoalDetailsLoading() {
-  // TODO:
-  return <div>Loading...</div>;
+  return (
+    <Box>
+      <Skeleton
+        variant="text"
+        width={88}
+        height={28}
+        sx={{ borderRadius: 1, mb: 0.5 }}
+      />
+      <Stack spacing={3}>
+        <Skeleton variant="rectangular" height={285} sx={{ borderRadius: 3 }} />
+        <Skeleton variant="rectangular" height={117} sx={{ borderRadius: 3 }} />
+        <Skeleton variant="rectangular" height={264} sx={{ borderRadius: 3 }} />
+      </Stack>
+    </Box>
+  );
 }
