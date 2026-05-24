@@ -3,7 +3,7 @@
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
-import AddEditDepositDialog from './AddEditDepositDialog';
+import AddEditDepositDialog from '../deposits/AddEditDepositDialog';
 
 export default function AddDepositBtn({
   id,

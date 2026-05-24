@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import DeleteSavingsGoalBtn from './DeleteSavingsGoalBtn';
+import DeleteGoalBtn from './DeleteGoalBtn';
 import Link from 'next/link';
 import AddDepositBtn from './AddDepositBtn';
 import type { SavingsGoal } from '@/types/savings';
@@ -52,7 +52,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
               <EditGoalBtn />
             </Link>
           )}
-          <DeleteSavingsGoalBtn id={goal.id} name={goal.name} />
+          <DeleteGoalBtn id={goal.id} name={goal.name} />
         </Grid>
       </Grid>
     </Box>

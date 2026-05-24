@@ -15,17 +15,17 @@ import DialogContent from '@mui/material/DialogContent';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
-import { reopenSavingsGoal } from '../../../actions';
+import { completeSavingsGoal } from '../../../../actions';
 
-export function ReopenGoalDialog({
+export function CompleteGoalDialog({
   id,
   handleClose,
 }: {
   id: number;
   handleClose: () => void;
 }) {
-  const [error, reopenGoalAction, isPending] = useActionState(
-    reopenSavingsGoal,
+  const [error, completeGoalAction, isPending] = useActionState(
+    completeSavingsGoal,
     '',
   );
 
@@ -47,18 +47,19 @@ export function ReopenGoalDialog({
       aria-labelledby={titleId}
       aria-describedby={contentId}
     >
-      <DialogTitle id={titleId}>Reopen Goal</DialogTitle>
+      <DialogTitle id={titleId}>Complete Goal</DialogTitle>
       <Divider />
       <DialogContent id={contentId}>
         <ApiFormErrorAlert message={error} hide={hideError} sx={{ mb: 2 }} />
         <DialogContentText>
-          Are you sure you want to reopen this goal?
+          Are you sure you want to mark this goal as completed?
         </DialogContentText>
         <DialogContentText>
-          While the goal is reopened, you will be able to make changes to it.
+          While the goal is completed, you won’t be able to make any changes to
+          it.
         </DialogContentText>
         <DialogContentText>
-          You can complete it later if needed.
+          You can reopen it later if needed.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -68,14 +69,14 @@ export function ReopenGoalDialog({
             setHideError(true);
             startTransition(() => {
               setHideError(false);
-              reopenGoalAction(id);
+              completeGoalAction(id);
             });
           }}
           variant="contained"
           loadingPosition="start"
           loading={isPending}
         >
-          Reopen Goal
+          Complete Goal
         </Button>
       </DialogActions>
     </Dialog>
