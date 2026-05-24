@@ -17,6 +17,7 @@ import {
   deleteSavingsGoal as deleteExistingSavingsGoal,
   createSavingsDeposit as createNewSavingsDeposit,
   completeSavingsGoal as markAsCompleted,
+  reopenSavingsGoal as markAsReopened,
 } from '@/data/savings';
 import { toCents } from '@/utils/currency';
 
@@ -122,5 +123,17 @@ export async function completeSavingsGoal(
   } catch (err: any) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     return 'Failed to complete savings goal';
+  }
+}
+
+export async function reopenSavingsGoal(
+  _: string | undefined,
+  id: number,
+): Promise<string | undefined> {
+  try {
+    await markAsReopened(id);
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return 'Failed to reopen savings goal';
   }
 }
