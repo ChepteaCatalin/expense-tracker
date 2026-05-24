@@ -17,7 +17,7 @@ import {
   useState,
 } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { savingsDepositSchema } from '../../../validation';
+import { savingsDepositSchema } from '../../../../validation';
 import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -30,7 +30,7 @@ import {
   handleDatePickerChange,
   toDatePickerValue,
 } from '@/lib/MuiDatePicker/utils';
-import { createSavingsDeposit } from '../../../actions';
+import { createSavingsDeposit } from '../../../../actions';
 
 interface AddEditDepositDialogProps {
   handleClose: () => void;

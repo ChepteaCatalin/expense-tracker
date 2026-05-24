@@ -4,9 +4,9 @@ import DeleteDialog from '@/components/DeleteDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { useActionState, useState, startTransition } from 'react';
-import { deleteSavingsGoal } from '../../../actions';
+import { deleteSavingsGoal } from '../../../../actions';
 
-export default function DeleteSavingsGoalBtn({
+export default function DeleteGoalBtn({
   id,
   name,
 }: {

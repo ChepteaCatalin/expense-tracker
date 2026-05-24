@@ -1,14 +1,13 @@
 import { notFound, redirect } from 'next/navigation';
 import { validIdParam } from '@/utils/url';
-import type { SavingsGoal } from '@/types/savings';
+import type { SavingsDeposit, SavingsGoal } from '@/types/savings';
 import { UnauthorizedError } from '@/utils/error';
-import { getSavingsGoalById } from '@/data/savings';
+import { getSavingsDepositsByGoalId, getSavingsGoalById } from '@/data/savings';
 import Stack from '@mui/material/Stack';
 import SavingsGoalCard from '../../_components/SavingsGoalCard';
-import ActionsButtons from './_components/ActionsButtons';
+import ActionsButtons from './_components/actions/ActionsButtons';
 import { BackToSavingsLink } from '../../_components/BackToSavingsLink';
-import { Suspense } from 'react';
-import SavingsDepositsList from './_components/SavingsDepositsList';
+import SavingsDeposits from './_components/deposits/SavingsDeposits';
 
 export default async function SavingsGoalDetailsPage({
   params,
@@ -18,8 +17,12 @@ export default async function SavingsGoalDetailsPage({
   if (!validIdParam(id)) notFound();
 
   let goal: SavingsGoal | null = null;
+  let deposits: SavingsDeposit[] = [];
   try {
-    goal = await getSavingsGoalById(+id);
+    [goal, deposits] = await Promise.all([
+      getSavingsGoalById(+id),
+      getSavingsDepositsByGoalId(+id),
+    ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
     notFound();
@@ -33,12 +36,10 @@ export default async function SavingsGoalDetailsPage({
       <Stack spacing={3}>
         <SavingsGoalCard goal={goal} />
         <ActionsButtons goal={goal} />
-        <Suspense fallback={<div>Loading deposits...</div>}>
-          <SavingsDepositsList
-            goalId={goal.id}
-            isCompleted={goal.isCompleted}
-          />
-        </Suspense>
+        <SavingsDeposits
+          deposits={deposits}
+          isGoalCompleted={goal.isCompleted}
+        />
       </Stack>
     </>
   );
