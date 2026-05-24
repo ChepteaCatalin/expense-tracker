@@ -230,6 +230,7 @@ export const reopenSavingsGoal = authGuard(
           updated_at = NOW()
         WHERE id = ${goalId}
           AND user_id = ${session.user.id}
+          AND is_completed = true
         RETURNING id
       `;
 
