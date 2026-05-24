@@ -36,7 +36,7 @@ export default function CompleteGoalBtn({
             onClick={() => setOpen(true)}
             disabled={disabled}
           >
-            Complete Goal
+            Complete
           </Button>
         </Box>
       </Tooltip>

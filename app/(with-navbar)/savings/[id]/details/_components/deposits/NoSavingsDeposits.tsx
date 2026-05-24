@@ -3,8 +3,17 @@ import SearchOffIcon from '@mui/icons-material/SearchOff';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import AddDepositOutlinedBtn from '../actions/AddDepositOutinedBtn';
 
-export default function NoSavingsDeposits() {
+export default function NoSavingsDeposits({
+  goalId,
+  goalCurrency,
+  isGoalCompleted,
+}: {
+  goalId: number;
+  goalCurrency?: string;
+  isGoalCompleted?: boolean;
+}) {
   return (
     <Card
       sx={{
@@ -19,7 +28,12 @@ export default function NoSavingsDeposits() {
           <SearchOffIcon
             sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }}
           />
-          <Typography>There are no deposits yet</Typography>
+          <Typography sx={{ mb: 1.5 }}>There are no deposits yet</Typography>
+          <AddDepositOutlinedBtn
+            id={goalId}
+            currency={goalCurrency}
+            disabled={isGoalCompleted}
+          />
         </Grid>
       </CardContent>
     </Card>

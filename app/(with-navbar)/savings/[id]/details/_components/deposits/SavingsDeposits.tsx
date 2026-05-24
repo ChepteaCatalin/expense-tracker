@@ -12,17 +12,27 @@ import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import NoSavingsDeposits from './NoSavingsDeposits';
 import IconButton from '@mui/material/IconButton';
+import AddDepositIconBtn from './AddDepositIconBtn';
 
 export default async function SavingsDeposits({
   deposits,
   isGoalCompleted,
+  goalId,
   goalCurrency,
 }: {
   deposits: SavingsDeposit[];
   isGoalCompleted: boolean;
   goalCurrency: string;
+  goalId: number;
 }) {
-  if (!deposits.length) return <NoSavingsDeposits />;
+  if (!deposits.length)
+    return (
+      <NoSavingsDeposits
+        goalId={goalId}
+        goalCurrency={goalCurrency}
+        isGoalCompleted={isGoalCompleted}
+      />
+    );
 
   return (
     <Card
@@ -41,9 +51,16 @@ export default async function SavingsDeposits({
             direction="row"
             sx={{ alignItems: 'center', justifyContent: 'space-between' }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Deposits
-            </Typography>
+            <Stack spacing={0.5} direction="row" sx={{ alignItems: 'center' }}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                Deposits
+              </Typography>
+              <AddDepositIconBtn
+                id={goalId}
+                isGoalCompleted={isGoalCompleted}
+                goalCurrency={goalCurrency}
+              />
+            </Stack>
             <Chip
               label={`${deposits.length} ${deposits.length === 1 ? 'entry' : 'entries'}`}
               size="small"

@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import AddEditDepositDialog from '../deposits/AddEditDepositDialog';
 
-export default function AddDepositBtn({
+export default function AddDepositOutlinedBtn({
   id,
   currency,
   disabled,
@@ -19,10 +19,9 @@ export default function AddDepositBtn({
   return (
     <>
       <Button
-        variant="contained"
+        variant="outlined"
         startIcon={<AddIcon />}
         onClick={() => setOpen(true)}
-        fullWidth
         disabled={disabled}
       >
         Add Deposit

@@ -1,14 +1,13 @@
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import DeleteGoalBtn from './DeleteGoalBtn';
 import Link from 'next/link';
-import AddDepositBtn from './AddDepositBtn';
 import type { SavingsGoal } from '@/types/savings';
 import CompleteGoalBtn from './CompleteGoalBtn';
 import ReopenGoalBtn from './ReopenGoalBtn';
+import Stack from '@mui/material/Stack';
 
 export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
   return (
@@ -29,32 +28,23 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       >
         Goal Actions
       </Typography>
-      <Grid container spacing={1.5}>
-        <Grid container spacing={1.5} sx={{ flex: 1 }}>
-          <AddDepositBtn
-            id={goal.id}
-            currency={goal.currency}
-            disabled={goal.isCompleted}
-          />
-          {goal.isCompleted ? (
-            <ReopenGoalBtn id={goal.id} />
-          ) : (
-            <CompleteGoalBtn id={goal.id} startDate={goal.startDate} />
-          )}
-        </Grid>
-        <Grid container spacing={1.5} sx={{ flex: 1 }}>
-          {goal.isCompleted ? (
-            <Box sx={{ width: '100%' }}>
-              <EditGoalBtn disabled />
-            </Box>
-          ) : (
-            <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
-              <EditGoalBtn />
-            </Link>
-          )}
-          <DeleteGoalBtn id={goal.id} name={goal.name} />
-        </Grid>
-      </Grid>
+      <Stack direction="row" spacing={1.5}>
+        {goal.isCompleted ? (
+          <Box sx={{ width: '100%' }}>
+            <EditGoalBtn disabled />
+          </Box>
+        ) : (
+          <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
+            <EditGoalBtn />
+          </Link>
+        )}
+        {goal.isCompleted ? (
+          <ReopenGoalBtn id={goal.id} />
+        ) : (
+          <CompleteGoalBtn id={goal.id} startDate={goal.startDate} />
+        )}
+        <DeleteGoalBtn id={goal.id} name={goal.name} />
+      </Stack>
     </Box>
   );
 }
@@ -67,7 +57,7 @@ function EditGoalBtn({ disabled }: { disabled?: boolean }) {
       fullWidth
       disabled={disabled}
     >
-      Edit Goal
+      Edit
     </Button>
   );
 }
