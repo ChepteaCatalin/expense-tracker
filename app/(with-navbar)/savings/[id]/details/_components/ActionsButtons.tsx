@@ -6,17 +6,9 @@ import Typography from '@mui/material/Typography';
 import DeleteSavingsGoalBtn from './DeleteSavingsGoalBtn';
 import Link from 'next/link';
 import AddDepositBtn from './AddDepositBtn';
-import { getSession } from '@/data/auth';
+import type { SavingsGoal } from '@/types/savings';
 
-export default async function ActionsButtons({
-  id,
-  name,
-}: {
-  id: number;
-  name: string;
-}) {
-  const currency = (await getSession())?.user.currency;
-
+export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
   return (
     <Box
       sx={{
@@ -39,13 +31,13 @@ export default async function ActionsButtons({
         Keep this goal moving or remove it if you no longer need it.
       </Typography>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-        <AddDepositBtn id={id} currency={currency} />
-        <Link href={`/savings/${id}/edit`} style={{ width: '100%' }}>
+        <AddDepositBtn id={goal.id} currency={goal.currency} />
+        <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
           <Button variant="outlined" startIcon={<EditIcon />} fullWidth>
             Edit Goal
           </Button>
         </Link>
-        <DeleteSavingsGoalBtn id={id} name={name} />
+        <DeleteSavingsGoalBtn id={goal.id} name={goal.name} />
       </Stack>
     </Box>
   );
