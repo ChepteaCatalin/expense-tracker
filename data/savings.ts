@@ -44,7 +44,8 @@ export const createSavingsGoal = authGuard(
           notes,
           currency,
           created_at,
-          updated_at
+          updated_at,
+          initial_amount AS current_amount
       `;
 
       const created = result[0];
@@ -53,7 +54,7 @@ export const createSavingsGoal = authGuard(
 
       updateTag(userTag(session.user.id)('savings-goals/list'));
 
-      return savingsGoalFromDb(created, created.initial_amount);
+      return savingsGoalFromDb(created);
     },
 );
 
@@ -66,26 +67,29 @@ export const getSavingsGoalById = authGuard(
 
       const result = await sql`
         SELECT
-          id,
-          name,
-          initial_amount,
-          target_amount,
-          to_char(start_date, 'YYYY-MM-DD') AS start_date,
-          is_completed,
-          to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
-          notes,
-          currency,
-          created_at,
-          updated_at
-        FROM savings_goal
-        WHERE id = ${id}
-          AND user_id = ${session.user.id}
+          sg.id,
+          sg.name,
+          sg.initial_amount,
+          sg.target_amount,
+          to_char(sg.start_date, 'YYYY-MM-DD') AS start_date,
+          sg.is_completed,
+          to_char(sg.completed_date, 'YYYY-MM-DD') AS completed_date,
+          sg.notes,
+          sg.currency,
+          sg.created_at,
+          sg.updated_at,
+          sg.initial_amount + COALESCE(SUM(sd.amount), 0) AS current_amount
+        FROM savings_goal sg
+        LEFT JOIN savings_deposit sd ON sd.savings_goal_id = sg.id
+        WHERE sg.id = ${id}
+          AND sg.user_id = ${session.user.id}
+        GROUP BY sg.id
       `;
 
       const row = result[0];
       if (!row) return null;
 
-      return savingsGoalFromDb(row, row.initial_amount); //TODO: real current amount, based on savings goals
+      return savingsGoalFromDb(row);
     },
 );
 
@@ -117,7 +121,7 @@ export const getAllSavingsGoals = authGuard(
         ORDER BY sg.start_date DESC
       `;
 
-      return result.map(row => savingsGoalFromDb(row, row.current_amount));
+      return result.map(row => savingsGoalFromDb(row));
     } catch {
       return [];
     }
@@ -128,29 +132,39 @@ export const updateSavingsGoal = authGuard(
   session =>
     async (goal: SavingsGoalFormValuesWithId): Promise<SavingsGoal> => {
       const result = await sql`
-        UPDATE savings_goal
-        SET
-          name = ${goal.name},
-          initial_amount = ${goal.initialAmount || 0},
-          target_amount = ${goal.targetAmount},
-          start_date = ${goal.startDate},
-          notes = ${goal.notes || null},
-          currency = ${goal.currency.code},
-          updated_at = NOW()
-        WHERE id = ${goal.id}
-          AND user_id = ${session.user.id}
-        RETURNING
-          id,
-          name,
-          initial_amount,
-          target_amount,
-          to_char(start_date, 'YYYY-MM-DD') AS start_date,
-          is_completed,
-          to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
-          notes,
-          currency,
-          created_at,
-          updated_at
+        WITH updated AS (
+          UPDATE savings_goal
+          SET
+            name = ${goal.name},
+            initial_amount = ${goal.initialAmount || 0},
+            target_amount = ${goal.targetAmount},
+            start_date = ${goal.startDate},
+            notes = ${goal.notes || null},
+            currency = ${goal.currency.code},
+            updated_at = NOW()
+          WHERE id = ${goal.id}
+            AND user_id = ${session.user.id}
+          RETURNING
+            id,
+            name,
+            initial_amount,
+            target_amount,
+            to_char(start_date, 'YYYY-MM-DD') AS start_date,
+            is_completed,
+            to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
+            notes,
+            currency,
+            created_at,
+            updated_at
+        )
+        SELECT
+          u.*,
+          u.initial_amount + COALESCE(SUM(sd.amount), 0) AS current_amount
+        FROM updated u
+        LEFT JOIN savings_deposit sd ON sd.savings_goal_id = u.id
+        GROUP BY u.id, u.name, u.initial_amount, u.target_amount, u.start_date,
+                 u.is_completed, u.completed_date, u.notes, u.currency,
+                 u.created_at, u.updated_at
       `;
 
       const updated = result[0];
@@ -161,7 +175,7 @@ export const updateSavingsGoal = authGuard(
       updateTag(tag(`savings-goals/id/${goal.id}`));
       updateTag(tag('savings-goals/list'));
 
-      return savingsGoalFromDb(updated, updated.initial_amount); //TODO: real target amount, based on savings goals
+      return savingsGoalFromDb(updated);
     },
 );
 
@@ -181,15 +195,12 @@ export const deleteSavingsGoal = authGuard(
   },
 );
 
-function savingsGoalFromDb(
-  dbResult: Record<string, any>,
-  currentAmount: number,
-): SavingsGoal {
+function savingsGoalFromDb(dbResult: Record<string, any>): SavingsGoal {
   return {
     id: dbResult.id,
     name: dbResult.name,
     initialAmount: dbResult.initial_amount,
-    currentAmount: currentAmount,
+    currentAmount: dbResult.current_amount,
     targetAmount: dbResult.target_amount,
     startDate: new Date(dbResult.start_date),
     isCompleted: dbResult.is_completed,
@@ -239,7 +250,6 @@ export const createSavingsDeposit = authGuard(
       if (!created) throw new Error('Failed to create goal deposit');
 
       const tag = userTag(session.user.id);
-      //TODO: REDO THIS TO UPDATE ONLY THE CURRENT AMOUNT FOR THE GOAL
       updateTag(tag(`savings-goals/id/${deposit.goalId}`));
       updateTag(tag('savings-goals/list'));
 
