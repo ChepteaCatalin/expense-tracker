@@ -207,6 +207,7 @@ export const completeSavingsGoal = authGuard(
           updated_at = NOW()
         WHERE id = ${goalId}
           AND user_id = ${session.user.id}
+          AND is_completed = false
         RETURNING id
       `;
 
