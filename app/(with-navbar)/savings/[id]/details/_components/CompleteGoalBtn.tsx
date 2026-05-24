@@ -5,6 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useState } from 'react';
 import { CompleteGoalDialog } from './CompleteGoalDialog';
 import Box from '@mui/material/Box';
+import dayjs from 'dayjs';
 import Tooltip from '@mui/material/Tooltip';
 
 export default function CompleteGoalBtn({
@@ -16,7 +17,9 @@ export default function CompleteGoalBtn({
 }) {
   const [open, setOpen] = useState(false);
 
-  const disabled = new Date() < startDate;
+  const disabled = dayjs()
+    .startOf('day')
+    .isBefore(dayjs(startDate).startOf('day'));
 
   return (
     <>
