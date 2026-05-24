@@ -4,20 +4,39 @@ import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import { useState } from 'react';
 import { CompleteGoalDialog } from './CompleteGoalDialog';
+import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 
-export default function CompleteGoalBtn({ id }: { id: number }) {
+export default function CompleteGoalBtn({
+  id,
+  startDate,
+}: {
+  id: number;
+  startDate: Date;
+}) {
   const [open, setOpen] = useState(false);
+
+  const disabled = new Date() < startDate;
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<CheckIcon />}
-        fullWidth
-        onClick={() => setOpen(true)}
+      <Tooltip
+        arrow
+        title={disabled ? 'Goal cannot be completed before start date' : ''}
+        disableHoverListener={!disabled}
       >
-        Complete Goal
-      </Button>
+        <Box sx={{ width: '100%' }}>
+          <Button
+            variant="outlined"
+            startIcon={<CheckIcon />}
+            fullWidth
+            onClick={() => setOpen(true)}
+            disabled={disabled}
+          >
+            Complete Goal
+          </Button>
+        </Box>
+      </Tooltip>
       {open && (
         <CompleteGoalDialog id={id} handleClose={() => setOpen(false)} />
       )}
