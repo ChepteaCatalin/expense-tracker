@@ -16,9 +16,11 @@ import IconButton from '@mui/material/IconButton';
 export default async function SavingsDeposits({
   deposits,
   isGoalCompleted,
+  goalCurrency,
 }: {
   deposits: SavingsDeposit[];
   isGoalCompleted: boolean;
+  goalCurrency: string;
 }) {
   if (!deposits.length) return <NoSavingsDeposits />;
 
@@ -53,7 +55,7 @@ export default async function SavingsDeposits({
             />
           </Stack>
           <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
-          <Stats deposits={deposits} />
+          <Stats deposits={deposits} currency={goalCurrency} />
           <Stack spacing={1.25}>
             {deposits.map(deposit => (
               <Stack
@@ -83,7 +85,7 @@ export default async function SavingsDeposits({
                       color: 'primary.main',
                     }}
                   >
-                    +{readableCurrency(deposit.amount)}
+                    +{readableCurrency(deposit.amount)} {goalCurrency}
                   </Typography>
                   <Stack
                     direction="row"
@@ -103,10 +105,18 @@ export default async function SavingsDeposits({
                     >
                       {dayjs(deposit.date).format('D MMM YYYY')}
                     </Typography>
-                    <IconButton size="small" aria-label="edit">
+                    <IconButton
+                      size="small"
+                      aria-label="edit"
+                      disabled={isGoalCompleted}
+                    >
                       <EditIcon fontSize="small" />
                     </IconButton>
-                    <IconButton size="small" aria-label="delete">
+                    <IconButton
+                      size="small"
+                      aria-label="delete"
+                      disabled={isGoalCompleted}
+                    >
                       <Delete fontSize="small" />
                     </IconButton>
                   </Stack>
@@ -132,7 +142,13 @@ export default async function SavingsDeposits({
   );
 }
 
-function Stats({ deposits }: { deposits: SavingsDeposit[] }) {
+function Stats({
+  deposits,
+  currency,
+}: {
+  deposits: SavingsDeposit[];
+  currency: string;
+}) {
   const totalAmount = deposits.reduce(
     (sum, deposit) => sum + deposit.amount,
     0,
@@ -156,16 +172,22 @@ function Stats({ deposits }: { deposits: SavingsDeposit[] }) {
         },
       }}
     >
-      <StatCard label="Average" value={readableCurrency(avgAmount)} />
+      <StatCard
+        label="Average"
+        value={readableCurrency(avgAmount)}
+        currency={currency}
+      />
       <StatCard
         label="Minimum"
         value={readableCurrency(minDeposit.amount)}
         date={minDeposit.date}
+        currency={currency}
       />
       <StatCard
         label="Maximum"
         value={readableCurrency(maxDeposit.amount)}
         date={maxDeposit.date}
+        currency={currency}
       />
     </Box>
   );
@@ -175,10 +197,12 @@ function StatCard({
   label,
   value,
   date,
+  currency,
 }: {
   label: string;
   value: string;
   date?: Date;
+  currency: string;
 }) {
   return (
     <Stack
@@ -196,7 +220,7 @@ function StatCard({
         {label}
       </Typography>
       <Typography sx={{ fontWeight: 700, color: 'primary.main' }}>
-        {value}
+        {value} {currency}
       </Typography>
       {date && (
         <Typography variant="caption" sx={{ color: 'text.secondary' }}>
