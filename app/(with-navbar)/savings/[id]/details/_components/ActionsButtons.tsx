@@ -1,18 +1,19 @@
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import DeleteSavingsGoalBtn from './DeleteSavingsGoalBtn';
 import Link from 'next/link';
 import AddDepositBtn from './AddDepositBtn';
 import type { SavingsGoal } from '@/types/savings';
+import CompleteGoalBtn from './CompleteGoalBtn';
 
 export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
   return (
     <Box
       sx={{
-        p: { xs: 2, sm: 2.5 },
+        p: 2,
         borderRadius: 3,
         border: '1px solid',
         borderColor: 'divider',
@@ -23,22 +24,24 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       <Typography
         variant="subtitle1"
         component="p"
-        sx={{ mb: 0.5, fontWeight: 600 }}
+        sx={{ mb: 2, fontWeight: 600 }}
       >
         Goal Actions
       </Typography>
-      <Typography variant="body2" sx={{ mb: 2 }}>
-        Keep this goal moving or remove it if you no longer need it.
-      </Typography>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-        <AddDepositBtn id={goal.id} currency={goal.currency} />
-        <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
-          <Button variant="outlined" startIcon={<EditIcon />} fullWidth>
-            Edit Goal
-          </Button>
-        </Link>
-        <DeleteSavingsGoalBtn id={goal.id} name={goal.name} />
-      </Stack>
+      <Grid container spacing={1.5}>
+        <Grid container spacing={1.5} sx={{ flex: 1 }}>
+          <AddDepositBtn id={goal.id} currency={goal.currency} />
+          <CompleteGoalBtn />
+        </Grid>
+        <Grid container spacing={1.5} sx={{ flex: 1 }}>
+          <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
+            <Button variant="outlined" startIcon={<EditIcon />} fullWidth>
+              Edit Goal
+            </Button>
+          </Link>
+          <DeleteSavingsGoalBtn id={goal.id} name={goal.name} />
+        </Grid>
+      </Grid>
     </Box>
   );
 }
