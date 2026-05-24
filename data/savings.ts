@@ -200,7 +200,7 @@ function savingsGoalFromDb(dbResult: Record<string, any>): SavingsGoal {
     id: dbResult.id,
     name: dbResult.name,
     initialAmount: dbResult.initial_amount,
-    currentAmount: dbResult.current_amount,
+    currentAmount: Number(dbResult.current_amount),
     targetAmount: dbResult.target_amount,
     startDate: new Date(dbResult.start_date),
     isCompleted: dbResult.is_completed,
