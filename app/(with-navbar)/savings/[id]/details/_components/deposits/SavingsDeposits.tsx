@@ -44,7 +44,7 @@ export default async function SavingsDeposits({
         boxShadow: '0 8px 30px rgba(0,0,0,0.35)',
       }}
     >
-      <CardContent sx={{ p: 2.5 }}>
+      <CardContent sx={{ p: 2, '&.MuiCardContent-root': { pb: 2 } }}>
         <Stack spacing={2}>
           <Stack
             direction="row"
