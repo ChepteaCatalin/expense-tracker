@@ -24,7 +24,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       <Typography
         variant="subtitle1"
         component="p"
-        sx={{ mb: 2, fontWeight: 600 }}
+        sx={{ mb: 2, fontWeight: 600, lineHeight: 1 }}
       >
         Goal Actions
       </Typography>

@@ -338,6 +338,31 @@ export const getSavingsDepositsByGoalId = authGuard(
     },
 );
 
+export const deleteSavingsDeposit = authGuard(
+  session =>
+    async (depositId: number): Promise<void> => {
+      const result = await sql`
+        DELETE FROM savings_deposit sd
+        USING savings_goal sg
+        WHERE sd.id = ${depositId}
+          AND sd.savings_goal_id = sg.id
+          AND sg.user_id = ${session.user.id}
+          AND sg.is_completed = false
+        RETURNING sd.savings_goal_id AS goal_id
+      `;
+
+      const deleted = result[0];
+      if (!deleted) {
+        throw new Error('Savings deposit not found or delete failed');
+      }
+
+      const tag = userTag(session.user.id);
+      updateTag(tag(`savings-goals/id/${deleted.goal_id}`));
+      updateTag(tag('savings-goals/list'));
+      updateTag(tag(`savings-deposits/goal/${deleted.goal_id}`));
+    },
+);
+
 function savingsDepositFromDb(dbResult: Record<string, any>): SavingsDeposit {
   return {
     id: dbResult.id,

@@ -12,8 +12,8 @@ export default function SavingsGoalDetailsLoading() {
         sx={{ borderRadius: 1, mb: 0.5 }}
       />
       <Stack spacing={3}>
-        <Skeleton variant="rectangular" height={285} sx={{ borderRadius: 3 }} />
-        <Skeleton variant="rectangular" height={117} sx={{ borderRadius: 3 }} />
+        <Skeleton variant="rectangular" height={330} sx={{ borderRadius: 3 }} />
+        <Skeleton variant="rectangular" height={106} sx={{ borderRadius: 3 }} />
         <Skeleton variant="rectangular" height={264} sx={{ borderRadius: 3 }} />
       </Stack>
     </Box>

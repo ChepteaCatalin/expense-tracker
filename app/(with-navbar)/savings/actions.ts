@@ -18,6 +18,7 @@ import {
   createSavingsDeposit as createNewSavingsDeposit,
   completeSavingsGoal as markAsCompleted,
   reopenSavingsGoal as markAsReopened,
+  deleteSavingsDeposit as deleteExistingSavingsDeposit,
 } from '@/data/savings';
 import { toCents } from '@/utils/currency';
 
@@ -136,4 +137,15 @@ export async function reopenSavingsGoal(
     if (err instanceof UnauthorizedError) redirect('/signin');
     return 'Failed to reopen savings goal';
   }
+}
+
+export async function deleteSavingsDeposit(_: string, id: number) {
+  try {
+    await deleteExistingSavingsDeposit(id);
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return 'Failed to delete deposit';
+  }
+
+  return '';
 }

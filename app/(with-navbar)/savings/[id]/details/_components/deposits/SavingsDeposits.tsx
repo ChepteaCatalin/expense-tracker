@@ -1,6 +1,5 @@
 import type { SavingsDeposit } from '@/types/savings';
 import { readableCurrency } from '@/utils/currency';
-import Delete from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -13,6 +12,7 @@ import dayjs from 'dayjs';
 import NoSavingsDeposits from './NoSavingsDeposits';
 import IconButton from '@mui/material/IconButton';
 import AddDepositIconBtn from './AddDepositIconBtn';
+import DeleteDepositBtn from './DeleteDepositBtn';
 
 export default async function SavingsDeposits({
   deposits,
@@ -129,13 +129,10 @@ export default async function SavingsDeposits({
                     >
                       <EditIcon fontSize="small" />
                     </IconButton>
-                    <IconButton
-                      size="small"
-                      aria-label="delete"
-                      disabled={isGoalCompleted}
-                    >
-                      <Delete fontSize="small" />
-                    </IconButton>
+                    <DeleteDepositBtn
+                      id={deposit.id}
+                      isGoalCompleted={isGoalCompleted}
+                    />
                   </Stack>
                 </Stack>
                 {deposit.notes && (
