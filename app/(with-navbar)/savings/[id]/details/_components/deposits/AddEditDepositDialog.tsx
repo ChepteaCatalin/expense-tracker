@@ -30,7 +30,10 @@ import {
   handleDatePickerChange,
   toDatePickerValue,
 } from '@/lib/MuiDatePicker/utils';
-import { createSavingsDeposit } from '../../../../actions';
+import {
+  createSavingsDeposit,
+  updateSavingsDeposit,
+} from '../../../../actions';
 
 interface AddEditDepositDialogProps {
   handleClose: () => void;
@@ -38,9 +41,6 @@ interface AddEditDepositDialogProps {
   currency?: string;
   deposit?: SavingsDeposit;
 }
-
-//TODO:
-const updateSavingsDeposit = async (formData: FormData | object) => formData;
 
 export default function AddEditDepositDialog({
   handleClose,
@@ -117,7 +117,7 @@ export default function AddEditDepositDialog({
       <DialogContent>
         <ApiFormErrorAlert
           hide={hideApiError}
-          message={createDepositErrors.api} //TODO:|| updateDepositErrors.api
+          message={createDepositErrors.api || updateDepositErrors.api}
           sx={{ mb: 2 }}
         />
         <Stack
@@ -129,6 +129,7 @@ export default function AddEditDepositDialog({
             startTransition(() => {
               setHideApiError(false);
               if (isEditMode) {
+                updateDepositAction({ ...data, id: deposit.id, goalId });
               } else {
                 createDepositAction({ ...data, goalId });
               }
@@ -204,7 +205,8 @@ export default function AddEditDepositDialog({
           type="submit"
           form={formId}
           disabled={
-            !hideApiError && !!createDepositErrors.api // TODO: !hideApiError && (!!createDepositErrors.api || !!updateDepositErrors.api)
+            !hideApiError &&
+            (!!createDepositErrors.api || !!updateDepositErrors.api)
           }
           loading={isMutating}
           loadingPosition="start"
