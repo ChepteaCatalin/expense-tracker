@@ -72,9 +72,11 @@ export default async function SavingsDeposits({
           </Stack>
           <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
           {deposits.length > 1 && (
-            <Stats deposits={deposits} currency={goalCurrency} />
+            <>
+              <Stats deposits={deposits} currency={goalCurrency} />
+              <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+            </>
           )}
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
           <Stack spacing={1.25}>
             {deposits.map(deposit => (
               <Stack
