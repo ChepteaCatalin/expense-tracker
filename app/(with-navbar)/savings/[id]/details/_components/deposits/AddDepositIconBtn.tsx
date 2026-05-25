@@ -25,7 +25,7 @@ export default function AddDepositIconBtn({
         color="primary"
         onClick={() => setOpen(true)}
       >
-        <AddIcon fontSize="small" />
+        <AddIcon />
       </IconButton>
       {open && (
         <AddEditDepositDialog
