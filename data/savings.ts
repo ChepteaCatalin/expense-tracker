@@ -9,6 +9,7 @@ import type {
   SavingsGoalFormValuesWithId,
   SavingsDeposit,
   SavingsDepositFormValuesWithGoalId,
+  SavingsDepositFormValuesWithId,
 } from '@/types/savings';
 import { cacheLife, cacheTag, updateTag } from 'next/cache';
 
@@ -335,6 +336,45 @@ export const getSavingsDepositsByGoalId = authGuard(
       } catch {
         return [];
       }
+    },
+);
+
+export const updateSavingsDeposit = authGuard(
+  session =>
+    async (
+      deposit: SavingsDepositFormValuesWithId,
+    ): Promise<SavingsDeposit> => {
+      const result = await sql`
+        UPDATE savings_deposit sd
+        SET
+          amount = ${deposit.amount},
+          date = ${deposit.date},
+          notes = ${deposit.notes || null},
+          updated_at = NOW()
+        FROM savings_goal sg
+        WHERE sd.id = ${deposit.id}
+          AND sd.savings_goal_id = sg.id
+          AND sg.user_id = ${session.user.id}
+          AND sg.is_completed = false
+        RETURNING
+          sd.id,
+          sd.savings_goal_id,
+          sd.amount,
+          to_char(sd.date, 'YYYY-MM-DD') AS date,
+          sd.notes,
+          sd.created_at,
+          sd.updated_at
+      `;
+
+      const updated = result[0];
+      if (!updated) throw new Error('Failed to update savings deposit');
+
+      const tag = userTag(session.user.id);
+      updateTag(tag(`savings-goals/id/${deposit.goalId}`));
+      updateTag(tag('savings-goals/list'));
+      updateTag(tag(`savings-deposits/goal/${deposit.goalId}`));
+
+      return savingsDepositFromDb(updated);
     },
 );
 

@@ -52,4 +52,9 @@ export interface SavingsDepositFormValuesWithGoalId extends SavingsDepositFormVa
   goalId: number;
 }
 
+export interface SavingsDepositFormValuesWithId extends SavingsDepositFormValues {
+  id: number;
+  goalId: number;
+}
+
 export type SavingsDepositFormErrors = FormErrors<SavingsDepositFormValues>;
