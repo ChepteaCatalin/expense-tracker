@@ -1,6 +1,5 @@
 import type { SavingsDeposit } from '@/types/savings';
 import { readableCurrency } from '@/utils/currency';
-import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,9 +9,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import NoSavingsDeposits from './NoSavingsDeposits';
-import IconButton from '@mui/material/IconButton';
 import AddDepositIconBtn from './AddDepositIconBtn';
 import DeleteDepositBtn from './DeleteDepositBtn';
+import EditDepositBtn from './EditDepositBtn';
 
 export default async function SavingsDeposits({
   deposits,
@@ -72,7 +71,9 @@ export default async function SavingsDeposits({
             />
           </Stack>
           <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
-          <Stats deposits={deposits} currency={goalCurrency} />
+          {deposits.length > 1 && (
+            <Stats deposits={deposits} currency={goalCurrency} />
+          )}
           <Stack spacing={1.25}>
             {deposits.map(deposit => (
               <Stack
@@ -122,13 +123,12 @@ export default async function SavingsDeposits({
                     >
                       {dayjs(deposit.date).format('D MMM YYYY')}
                     </Typography>
-                    <IconButton
-                      size="small"
-                      aria-label="edit"
-                      disabled={isGoalCompleted}
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
+                    <EditDepositBtn
+                      deposit={deposit}
+                      goalId={goalId}
+                      isGoalCompleted={isGoalCompleted}
+                      goalCurrency={goalCurrency}
+                    />
                     <DeleteDepositBtn
                       id={deposit.id}
                       isGoalCompleted={isGoalCompleted}

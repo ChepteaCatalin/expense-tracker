@@ -3,6 +3,7 @@
 import type {
   SavingsDepositFormErrors,
   SavingsDepositFormValuesWithGoalId,
+  SavingsDepositFormValuesWithId,
   SavingsGoalFormErrors,
   SavingsGoalFormValues,
   SavingsGoalFormValuesWithId,
@@ -19,6 +20,7 @@ import {
   completeSavingsGoal as markAsCompleted,
   reopenSavingsGoal as markAsReopened,
   deleteSavingsDeposit as deleteExistingSavingsDeposit,
+  updateSavingsDeposit as updateExistingSavingsDeposit,
 } from '@/data/savings';
 import { toCents } from '@/utils/currency';
 
@@ -148,4 +150,28 @@ export async function deleteSavingsDeposit(_: string, id: number) {
   }
 
   return '';
+}
+
+export async function updateSavingsDeposit(
+  _: SavingsDepositFormErrors,
+  deposit: SavingsDepositFormValuesWithId,
+): Promise<SavingsDepositFormErrors> {
+  const errors = getFormErrors(savingsDepositSchema, {
+    ...deposit,
+    amount: +deposit.amount,
+    date: String(deposit.date),
+  });
+  if (errors) return errors;
+
+  try {
+    await updateExistingSavingsDeposit({
+      ...deposit,
+      amount: toCents(deposit.amount),
+    });
+  } catch (err: any) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    return { api: 'Failed to update goal deposit' };
+  }
+
+  return {};
 }
