@@ -24,9 +24,7 @@ export default function NavBar() {
         boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.3)',
       }}
     >
-      <Toolbar
-        sx={{ '&.MuiToolbar-root': { minHeight: '64px', p: '8px 16px' } }}
-      >
+      <Toolbar sx={{ '&.MuiToolbar-root': { minHeight: '64px', p: '8px' } }}>
         <Grid
           container
           spacing={2}
