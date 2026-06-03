@@ -5,6 +5,7 @@ import NavLink from './NavLink';
 import SavingsIcon from '@mui/icons-material/Savings';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Suspense } from 'react';
 import ExpensesNavLink from './ExpensesNavLink';
 import IncomeNavLink from './IncomeNavLink';
@@ -32,6 +33,7 @@ export default function NavBar() {
           sx={{ justifyContent: 'center', flex: '1' }}
         >
           <Suspense fallback={<NavBarFallback />}>
+            <NavLink href="/dashboard" Icon={DashboardIcon} text="Dashboard" />
             <ExpensesNavLink />
             <IncomeNavLink />
             <NavLink href="/savings" Icon={SavingsIcon} text="Savings" />
