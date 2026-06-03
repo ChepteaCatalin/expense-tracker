@@ -1,10 +1,15 @@
-import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import InsightCard from './_components/InsightCard';
 
 export default function DashboardPage() {
   return (
-    <Box>
-      <InsightCard title="Total Expenses">$1,250.00</InsightCard>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <InsightCard title="Total Expenses">$1,250.00</InsightCard>
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <InsightCard title="Total Expenses">$1,250.00</InsightCard>
+      </Grid>
+    </Grid>
   );
 }
