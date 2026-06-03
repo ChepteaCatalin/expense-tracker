@@ -86,7 +86,7 @@ export default async function SavingsDeposits({
                   borderRadius: 2,
                   px: 1.5,
                   py: 1.25,
-                  pr: 0.875,
+                  pr: 0.5,
                   border: '1px solid rgba(255,255,255,0.12)',
                   background:
                     'linear-gradient(125deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
@@ -126,16 +126,18 @@ export default async function SavingsDeposits({
                     >
                       {dayjs(deposit.date).format('D MMM YYYY')}
                     </Typography>
-                    <EditDepositBtn
-                      deposit={deposit}
-                      goalId={goalId}
-                      isGoalCompleted={isGoalCompleted}
-                      goalCurrency={goalCurrency}
-                    />
-                    <DeleteDepositBtn
-                      id={deposit.id}
-                      isGoalCompleted={isGoalCompleted}
-                    />
+                    <Box>
+                      <EditDepositBtn
+                        deposit={deposit}
+                        goalId={goalId}
+                        isGoalCompleted={isGoalCompleted}
+                        goalCurrency={goalCurrency}
+                      />
+                      <DeleteDepositBtn
+                        id={deposit.id}
+                        isGoalCompleted={isGoalCompleted}
+                      />
+                    </Box>
                   </Stack>
                 </Stack>
                 {deposit.notes && (
