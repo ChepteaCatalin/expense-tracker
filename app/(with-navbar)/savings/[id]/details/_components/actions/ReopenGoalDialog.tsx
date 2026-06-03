@@ -58,7 +58,7 @@ export function ReopenGoalDialog({
           While the goal is reopened, you will be able to make changes to it.
         </DialogContentText>
         <DialogContentText>
-          You can complete it later if needed.
+          You can mark it as completed later if needed.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
