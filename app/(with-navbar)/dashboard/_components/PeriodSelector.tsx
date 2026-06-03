@@ -62,7 +62,6 @@ export default function PeriodSelector() {
       })}
       sx={{
         width: '100%',
-        justifyContent: 'flex-end',
         alignItems: 'center',
         gap: 1,
         mb: 1,
