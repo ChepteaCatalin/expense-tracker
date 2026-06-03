@@ -37,6 +37,21 @@
     }
 }
 
+@media (pointer: coarse) {
+    .link {
+        gap: 4px;
+        padding: 8px 16px;
+    }
+
+    .link .icon {
+        font-size: 2.1875rem;
+    }
+
+    .link .label.label {
+        line-height: 1.3;
+    }
+}
+
 .link .label {
     font-size: 0.875rem;
     font-weight: 600;
