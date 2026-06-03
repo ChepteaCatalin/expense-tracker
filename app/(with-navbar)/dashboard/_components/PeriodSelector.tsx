@@ -22,9 +22,11 @@ export default function PeriodSelector() {
     control,
     trigger,
     handleSubmit,
+    resetDefaultValues,
     formState: { errors, isDirty },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
     mode: 'onChange',
+    shouldUnregister: true,
     defaultValues: normalizedSearchParams({
       from: searchParams.get('from'),
       to: searchParams.get('to'),
@@ -56,6 +58,7 @@ export default function PeriodSelector() {
       direction={{ xs: 'column', md: 'row' }}
       onSubmit={handleSubmit(data => {
         router.push(`/dashboard/?${buildSearchParams(data)}`);
+        resetDefaultValues(data);
       })}
       sx={{
         width: '100%',
