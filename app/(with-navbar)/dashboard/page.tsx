@@ -1,3 +1,5 @@
+import Box from '@mui/material/Box';
+
 export default function DashboardPage() {
-  return <div>1</div>;
+  return <Box>content</Box>;
 }
