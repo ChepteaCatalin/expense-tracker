@@ -1,11 +1,7 @@
 'use client';
 
 import type { FormDateTime } from '@/lib/MuiDatePicker/types';
-import {
-  handleDatePickerChange,
-  toDatePickerValue,
-  validDate,
-} from '@/lib/MuiDatePicker/utils';
+import { toDatePickerValue, validDate } from '@/lib/MuiDatePicker/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
@@ -15,6 +11,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { DatePicker } from '@mui/x-date-pickers';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { normalizedSearchParams } from '../utils';
+import type { PickerValue } from '@mui/x-date-pickers/internals';
 
 export default function PeriodSelector() {
   const router = useRouter();
@@ -24,13 +22,13 @@ export default function PeriodSelector() {
     control,
     trigger,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
     mode: 'onChange',
-    defaultValues: {
+    defaultValues: normalizedSearchParams({
       from: searchParams.get('from'),
       to: searchParams.get('to'),
-    },
+    }),
     resolver: zodResolver(
       z.object({ from: validDate, to: validDate }).refine(
         ({ from, to }) => {
@@ -75,7 +73,7 @@ export default function PeriodSelector() {
             label="From"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDatePickerChange(value => {
+            onChange={handleDateChange(value => {
               onChange(value);
               trigger('to');
             })}
@@ -104,7 +102,7 @@ export default function PeriodSelector() {
             label="To"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDatePickerChange(value => {
+            onChange={handleDateChange(value => {
               onChange(value);
               trigger('from');
             })}
@@ -118,13 +116,15 @@ export default function PeriodSelector() {
           />
         )}
       />
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{ mt: { xs: 1, md: 0 }, ml: { xs: 0, md: 1 } }}
-      >
-        View Insights
-      </Button>
+      {isDirty && (
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ mt: { xs: 1, md: 0 }, ml: { xs: 0, md: 1 } }}
+        >
+          View Insights
+        </Button>
+      )}
     </Stack>
   );
 }
@@ -134,4 +134,9 @@ function buildSearchParams(data: { from: FormDateTime; to: FormDateTime }) {
     from: dayjs(data.from).format('YYYY-MM-DD'),
     to: dayjs(data.to).format('YYYY-MM-DD'),
   }).toString();
+}
+
+function handleDateChange(onChange: (...event: any[]) => void) {
+  return (date: PickerValue) =>
+    onChange(date?.isValid() ? date.format('YYYY-MM-DD') : null);
 }
