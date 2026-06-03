@@ -34,7 +34,7 @@ export default async function SavingsGoalDetailsPage({
     <>
       <BackToSavingsLink />
       <Stack spacing={3}>
-        <SavingsGoalCard goal={goal} />
+        <SavingsGoalCard goal={goal} noHoverEffects />
         <ActionsButtons goal={goal} />
         <SavingsDeposits
           deposits={deposits}

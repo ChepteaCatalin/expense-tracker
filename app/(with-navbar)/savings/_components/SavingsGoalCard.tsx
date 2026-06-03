@@ -19,8 +19,10 @@ export default function SavingsGoalCard({
     completedDate,
     notes,
   },
+  noHoverEffects = false,
 }: {
   goal: SavingsGoal;
+  noHoverEffects?: boolean;
 }) {
   const remaining = targetAmount - currentAmount;
 
@@ -42,11 +44,13 @@ export default function SavingsGoalCard({
           ? '0 0 24px rgba(30, 215, 96, 0.15)'
           : '0 4px 24px rgba(0,0,0,0.4)',
         transition: 'box-shadow 0.2s',
-        '&:hover': {
-          boxShadow: isCompleted
-            ? '0 0 36px rgba(30, 215, 96, 0.25)'
-            : '0 8px 32px rgba(0,0,0,0.6)',
-        },
+        ...(!noHoverEffects && {
+          '&:hover': {
+            boxShadow: isCompleted
+              ? '0 0 36px rgba(30, 215, 96, 0.25)'
+              : '0 8px 32px rgba(0,0,0,0.6)',
+          },
+        }),
       }}
     >
       <Heading name={name} isCompleted={isCompleted} />
