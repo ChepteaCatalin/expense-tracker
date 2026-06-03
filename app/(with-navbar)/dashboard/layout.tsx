@@ -13,7 +13,11 @@ export default function DashboardLayout({
 }) {
   return (
     <Box>
-      <Heading title={metadata.title} subtitle={metadata.description} />
+      <Heading
+        title={metadata.title}
+        subtitle={metadata.description}
+        sx={{ mb: 3 }}
+      />
       {children}
     </Box>
   );
