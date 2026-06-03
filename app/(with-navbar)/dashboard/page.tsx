@@ -1,8 +1,17 @@
 import Grid from '@mui/material/Grid';
 import InsightCard from './_components/InsightCard';
 import PeriodSelector from './_components/PeriodSelector';
+import { notFound } from 'next/navigation';
+import type { DashboardSearchParams } from '@/types/dashboard';
+import { validSearchParams } from './utils';
 
-export default function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<DashboardSearchParams>;
+}) {
+  if (!validSearchParams(await searchParams)) notFound();
+
   return (
     <Grid container spacing={2}>
       <PeriodSelector />
