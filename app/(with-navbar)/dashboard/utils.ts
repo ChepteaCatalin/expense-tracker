@@ -1,5 +1,6 @@
 import type { DashboardSearchParams } from '@/types/dashboard';
 import { parseURLDate } from '@/utils/url';
+import dayjs from 'dayjs';
 
 export function validSearchParams({ from, to }: DashboardSearchParams) {
   if (!from && !to) return true;
@@ -12,4 +13,17 @@ export function validSearchParams({ from, to }: DashboardSearchParams) {
     toDate.isValid() &&
     (toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day'))
   );
+}
+
+export function normalizedSearchParams({
+  from,
+  to,
+}: DashboardSearchParams): DashboardSearchParams {
+  if (!from && !to)
+    return {
+      from: dayjs().startOf('year').format('YYYY-MM-DD'),
+      to: dayjs().format('YYYY-MM-DD'),
+    };
+
+  return { from, to };
 }

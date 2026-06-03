@@ -1,4 +1,4 @@
 export interface DashboardSearchParams {
-  from?: string;
-  to?: string;
+  from: string | null;
+  to: string | null;
 }
