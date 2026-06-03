@@ -6,7 +6,7 @@ export default function SavingsGoalDetailsLoading() {
   return (
     <Box>
       <Skeleton
-        variant="text"
+        variant="rectangular"
         width={88}
         height={28}
         sx={{ borderRadius: 1, mb: 0.5 }}
