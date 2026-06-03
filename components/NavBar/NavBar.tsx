@@ -24,11 +24,17 @@ export default function NavBar() {
         boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.3)',
       }}
     >
-      <Toolbar sx={{ '&.MuiToolbar-root': { minHeight: '64px', p: '8px' } }}>
+      <Toolbar
+        sx={{ '&.MuiToolbar-root': { minHeight: '64px', p: '8px 16px' } }}
+      >
         <Grid
           container
-          spacing={2}
-          sx={{ justifyContent: 'center', flex: '1' }}
+          sx={{
+            justifyContent: 'center',
+            flex: '1',
+            columnGap: 1.25,
+            '@media (pointer: fine)': { columnGap: 2 },
+          }}
         >
           <Suspense fallback={<NavBarFallback />}>
             <NavLink href="/dashboard" Icon={DashboardIcon} text="Dashboard" />
