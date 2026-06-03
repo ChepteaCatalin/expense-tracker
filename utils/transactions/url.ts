@@ -2,7 +2,7 @@ import type { TransactionCategoriesSearchParams } from '@/types/transaction';
 import dayjs from 'dayjs';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { notFound } from 'next/navigation';
-import { validIdParam } from '@/utils/url';
+import { parseURLDate, validIdParam } from '@/utils/url';
 import type {
   TransactionByCategorySearchParams,
   SortTransactionBy,
@@ -15,7 +15,6 @@ export const year = 'year';
 export const custom = 'custom';
 export const periods = [day, week, month, year, custom] as const;
 const validPeriodParams = [...periods, 'from', 'to'] as const;
-const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 export function validSearchParams(
   searchParams: TransactionCategoriesSearchParams,
@@ -113,17 +112,6 @@ function getActivePeriod(searchParams: TransactionCategoriesSearchParams) {
       periods.includes(key as (typeof periods)[number]),
     ) || []
   );
-}
-
-function parseURLDate(date: string | null | undefined) {
-  if (typeof date !== 'string' || !isoDateRegex.test(date)) return dayjs('');
-
-  const parsedDate = dayjs(date);
-  if (!parsedDate.isValid() || parsedDate.format('YYYY-MM-DD') !== date) {
-    return dayjs('');
-  }
-
-  return parsedDate;
 }
 
 export function getActivePeriodEntry(
