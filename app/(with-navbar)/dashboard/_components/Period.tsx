@@ -36,7 +36,7 @@ export default function Period() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stack direction="row" sx={{ mb: 1, alignItems: 'center', gap: 1.5 }}>
+      <Stack direction="row" sx={{ mb: 1, alignItems: 'center', gap: 1 }}>
         <Box
           sx={{
             display: 'inline-flex',
