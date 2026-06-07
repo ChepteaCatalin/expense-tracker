@@ -32,7 +32,7 @@ export default function NavBar() {
           sx={{
             justifyContent: 'center',
             flex: '1',
-            columnGap: 1.25,
+            columnGap: 1,
             '@media (pointer: fine)': { columnGap: 2 },
           }}
         >
