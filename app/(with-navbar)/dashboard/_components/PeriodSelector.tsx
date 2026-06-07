@@ -25,7 +25,7 @@ export default function PeriodSelector() {
     handleSubmit,
     resetDefaultValues,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
     mode: 'onChange',
     shouldUnregister: true,
@@ -108,7 +108,7 @@ export default function PeriodSelector() {
           />
         )}
       />
-      {isDirty && (
+      {isDirty && isValid && (
         <Button
           type="submit"
           variant="contained"
