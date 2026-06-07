@@ -13,6 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { normalizedSearchParams } from '../utils';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
+import { useEffect } from 'react';
 
 export default function PeriodSelector() {
   const router = useRouter();
@@ -23,33 +24,22 @@ export default function PeriodSelector() {
     trigger,
     handleSubmit,
     resetDefaultValues,
+    reset,
     formState: { errors, isDirty },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
     mode: 'onChange',
     shouldUnregister: true,
-    defaultValues: normalizedSearchParams({
-      from: searchParams.get('from'),
-      to: searchParams.get('to'),
-    }),
-    resolver: zodResolver(
-      z.object({ from: validDate, to: validDate }).refine(
-        ({ from, to }) => {
-          const fromDate = dayjs(from);
-          const toDate = dayjs(to);
-
-          if (!fromDate.isValid() || !toDate.isValid()) return true;
-
-          return (
-            toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day')
-          );
-        },
-        {
-          message: 'To date must be on or after From date',
-          path: ['to'],
-        },
-      ),
-    ),
+    defaultValues: getDefaultValues(),
+    resolver: zodResolver(schema),
   });
+
+  useEffect(
+    function resetFormOnMount() {
+      reset(getDefaultValues());
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <Stack
@@ -129,7 +119,29 @@ export default function PeriodSelector() {
       )}
     </Stack>
   );
+
+  function getDefaultValues() {
+    return normalizedSearchParams({
+      from: searchParams.get('from'),
+      to: searchParams.get('to'),
+    });
+  }
 }
+
+const schema = z.object({ from: validDate, to: validDate }).refine(
+  ({ from, to }) => {
+    const fromDate = dayjs(from);
+    const toDate = dayjs(to);
+
+    if (!fromDate.isValid() || !toDate.isValid()) return true;
+
+    return toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day');
+  },
+  {
+    message: 'To date must be on or after From date',
+    path: ['to'],
+  },
+);
 
 function buildSearchParams(data: { from: FormDateTime; to: FormDateTime }) {
   return new URLSearchParams({
