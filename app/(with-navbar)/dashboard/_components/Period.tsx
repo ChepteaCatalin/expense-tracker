@@ -63,7 +63,11 @@ export default function Period() {
             {formatPeriodDate(defaultValues.to)}
           </Typography>
         </Box>
-        <IconButton onClick={event => setAnchorEl(event.currentTarget)}>
+        <IconButton
+          onClick={event => setAnchorEl(event.currentTarget)}
+          aria-label="choose date range"
+          aria-describedby={popoverId}
+        >
           <DateRangeIcon />
         </IconButton>
         <Popover
@@ -203,7 +207,7 @@ function PeriodPopover({
   );
 }
 
-function formatPeriodDate(value: string | null) {
+function formatPeriodDate(value: string | null | undefined) {
   return dayjs(value).format('D MMM YYYY');
 }
 
