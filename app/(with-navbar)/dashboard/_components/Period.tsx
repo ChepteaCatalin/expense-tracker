@@ -20,10 +20,11 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Popover from '@mui/material/Popover';
+import type { DashboardSearchParams } from '@/types/dashboard';
 
 export default function Period() {
   const router = useRouter();
-  const initialValues = useGetSearchParamsPeriod();
+  const searchParams = useSearchParams();
 
   const [isPending, startNavigation] = useTransition();
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
@@ -31,12 +32,16 @@ export default function Period() {
   );
   const id = useId();
 
+  const defaultValues = normalizedSearchParams({
+    from: searchParams.get('from'),
+    to: searchParams.get('to'),
+  });
   const popoverOpened = Boolean(anchorEl);
   const popoverId = popoverOpened ? 'popover' + id : undefined;
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stack direction="row" sx={{ mb: 1, alignItems: 'center', gap: 1 }}>
+      <Stack direction="row" sx={{ mb: 1, alignItems: 'center', gap: 0.5 }}>
         <Box
           sx={{
             display: 'inline-flex',
@@ -51,11 +56,11 @@ export default function Period() {
           }}
         >
           <Typography sx={{ fontWeight: 600 }}>
-            {formatPeriodDate(initialValues.from)}
+            {formatPeriodDate(defaultValues.from)}
           </Typography>
           <ArrowForwardIcon fontSize="small" sx={{ color: 'text.secondary' }} />
           <Typography sx={{ fontWeight: 600 }}>
-            {formatPeriodDate(initialValues.to)}
+            {formatPeriodDate(defaultValues.to)}
           </Typography>
         </Box>
         <IconButton onClick={event => setAnchorEl(event.currentTarget)}>
@@ -76,6 +81,7 @@ export default function Period() {
           }}
         >
           <PeriodPopover
+            defaultValues={defaultValues}
             onSubmit={params => {
               setAnchorEl(null);
               startNavigation(() => {
@@ -94,9 +100,13 @@ export default function Period() {
   );
 }
 
-function PeriodPopover({ onSubmit }: { onSubmit: (params: string) => void }) {
-  const defaultValues = useGetSearchParamsPeriod();
-
+function PeriodPopover({
+  defaultValues,
+  onSubmit,
+}: {
+  defaultValues: DashboardSearchParams;
+  onSubmit: (params: string) => void;
+}) {
   const {
     control,
     trigger,
@@ -191,15 +201,6 @@ function PeriodPopover({ onSubmit }: { onSubmit: (params: string) => void }) {
       </Button>
     </Stack>
   );
-}
-
-function useGetSearchParamsPeriod() {
-  const searchParams = useSearchParams();
-
-  return normalizedSearchParams({
-    from: searchParams.get('from'),
-    to: searchParams.get('to'),
-  });
 }
 
 function formatPeriodDate(value: string | null) {
