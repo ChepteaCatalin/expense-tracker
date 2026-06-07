@@ -13,54 +13,30 @@ import { DatePicker } from '@mui/x-date-pickers';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { normalizedSearchParams } from '../utils';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
-import { useEffect, useState } from 'react';
+import { useId, useState, useTransition } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import IconButton from '@mui/material/IconButton';
+import LinearProgress from '@mui/material/LinearProgress';
+import Popover from '@mui/material/Popover';
 
 export default function Period() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const initialValues = useGetSearchParamsPeriod();
 
-  const initialValues = normalizedSearchParams({
-    from: searchParams.get('from'),
-    to: searchParams.get('to'),
-  });
-
-  const {
-    control,
-    trigger,
-    handleSubmit,
-    resetDefaultValues,
-    reset,
-    formState: { errors, isDirty, isValid },
-  } = useForm<{ from: FormDateTime; to: FormDateTime }>({
-    mode: 'onChange',
-    shouldUnregister: true,
-    defaultValues: initialValues,
-    resolver: zodResolver(schema),
-  });
-
-  const [changingPeriod, setChangingPeriod] = useState(false);
-
-  useEffect(
-    function resetFormOnMount() {
-      reset(initialValues);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+  const [isPending, startNavigation] = useTransition();
+  const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
+    null,
   );
+  const id = useId();
 
-  useEffect(function onUnmount() {
-    return () => {
-      setChangingPeriod(false);
-    };
-  }, []);
+  const popoverOpened = Boolean(anchorEl);
+  const popoverId = popoverOpened ? 'popover' + id : undefined;
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stack direction="row" sx={{ mb: 2, alignItems: 'center', gap: 1.5 }}>
+      <Stack direction="row" sx={{ mb: 1, alignItems: 'center', gap: 1.5 }}>
         <Box
           sx={{
             display: 'inline-flex',
@@ -75,135 +51,159 @@ export default function Period() {
           }}
         >
           <Typography sx={{ fontWeight: 600 }}>
-            {dayjs(initialValues.from).format('D MMM YYYY')}
+            {formatPeriodDate(initialValues.from)}
           </Typography>
           <ArrowForwardIcon fontSize="small" sx={{ color: 'text.secondary' }} />
           <Typography sx={{ fontWeight: 600 }}>
-            {dayjs(initialValues.to).format('D MMM YYYY')}
+            {formatPeriodDate(initialValues.to)}
           </Typography>
         </Box>
-        {!changingPeriod && (
-          <IconButton onClick={() => setChangingPeriod(true)}>
-            <DateRangeIcon />
-          </IconButton>
-        )}
-      </Stack>
-      {changingPeriod && (
-        <Stack
-          component="form"
-          noValidate
-          direction={{ xs: 'column', md: 'row' }}
-          onSubmit={handleSubmit(data => {
-            router.push(`/dashboard/?${buildSearchParams(data)}`);
-            resetDefaultValues(data);
-            setChangingPeriod(false);
-          })}
-          sx={{
-            width: '100%',
-            alignItems: 'center',
-            gap: 1,
-            mb: 1,
+        <IconButton onClick={event => setAnchorEl(event.currentTarget)}>
+          <DateRangeIcon />
+        </IconButton>
+        <Popover
+          id={popoverId}
+          open={popoverOpened}
+          anchorEl={anchorEl}
+          onClose={() => setAnchorEl(null)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
           }}
         >
-          <Controller
-            name="from"
-            control={control}
-            render={({ field: { name, value, onChange } }) => (
-              <DatePicker
-                label="From"
-                name={name}
-                value={toDatePickerValue(value)}
-                onChange={handleDateChange(value => {
-                  onChange(value);
-                  trigger('to');
-                })}
-                slotProps={{
-                  textField: {
-                    required: true,
-                    error: !!errors.from,
-                  },
-                }}
-                sx={{ maxWidth: 250 }}
-              />
-            )}
-          />
-          <ArrowForwardIcon
-            sx={{
-              color: 'text.secondary',
-              mx: 1,
-              transform: { xs: 'rotate(90deg)', md: 'none' },
+          <PeriodPopover
+            onSubmit={params => {
+              setAnchorEl(null);
+              startNavigation(() => {
+                router.push(`/dashboard/?${params}`);
+              });
             }}
           />
-          <Controller
-            name="to"
-            control={control}
-            render={({ field: { name, value, onChange } }) => (
-              <DatePicker
-                label="To"
-                name={name}
-                value={toDatePickerValue(value)}
-                onChange={handleDateChange(value => {
-                  onChange(value);
-                  trigger('from');
-                })}
-                slotProps={{
-                  textField: {
-                    required: true,
-                    error: !!errors.to,
-                  },
-                }}
-                sx={{ maxWidth: 250 }}
-              />
-            )}
-          />
-          <Stack
-            direction="row"
-            sx={{
-              gap: 1.5,
-              mt: { xs: 1, md: 0 },
-              ml: { xs: 0, md: 1 },
-            }}
-          >
-            {isDirty && isValid && (
-              <Button type="submit" variant="outlined">
-                View Insights
-              </Button>
-            )}
-            <Button
-              onClick={() => {
-                reset(initialValues);
-                setChangingPeriod(false);
-              }}
-            >
-              Cancel
-            </Button>
-          </Stack>
-        </Stack>
+        </Popover>
+      </Stack>
+      {isPending ? (
+        <LinearProgress sx={{ borderRadius: '999px' }} />
+      ) : (
+        <Box sx={{ height: 4 }} />
       )}
     </Box>
   );
 }
 
-const schema = z.object({ from: validDate, to: validDate }).refine(
-  ({ from, to }) => {
-    const fromDate = dayjs(from);
-    const toDate = dayjs(to);
+function PeriodPopover({ onSubmit }: { onSubmit: (params: string) => void }) {
+  const defaultValues = useGetSearchParamsPeriod();
 
-    if (!fromDate.isValid() || !toDate.isValid()) return true;
+  const {
+    control,
+    trigger,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ from: FormDateTime; to: FormDateTime }>({
+    mode: 'onChange',
+    shouldUnregister: true,
+    defaultValues,
+    resolver: zodResolver(
+      z.object({ from: validDate, to: validDate }).refine(
+        ({ from, to }) => {
+          const fromDate = dayjs(from);
+          const toDate = dayjs(to);
 
-    return toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day');
-  },
-  {
-    message: 'To date must be on or after From date',
-    path: ['to'],
-  },
-);
+          if (!fromDate.isValid() || !toDate.isValid()) return true;
 
-function buildSearchParams(data: { from: FormDateTime; to: FormDateTime }) {
-  return new URLSearchParams({
-    from: dayjs(data.from).format('YYYY-MM-DD'),
-    to: dayjs(data.to).format('YYYY-MM-DD'),
-  }).toString();
+          return (
+            toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day')
+          );
+        },
+        {
+          message: 'To date must be on or after From date',
+          path: ['to'],
+        },
+      ),
+    ),
+  });
+
+  return (
+    <Stack
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(data => {
+        onSubmit(
+          new URLSearchParams({
+            from: dayjs(data.from).format('YYYY-MM-DD'),
+            to: dayjs(data.to).format('YYYY-MM-DD'),
+          }).toString(),
+        );
+      })}
+      spacing={1.5}
+      sx={{ p: 1.5, width: '260px' }}
+    >
+      <Typography>Date range:</Typography>
+      <Controller
+        name="from"
+        control={control}
+        render={({ field: { name, value, onChange } }) => (
+          <DatePicker
+            label="From"
+            name={name}
+            value={toDatePickerValue(value)}
+            onChange={handleDateChange(value => {
+              onChange(value);
+              trigger('to');
+            })}
+            slotProps={{
+              textField: {
+                required: true,
+                error: !!errors.from,
+                helperText: errors.from?.message,
+              },
+            }}
+          />
+        )}
+      />
+      <Controller
+        name="to"
+        control={control}
+        render={({ field: { name, value, onChange } }) => (
+          <DatePicker
+            label="To"
+            name={name}
+            value={toDatePickerValue(value)}
+            onChange={handleDateChange(value => {
+              onChange(value);
+              trigger('from');
+            })}
+            slotProps={{
+              textField: {
+                required: true,
+                error: !!errors.to,
+                helperText: errors.to?.message,
+              },
+            }}
+          />
+        )}
+      />
+      <Button type="submit" variant="contained">
+        View Insights
+      </Button>
+    </Stack>
+  );
+}
+
+function useGetSearchParamsPeriod() {
+  const searchParams = useSearchParams();
+
+  return normalizedSearchParams({
+    from: searchParams.get('from'),
+    to: searchParams.get('to'),
+  });
+}
+
+function formatPeriodDate(value: string | null) {
+  return dayjs(value).format('D MMM YYYY');
 }
 
 function handleDateChange(onChange: (...event: any[]) => void) {
