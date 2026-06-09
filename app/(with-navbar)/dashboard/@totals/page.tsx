@@ -34,20 +34,23 @@ export default async function TotalsPage({
   return (
     <InsightCard title="Totals">
       <MetricRow
-        label={`Income (${currency})`}
+        label="Income"
         value={totals.income}
+        currency={currency}
         color="success.main"
       />
       <Divider sx={dividerSx} />
       <MetricRow
-        label={`Expenses (${currency})`}
+        label="Expenses"
         value={totals.expenses}
+        currency={currency}
         color="error.main"
       />
       <Divider sx={dividerSx} />
       <MetricRow
-        label={`Net Income (${currency})`}
+        label="Net Income"
         value={netIncome}
+        currency={currency}
         color={netIncome >= 0 ? 'success.main' : 'error.main'}
         highlight
       />
@@ -58,8 +61,9 @@ export default async function TotalsPage({
         totals.savingsByCurrency.map(({ currency, total }) => (
           <MetricRow
             key={currency}
-            label={`Savings (${currency})`}
+            label="Savings"
             value={total}
+            currency={currency}
             color="info.main"
           />
         ))
@@ -71,11 +75,13 @@ export default async function TotalsPage({
 function MetricRow({
   label,
   value,
+  currency,
   color,
   highlight,
 }: {
   label: string;
   value: number;
+  currency?: string;
   color: string;
   highlight?: boolean;
 }) {
@@ -98,7 +104,7 @@ function MetricRow({
         variant="body2"
         sx={{ fontWeight: highlight ? 700 : 600, color }}
       >
-        {readableCurrency(value)}
+        {readableCurrency(value)} {currency ?? ''}
       </Typography>
     </Box>
   );
