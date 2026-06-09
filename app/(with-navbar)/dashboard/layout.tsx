@@ -1,5 +1,6 @@
 import Heading from '@/components/Heading';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 export const metadata = {
   title: 'Dashboard',
@@ -7,9 +8,11 @@ export const metadata = {
 };
 
 export default function DashboardLayout({
-  children,
+  period,
+  totals,
 }: {
-  children: React.ReactNode;
+  period: React.ReactNode;
+  totals: React.ReactNode;
 }) {
   return (
     <Box>
@@ -18,7 +21,10 @@ export default function DashboardLayout({
         subtitle={metadata.description}
         sx={{ mb: 3 }}
       />
-      {children}
+      <Grid container spacing={2}>
+        {period}
+        <Grid size={{ xs: 12, md: 6 }}>{totals}</Grid>
+      </Grid>
     </Box>
   );
 }
