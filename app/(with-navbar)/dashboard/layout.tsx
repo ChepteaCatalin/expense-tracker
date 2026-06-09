@@ -23,7 +23,7 @@ export default function DashboardLayout({
       />
       <Grid container spacing={2}>
         {period}
-        <Grid size={{ xs: 12, md: 6 }}>{totals}</Grid>
+        <Grid size={{ xs: 12, md: 4 }}>{totals}</Grid>
       </Grid>
     </Box>
   );
