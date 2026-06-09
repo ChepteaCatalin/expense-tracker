@@ -18,7 +18,7 @@ export default async function Totals({
   const currency = (await getSession())?.user.currency;
 
   const totals = {
-    income: 1_234_56700.99,
+    income: 12_234_56700.99,
     expenses: 1_234_56700.99,
     savings: 1_234_56700.99,
   };
