@@ -1,11 +1,14 @@
 import Typography from '@mui/material/Typography';
 import { getValidNormalizedSearchParams } from '../utils';
 import InsightCard from '../_components/InsightCard';
-import type { DashboardSearchParams } from '@/types/dashboard';
+import type { DashboardSearchParams, TotalsMetrics } from '@/types/dashboard';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import { getSession } from '@/data/auth';
 import { readableCurrency } from '@/utils/currency';
+import { UnauthorizedError } from '@/utils/error';
+import { getDashboardTotals } from '@/data/dashboard';
+import { redirect } from 'next/navigation';
 
 export default async function Totals({
   searchParams,
@@ -14,14 +17,14 @@ export default async function Totals({
 }) {
   const params = await getValidNormalizedSearchParams(searchParams);
 
-  //TODO: do this after fetching data
+  let totals: TotalsMetrics;
+  try {
+    totals = await getDashboardTotals({ from: params.from!, to: params.to! });
+  } catch (err) {
+    if (err instanceof UnauthorizedError) redirect('/signin');
+    throw err;
+  }
   const currency = (await getSession())?.user.currency;
-
-  const totals = {
-    income: 1_234_56700.99,
-    expenses: 1_234_56700.99,
-    savings: 1_234_56700.99,
-  };
 
   const netIncome = totals.income - totals.expenses;
 
