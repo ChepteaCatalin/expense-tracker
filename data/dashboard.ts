@@ -4,7 +4,7 @@ import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
 import type { TotalsMetrics } from '@/types/dashboard';
 
-export const getDashboardTotals = authGuard(
+export const getTotals = authGuard(
   session =>
     async ({
       from,
@@ -42,9 +42,9 @@ export const getDashboardTotals = authGuard(
       const row = result[0];
 
       return {
-        expenses: Number(row.expenses),
-        income: Number(row.income),
-        savings: Number(row.savings),
+        expenses: +row.expenses,
+        income: +row.income,
+        savings: +row.savings,
       };
     },
 );
