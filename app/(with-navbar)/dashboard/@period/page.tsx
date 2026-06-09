@@ -22,7 +22,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Popover from '@mui/material/Popover';
 import type { DashboardSearchParams } from '@/types/dashboard';
 
-export default function Period() {
+export default function PeriodPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
