@@ -3,7 +3,7 @@
 import type { FormDateTime } from '@/lib/MuiDatePicker/types';
 import { toDatePickerValue, validDate } from '@/lib/MuiDatePicker/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
 import dayjs from 'dayjs';
@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { DatePicker } from '@mui/x-date-pickers';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { normalizedSearchParams } from '../utils';
+import { normalizedSearchParams, validSearchParams } from '../utils';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
 import { useId, useState, useTransition } from 'react';
 import Box from '@mui/material/Box';
@@ -32,10 +32,13 @@ export default function Period() {
   );
   const id = useId();
 
-  const defaultValues = normalizedSearchParams({
+  const periodParams = {
     from: searchParams.get('from'),
     to: searchParams.get('to'),
-  });
+  };
+  if (!validSearchParams(periodParams)) notFound();
+  const defaultValues = normalizedSearchParams(periodParams);
+
   const popoverOpened = Boolean(anchorEl);
   const popoverId = popoverOpened ? 'popover' + id : undefined;
 

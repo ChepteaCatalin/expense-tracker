@@ -1,6 +1,17 @@
 import type { DashboardSearchParams } from '@/types/dashboard';
 import { parseURLDate } from '@/utils/url';
 import dayjs from 'dayjs';
+import { notFound } from 'next/navigation';
+
+export async function getValidNormalizedSearchParams(
+  searchParams: Promise<DashboardSearchParams>,
+) {
+  const awaitedSearchParams = await searchParams;
+
+  if (!validSearchParams(awaitedSearchParams)) notFound();
+
+  return normalizedSearchParams(awaitedSearchParams);
+}
 
 export function validSearchParams({ from, to }: DashboardSearchParams) {
   if (!from && !to) return true;
