@@ -3,8 +3,13 @@ export interface DashboardSearchParams {
   to?: string | null;
 }
 
+export interface SavingsByCurrency {
+  currency: string;
+  total: number;
+}
+
 export interface TotalsMetrics {
   income: number;
   expenses: number;
-  savings: number;
+  savingsByCurrency: SavingsByCurrency[];
 }
