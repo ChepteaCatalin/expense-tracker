@@ -32,19 +32,38 @@ export default async function TotalsPage({
   const netIncome = totals.income - totals.expenses;
 
   return (
-    <InsightCard title={`Totals (${currency})`}>
-      <MetricRow label="Income" value={totals.income} color="success.main" />
-      <Divider sx={dividerSx} />
-      <MetricRow label="Expenses" value={totals.expenses} color="error.main" />
+    <InsightCard title="Totals">
+      <MetricRow
+        label={`Income (${currency})`}
+        value={totals.income}
+        color="success.main"
+      />
       <Divider sx={dividerSx} />
       <MetricRow
-        label="Net Income"
+        label={`Expenses (${currency})`}
+        value={totals.expenses}
+        color="error.main"
+      />
+      <Divider sx={dividerSx} />
+      <MetricRow
+        label={`Net Income (${currency})`}
         value={netIncome}
         color={netIncome >= 0 ? 'success.main' : 'error.main'}
         highlight
       />
       <Divider sx={dividerSx} />
-      <MetricRow label="Savings" value={totals.savings} color="info.main" />
+      {totals.savingsByCurrency.length === 0 ? (
+        <MetricRow label="Savings" value={0} color="info.main" />
+      ) : (
+        totals.savingsByCurrency.map(({ currency, total }) => (
+          <MetricRow
+            key={currency}
+            label={`Savings (${currency})`}
+            value={total}
+            color="info.main"
+          />
+        ))
+      )}
     </InsightCard>
   );
 }
