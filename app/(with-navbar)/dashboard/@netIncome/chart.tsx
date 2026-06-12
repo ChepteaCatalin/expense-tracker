@@ -26,18 +26,12 @@ export default function NetIncomeChart() {
         xAxis: {
           type: 'category',
           data: data.months,
-          axisPointer: {
-            type: 'shadow',
-          },
-          axisLabel: {
-            color: textColor,
-          },
+          axisPointer: { type: 'shadow' },
+          axisLabel: { color: textColor },
         },
         yAxis: {
           type: 'value',
-          axisLabel: {
-            color: textColor,
-          },
+          axisLabel: { color: textColor },
         },
         series: [
           {
