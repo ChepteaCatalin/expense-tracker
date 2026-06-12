@@ -30,7 +30,7 @@ export default function InsightError({
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ textAlign: 'center' }}
+          sx={{ textAlign: 'center', fontSize: '1rem' }}
         >
           Unable to load this insight
         </Typography>
