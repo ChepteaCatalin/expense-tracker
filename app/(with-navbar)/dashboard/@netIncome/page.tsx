@@ -1,7 +1,7 @@
 import { getValidNormalizedSearchParams } from '../utils';
 import InsightCard from '../_components/InsightCard';
 import type { DashboardSearchParams, MonthlyMetric } from '@/types/dashboard';
-import IncomeVsExpensesChart from './chart';
+import NetIncomeChart from './NetIncomeChart';
 import { getSession } from '@/data/auth';
 import { getMonthlyMetrics } from '@/data/dashboard';
 import { UnauthorizedError } from '@/utils/error';
@@ -36,7 +36,7 @@ export default async function NetIncomePage({
 
   return (
     <InsightCard title={`Net Income (${currency})`}>
-      <IncomeVsExpensesChart data={chartData} />
+      <NetIncomeChart data={chartData} />
     </InsightCard>
   );
 }
