@@ -41,6 +41,12 @@ export default function IncomeVsExpensesChart() {
         },
         series: [
           {
+            name: 'Net Income',
+            type: 'line',
+            data: data.netIncome,
+            color: '#42a5f5',
+          },
+          {
             name: 'Income',
             data: data.income,
             type: 'bar',
@@ -55,12 +61,6 @@ export default function IncomeVsExpensesChart() {
             stack: 'expenses',
             barMaxWidth: 40,
             color: '#f44336',
-          },
-          {
-            name: 'Net Income',
-            type: 'line',
-            data: data.netIncome,
-            color: '#42a5f5',
           },
         ],
         legend: {
