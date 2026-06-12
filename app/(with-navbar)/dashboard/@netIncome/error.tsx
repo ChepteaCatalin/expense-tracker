@@ -2,10 +2,10 @@
 
 import InsightError from '../_components/InsightError';
 
-export default function TotalsError({
+export default function NetIncomeError({
   unstable_retry,
 }: {
   unstable_retry: () => void;
 }) {
-  return <InsightError title="Totals" retry={unstable_retry} />;
+  return <InsightError title="Net Income" retry={unstable_retry} />;
 }
