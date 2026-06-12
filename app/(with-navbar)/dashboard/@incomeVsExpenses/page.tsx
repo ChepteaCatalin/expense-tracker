@@ -1,6 +1,8 @@
 import { getValidNormalizedSearchParams } from '../utils';
 import InsightCard from '../_components/InsightCard';
 import type { DashboardSearchParams } from '@/types/dashboard';
+import IncomeVsExpensesChart from './chart';
+import { getSession } from '@/data/auth';
 
 export default async function IncomeVsExpensesPage({
   searchParams,
@@ -9,5 +11,12 @@ export default async function IncomeVsExpensesPage({
 }) {
   const params = await getValidNormalizedSearchParams(searchParams);
 
-  return <InsightCard title="Income vs Expenses">123</InsightCard>;
+  // TODO: do this after fetching
+  const currency = (await getSession())?.user.currency;
+
+  return (
+    <InsightCard title="Income vs Expenses">
+      <IncomeVsExpensesChart currency={currency} />
+    </InsightCard>
+  );
 }
