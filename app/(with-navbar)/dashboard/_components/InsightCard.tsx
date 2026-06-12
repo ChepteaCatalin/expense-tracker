@@ -16,6 +16,7 @@ export default function InsightCard({
         border: BORDER,
         background:
           'linear-gradient(160deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
+        height: '100%',
       }}
     >
       <CardHeader
