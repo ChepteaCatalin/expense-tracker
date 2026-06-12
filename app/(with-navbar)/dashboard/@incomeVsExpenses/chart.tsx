@@ -41,13 +41,13 @@ export default function IncomeVsExpensesChart() {
         },
         series: [
           {
-            name: 'Net Income',
+            name: names[0],
             type: 'line',
             data: data.netIncome,
             color: '#ffca28',
           },
           {
-            name: 'Income',
+            name: names[1],
             data: data.income,
             type: 'bar',
             stack: 'income',
@@ -56,7 +56,7 @@ export default function IncomeVsExpensesChart() {
             itemStyle,
           },
           {
-            name: 'Expenses',
+            name: names[2],
             data: data.expenses,
             type: 'bar',
             stack: 'expenses',
@@ -67,7 +67,7 @@ export default function IncomeVsExpensesChart() {
         ],
         legend: {
           top: 0,
-          data: ['Income', 'Expenses', 'Net Income'],
+          data: names,
           textStyle: { color: textColor },
         },
         tooltip: {
@@ -114,3 +114,4 @@ const textColor = 'rgba(255, 255, 255, 0.7)';
 const itemStyle = {
   borderRadius: [2, 2, 0, 0],
 };
+const names = ['Net Income', 'Income', 'Expenses'];
