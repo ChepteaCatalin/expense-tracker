@@ -4,7 +4,7 @@ import type { DashboardSearchParams } from '@/types/dashboard';
 import IncomeVsExpensesChart from './chart';
 import { getSession } from '@/data/auth';
 
-export default async function IncomeVsExpensesPage({
+export default async function NetIncomePage({
   searchParams,
 }: {
   searchParams: Promise<DashboardSearchParams>;
@@ -15,7 +15,7 @@ export default async function IncomeVsExpensesPage({
   const currency = (await getSession())?.user.currency;
 
   return (
-    <InsightCard title={`Income vs Expenses (${currency})`}>
+    <InsightCard title={`Net Income (${currency})`}>
       <IncomeVsExpensesChart />
     </InsightCard>
   );

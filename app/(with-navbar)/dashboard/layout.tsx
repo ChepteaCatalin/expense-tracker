@@ -10,11 +10,11 @@ export const metadata = {
 export default function DashboardLayout({
   period,
   totals,
-  incomeVsExpenses,
+  netIncome,
 }: {
   period: React.ReactNode;
   totals: React.ReactNode;
-  incomeVsExpenses: React.ReactNode;
+  netIncome: React.ReactNode;
 }) {
   return (
     <Box>
@@ -26,7 +26,7 @@ export default function DashboardLayout({
       <Grid container spacing={2}>
         {period}
         <Grid size={{ xs: 12, md: 4 }}>{totals}</Grid>
-        <Grid size={{ xs: 12, md: 8 }}>{incomeVsExpenses}</Grid>
+        <Grid size={{ xs: 12, md: 8 }}>{netIncome}</Grid>
       </Grid>
     </Box>
   );
