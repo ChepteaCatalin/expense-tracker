@@ -1,9 +1,9 @@
 import Skeleton from '@mui/material/Skeleton';
 import InsightCard from '../_components/InsightCard';
 
-export default function IncomeVsExpensesLoading() {
+export default function NetIncomeLoading() {
   return (
-    <InsightCard title="Income vs Expenses">
+    <InsightCard title="Net Income">
       <Skeleton
         variant="rectangular"
         height={350}

@@ -2,7 +2,7 @@
 
 import ReactECharts from 'echarts-for-react';
 
-export default function IncomeVsExpensesChart() {
+export default function NetIncomeChart() {
   return (
     <ReactECharts
       style={{ height: '350px' }}
