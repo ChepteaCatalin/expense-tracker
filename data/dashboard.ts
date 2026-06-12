@@ -2,7 +2,7 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
-import type { TotalsMetrics } from '@/types/dashboard';
+import type { MonthlyMetric, TotalsMetrics } from '@/types/dashboard';
 
 export const getTotals = authGuard(
   session =>
@@ -53,5 +53,45 @@ export const getTotals = authGuard(
           total: +r.total,
         })),
       };
+    },
+);
+
+export const getMonthlyMetrics = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<MonthlyMetric[]> => {
+      const rows = await sql`
+        SELECT
+          TO_CHAR(month, 'Mon YYYY') AS month,
+          COALESCE(SUM(i.amount), 0) AS income,
+          COALESCE(SUM(e.amount), 0) AS expenses
+        FROM (
+          SELECT generate_series(
+            DATE_TRUNC('month', ${from}::date),
+            DATE_TRUNC('month', ${to}::date),
+            '1 month'::interval
+          ) AS month
+        ) months
+        LEFT JOIN income i
+          ON i.user_id = ${session.user.id}
+          AND DATE_TRUNC('month', i.date) = months.month
+        LEFT JOIN expense e
+          ON e.user_id = ${session.user.id}
+          AND DATE_TRUNC('month', e.date) = months.month
+        GROUP BY months.month
+        ORDER BY months.month
+      `;
+
+      return rows.map(r => ({
+        month: r.month as string,
+        income: +r.income,
+        expenses: +r.expenses,
+        netIncome: +r.income - +r.expenses,
+      }));
     },
 );

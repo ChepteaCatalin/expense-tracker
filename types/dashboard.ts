@@ -13,3 +13,10 @@ export interface TotalsMetrics {
   expenses: number;
   savingsByCurrency: SavingsByCurrency[];
 }
+
+export interface MonthlyMetric {
+  month: string;
+  income: number;
+  expenses: number;
+  netIncome: number;
+}
