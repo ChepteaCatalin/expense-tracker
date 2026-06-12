@@ -24,6 +24,7 @@ export default function IncomeVsExpensesChart({
             type: 'slider',
             right: 5,
             bottom: 10,
+            showDetail: false,
           },
         ],
         xAxis: {
@@ -81,18 +82,18 @@ export default function IncomeVsExpensesChart({
 //TODO: la net income fa diferenta inainte de a converti in readable currency
 const data = {
   months: [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+    'Jan 2026',
+    'Feb 2026',
+    'Mar 2026',
+    'Apr 2026',
+    'May 2026',
+    'Jun 2026',
+    'Jul 2026',
+    'Aug 2026',
+    'Sep 2026',
+    'Oct 2026',
+    'Nov 2026',
+    'Dec 2026',
   ],
   income: [
     5000, 7000, 8000, 6000, 7500, 9000, 8500, 9500, 11000, 12000, 13000, 12500,
