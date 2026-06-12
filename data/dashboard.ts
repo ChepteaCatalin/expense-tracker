@@ -79,9 +79,13 @@ export const getMonthlyMetrics = authGuard(
         ) months
         LEFT JOIN income i
           ON i.user_id = ${session.user.id}
+          AND i.date >= ${from}::date
+          AND i.date <= ${to}::date
           AND DATE_TRUNC('month', i.date) = months.month
         LEFT JOIN expense e
           ON e.user_id = ${session.user.id}
+          AND e.date >= ${from}::date
+          AND e.date <= ${to}::date
           AND DATE_TRUNC('month', e.date) = months.month
         GROUP BY months.month
         ORDER BY months.month
