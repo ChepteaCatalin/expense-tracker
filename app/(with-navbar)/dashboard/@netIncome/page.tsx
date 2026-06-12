@@ -1,8 +1,12 @@
 import { getValidNormalizedSearchParams } from '../utils';
 import InsightCard from '../_components/InsightCard';
-import type { DashboardSearchParams } from '@/types/dashboard';
+import type { DashboardSearchParams, MonthlyMetric } from '@/types/dashboard';
 import IncomeVsExpensesChart from './chart';
 import { getSession } from '@/data/auth';
+import { getMonthlyMetrics } from '@/data/dashboard';
+import { UnauthorizedError } from '@/utils/error';
+import { redirect } from 'next/navigation';
+import { fromCents } from '@/utils/currency';
 
 export default async function NetIncomePage({
   searchParams,
@@ -11,12 +15,28 @@ export default async function NetIncomePage({
 }) {
   const params = await getValidNormalizedSearchParams(searchParams);
 
-  // TODO: do this after fetching
+  var metrics: MonthlyMetric[];
+  try {
+    metrics = await getMonthlyMetrics({
+      from: params.from!,
+      to: params.to!,
+    });
+  } catch (error) {
+    if (error instanceof UnauthorizedError) redirect('/signin');
+    throw error;
+  }
   const currency = (await getSession())?.user.currency;
+
+  const chartData = {
+    months: metrics.map(m => m.month),
+    income: metrics.map(m => fromCents(m.income)),
+    expenses: metrics.map(m => fromCents(m.expenses)),
+    netIncome: metrics.map(m => fromCents(m.netIncome)),
+  };
 
   return (
     <InsightCard title={`Net Income (${currency})`}>
-      <IncomeVsExpensesChart />
+      <IncomeVsExpensesChart data={chartData} />
     </InsightCard>
   );
 }
