@@ -44,7 +44,7 @@ export default function IncomeVsExpensesChart() {
             name: 'Net Income',
             type: 'line',
             data: data.netIncome,
-            color: '#42a5f5',
+            color: '#ffca28',
           },
           {
             name: 'Income',
@@ -53,6 +53,7 @@ export default function IncomeVsExpensesChart() {
             stack: 'income',
             barMaxWidth: 40,
             color: '#66bb6a',
+            itemStyle,
           },
           {
             name: 'Expenses',
@@ -61,6 +62,7 @@ export default function IncomeVsExpensesChart() {
             stack: 'expenses',
             barMaxWidth: 40,
             color: '#f44336',
+            itemStyle,
           },
         ],
         legend: {
@@ -79,6 +81,7 @@ export default function IncomeVsExpensesChart() {
   );
 }
 
+//TODO: rationalizeaza datele, in loc de 3 array-uri separate, sa fie un array de obiecte cu month, income, expenses, netIncome
 //TODO: map to readable currency the income and expenses
 //TODO: la net income fa diferenta inainte de a converti in readable currency
 const data = {
@@ -108,3 +111,6 @@ const data = {
 };
 
 const textColor = 'rgba(255, 255, 255, 0.7)';
+const itemStyle = {
+  borderRadius: [2, 2, 0, 0],
+};
