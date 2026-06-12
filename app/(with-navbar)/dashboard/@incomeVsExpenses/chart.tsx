@@ -9,12 +9,12 @@ export default function IncomeVsExpensesChart({
 }) {
   return (
     <ReactECharts
-      style={{ height: '300px' }}
+      style={{ height: '350px' }}
       theme="dark"
       option={{
         backgroundColor: 'transparent',
         grid: {
-          top: 0,
+          top: 30,
           bottom: 65,
           left: 0,
           right: 0,
@@ -29,6 +29,9 @@ export default function IncomeVsExpensesChart({
         xAxis: {
           type: 'category',
           data: data.months,
+          axisPointer: {
+            type: 'shadow',
+          },
         },
         yAxis: {
           type: 'value',
@@ -50,7 +53,17 @@ export default function IncomeVsExpensesChart({
             barMaxWidth: 40,
             color: '#f44336',
           },
+          {
+            name: 'Net Income',
+            type: 'line',
+            data: data.netIncome,
+            color: '#42a5f5',
+          },
         ],
+        legend: {
+          top: 0,
+          data: ['Income', 'Expenses', 'Net Income'],
+        },
         tooltip: {
           trigger: 'axis',
           position: 'inside',
@@ -65,6 +78,7 @@ export default function IncomeVsExpensesChart({
 }
 
 //TODO: map to readable currency the income and expenses
+//TODO: la net income fa diferenta inainte de a converti in readable currency
 const data = {
   months: [
     'Jan',
@@ -85,5 +99,8 @@ const data = {
   ],
   expenses: [
     3000, 4000, 3500, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500,
+  ],
+  netIncome: [
+    2000, 3000, 4500, 1500, 2500, 3500, 2500, 3000, 4000, 4500, 5000, 4000,
   ],
 };
