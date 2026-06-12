@@ -8,7 +8,7 @@ export default function Fab() {
       aria-label="add"
       sx={{
         position: 'fixed',
-        bottom: 77,
+        bottom: 81,
         right: 10,
         '@media (pointer: fine)': { bottom: 100 },
       }}
