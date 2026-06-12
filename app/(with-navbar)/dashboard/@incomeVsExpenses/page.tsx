@@ -15,8 +15,8 @@ export default async function IncomeVsExpensesPage({
   const currency = (await getSession())?.user.currency;
 
   return (
-    <InsightCard title="Income vs Expenses">
-      <IncomeVsExpensesChart currency={currency} />
+    <InsightCard title={`Income vs Expenses (${currency})`}>
+      <IncomeVsExpensesChart />
     </InsightCard>
   );
 }

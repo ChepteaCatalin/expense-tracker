@@ -2,11 +2,7 @@
 
 import ReactECharts from 'echarts-for-react';
 
-export default function IncomeVsExpensesChart({
-  currency,
-}: {
-  currency?: string;
-}) {
+export default function IncomeVsExpensesChart() {
   return (
     <ReactECharts
       style={{ height: '350px' }}
@@ -33,9 +29,15 @@ export default function IncomeVsExpensesChart({
           axisPointer: {
             type: 'shadow',
           },
+          axisLabel: {
+            color: textColor,
+          },
         },
         yAxis: {
           type: 'value',
+          axisLabel: {
+            color: textColor,
+          },
         },
         series: [
           {
@@ -64,14 +66,13 @@ export default function IncomeVsExpensesChart({
         legend: {
           top: 0,
           data: ['Income', 'Expenses', 'Net Income'],
+          textStyle: { color: textColor },
         },
         tooltip: {
           trigger: 'axis',
           position: 'inside',
           confine: true,
-          formatter: (params: any) =>
-            `${params.marker} <b>${params.seriesName} in ${params.name}:</b> ${params.value} ${currency || ''}`,
-          textStyle: { color: 'rgb(227, 227, 227)' },
+          textStyle: { color: textColor },
         },
       }}
     />
@@ -105,3 +106,5 @@ const data = {
     2000, 3000, 4500, 1500, 2500, 3500, 2500, 3000, 4000, 4500, 5000, 4000,
   ],
 };
+
+const textColor = 'rgba(255, 255, 255, 0.7)';
