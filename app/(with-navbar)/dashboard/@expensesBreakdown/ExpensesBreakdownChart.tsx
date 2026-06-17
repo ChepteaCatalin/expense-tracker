@@ -68,18 +68,18 @@ export default function ExpensesBreakdownChart() {
 
 // Mock data
 const months = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
+  'Jan 2026',
+  'Feb 2026',
+  'Mar 2026',
+  'Apr 2026',
+  'May 2026',
+  'Jun 2026',
+  'Jul 2026',
+  'Aug 2026',
+  'Sep 2026',
+  'Oct 2026',
+  'Nov 2026',
+  'Dec 2026',
 ];
 
 const categories = [
