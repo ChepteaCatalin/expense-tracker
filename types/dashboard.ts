@@ -20,3 +20,15 @@ export interface MonthlyMetric {
   expenses: number;
   netIncome: number;
 }
+
+export interface ExpenseCategoryBreakdownCategory {
+  categoryId: number;
+  categoryName: string;
+  backgroundColor: string;
+  data: number[];
+}
+
+export interface ExpenseCategoryBreakdown {
+  months: string[];
+  categories: ExpenseCategoryBreakdownCategory[];
+}
