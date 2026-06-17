@@ -3,14 +3,7 @@
 import ReactECharts from 'echarts-for-react';
 import { barBorderRadius, textColor } from '../_utils/chart';
 
-interface ChartData {
-  months: string[];
-  income: number[];
-  expenses: number[];
-  netIncome: number[];
-}
-
-export default function NetIncomeChart({ data }: { data: ChartData }) {
+export default function ExpensesBreakdownChart() {
   return (
     <ReactECharts
       style={{ height: '350px' }}
@@ -69,7 +62,7 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
         ],
         legend: {
           top: 0,
-          data: names,
+          data: categories,
           textStyle: { color: textColor },
         },
         tooltip: {
@@ -83,4 +76,5 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
   );
 }
 
-const names = ['Net Income', 'Income', 'Expenses'];
+//TODO:
+const categories = ['Rent', 'Food', 'Utilities', 'Entertainment', 'Other'];
