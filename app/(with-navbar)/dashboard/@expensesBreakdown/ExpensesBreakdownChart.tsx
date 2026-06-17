@@ -66,7 +66,7 @@ export default function ExpensesBreakdownChart() {
   );
 }
 
-// Mock data
+// TODO: remove these mocks
 const months = [
   'Jan 2026',
   'Feb 2026',

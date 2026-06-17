@@ -2,7 +2,12 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
-import type { MonthlyMetric, TotalsMetrics } from '@/types/dashboard';
+import type {
+  ExpenseCategoryBreakdown,
+  ExpenseCategoryBreakdownCategory,
+  MonthlyMetric,
+  TotalsMetrics,
+} from '@/types/dashboard';
 
 export const getTotals = authGuard(
   session =>
@@ -102,5 +107,65 @@ export const getMonthlyMetrics = authGuard(
         expenses: +r.expenses,
         netIncome: +r.income - +r.expenses,
       }));
+    },
+);
+
+export const getExpenseCategoryBreakdown = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<ExpenseCategoryBreakdown> => {
+      const rows = await sql`
+        SELECT
+          c.id AS category_id,
+          c.name AS category_name,
+          c.background_color AS background_color,
+          TO_CHAR(months.month, 'Mon YYYY') AS month,
+          COALESCE(SUM(e.amount), 0) AS total
+        FROM (
+          SELECT generate_series(
+            DATE_TRUNC('month', ${from}::date),
+            DATE_TRUNC('month', ${to}::date),
+            '1 month'::interval
+          ) AS month
+        ) months
+        CROSS JOIN (
+          SELECT id, name, background_color
+          FROM category
+          WHERE user_id = ${session.user.id}
+            AND type = 'expense'
+        ) c
+        LEFT JOIN expense e
+          ON e.category_id = c.id
+          AND e.user_id = ${session.user.id}
+          AND DATE_TRUNC('month', e.date) = months.month
+        GROUP BY c.id, c.name, c.background_color, months.month
+        ORDER BY months.month, c.name
+      `;
+
+      const months: string[] = [];
+      const categoryMap = new Map<number, ExpenseCategoryBreakdownCategory>();
+
+      for (const r of rows) {
+        const month = r.month as string;
+        if (!months.includes(month)) months.push(month);
+
+        const id = +r.category_id;
+        if (!categoryMap.has(id)) {
+          categoryMap.set(id, {
+            categoryId: id,
+            categoryName: r.category_name as string,
+            backgroundColor: r.background_color as string,
+            data: [],
+          });
+        }
+        categoryMap.get(id)!.data.push(+r.total);
+      }
+
+      return { months, categories: Array.from(categoryMap.values()) };
     },
 );
