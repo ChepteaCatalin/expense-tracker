@@ -73,8 +73,8 @@ export const getMonthlyMetrics = authGuard(
       const rows = await sql`
         SELECT
           TO_CHAR(months.month, 'Mon YYYY') AS month,
-          COALESCE(SUM(i.amount), 0) AS income,
-          COALESCE(SUM(e.amount), 0) AS expenses
+          COALESCE(i.total, 0) AS income,
+          COALESCE(e.total, 0) AS expenses
         FROM (
           SELECT generate_series(
             DATE_TRUNC('month', ${from}::date),
@@ -82,19 +82,22 @@ export const getMonthlyMetrics = authGuard(
             '1 month'::interval
           ) AS month
         ) months
-        LEFT JOIN income i
-          ON i.user_id = ${session.user.id}
-          AND i.date >= months.month::date
-          AND i.date < (months.month + '1 month'::interval)::date
-          AND i.date >= ${from}::date
-          AND i.date <= ${to}::date
-        LEFT JOIN expense e
-          ON e.user_id = ${session.user.id}
-          AND e.date >= months.month::date
-          AND e.date < (months.month + '1 month'::interval)::date
-          AND e.date >= ${from}::date
-          AND e.date <= ${to}::date
-        GROUP BY months.month
+        LEFT JOIN (
+          SELECT DATE_TRUNC('month', date) AS month, SUM(amount) AS total
+          FROM income
+          WHERE user_id = ${session.user.id}
+            AND date >= ${from}::date
+            AND date <= ${to}::date
+          GROUP BY DATE_TRUNC('month', date)
+        ) i ON i.month = months.month
+        LEFT JOIN (
+          SELECT DATE_TRUNC('month', date) AS month, SUM(amount) AS total
+          FROM expense
+          WHERE user_id = ${session.user.id}
+            AND date >= ${from}::date
+            AND date <= ${to}::date
+          GROUP BY DATE_TRUNC('month', date)
+        ) e ON e.month = months.month
         ORDER BY months.month
       `;
 
