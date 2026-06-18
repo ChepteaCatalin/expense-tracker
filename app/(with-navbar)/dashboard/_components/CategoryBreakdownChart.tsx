@@ -71,7 +71,9 @@ export default function CategoryBreakdownChart({
           textStyle: { color: textColor },
           axisPointer: { type: 'shadow' },
           formatter: (params: any[]) => {
-            const nonZero = params.filter(p => p.value > 0);
+            const nonZero = params
+              .filter(p => p.value > 0)
+              .sort((a, b) => b.value - a.value);
             if (!nonZero.length) return '';
             const header = `<div style="margin-bottom:8px">${params[0].name}</div>`;
             const rows = nonZero
