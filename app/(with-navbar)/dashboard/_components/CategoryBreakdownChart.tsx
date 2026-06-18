@@ -79,7 +79,7 @@ export default function CategoryBreakdownChart({
                 p =>
                   `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px">` +
                   `<span>${p.marker} ${p.seriesName}</span>` +
-                  `<span style="font-weight:bold;margin-left:auto">${p.value}</span>` +
+                  `<span style="font-weight:bold;margin-left:auto">${(+p.value).toLocaleString()}</span>` +
                   `</div>`,
               )
               .join('');
