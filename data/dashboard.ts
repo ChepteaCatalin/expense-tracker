@@ -3,8 +3,8 @@ import 'server-only';
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
 import type {
-  ExpenseCategoryBreakdown,
-  ExpenseCategoryBreakdownCategory,
+  BreakdownChartData,
+  CategoryBreakdown,
   MonthlyMetric,
   TotalsMetrics,
 } from '@/types/dashboard';
@@ -118,7 +118,7 @@ export const getExpenseCategoryBreakdown = authGuard(
     }: {
       from: string;
       to: string;
-    }): Promise<ExpenseCategoryBreakdown> => {
+    }): Promise<BreakdownChartData> => {
       const rows = await sql`
         SELECT
           c.id AS category_id,
@@ -148,7 +148,7 @@ export const getExpenseCategoryBreakdown = authGuard(
       `;
 
       const months: string[] = [];
-      const categoryMap = new Map<number, ExpenseCategoryBreakdownCategory>();
+      const categoryMap = new Map<number, CategoryBreakdown>();
 
       for (const r of rows) {
         const month = r.month as string;

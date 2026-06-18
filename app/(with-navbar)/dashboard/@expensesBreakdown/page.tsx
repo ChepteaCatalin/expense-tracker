@@ -1,14 +1,14 @@
 import type {
   DashboardSearchParams,
-  ExpenseCategoryBreakdown,
+  BreakdownChartData,
 } from '@/types/dashboard';
 import { getValidNormalizedSearchParams } from '../utils';
 import InsightCard from '../_components/InsightCard';
-import ExpensesBreakdownChart from './ExpensesBreakdownChart';
 import { getSession } from '@/data/auth';
 import { getExpenseCategoryBreakdown } from '@/data/dashboard';
 import { redirect } from 'next/navigation';
 import { UnauthorizedError } from '@/utils/error';
+import CategoryBreakdownChart from '../_components/CategoryBreakdownChart';
 
 export default async function ExpensesBreakdown({
   searchParams,
@@ -17,7 +17,7 @@ export default async function ExpensesBreakdown({
 }) {
   const params = await getValidNormalizedSearchParams(searchParams);
 
-  var chartData: ExpenseCategoryBreakdown;
+  var chartData: BreakdownChartData;
   try {
     chartData = await getExpenseCategoryBreakdown({
       from: params.from!,
@@ -31,7 +31,7 @@ export default async function ExpensesBreakdown({
 
   return (
     <InsightCard title={`Expenses Breakdown (${currency})`}>
-      <ExpensesBreakdownChart chartData={chartData} />
+      <CategoryBreakdownChart chartData={chartData} />
     </InsightCard>
   );
 }
