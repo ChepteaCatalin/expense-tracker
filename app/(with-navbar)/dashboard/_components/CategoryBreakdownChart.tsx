@@ -55,7 +55,10 @@ export default function CategoryBreakdownChart({
         legend: {
           type: 'scroll',
           top: 0,
-          data: chartData.categories.map(c => c.categoryName),
+          data: chartData.categories.map(c => ({
+            name: c.categoryName,
+            itemStyle: { color: c.backgroundColor },
+          })),
           textStyle: { color: textColor },
           pageTextStyle: { color: textColor },
           pageIconColor: textColor,
