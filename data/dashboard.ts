@@ -73,8 +73,8 @@ export const getMonthlyMetrics = authGuard(
       const rows = await sql`
         SELECT
           TO_CHAR(months.month, 'Mon YYYY') AS month,
-          COALESCE(i.total, 0) AS income,
-          COALESCE(e.total, 0) AS expenses
+          COALESCE(SUM(i.amount), 0) AS income,
+          COALESCE(SUM(e.amount), 0) AS expenses
         FROM (
           SELECT generate_series(
             DATE_TRUNC('month', ${from}::date),
@@ -82,22 +82,19 @@ export const getMonthlyMetrics = authGuard(
             '1 month'::interval
           ) AS month
         ) months
-        LEFT JOIN (
-          SELECT DATE_TRUNC('month', date) AS month, SUM(amount) AS total
-          FROM income
-          WHERE user_id = ${session.user.id}
-            AND date >= ${from}::date
-            AND date <= ${to}::date
-          GROUP BY DATE_TRUNC('month', date)
-        ) i ON i.month = months.month
-        LEFT JOIN (
-          SELECT DATE_TRUNC('month', date) AS month, SUM(amount) AS total
-          FROM expense
-          WHERE user_id = ${session.user.id}
-            AND date >= ${from}::date
-            AND date <= ${to}::date
-          GROUP BY DATE_TRUNC('month', date)
-        ) e ON e.month = months.month
+        LEFT JOIN income i
+          ON i.user_id = ${session.user.id}
+          AND i.date >= months.month::date
+          AND i.date < (months.month + '1 month'::interval)::date
+          AND i.date >= ${from}::date
+          AND i.date <= ${to}::date
+        LEFT JOIN expense e
+          ON e.user_id = ${session.user.id}
+          AND e.date >= months.month::date
+          AND e.date < (months.month + '1 month'::interval)::date
+          AND e.date >= ${from}::date
+          AND e.date <= ${to}::date
+        GROUP BY months.month
         ORDER BY months.month
       `;
 
@@ -142,7 +139,10 @@ export const getExpenseCategoryBreakdown = authGuard(
         LEFT JOIN expense e
           ON e.category_id = c.id
           AND e.user_id = ${session.user.id}
-          AND DATE_TRUNC('month', e.date) = months.month
+          AND e.date >= months.month::date
+          AND e.date < (months.month + '1 month'::interval)::date
+          AND e.date >= ${from}::date
+          AND e.date <= ${to}::date
         GROUP BY c.id, c.name, c.background_color, months.month
         ORDER BY months.month, c.name
       `;
@@ -152,7 +152,7 @@ export const getExpenseCategoryBreakdown = authGuard(
 
       for (const r of rows) {
         const month = r.month as string;
-        if (!months.includes(month)) months.push(month);
+        if (months[months.length - 1] !== month) months.push(month);
 
         const id = +r.category_id;
         if (!categoryMap.has(id)) {
