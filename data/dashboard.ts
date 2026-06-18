@@ -125,7 +125,7 @@ export const getExpenseCategoryBreakdown = authGuard(
           c.name AS category_name,
           c.background_color AS background_color,
           TO_CHAR(months.month, 'Mon YYYY') AS month,
-          COALESCE(SUM(e.amount), 0) AS total
+          COALESCE(SUM(e.amount), 0) / 100.0 AS total
         FROM (
           SELECT generate_series(
             DATE_TRUNC('month', ${from}::date),
