@@ -120,6 +120,14 @@ export const getExpenseCategoryBreakdown = authGuard(
       to: string;
     }): Promise<BreakdownChartData> => {
       const rows = await sql`
+        WITH category_totals AS (
+          SELECT category_id, SUM(amount) AS period_total
+          FROM expense
+          WHERE user_id = ${session.user.id}
+            AND date >= ${from}::date
+            AND date <= ${to}::date
+          GROUP BY category_id
+        )
         SELECT
           c.id AS category_id,
           c.name AS category_name,
@@ -134,10 +142,11 @@ export const getExpenseCategoryBreakdown = authGuard(
           ) AS month
         ) months
         CROSS JOIN (
-          SELECT id, name, background_color
-          FROM category
-          WHERE user_id = ${session.user.id}
-            AND type = 'expense'
+          SELECT c.id, c.name, c.background_color, ct.period_total
+          FROM category c
+          JOIN category_totals ct ON ct.category_id = c.id
+          WHERE c.user_id = ${session.user.id}
+            AND c.type = 'expense'
         ) c
         LEFT JOIN expense e
           ON e.category_id = c.id
@@ -146,8 +155,8 @@ export const getExpenseCategoryBreakdown = authGuard(
           AND e.date < (months.month + '1 month'::interval)::date
           AND e.date >= ${from}::date
           AND e.date <= ${to}::date
-        GROUP BY c.id, c.name, c.background_color, months.month
-        ORDER BY months.month, LOWER(c.name)
+        GROUP BY c.id, c.name, c.background_color, c.period_total, months.month
+        ORDER BY months.month, c.period_total DESC, LOWER(c.name)
       `;
 
       const months: string[] = [];

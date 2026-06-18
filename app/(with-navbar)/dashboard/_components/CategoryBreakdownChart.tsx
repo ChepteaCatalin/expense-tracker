@@ -67,6 +67,21 @@ export default function CategoryBreakdownChart({
           confine: true,
           textStyle: { color: textColor },
           axisPointer: { type: 'shadow' },
+          formatter: (params: any[]) => {
+            const nonZero = params.filter(p => p.value > 0);
+            if (!nonZero.length) return '';
+            const header = `<div style="margin-bottom:8px">${params[0].name}</div>`;
+            const rows = nonZero
+              .map(
+                p =>
+                  `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px">` +
+                  `<span>${p.marker} ${p.seriesName}</span>` +
+                  `<span style="font-weight:bold;margin-left:auto">${p.value}</span>` +
+                  `</div>`,
+              )
+              .join('');
+            return header + rows;
+          },
         },
       }}
     />
