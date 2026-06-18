@@ -147,7 +147,7 @@ export const getExpenseCategoryBreakdown = authGuard(
           AND e.date >= ${from}::date
           AND e.date <= ${to}::date
         GROUP BY c.id, c.name, c.background_color, months.month
-        ORDER BY months.month, c.name
+        ORDER BY months.month, LOWER(c.name)
       `;
 
       const months: string[] = [];
