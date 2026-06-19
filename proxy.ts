@@ -1,13 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import dayjs from 'dayjs';
 
 export function proxy(request: NextRequest) {
   const url = new URL('/expenses/categories', request.url);
-  const today = new Date();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-
-  url.searchParams.set('month', `${today.getFullYear()}-${month}-${day}`);
+  url.searchParams.set('month', dayjs().format('YYYY-MM-DD'));
 
   return NextResponse.redirect(url);
 }
