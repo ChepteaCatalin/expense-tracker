@@ -2,8 +2,13 @@
 
 import ReactECharts from 'echarts-for-react';
 import { textColor } from '../_utils/chart';
+import type { SavingsChartData } from '@/types/dashboard';
 
-export default function SavingsChart() {
+export default function SavingsChart({
+  chartData,
+}: {
+  chartData: SavingsChartData;
+}) {
   return (
     <ReactECharts
       style={{ height: '500px' }}
@@ -26,7 +31,7 @@ export default function SavingsChart() {
         ],
         xAxis: {
           type: 'category',
-          data: months,
+          data: chartData.months,
           axisPointer: { type: 'shadow' },
           axisLabel: { color: textColor },
         },
@@ -38,7 +43,7 @@ export default function SavingsChart() {
           {
             type: 'line',
             name: 'Savings',
-            data,
+            data: chartData.data,
             color: '#1ED760',
             smooth: true,
             symbolSize: 13,
@@ -53,15 +58,3 @@ export default function SavingsChart() {
     />
   );
 }
-
-//TODO: remove mocks
-const months = [
-  'Jan 2026',
-  'Feb 2026',
-  'Mar 2026',
-  'Apr 2026',
-  'May 2026',
-  'Jun 2026',
-];
-
-const data = [150, 230, 224, 218, 135, 147];
