@@ -24,8 +24,7 @@ export default function InsightError({
         }}
       >
         <ErrorOutlineIcon
-          fontSize="large"
-          sx={{ color: 'error.main', opacity: 0.8 }}
+          sx={{ color: 'error.main', opacity: 0.8, fontSize: '60px' }}
         />
         <Typography
           variant="body2"
