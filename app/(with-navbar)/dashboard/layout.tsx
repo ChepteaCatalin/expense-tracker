@@ -13,12 +13,14 @@ export default function DashboardLayout({
   netIncome,
   expensesBreakdown,
   incomeBreakdown,
+  savings,
 }: {
   period: React.ReactNode;
   totals: React.ReactNode;
   netIncome: React.ReactNode;
   expensesBreakdown: React.ReactNode;
   incomeBreakdown: React.ReactNode;
+  savings: React.ReactNode;
 }) {
   return (
     <Box>
@@ -33,6 +35,7 @@ export default function DashboardLayout({
         <Grid size={{ xs: 12, md: 8 }}>{netIncome}</Grid>
         <Grid size={12}>{expensesBreakdown}</Grid>
         <Grid size={12}>{incomeBreakdown}</Grid>
+        <Grid size={12}>{savings}</Grid>
       </Grid>
     </Box>
   );
