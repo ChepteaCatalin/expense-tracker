@@ -1,9 +1,15 @@
 'use client';
 
 import dayjs from 'dayjs';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
-  redirect(`/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`);
-  return null;
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace(
+      `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`,
+    );
+  }, [router]);
 }
