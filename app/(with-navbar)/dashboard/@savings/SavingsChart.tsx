@@ -4,6 +4,8 @@ import ReactECharts from 'echarts-for-react';
 import { textColor } from '../_utils/chart';
 import type { SavingsChartData } from '@/types/dashboard';
 
+const lineColors = ['#1ED760', '#4FC3F7', '#FFD166', '#FF7B72', '#C792EA'];
+
 export default function SavingsChart({
   chartData,
 }: {
@@ -16,7 +18,7 @@ export default function SavingsChart({
       option={{
         backgroundColor: 'transparent',
         grid: {
-          top: 0,
+          top: 35,
           bottom: 65,
           left: 0,
           right: 0,
@@ -39,18 +41,25 @@ export default function SavingsChart({
           type: 'value',
           axisLabel: { color: textColor },
         },
-        series: [
-          {
-            type: 'line',
-            name: 'Savings',
-            data: chartData.data,
-            color: '#1ED760',
-            smooth: true,
-            symbolSize: 13,
-            lineStyle: { width: 3 },
-          },
-        ],
+        series: chartData.series.map((series, index) => ({
+          type: 'line',
+          name: series.currency,
+          data: series.data,
+          color: lineColors[index % lineColors.length],
+          smooth: true,
+          symbolSize: 13,
+          lineStyle: { width: 3 },
+        })),
+        legend: {
+          type: 'scroll',
+          top: 0,
+          textStyle: { color: textColor },
+          pageTextStyle: { color: textColor },
+          pageIconColor: textColor,
+          pageIconInactiveColor: 'rgba(255,255,255,0.2)',
+        },
         tooltip: {
+          trigger: 'axis',
           confine: true,
           textStyle: { color: textColor },
         },

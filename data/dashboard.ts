@@ -121,31 +121,62 @@ export const getSavingsChartData = authGuard(
       to: string;
     }): Promise<SavingsChartData> => {
       const rows = await sql`
-        SELECT
-          TO_CHAR(months.month, 'Mon YYYY') AS month,
-          COALESCE(s.total, 0) / 100.0 AS total
-        FROM (
+        WITH months AS (
           SELECT generate_series(
             DATE_TRUNC('month', ${from}::date),
             DATE_TRUNC('month', ${to}::date),
             '1 month'::interval
           ) AS month
-        ) months
-        LEFT JOIN (
-          SELECT DATE_TRUNC('month', sd.date) AS month, SUM(sd.amount) AS total
+        ),
+        currencies AS (
+          SELECT DISTINCT sg.currency
           FROM savings_deposit sd
           JOIN savings_goal sg ON sg.id = sd.savings_goal_id
           WHERE sg.user_id = ${session.user.id}
             AND sd.date >= ${from}::date
             AND sd.date <= ${to}::date
-          GROUP BY DATE_TRUNC('month', sd.date)
-        ) s ON s.month = months.month
-        ORDER BY months.month
+        ),
+        savings AS (
+          SELECT
+            DATE_TRUNC('month', sd.date) AS month,
+            sg.currency,
+            SUM(sd.amount) AS total
+          FROM savings_deposit sd
+          JOIN savings_goal sg ON sg.id = sd.savings_goal_id
+          WHERE sg.user_id = ${session.user.id}
+            AND sd.date >= ${from}::date
+            AND sd.date <= ${to}::date
+          GROUP BY DATE_TRUNC('month', sd.date), sg.currency
+        )
+        SELECT
+          TO_CHAR(months.month, 'Mon YYYY') AS month,
+          currencies.currency,
+          COALESCE(savings.total, 0) / 100.0 AS total
+        FROM months
+        CROSS JOIN currencies
+        LEFT JOIN savings
+          ON savings.month = months.month
+          AND savings.currency = currencies.currency
+        ORDER BY currencies.currency, months.month
       `;
 
+      const months = Array.from(new Set(rows.map(row => row.month as string)));
+      const seriesMap = new Map<string, number[]>();
+
+      for (const row of rows) {
+        const currency = row.currency as string;
+        if (!seriesMap.has(currency)) {
+          seriesMap.set(currency, []);
+        }
+        seriesMap.get(currency)!.push(+row.total);
+      }
+
       return {
-        months: rows.map(row => row.month as string),
-        data: rows.map(row => +row.total),
+        months,
+        series: Array.from(seriesMap.entries()).map(([currency, data]) => ({
+          currency,
+          data,
+        })),
       };
     },
 );
