@@ -12,4 +12,6 @@ export default function Home() {
       `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`,
     );
   }, [router]);
+
+  return null;
 }
