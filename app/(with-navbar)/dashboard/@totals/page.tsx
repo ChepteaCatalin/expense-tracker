@@ -9,6 +9,8 @@ import { readableCurrency } from '@/utils/currency';
 import { getTotals } from '@/data/dashboard';
 import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
+import NoData from '../_components/NoData';
+import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
 
 export default async function TotalsPage({
   searchParams,
@@ -30,6 +32,14 @@ export default async function TotalsPage({
   const currency = (await getSession())?.user.currency;
 
   const netIncome = totals.income - totals.expenses;
+
+  if (
+    totals.income === 0 &&
+    totals.expenses === 0 &&
+    totals.savingsByCurrency?.length === 0
+  ) {
+    return <NoData title="Totals" customLink={<AddExpensesLinkBtn />} />;
+  }
 
   return (
     <InsightCard title="Totals">

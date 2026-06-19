@@ -9,6 +9,8 @@ import { getExpenseCategoryBreakdown } from '@/data/dashboard';
 import { redirect } from 'next/navigation';
 import { UnauthorizedError } from '@/utils/error';
 import CategoryBreakdownChart from '../_components/CategoryBreakdownChart';
+import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
+import NoData from '../_components/NoData';
 
 export default async function ExpensesBreakdown({
   searchParams,
@@ -28,6 +30,12 @@ export default async function ExpensesBreakdown({
     throw error;
   }
   const currency = (await getSession())?.user.currency;
+
+  if (chartData.categories.length === 0) {
+    return (
+      <NoData title="Expenses Breakdown" customLink={<AddExpensesLinkBtn />} />
+    );
+  }
 
   return (
     <InsightCard title={`Expenses Breakdown (${currency})`}>

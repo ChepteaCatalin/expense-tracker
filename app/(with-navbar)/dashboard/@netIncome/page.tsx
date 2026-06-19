@@ -7,6 +7,8 @@ import { getMonthlyMetrics } from '@/data/dashboard';
 import { UnauthorizedError } from '@/utils/error';
 import { redirect } from 'next/navigation';
 import { fromCents } from '@/utils/currency';
+import NoData from '../_components/NoData';
+import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
 
 export default async function NetIncomePage({
   searchParams,
@@ -33,6 +35,10 @@ export default async function NetIncomePage({
     expenses: metrics.map(m => fromCents(m.expenses)),
     netIncome: metrics.map(m => fromCents(m.netIncome)),
   };
+
+  if (chartData.income.every(i => !i) && chartData.expenses.every(e => !e)) {
+    return <NoData title="Net Income" customLink={<AddExpensesLinkBtn />} />;
+  }
 
   return (
     <InsightCard title={`Net Income (${currency})`}>
