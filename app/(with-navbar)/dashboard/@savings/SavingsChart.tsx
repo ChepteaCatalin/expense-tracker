@@ -4,8 +4,6 @@ import ReactECharts from 'echarts-for-react';
 import { textColor } from '../_utils/chart';
 import type { SavingsChartData } from '@/types/dashboard';
 
-const lineColors = ['#1ED760', '#4FC3F7', '#FFD166', '#FF7B72', '#C792EA'];
-
 export default function SavingsChart({
   chartData,
 }: {
@@ -67,3 +65,5 @@ export default function SavingsChart({
     />
   );
 }
+
+const lineColors = ['#1ED760', '#4FC3F7', '#FFD166', '#FF7B72', '#C792EA'];
