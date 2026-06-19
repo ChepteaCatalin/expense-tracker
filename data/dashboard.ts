@@ -181,3 +181,75 @@ export const getExpenseCategoryBreakdown = authGuard(
       return { months, categories: Array.from(categoryMap.values()) };
     },
 );
+
+export const getIncomeCategoryBreakdown = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<BreakdownChartData> => {
+      const rows = await sql`
+        WITH category_totals AS (
+          SELECT category_id, SUM(amount) AS period_total
+          FROM income
+          WHERE user_id = ${session.user.id}
+            AND date >= ${from}::date
+            AND date <= ${to}::date
+          GROUP BY category_id
+        )
+        SELECT
+          c.id AS category_id,
+          c.name AS category_name,
+          c.background_color AS background_color,
+          TO_CHAR(months.month, 'Mon YYYY') AS month,
+          COALESCE(SUM(i.amount), 0) / 100.0 AS total
+        FROM (
+          SELECT generate_series(
+            DATE_TRUNC('month', ${from}::date),
+            DATE_TRUNC('month', ${to}::date),
+            '1 month'::interval
+          ) AS month
+        ) months
+        CROSS JOIN (
+          SELECT c.id, c.name, c.background_color, ct.period_total
+          FROM category c
+          JOIN category_totals ct ON ct.category_id = c.id
+          WHERE c.user_id = ${session.user.id}
+            AND c.type = 'income'
+        ) c
+        LEFT JOIN income i
+          ON i.category_id = c.id
+          AND i.user_id = ${session.user.id}
+          AND i.date >= months.month::date
+          AND i.date < (months.month + '1 month'::interval)::date
+          AND i.date >= ${from}::date
+          AND i.date <= ${to}::date
+        GROUP BY c.id, c.name, c.background_color, c.period_total, months.month
+        ORDER BY months.month, c.period_total DESC, LOWER(c.name)
+      `;
+
+      const months: string[] = [];
+      const categoryMap = new Map<number, CategoryBreakdown>();
+
+      for (const r of rows) {
+        const month = r.month as string;
+        if (months[months.length - 1] !== month) months.push(month);
+
+        const id = +r.category_id;
+        if (!categoryMap.has(id)) {
+          categoryMap.set(id, {
+            categoryId: id,
+            categoryName: r.category_name as string,
+            backgroundColor: r.background_color as string,
+            data: [],
+          });
+        }
+        categoryMap.get(id)!.data.push(+r.total);
+      }
+
+      return { months, categories: Array.from(categoryMap.values()) };
+    },
+);
