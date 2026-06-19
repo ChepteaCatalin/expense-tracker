@@ -4,7 +4,6 @@ import type {
   DashboardSearchParams,
   SavingsChartData,
 } from '@/types/dashboard';
-import { getSession } from '@/data/auth';
 import SavingsChart from './SavingsChart';
 import { getSavingsChartData } from '@/data/dashboard';
 import { UnauthorizedError } from '@/utils/error';
@@ -28,9 +27,8 @@ export default async function SavingsPage({
     if (error instanceof UnauthorizedError) redirect('/signin');
     throw error;
   }
-  const currency = (await getSession())?.user.currency;
 
-  if (chartData.data.every(d => !d)) {
+  if (chartData.series.length === 0) {
     return (
       <NoData
         title="Savings"
@@ -40,7 +38,7 @@ export default async function SavingsPage({
   }
 
   return (
-    <InsightCard title={`Savings (${currency})`}>
+    <InsightCard title="Savings">
       <SavingsChart chartData={chartData} />
     </InsightCard>
   );

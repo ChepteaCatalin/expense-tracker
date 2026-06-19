@@ -2,7 +2,7 @@
 
 import InsightError from '../_components/InsightError';
 
-export default function NetIncomeError({
+export default function SavingsError({
   unstable_retry,
 }: {
   unstable_retry: () => void;
