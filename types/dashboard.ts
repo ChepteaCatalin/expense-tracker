@@ -21,6 +21,11 @@ export interface MonthlyMetric {
   netIncome: number;
 }
 
+export interface SavingsChartData {
+  months: string[];
+  data: number[];
+}
+
 export interface CategoryBreakdown {
   categoryId: number;
   categoryName: string;

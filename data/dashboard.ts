@@ -6,6 +6,7 @@ import type {
   BreakdownChartData,
   CategoryBreakdown,
   MonthlyMetric,
+  SavingsChartData,
   TotalsMetrics,
 } from '@/types/dashboard';
 
@@ -107,6 +108,45 @@ export const getMonthlyMetrics = authGuard(
         expenses: +r.expenses,
         netIncome: +r.income - +r.expenses,
       }));
+    },
+);
+
+export const getSavingsChartData = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<SavingsChartData> => {
+      const rows = await sql`
+        SELECT
+          TO_CHAR(months.month, 'Mon YYYY') AS month,
+          COALESCE(s.total, 0) / 100.0 AS total
+        FROM (
+          SELECT generate_series(
+            DATE_TRUNC('month', ${from}::date),
+            DATE_TRUNC('month', ${to}::date),
+            '1 month'::interval
+          ) AS month
+        ) months
+        LEFT JOIN (
+          SELECT DATE_TRUNC('month', sd.date) AS month, SUM(sd.amount) AS total
+          FROM savings_deposit sd
+          JOIN savings_goal sg ON sg.id = sd.savings_goal_id
+          WHERE sg.user_id = ${session.user.id}
+            AND sd.date >= ${from}::date
+            AND sd.date <= ${to}::date
+          GROUP BY DATE_TRUNC('month', sd.date)
+        ) s ON s.month = months.month
+        ORDER BY months.month
+      `;
+
+      return {
+        months: rows.map(row => row.month as string),
+        data: rows.map(row => +row.total),
+      };
     },
 );
 
