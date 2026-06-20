@@ -34,7 +34,7 @@ export default async function ExpensesTreemap({
   if (chartData.length === 0) {
     return (
       <NoData
-        title={`Expenses by Category (${currency})`}
+        title="Expenses by Category"
         customLink={<AddExpensesLinkBtn />}
       />
     );
