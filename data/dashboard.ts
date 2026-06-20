@@ -5,6 +5,7 @@ import { authGuard } from '@/lib/auth-utils';
 import type {
   BreakdownChartData,
   CategoryBreakdown,
+  CategoryTreemapNode,
   MonthlyMetric,
   SavingsChartData,
   TotalsMetrics,
@@ -322,5 +323,39 @@ export const getIncomeCategoryBreakdown = authGuard(
       }
 
       return { months, categories: Array.from(categoryMap.values()) };
+    },
+);
+
+export const getExpenseCategoryTreemapData = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<CategoryTreemapNode[]> => {
+      const rows = await sql`
+        SELECT
+          c.id AS category_id,
+          c.name AS category_name,
+          c.background_color AS background_color,
+          SUM(e.amount) / 100.0 AS total
+        FROM expense e
+        JOIN category c ON c.id = e.category_id
+        WHERE e.user_id = ${session.user.id}
+          AND c.user_id = ${session.user.id}
+          AND e.date >= ${from}::date
+          AND e.date <= ${to}::date
+        GROUP BY c.id, c.name, c.background_color
+        ORDER BY SUM(e.amount) DESC, LOWER(c.name)
+      `;
+
+      return rows.map(row => ({
+        categoryId: +row.category_id,
+        categoryName: row.category_name as string,
+        backgroundColor: row.background_color as string,
+        value: +row.total,
+      }));
     },
 );
