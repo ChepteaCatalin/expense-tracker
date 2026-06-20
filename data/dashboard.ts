@@ -360,3 +360,38 @@ export const getExpenseCategoryTreemapData = authGuard(
       }));
     },
 );
+
+export const getIncomeCategoryTreemapData = authGuard(
+  session =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<CategoryTreemapNode[]> => {
+      const rows = await sql`
+        SELECT
+          c.id AS category_id,
+          c.name AS category_name,
+          c.background_color AS background_color,
+          SUM(i.amount) / 100.0 AS total
+        FROM income i
+        JOIN category c ON c.id = i.category_id
+        WHERE i.user_id = ${session.user.id}
+          AND c.user_id = ${session.user.id}
+          AND c.type = 'income'
+          AND i.date >= ${from}::date
+          AND i.date <= ${to}::date
+        GROUP BY c.id, c.name, c.background_color
+        ORDER BY SUM(i.amount) DESC, LOWER(c.name)
+      `;
+
+      return rows.map(row => ({
+        categoryId: +row.category_id,
+        categoryName: row.category_name as string,
+        backgroundColor: row.background_color as string,
+        value: +row.total,
+      }));
+    },
+);
