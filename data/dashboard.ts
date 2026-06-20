@@ -345,6 +345,7 @@ export const getExpenseCategoryTreemapData = authGuard(
         JOIN category c ON c.id = e.category_id
         WHERE e.user_id = ${session.user.id}
           AND c.user_id = ${session.user.id}
+          AND c.type = 'expense'
           AND e.date >= ${from}::date
           AND e.date <= ${to}::date
         GROUP BY c.id, c.name, c.background_color
