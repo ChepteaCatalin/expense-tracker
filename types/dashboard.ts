@@ -42,10 +42,3 @@ export interface BreakdownChartData {
   months: string[];
   categories: CategoryBreakdown[];
 }
-
-export interface CategoryTreemapNode {
-  categoryId: number;
-  categoryName: string;
-  backgroundColor: string;
-  value: number;
-}

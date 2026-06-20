@@ -14,7 +14,6 @@ export default function DashboardLayout({
   expensesBreakdown,
   incomeBreakdown,
   savings,
-  expensesTreemap,
 }: {
   period: React.ReactNode;
   totals: React.ReactNode;
@@ -22,7 +21,6 @@ export default function DashboardLayout({
   expensesBreakdown: React.ReactNode;
   incomeBreakdown: React.ReactNode;
   savings: React.ReactNode;
-  expensesTreemap: React.ReactNode;
 }) {
   return (
     <Box>
@@ -38,7 +36,6 @@ export default function DashboardLayout({
         <Grid size={12}>{expensesBreakdown}</Grid>
         <Grid size={12}>{incomeBreakdown}</Grid>
         <Grid size={12}>{savings}</Grid>
-        <Grid size={12}>{expensesTreemap}</Grid>
       </Grid>
     </Box>
   );
