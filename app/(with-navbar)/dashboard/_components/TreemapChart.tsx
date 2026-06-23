@@ -50,8 +50,13 @@ export default function TreemapChart({
           trigger: 'item',
           confine: true,
           textStyle: { color: textColor },
-          formatter: (params: { name: string; value: number }) =>
-            `<span style="color: rgba(255, 255, 255, 0.96); font-weight: 700;">${params.name}</span>: <strong>${params.value.toLocaleString()}${currency ? ` ${currency}` : ''}</strong> (${totalAmount > 0 ? ((params.value / totalAmount) * 100).toFixed(2) : 0}%)`,
+          formatter: (params: {
+            name: string;
+            value: number;
+            dataIndex: number;
+          }) =>
+            `<span style="color: rgba(255, 255, 255, 0.96); font-weight: 700;">${params.dataIndex === 0 ? 'Total' : params.name}:</span> <strong>${params.value.toLocaleString()}${currency ? ` ${currency}` : ''}</strong> (${totalAmount > 0 ? ((params.value / totalAmount) * 100).toFixed(2) : 0}%)`,
+          extraCssText: 'z-index: 1000',
         },
       }}
     />
