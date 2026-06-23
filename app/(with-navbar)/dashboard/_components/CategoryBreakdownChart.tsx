@@ -87,6 +87,7 @@ export default function CategoryBreakdownChart({
               .join('');
             return header + rows;
           },
+          extraCssText: 'z-index: 1000',
         },
       }}
     />

@@ -77,6 +77,7 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
           position: 'inside',
           confine: true,
           textStyle: { color: textColor },
+          extraCssText: 'z-index: 1000',
         },
       }}
     />

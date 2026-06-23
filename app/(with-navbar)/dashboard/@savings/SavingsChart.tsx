@@ -60,6 +60,7 @@ export default function SavingsChart({
           trigger: 'axis',
           confine: true,
           textStyle: { color: textColor },
+          extraCssText: 'z-index: 1000',
         },
       }}
     />
