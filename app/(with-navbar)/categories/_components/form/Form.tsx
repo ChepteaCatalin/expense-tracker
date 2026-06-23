@@ -186,8 +186,8 @@ function getDefaultValues(category?: Category): CategoryFormValues {
   return {
     name: '',
     icon: '/category-icons/other.svg',
-    strokeColor: 'rgb(227, 227, 227)',
-    backgroundColor: 'rgb(115, 115, 115)',
+    strokeColor: 'rgb(30, 215, 96)',
+    backgroundColor: 'rgba(30, 215, 96, 0.12)',
   } as CategoryFormValues;
 }
 
