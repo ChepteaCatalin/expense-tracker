@@ -5,6 +5,8 @@ import Logo from '../_components/Logo';
 import Form from './Form';
 import Link from 'next/link';
 import linkStyles from '../_components/Link.module.css';
+import GitHubLink from '@/components/GitHubLink';
+import Box from '@mui/material/Box';
 
 const spacing = 2.5;
 
@@ -50,6 +52,9 @@ export default function SignInPage() {
           </Link>
         </Grid>
       </Card>
+      <Box sx={{ mt: 2, textAlign: 'center' }}>
+        <GitHubLink />
+      </Box>
     </Grid>
   );
 }

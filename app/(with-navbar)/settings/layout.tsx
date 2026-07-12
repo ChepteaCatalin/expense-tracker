@@ -5,7 +5,7 @@ import ChangePasswordSkeleton from './_components/ChangePasswordSkeleton';
 import Grid from '@mui/material/Grid';
 import PreferencesSkeleton from './_components/PreferencesSkeleton';
 import Heading from '@/components/Heading';
-import GitHubLink from './_components/GitHubLink';
+import GitHubLink from '@/components/GitHubLink';
 
 export const metadata = {
   title: 'Settings',
