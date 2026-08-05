@@ -12,8 +12,6 @@ export default function PasswordPage() {
   );
 }
 
-// The whole section depends on the session: it renders only for
-// non-verified-email (credentials) accounts.
 async function ChangePassword() {
   const { user } = await requireAuth();
 

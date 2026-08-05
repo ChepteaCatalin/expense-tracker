@@ -63,9 +63,6 @@ export function dateFromSearchParams(
 ): { from: string; to: string } {
   const [period, periodValue] = getActivePeriod(searchParams);
 
-  // Only the active period's range is computed: eagerly building every
-  // branch runs `dayjs(undefined)` (i.e. `new Date()`), which is unstable
-  // during prerendering.
   switch (period) {
     case day:
       return {
