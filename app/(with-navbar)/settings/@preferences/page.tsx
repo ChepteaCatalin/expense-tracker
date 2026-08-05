@@ -20,7 +20,7 @@ export default function PreferencesPage() {
             <Skeleton
               variant="rectangular"
               height={40}
-              sx={{ borderRadius: '4px' }}
+              sx={{ borderRadius: '4px', mt: 1 }}
             />
           }
         >
