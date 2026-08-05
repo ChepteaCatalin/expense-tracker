@@ -16,6 +16,7 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
+  partialPrefetching: true,
   turbopack: {
     rules: {
       '*.svg': {

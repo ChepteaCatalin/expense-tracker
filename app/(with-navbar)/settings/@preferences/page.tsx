@@ -4,22 +4,28 @@ import CurrencyAutocomplete from './CurrencyAutocomplete';
 import { requireAuth } from '@/lib/auth-utils';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Skeleton from '@mui/material/Skeleton';
+import { Suspense } from 'react';
 import { type CategoryType } from '@/types/category';
 import Link from 'next/link';
 
 const DEFAULT_CATEGORY_TYPE: CategoryType = 'expense';
 
-export default async function PreferencesPage() {
-  const { user } = await requireAuth();
-
+export default function PreferencesPage() {
   return (
     <Section title="Preferences">
       <Grid container spacing={3} sx={{ flexDirection: 'column' }}>
-        <CurrencyAutocomplete
-          key={user.id}
-          defaultValue={currencies.find(c => c.code === user?.currency)}
-          options={currencies.map(({ code, currency }) => ({ code, currency }))}
-        />
+        <Suspense
+          fallback={
+            <Skeleton
+              variant="rectangular"
+              height={40}
+              sx={{ borderRadius: '4px' }}
+            />
+          }
+        >
+          <UserCurrencyAutocomplete />
+        </Suspense>
         <Link
           href={{
             pathname: '/categories/all',
@@ -32,5 +38,17 @@ export default async function PreferencesPage() {
         </Link>
       </Grid>
     </Section>
+  );
+}
+
+async function UserCurrencyAutocomplete() {
+  const { user } = await requireAuth();
+
+  return (
+    <CurrencyAutocomplete
+      key={user.id}
+      defaultValue={currencies.find(c => c.code === user?.currency)}
+      options={currencies.map(({ code, currency }) => ({ code, currency }))}
+    />
   );
 }
