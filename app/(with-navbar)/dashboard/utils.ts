@@ -10,11 +10,7 @@ export async function getValidNormalizedSearchParams(
   const awaitedSearchParams = await searchParams;
 
   if (!validSearchParams(awaitedSearchParams)) notFound();
-
-  // The default range ends "today", so it must be computed at request time
-  // rather than while prerendering the route's shell.
-  if (!awaitedSearchParams.from && !awaitedSearchParams.to)
-    await connection();
+  if (!awaitedSearchParams.from && !awaitedSearchParams.to) await connection();
 
   return normalizedSearchParams(awaitedSearchParams);
 }
