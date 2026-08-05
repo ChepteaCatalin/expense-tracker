@@ -3,42 +3,52 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import { Suspense } from 'react';
 import SignOutBtn from './SignOutBtn';
 import Section from '../_components/Section';
+import AccountDetailsSkeleton from '../_components/AccountDetailsSkeleton';
 
-export default async function AccountPage() {
+export default function AccountPage() {
+  return (
+    <Section title="Account">
+      <Suspense fallback={<AccountDetailsSkeleton />}>
+        <AccountDetails />
+      </Suspense>
+    </Section>
+  );
+}
+
+async function AccountDetails() {
   const { user } = await requireAuth();
 
   return (
-    <Section title="Account">
-      <Stack spacing={3}>
-        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-          <Avatar
-            src={user.image || undefined}
-            alt={user.name}
-            sx={{
-              width: 56,
-              height: 56,
-              bgcolor: 'primary.main',
-              fontSize: '1.5rem',
-              fontWeight: 600,
-            }}
-          >
-            {getInitials(user.name)}
-          </Avatar>
-          <Stack spacing={0.5}>
-            <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
-              {user.name}
-            </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-              {user.email}
-            </Typography>
-          </Stack>
+    <Stack spacing={3}>
+      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Avatar
+          src={user.image || undefined}
+          alt={user.name}
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: 'primary.main',
+            fontSize: '1.5rem',
+            fontWeight: 600,
+          }}
+        >
+          {getInitials(user.name)}
+        </Avatar>
+        <Stack spacing={0.5}>
+          <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
+            {user.name}
+          </Typography>
+          <Typography sx={{ color: 'text.secondary' }}>
+            {user.email}
+          </Typography>
         </Stack>
-        <Divider />
-        <SignOutBtn />
       </Stack>
-    </Section>
+      <Divider />
+      <SignOutBtn />
+    </Stack>
   );
 }
 

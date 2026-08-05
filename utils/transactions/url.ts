@@ -63,31 +63,38 @@ export function dateFromSearchParams(
 ): { from: string; to: string } {
   const [period, periodValue] = getActivePeriod(searchParams);
 
-  if (!period) return { from: '', to: '' };
-  return (
-    {
-      [day]: {
+  // Only the active period's range is computed: eagerly building every
+  // branch runs `dayjs(undefined)` (i.e. `new Date()`), which is unstable
+  // during prerendering.
+  switch (period) {
+    case day:
+      return {
         from: dayjs(periodValue).format('YYYY-MM-DD'),
         to: dayjs(periodValue).format('YYYY-MM-DD'),
-      },
-      [week]: {
+      };
+    case week:
+      return {
         from: dayjs(periodValue).startOf('week').format('YYYY-MM-DD'),
         to: dayjs(periodValue).endOf('week').format('YYYY-MM-DD'),
-      },
-      [month]: {
+      };
+    case month:
+      return {
         from: dayjs(periodValue).startOf('month').format('YYYY-MM-DD'),
         to: dayjs(periodValue).endOf('month').format('YYYY-MM-DD'),
-      },
-      [year]: {
+      };
+    case year:
+      return {
         from: dayjs(periodValue).startOf('year').format('YYYY-MM-DD'),
         to: dayjs(periodValue).endOf('year').format('YYYY-MM-DD'),
-      },
-      [custom]: {
+      };
+    case custom:
+      return {
         from: dayjs(searchParams.from).format('YYYY-MM-DD'),
         to: dayjs(searchParams.to).format('YYYY-MM-DD'),
-      },
-    }[period] || { from: '', to: '' }
-  );
+      };
+    default:
+      return { from: '', to: '' };
+  }
 }
 
 export function stringifySearchParams<T extends object>(searchParams: {
