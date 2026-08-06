@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
-const a = 1;
+
 export default function NoData({
   title,
   link,
