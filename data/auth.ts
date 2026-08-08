@@ -8,7 +8,7 @@ export const getSession = cache(async () =>
   auth.api.getSession({ headers: await headers() }),
 );
 
-export const getSessionWithoutCache = cache(async () =>
+export const refreshSession = cache(async () =>
   auth.api.getSession({
     query: { disableCookieCache: true },
     headers: await headers(),
