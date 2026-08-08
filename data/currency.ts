@@ -2,7 +2,7 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
-import { getSessionWithoutCache } from './auth';
+import { refreshSession } from './auth';
 
 export const updateCurrency = authGuard(session => async (currency: string) => {
   const result =
@@ -11,7 +11,7 @@ export const updateCurrency = authGuard(session => async (currency: string) => {
   if (!result[0]) throw new Error('Failed to update currency');
 
   // Invalidate session cache to make sure the new currency is reflected in the UI immediately
-  await getSessionWithoutCache();
+  await refreshSession();
 });
 
 // https://github.com/freeall/currency-codes/blob/master/data.js
