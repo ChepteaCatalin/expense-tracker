@@ -2,6 +2,8 @@ import 'server-only';
 
 import { sql } from '@/lib/neon';
 import { authGuard } from '@/lib/auth-utils';
+import { cacheLife, cacheTag } from 'next/cache';
+import { userTag } from '@/utils/cache';
 import type {
   BreakdownChartData,
   CategoryBreakdown,
@@ -20,6 +22,11 @@ export const getTotals = authGuard(
       from: string;
       to: string;
     }): Promise<TotalsMetrics> => {
+      'use cache';
+      cacheLife('max');
+      const tag = userTag(session.user.id);
+      cacheTag(tag('expenses'), tag('incomes'), tag('savings'));
+
       const [totalsResult, savingsResult] = await Promise.all([
         sql`
           SELECT
@@ -72,6 +79,11 @@ export const getMonthlyMetrics = authGuard(
       from: string;
       to: string;
     }): Promise<MonthlyMetric[]> => {
+      'use cache';
+      cacheLife('max');
+      const tag = userTag(session.user.id);
+      cacheTag(tag('expenses'), tag('incomes'));
+
       const rows = await sql`
         SELECT
           TO_CHAR(months.month, 'Mon YYYY') AS month,
@@ -121,6 +133,10 @@ export const getSavingsChartData = authGuard(
       from: string;
       to: string;
     }): Promise<SavingsChartData> => {
+      'use cache';
+      cacheLife('max');
+      cacheTag(userTag(session.user.id)('savings'));
+
       const rows = await sql`
         WITH months AS (
           SELECT generate_series(
@@ -191,6 +207,10 @@ export const getExpenseCategoryBreakdown = authGuard(
       from: string;
       to: string;
     }): Promise<BreakdownChartData> => {
+      'use cache';
+      cacheLife('max');
+      cacheTag(userTag(session.user.id)('expenses'));
+
       const rows = await sql`
         WITH category_totals AS (
           SELECT category_id, SUM(amount) AS period_total
@@ -263,6 +283,10 @@ export const getIncomeCategoryBreakdown = authGuard(
       from: string;
       to: string;
     }): Promise<BreakdownChartData> => {
+      'use cache';
+      cacheLife('max');
+      cacheTag(userTag(session.user.id)('incomes'));
+
       const rows = await sql`
         WITH category_totals AS (
           SELECT category_id, SUM(amount) AS period_total
@@ -335,6 +359,10 @@ export const getExpenseCategoryTreemapData = authGuard(
       from: string;
       to: string;
     }): Promise<CategoryTreemapNode[]> => {
+      'use cache';
+      cacheLife('max');
+      cacheTag(userTag(session.user.id)('expenses'));
+
       const rows = await sql`
         SELECT
           c.id AS category_id,
@@ -370,6 +398,10 @@ export const getIncomeCategoryTreemapData = authGuard(
       from: string;
       to: string;
     }): Promise<CategoryTreemapNode[]> => {
+      'use cache';
+      cacheLife('max');
+      cacheTag(userTag(session.user.id)('incomes'));
+
       const rows = await sql`
         SELECT
           c.id AS category_id,

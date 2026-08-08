@@ -28,15 +28,16 @@ export default async function ExpenseCategoriesPage({
   if (!validSearchParams(params)) notFound();
 
   var expensesByCategory = [] as TransactionCategory[];
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    expensesByCategory = await getExpenseCategories(
-      dateFromSearchParams(params),
-    );
+    [expensesByCategory, session] = await Promise.all([
+      getExpenseCategories(dateFromSearchParams(params)),
+      getSession(),
+    ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
-  const session = await getSession();
   const currency = session!.user.currency;
   const categoryPercentages = getCategoryPercentages(expensesByCategory);
 

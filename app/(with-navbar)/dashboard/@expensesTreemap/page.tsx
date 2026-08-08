@@ -20,16 +20,20 @@ export default async function ExpensesTreemap({
   const params = await getValidNormalizedSearchParams(searchParams);
 
   var chartData: CategoryTreemapNode[];
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    chartData = await getExpenseCategoryTreemapData({
-      from: params.from!,
-      to: params.to!,
-    });
+    [chartData, session] = await Promise.all([
+      getExpenseCategoryTreemapData({
+        from: params.from!,
+        to: params.to!,
+      }),
+      getSession(),
+    ]);
   } catch (error) {
     if (error instanceof UnauthorizedError) redirect('/signin');
     throw error;
   }
-  const currency = (await getSession())?.user.currency;
+  const currency = session?.user.currency;
 
   if (chartData.length === 0) {
     return (

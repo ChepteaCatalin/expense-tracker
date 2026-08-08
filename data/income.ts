@@ -45,6 +45,7 @@ export const createIncome = authGuard(
       if (!createdIncome) throw new Error('Failed to create income');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('incomes'));
       updateTag(tag('incomes/categories'));
       updateTag(tag(`incomes/category/${income.categoryId}`));
 
@@ -64,7 +65,7 @@ export const getIncomeById = authGuard(
   session =>
     async (incomeId: number): Promise<Transaction | undefined> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`incomes/id/${incomeId}`));
 
       try {
@@ -129,6 +130,7 @@ export const updateIncome = authGuard(
       if (!editedIncome) throw new Error('Failed to edit income');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('incomes'));
       updateTag(tag('incomes/categories'));
       updateTag(tag(`incomes/category/${income.categoryId}`));
       updateTag(tag(`incomes/id/${income.id}`));
@@ -160,6 +162,7 @@ export const deleteIncome = authGuard(
       if (!deletedIncome) throw new Error('Failed to delete income');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('incomes'));
       updateTag(tag('incomes/categories'));
       updateTag(tag(`incomes/category/${deletedIncome.category_id}`));
       updateTag(tag(`incomes/id/${incomeId}`));
@@ -178,7 +181,7 @@ export const getIncomeCategories = authGuard(
       to: string;
     }): Promise<TransactionCategory[]> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)('incomes/categories'));
 
       try {
@@ -227,7 +230,7 @@ export const getIncomesByCategory = authGuard(
       sortBy?: SortTransactionBy;
     }): Promise<TransactionsByDate[]> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`incomes/category/${categoryId}`));
 
       try {
@@ -308,7 +311,7 @@ export const getIncomeCategoryTotal = authGuard(
       to: string;
     }): Promise<number> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`incomes/category/${categoryId}`));
 
       try {

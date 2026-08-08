@@ -30,13 +30,16 @@ export default async function IncomeCategoriesPage({
   if (!validSearchParams(params)) notFound();
 
   var incomesByCategory = [] as TransactionCategory[];
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    incomesByCategory = await getIncomeCategories(dateFromSearchParams(params));
+    [incomesByCategory, session] = await Promise.all([
+      getIncomeCategories(dateFromSearchParams(params)),
+      getSession(),
+    ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
 
-  const session = await getSession();
   const currency = session!.user.currency;
   const categoryPercentages = getCategoryPercentages(incomesByCategory);
 
