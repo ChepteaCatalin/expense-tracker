@@ -2,6 +2,7 @@ import type { DashboardSearchParams } from '@/types/dashboard';
 import { parseURLDate } from '@/utils/url';
 import dayjs from 'dayjs';
 import { notFound } from 'next/navigation';
+import { connection } from 'next/server';
 
 export async function getValidNormalizedSearchParams(
   searchParams: Promise<DashboardSearchParams>,
@@ -9,6 +10,7 @@ export async function getValidNormalizedSearchParams(
   const awaitedSearchParams = await searchParams;
 
   if (!validSearchParams(awaitedSearchParams)) notFound();
+  if (!awaitedSearchParams.from && !awaitedSearchParams.to) await connection();
 
   return normalizedSearchParams(awaitedSearchParams);
 }
