@@ -18,16 +18,20 @@ export default async function NetIncomePage({
   const params = await getValidNormalizedSearchParams(searchParams);
 
   var metrics: MonthlyMetric[];
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    metrics = await getMonthlyMetrics({
-      from: params.from!,
-      to: params.to!,
-    });
+    [metrics, session] = await Promise.all([
+      getMonthlyMetrics({
+        from: params.from!,
+        to: params.to!,
+      }),
+      getSession(),
+    ]);
   } catch (error) {
     if (error instanceof UnauthorizedError) redirect('/signin');
     throw error;
   }
-  const currency = (await getSession())?.user.currency;
+  const currency = session?.user.currency;
 
   const chartData = {
     months: metrics.map(m => m.month),

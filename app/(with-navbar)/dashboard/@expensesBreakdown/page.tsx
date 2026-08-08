@@ -20,16 +20,20 @@ export default async function ExpensesBreakdown({
   const params = await getValidNormalizedSearchParams(searchParams);
 
   var chartData: BreakdownChartData;
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    chartData = await getExpenseCategoryBreakdown({
-      from: params.from!,
-      to: params.to!,
-    });
+    [chartData, session] = await Promise.all([
+      getExpenseCategoryBreakdown({
+        from: params.from!,
+        to: params.to!,
+      }),
+      getSession(),
+    ]);
   } catch (error) {
     if (error instanceof UnauthorizedError) redirect('/signin');
     throw error;
   }
-  const currency = (await getSession())?.user.currency;
+  const currency = session?.user.currency;
 
   if (chartData.categories.length === 0) {
     return (

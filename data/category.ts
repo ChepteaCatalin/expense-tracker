@@ -58,6 +58,7 @@ export const updateCategory = authGuard(
       if (!result[0]) throw new Error('Category not found or update failed');
 
       const tag = userTag(session.user.id);
+      updateTag(tag(category.type === 'expense' ? 'expenses' : 'incomes'));
       updateTag(tag(`categories/type/${category.type}`));
       updateTag(tag(`categories/id/${category.id}`));
       updateTag(tag('expenses/categories'));
@@ -80,6 +81,7 @@ export const deleteCategory = authGuard(
     if (!result[0]) throw new Error('Category not found or delete failed');
 
     const tag = userTag(session.user.id);
+    updateTag(tag(result[0].type === 'expense' ? 'expenses' : 'incomes'));
     updateTag(tag(`categories/type/${result[0].type}`));
     updateTag(tag(`categories/id/${categoryId}`));
     updateTag(tag('expenses/categories'));
@@ -93,7 +95,7 @@ export const getAllCategoriesByType = authGuard(
   session =>
     async (type: CategoryType): Promise<Category[] | Array<never>> => {
       'use cache';
-      cacheLife('weeks');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`categories/type/${type}`));
 
       const result = await sql`
@@ -121,7 +123,7 @@ export const getCategoryById = authGuard(
   session =>
     async (categoryId: number): Promise<Category | undefined> => {
       'use cache';
-      cacheLife('weeks');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`categories/id/${categoryId}`));
 
       const result = await sql`
@@ -147,7 +149,7 @@ export const getCategoryNameById = authGuard(
   session =>
     async (categoryId: number): Promise<string | undefined> => {
       'use cache';
-      cacheLife('weeks');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`categories/id/${categoryId}`));
 
       const result = await sql`

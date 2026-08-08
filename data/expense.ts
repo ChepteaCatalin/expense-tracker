@@ -47,6 +47,7 @@ export const createExpense = authGuard(
       if (!createdExpense) throw new Error('Failed to create expense');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('expenses'));
       updateTag(tag('expenses/categories'));
       updateTag(tag(`expenses/category/${expense.categoryId}`));
 
@@ -91,6 +92,7 @@ export const updateExpense = authGuard(
       if (!editedExpense) throw new Error('Failed to edit expense');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('expenses'));
       updateTag(tag('expenses/categories'));
       updateTag(tag(`expenses/category/${expense.categoryId}`));
       updateTag(tag(`expenses/id/${expense.id}`));
@@ -122,6 +124,7 @@ export const deleteExpense = authGuard(
       if (!deletedExpense) throw new Error('Failed to delete expense');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('expenses'));
       updateTag(tag('expenses/categories'));
       updateTag(tag(`expenses/category/${deletedExpense.category_id}`));
       updateTag(tag(`expenses/id/${expenseId}`));

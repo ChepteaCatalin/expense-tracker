@@ -20,16 +20,20 @@ export default async function TotalsPage({
   const params = await getValidNormalizedSearchParams(searchParams);
 
   var totals: TotalsMetrics;
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    totals = await getTotals({
-      from: params.from!,
-      to: params.to!,
-    });
+    [totals, session] = await Promise.all([
+      getTotals({
+        from: params.from!,
+        to: params.to!,
+      }),
+      getSession(),
+    ]);
   } catch (error) {
     if (error instanceof UnauthorizedError) redirect('/signin');
     throw error;
   }
-  const currency = (await getSession())?.user.currency;
+  const currency = session?.user.currency;
 
   const netIncome = totals.income - totals.expenses;
 

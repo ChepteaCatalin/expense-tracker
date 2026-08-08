@@ -18,17 +18,19 @@ export default async function EditIncome({
 
   var categories: Category[] = [];
   var income: Transaction | undefined = undefined;
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    [categories, income] = await Promise.all([
+    [categories, income, session] = await Promise.all([
       getAllCategoriesByType('income'),
       getIncomeById(+id),
+      getSession(),
     ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
   if (!categories.length || !income) notFound();
 
-  const currency = (await getSession())?.user.currency;
+  const currency = session?.user.currency;
 
   return (
     <Form

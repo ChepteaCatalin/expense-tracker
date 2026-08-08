@@ -18,17 +18,19 @@ export default async function EditExpense({
 
   var categories: Category[] = [];
   var expense: Transaction | undefined = undefined;
+  var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
-    [categories, expense] = await Promise.all([
+    [categories, expense, session] = await Promise.all([
       getAllCategoriesByType('expense'),
       getExpenseById(+id),
+      getSession(),
     ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
   }
   if (!categories.length || !expense) notFound();
 
-  const currency = (await getSession())?.user.currency;
+  const currency = session?.user.currency;
 
   return (
     <Form

@@ -53,7 +53,9 @@ export const createSavingsGoal = authGuard(
 
       if (!created) throw new Error('Failed to create savings goal');
 
-      updateTag(userTag(session.user.id)('savings-goals/list'));
+      const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
+      updateTag(tag('savings-goals/list'));
 
       return savingsGoalFromDb(created);
     },
@@ -63,7 +65,7 @@ export const getSavingsGoalById = authGuard(
   session =>
     async (id: number): Promise<SavingsGoal | null> => {
       'use cache';
-      cacheLife('weeks');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`savings-goals/id/${id}`));
 
       const result = await sql`
@@ -97,7 +99,7 @@ export const getSavingsGoalById = authGuard(
 export const getAllSavingsGoals = authGuard(
   session => async (): Promise<SavingsGoal[]> => {
     'use cache';
-    cacheLife('weeks');
+    cacheLife('max');
     cacheTag(userTag(session.user.id)('savings-goals/list'));
 
     try {
@@ -174,6 +176,7 @@ export const updateSavingsGoal = authGuard(
       if (!updated) throw new Error('Failed to update savings goal');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
       updateTag(tag(`savings-goals/id/${goal.id}`));
       updateTag(tag('savings-goals/list'));
 
@@ -192,6 +195,7 @@ export const deleteSavingsGoal = authGuard(
     if (!result[0]) throw new Error('Savings goal not found or delete failed');
 
     const tag = userTag(session.user.id);
+    updateTag(tag('savings'));
     updateTag(tag(`savings-goals/id/${goalId}`));
     updateTag(tag('savings-goals/list'));
   },
@@ -215,6 +219,7 @@ export const completeSavingsGoal = authGuard(
       if (!result[0]) throw new Error('Failed to complete savings goal');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
       updateTag(tag(`savings-goals/id/${goalId}`));
       updateTag(tag('savings-goals/list'));
     },
@@ -238,6 +243,7 @@ export const reopenSavingsGoal = authGuard(
       if (!result[0]) throw new Error('Failed to reopen savings goal');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
       updateTag(tag(`savings-goals/id/${goalId}`));
       updateTag(tag('savings-goals/list'));
     },
@@ -300,6 +306,7 @@ export const createSavingsDeposit = authGuard(
       if (!created) throw new Error('Failed to create goal deposit');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
       updateTag(tag(`savings-goals/id/${deposit.goalId}`));
       updateTag(tag('savings-goals/list'));
       updateTag(tag(`savings-deposits/goal/${deposit.goalId}`));
@@ -312,7 +319,7 @@ export const getSavingsDepositsByGoalId = authGuard(
   session =>
     async (goalId: number): Promise<SavingsDeposit[]> => {
       'use cache';
-      cacheLife('weeks');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`savings-deposits/goal/${goalId}`));
 
       try {
@@ -370,6 +377,7 @@ export const updateSavingsDeposit = authGuard(
       if (!updated) throw new Error('Failed to update savings deposit');
 
       const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
       updateTag(tag(`savings-goals/id/${deposit.goalId}`));
       updateTag(tag('savings-goals/list'));
       updateTag(tag(`savings-deposits/goal/${deposit.goalId}`));
@@ -397,6 +405,7 @@ export const deleteSavingsDeposit = authGuard(
       }
 
       const tag = userTag(session.user.id);
+      updateTag(tag('savings'));
       updateTag(tag(`savings-goals/id/${deleted.goal_id}`));
       updateTag(tag('savings-goals/list'));
       updateTag(tag(`savings-deposits/goal/${deleted.goal_id}`));
