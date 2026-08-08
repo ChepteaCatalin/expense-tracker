@@ -46,14 +46,24 @@ export const getTotals = authGuard(
             ), 0) AS income
         `,
         sql`
-          SELECT sg.currency, SUM(sd.amount) AS total
-          FROM savings_deposit sd
-          JOIN savings_goal sg ON sd.savings_goal_id = sg.id
-          WHERE sg.user_id = ${session.user.id}
-            AND sd.date >= ${from}::date
-            AND sd.date <= ${to}::date
-          GROUP BY sg.currency
-          ORDER BY sg.currency
+          SELECT currency, SUM(amount) AS total
+          FROM (
+            SELECT sg.currency, sd.amount
+            FROM savings_deposit sd
+            JOIN savings_goal sg ON sd.savings_goal_id = sg.id
+            WHERE sg.user_id = ${session.user.id}
+              AND sd.date >= ${from}::date
+              AND sd.date <= ${to}::date
+            UNION ALL
+            SELECT sg.currency, sg.initial_amount AS amount
+            FROM savings_goal sg
+            WHERE sg.user_id = ${session.user.id}
+              AND sg.initial_amount > 0
+              AND sg.start_date >= ${from}::date
+              AND sg.start_date <= ${to}::date
+          ) contributions
+          GROUP BY currency
+          ORDER BY currency
         `,
       ]);
 
@@ -145,25 +155,35 @@ export const getSavingsChartData = authGuard(
             '1 month'::interval
           ) AS month
         ),
-        currencies AS (
-          SELECT DISTINCT sg.currency
-          FROM savings_deposit sd
-          JOIN savings_goal sg ON sg.id = sd.savings_goal_id
-          WHERE sg.user_id = ${session.user.id}
-            AND sd.date >= ${from}::date
-            AND sd.date <= ${to}::date
-        ),
-        savings AS (
+        contributions AS (
           SELECT
             DATE_TRUNC('month', sd.date) AS month,
             sg.currency,
-            SUM(sd.amount) AS total
+            sd.amount
           FROM savings_deposit sd
           JOIN savings_goal sg ON sg.id = sd.savings_goal_id
           WHERE sg.user_id = ${session.user.id}
             AND sd.date >= ${from}::date
             AND sd.date <= ${to}::date
-          GROUP BY DATE_TRUNC('month', sd.date), sg.currency
+          UNION ALL
+          SELECT
+            DATE_TRUNC('month', sg.start_date) AS month,
+            sg.currency,
+            sg.initial_amount AS amount
+          FROM savings_goal sg
+          WHERE sg.user_id = ${session.user.id}
+            AND sg.initial_amount > 0
+            AND sg.start_date >= ${from}::date
+            AND sg.start_date <= ${to}::date
+        ),
+        currencies AS (
+          SELECT DISTINCT currency
+          FROM contributions
+        ),
+        savings AS (
+          SELECT month, currency, SUM(amount) AS total
+          FROM contributions
+          GROUP BY month, currency
         )
         SELECT
           TO_CHAR(months.month, 'Mon YYYY') AS month,
