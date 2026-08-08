@@ -36,6 +36,7 @@ export default async function ExpenseCategoriesPage({
     ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
+    throw err;
   }
 
   const currency = session!.user.currency;

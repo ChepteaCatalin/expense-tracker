@@ -27,6 +27,7 @@ export default async function EditExpense({
     ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect('/signin');
+    throw err;
   }
   if (!categories.length || !expense) notFound();
 
