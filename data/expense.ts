@@ -143,7 +143,7 @@ export const getExpenseCategories = authGuard(
       to: string;
     }): Promise<TransactionCategory[]> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)('expenses/categories'));
 
       try {
@@ -182,7 +182,7 @@ export const getExpenseById = authGuard(
   session =>
     async (expenseId: number): Promise<Transaction | undefined> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`expenses/id/${expenseId}`));
 
       try {
@@ -230,7 +230,7 @@ export const getExpenseCategoryTotal = authGuard(
       to: string;
     }): Promise<number> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
       try {
@@ -264,7 +264,7 @@ export const getExpensesByCategory = authGuard(
       sortBy?: SortTransactionBy;
     }): Promise<TransactionsByDate[]> => {
       'use cache';
-      cacheLife('minutes');
+      cacheLife('max');
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
       try {
