@@ -6,6 +6,7 @@ import theme from './theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import DatePickerProvider from '@/lib/MuiDatePicker/DatePickerProvider';
 import '@/lib/dayjs';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Expense Tracker',
