@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
-import CssBaseline from "@mui/material/CssBaseline";
+// import CssBaseline from "@mui/material/CssBaseline";
 import DatePickerProvider from "@/lib/MuiDatePicker/DatePickerProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 import "@/lib/dayjs";
 import "./globals.css";
 
@@ -22,14 +23,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geist.variable}>
-      <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <DatePickerProvider>{children}</DatePickerProvider>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+    <html lang="en" className={geist.variable} suppressHydrationWarning>
+      <body className="bg-background">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AppRouterCacheProvider>
+            <MuiThemeProvider theme={theme}>
+              {/* <CssBaseline /> */}
+              <DatePickerProvider>{children}</DatePickerProvider>
+            </MuiThemeProvider>
+          </AppRouterCacheProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

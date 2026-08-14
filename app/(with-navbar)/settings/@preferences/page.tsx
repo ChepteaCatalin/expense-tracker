@@ -8,6 +8,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { Suspense } from "react";
 import { type CategoryType } from "@/types/category";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const DEFAULT_CATEGORY_TYPE: CategoryType = "expense";
 
@@ -15,6 +16,7 @@ export default function PreferencesPage() {
   return (
     <Section title="Preferences">
       <Grid container spacing={3} sx={{ flexDirection: "column" }}>
+        <ThemeToggle />
         <Suspense
           fallback={
             <Skeleton
