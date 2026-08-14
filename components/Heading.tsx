@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import type { SxProps, Theme } from '@mui/material/styles';
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 export default function Heading({
   title,
@@ -22,7 +22,7 @@ export default function Heading({
         {title}
       </Typography>
       {subtitle && (
-        <Typography sx={{ color: 'text.secondary', fontWeight: 600 }}>
+        <Typography sx={{ color: "text.secondary", fontWeight: 600 }}>
           {subtitle}
         </Typography>
       )}

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
-import AddEditDepositDialog from './AddEditDepositDialog';
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
+import AddEditDepositDialog from "./AddEditDepositDialog";
 
 export default function AddDepositIconBtn({
   id,

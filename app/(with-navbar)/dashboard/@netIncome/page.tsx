@@ -1,14 +1,14 @@
-import { getValidNormalizedSearchParams } from '../utils';
-import InsightCard from '../_components/InsightCard';
-import type { DashboardSearchParams, MonthlyMetric } from '@/types/dashboard';
-import NetIncomeChart from './NetIncomeChart';
-import { getSession } from '@/data/auth';
-import { getMonthlyMetrics } from '@/data/dashboard';
-import { UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
-import { fromCents } from '@/utils/currency';
-import NoData from '../_components/NoData';
-import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
+import { getValidNormalizedSearchParams } from "../utils";
+import InsightCard from "../_components/InsightCard";
+import type { DashboardSearchParams, MonthlyMetric } from "@/types/dashboard";
+import NetIncomeChart from "./NetIncomeChart";
+import { getSession } from "@/data/auth";
+import { getMonthlyMetrics } from "@/data/dashboard";
+import { UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
+import { fromCents } from "@/utils/currency";
+import NoData from "../_components/NoData";
+import AddExpensesLinkBtn from "../_components/AddExpensesLinkBtn";
 
 export default async function NetIncomePage({
   searchParams,
@@ -28,19 +28,22 @@ export default async function NetIncomePage({
       getSession(),
     ]);
   } catch (error) {
-    if (error instanceof UnauthorizedError) redirect('/signin');
+    if (error instanceof UnauthorizedError) redirect("/signin");
     throw error;
   }
   const currency = session?.user.currency;
 
   const chartData = {
-    months: metrics.map(m => m.month),
-    income: metrics.map(m => fromCents(m.income)),
-    expenses: metrics.map(m => fromCents(m.expenses)),
-    netIncome: metrics.map(m => fromCents(m.netIncome)),
+    months: metrics.map((m) => m.month),
+    income: metrics.map((m) => fromCents(m.income)),
+    expenses: metrics.map((m) => fromCents(m.expenses)),
+    netIncome: metrics.map((m) => fromCents(m.netIncome)),
   };
 
-  if (chartData.income.every(i => !i) && chartData.expenses.every(e => !e)) {
+  if (
+    chartData.income.every((i) => !i) &&
+    chartData.expenses.every((e) => !e)
+  ) {
     return <NoData title="Net Income" customLink={<AddExpensesLinkBtn />} />;
   }
 

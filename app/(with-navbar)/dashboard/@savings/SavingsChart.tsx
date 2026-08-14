@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import ReactECharts from 'echarts-for-react';
-import { textColor } from '../_utils/chart';
-import type { SavingsChartData } from '@/types/dashboard';
+import ReactECharts from "echarts-for-react";
+import { textColor } from "../_utils/chart";
+import type { SavingsChartData } from "@/types/dashboard";
 
 export default function SavingsChart({
   chartData,
@@ -11,10 +11,10 @@ export default function SavingsChart({
 }) {
   return (
     <ReactECharts
-      style={{ height: '500px' }}
+      style={{ height: "500px" }}
       theme="dark"
       option={{
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         grid: {
           top: 35,
           bottom: 65,
@@ -23,24 +23,24 @@ export default function SavingsChart({
         },
         dataZoom: [
           {
-            type: 'slider',
+            type: "slider",
             right: 5,
             bottom: 10,
             showDetail: false,
           },
         ],
         xAxis: {
-          type: 'category',
+          type: "category",
           data: chartData.months,
-          axisPointer: { type: 'shadow' },
+          axisPointer: { type: "shadow" },
           axisLabel: { color: textColor },
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           axisLabel: { color: textColor },
         },
         series: chartData.series.map((series, index) => ({
-          type: 'line',
+          type: "line",
           name: series.currency,
           data: series.data,
           color: lineColors[index % lineColors.length],
@@ -49,22 +49,22 @@ export default function SavingsChart({
           lineStyle: { width: 3 },
         })),
         legend: {
-          type: 'scroll',
+          type: "scroll",
           top: 0,
           textStyle: { color: textColor },
           pageTextStyle: { color: textColor },
           pageIconColor: textColor,
-          pageIconInactiveColor: 'rgba(255,255,255,0.2)',
+          pageIconInactiveColor: "rgba(255,255,255,0.2)",
         },
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           confine: true,
           textStyle: { color: textColor },
-          extraCssText: 'z-index: 1000',
+          extraCssText: "z-index: 1000",
         },
       }}
     />
   );
 }
 
-const lineColors = ['#1ED760', '#4FC3F7', '#FFD166', '#FF7B72', '#C792EA'];
+const lineColors = ["#1ED760", "#4FC3F7", "#FFD166", "#FF7B72", "#C792EA"];

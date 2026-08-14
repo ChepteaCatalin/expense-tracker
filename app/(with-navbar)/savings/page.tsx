@@ -1,15 +1,15 @@
-import Fab from '@/components/Fab';
-import Stack from '@mui/material/Stack';
-import Link from 'next/link';
-import SavingsGoalCard from './_components/SavingsGoalCard';
-import Heading from '@/components/Heading';
-import { getAllSavingsGoals } from '@/data/savings';
-import { UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
-import type { SavingsGoal } from '@/types/savings';
-import NoSavingsGoals from './_components/NoSavingsGoals';
-import { metadata } from './constants';
-import PageWrapper from '@/components/PageWrapper';
+import Fab from "@/components/Fab";
+import Stack from "@mui/material/Stack";
+import Link from "next/link";
+import SavingsGoalCard from "./_components/SavingsGoalCard";
+import Heading from "@/components/Heading";
+import { getAllSavingsGoals } from "@/data/savings";
+import { UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
+import type { SavingsGoal } from "@/types/savings";
+import NoSavingsGoals from "./_components/NoSavingsGoals";
+import { metadata } from "./constants";
+import PageWrapper from "@/components/PageWrapper";
 
 export { metadata };
 
@@ -18,7 +18,7 @@ export default async function SavingsPage() {
   try {
     savingsGoals = await getAllSavingsGoals();
   } catch (err) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
+    if (err instanceof UnauthorizedError) redirect("/signin");
   }
 
   return (
@@ -30,11 +30,11 @@ export default async function SavingsPage() {
       />
       <Stack spacing={3}>
         {savingsGoals.length ? (
-          savingsGoals.map(goal => (
+          savingsGoals.map((goal) => (
             <Link
               key={goal.id}
               href={`/savings/${goal.id}/details`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <SavingsGoalCard goal={goal} />
             </Link>

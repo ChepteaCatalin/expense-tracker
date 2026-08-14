@@ -1,16 +1,16 @@
-import Typography from '@mui/material/Typography';
-import { getValidNormalizedSearchParams } from '../utils';
-import InsightCard from '../_components/InsightCard';
-import type { DashboardSearchParams, TotalsMetrics } from '@/types/dashboard';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import { getSession } from '@/data/auth';
-import { readableCurrency } from '@/utils/currency';
-import { getTotals } from '@/data/dashboard';
-import { UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
-import NoData from '../_components/NoData';
-import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
+import Typography from "@mui/material/Typography";
+import { getValidNormalizedSearchParams } from "../utils";
+import InsightCard from "../_components/InsightCard";
+import type { DashboardSearchParams, TotalsMetrics } from "@/types/dashboard";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import { getSession } from "@/data/auth";
+import { readableCurrency } from "@/utils/currency";
+import { getTotals } from "@/data/dashboard";
+import { UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
+import NoData from "../_components/NoData";
+import AddExpensesLinkBtn from "../_components/AddExpensesLinkBtn";
 
 export default async function TotalsPage({
   searchParams,
@@ -30,7 +30,7 @@ export default async function TotalsPage({
       getSession(),
     ]);
   } catch (error) {
-    if (error instanceof UnauthorizedError) redirect('/signin');
+    if (error instanceof UnauthorizedError) redirect("/signin");
     throw error;
   }
   const currency = session?.user.currency;
@@ -65,7 +65,7 @@ export default async function TotalsPage({
         label="Net Income"
         value={netIncome}
         currency={currency}
-        color={netIncome >= 0 ? 'success.main' : 'error.main'}
+        color={netIncome >= 0 ? "success.main" : "error.main"}
         highlight
       />
       <Divider sx={dividerSx} />
@@ -102,26 +102,26 @@ function MetricRow({
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
         px: highlight ? 1 : 0,
         py: highlight ? 0.5 : 0,
         borderRadius: highlight ? 1 : 0,
-        bgcolor: highlight ? 'rgba(255,255,255,0.04)' : 'transparent',
+        bgcolor: highlight ? "rgba(255,255,255,0.04)" : "transparent",
       }}
     >
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+      <Typography variant="body2" sx={{ color: "text.secondary" }}>
         {label}
       </Typography>
       <Typography
         variant="body2"
         sx={{ fontWeight: highlight ? 700 : 600, color }}
       >
-        {readableCurrency(value)} {currency ?? ''}
+        {readableCurrency(value)} {currency ?? ""}
       </Typography>
     </Box>
   );
 }
 
-const dividerSx = { my: 1, borderColor: 'rgba(255,255,255,0.07)' };
+const dividerSx = { my: 1, borderColor: "rgba(255,255,255,0.07)" };

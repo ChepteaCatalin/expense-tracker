@@ -1,7 +1,7 @@
 export enum ErrorCode {
-  UNAUTHORIZED = 'UNAUTHORIZED',
+  UNAUTHORIZED = "UNAUTHORIZED",
 }
 
 export enum PostgresErrorCode {
-  UniqueViolation = '23505',
+  UniqueViolation = "23505",
 }

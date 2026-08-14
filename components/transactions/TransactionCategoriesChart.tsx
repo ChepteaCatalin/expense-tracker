@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { TransactionCategoriesChartData } from '@/types/transaction';
-import { readableCurrency } from '@/utils/currency';
-import ReactECharts from 'echarts-for-react';
-import styles from './TransactionCategoriesChart.module.css';
+import type { TransactionCategoriesChartData } from "@/types/transaction";
+import { readableCurrency } from "@/utils/currency";
+import ReactECharts from "echarts-for-react";
+import styles from "./TransactionCategoriesChart.module.css";
 
 export default function TransactionCategoriesChart({
   data,
@@ -17,41 +17,41 @@ export default function TransactionCategoriesChart({
   return (
     <div className={styles.chart}>
       <ReactECharts
-        style={{ height: '100%' }}
+        style={{ height: "100%" }}
         theme="dark"
         option={{
-          backgroundColor: 'transparent',
+          backgroundColor: "transparent",
           title: {
             text: `${readableCurrency(sum)} ${currency}`,
-            left: 'center',
-            top: 'center',
+            left: "center",
+            top: "center",
             textStyle: {
-              color: 'rgb(227, 227, 227)',
+              color: "rgb(227, 227, 227)",
               fontSize: 18,
               fontWeight: 700,
             },
           },
           tooltip: {
-            trigger: 'item',
-            position: 'inside',
+            trigger: "item",
+            position: "inside",
             confine: true,
             formatter: (params: any) =>
               `${params.marker} <b>${params.name}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
-            textStyle: { color: 'rgb(227, 227, 227)' },
-            extraCssText: 'white-space: normal',
+            textStyle: { color: "rgb(227, 227, 227)" },
+            extraCssText: "white-space: normal",
           },
           series: [
             {
-              name: 'Category',
-              type: 'pie',
-              radius: [innerRadius(sum), '95%'],
+              name: "Category",
+              type: "pie",
+              radius: [innerRadius(sum), "95%"],
               itemStyle: {
-                borderColor: 'rgb(227, 227, 227)',
+                borderColor: "rgb(227, 227, 227)",
                 borderWidth: 1,
               },
-              color: data.map(item => item.color),
+              color: data.map((item) => item.color),
               label: { show: false },
-              data: data.map(item => ({ ...item, value: item.value })),
+              data: data.map((item) => ({ ...item, value: item.value })),
             },
           ],
         }}
@@ -61,7 +61,7 @@ export default function TransactionCategoriesChart({
 }
 
 function innerRadius(value: number) {
-  if (value >= 1_000_000) return '65%';
-  if (value >= 100_000) return '60%';
-  return '55%';
+  if (value >= 1_000_000) return "65%";
+  if (value >= 100_000) return "60%";
+  return "55%";
 }

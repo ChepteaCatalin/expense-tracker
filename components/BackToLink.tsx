@@ -1,8 +1,8 @@
-import Button from '@mui/material/Button';
-import type { SxProps, Theme } from '@mui/material/styles';
-import Link from 'next/link';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import type { UrlObject } from 'url';
+import Button from "@mui/material/Button";
+import type { SxProps, Theme } from "@mui/material/styles";
+import Link from "next/link";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import type { UrlObject } from "url";
 
 export default function BackToLink({
   href,
@@ -19,12 +19,12 @@ export default function BackToLink({
         sx={{
           py: 0,
           px: 0.5,
-          '& .MuiButton-startIcon': { mr: 0.5 },
+          "& .MuiButton-startIcon": { mr: 0.5 },
           ...sx,
         }}
         startIcon={<ChevronLeftIcon />}
       >
-        {pageName ? `Back to ${pageName}` : 'Back'}
+        {pageName ? `Back to ${pageName}` : "Back"}
       </Button>
     </Link>
   );

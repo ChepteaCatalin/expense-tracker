@@ -1,12 +1,12 @@
-import { requireAuth } from '@/lib/auth-utils';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import { Suspense } from 'react';
-import SignOutBtn from './SignOutBtn';
-import Section from '../_components/Section';
-import AccountDetailsSkeleton from '../_components/AccountDetailsSkeleton';
+import { requireAuth } from "@/lib/auth-utils";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
+import { Suspense } from "react";
+import SignOutBtn from "./SignOutBtn";
+import Section from "../_components/Section";
+import AccountDetailsSkeleton from "../_components/AccountDetailsSkeleton";
 
 export default function AccountPage() {
   return (
@@ -23,15 +23,15 @@ async function AccountDetails() {
 
   return (
     <Stack spacing={3}>
-      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
         <Avatar
           src={user.image || undefined}
           alt={user.name}
           sx={{
             width: 56,
             height: 56,
-            bgcolor: 'primary.main',
-            fontSize: '1.5rem',
+            bgcolor: "primary.main",
+            fontSize: "1.5rem",
             fontWeight: 600,
           }}
         >
@@ -41,9 +41,7 @@ async function AccountDetails() {
           <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
             {user.name}
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            {user.email}
-          </Typography>
+          <Typography sx={{ color: "text.secondary" }}>{user.email}</Typography>
         </Stack>
       </Stack>
       <Divider />
@@ -55,9 +53,9 @@ async function AccountDetails() {
 function getInitials(name: string) {
   return name
     .trim()
-    .split(' ')
-    .map(n => n[0])
+    .split(" ")
+    .map((n) => n[0])
     .slice(0, 2)
-    .join('')
+    .join("")
     .toUpperCase();
 }

@@ -1,8 +1,8 @@
-import ColorPicker from '@/components/ColorPicker';
-import Popover from '@mui/material/Popover';
-import { useEffect, useId, useState } from 'react';
-import Button from '@mui/material/Button';
-import CircleIcon from '@mui/icons-material/Circle';
+import ColorPicker from "@/components/ColorPicker";
+import Popover from "@mui/material/Popover";
+import { useEffect, useId, useState } from "react";
+import Button from "@mui/material/Button";
+import CircleIcon from "@mui/icons-material/Circle";
 
 interface ColorInputProps {
   label: string;
@@ -32,14 +32,14 @@ export default function ColorInput({
     <>
       <Button
         color="inherit"
-        onClick={event => setAnchorEl(event.currentTarget)}
+        onClick={(event) => setAnchorEl(event.currentTarget)}
         endIcon={
           <CircleIcon
-            sx={{ color: localValue, width: '32px', height: '32px' }}
+            sx={{ color: localValue, width: "32px", height: "32px" }}
           />
         }
         disabled={disabled}
-        sx={{ '& .MuiButton-icon': { ml: 0.5 }, color: 'text.secondary' }}
+        sx={{ "& .MuiButton-icon": { ml: 0.5 }, color: "text.secondary" }}
       >
         {label}
       </Button>
@@ -48,7 +48,7 @@ export default function ColorInput({
         open={open}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
         <ColorPicker
           value={localValue}

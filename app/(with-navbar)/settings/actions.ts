@@ -1,18 +1,18 @@
-'use server';
+"use server";
 
-import { changePassword, signOut as signOutUser } from '@/data/auth';
-import { redirect } from 'next/navigation';
+import { changePassword, signOut as signOutUser } from "@/data/auth";
+import { redirect } from "next/navigation";
 import {
   type ChangeCurrencyError,
   type ChangePasswordFormErrors,
   type ChangePasswordFormValues,
-} from './types';
-import { changePasswordSchema } from './validation';
-import { getFormErrors } from '@/lib/zod';
-import { APIError } from 'better-auth';
-import { currencies, updateCurrency as changeCurrency } from '@/data/currency';
-import { revalidatePath } from 'next/cache';
-import { UnauthorizedError } from '@/utils/error';
+} from "./types";
+import { changePasswordSchema } from "./validation";
+import { getFormErrors } from "@/lib/zod";
+import { APIError } from "better-auth";
+import { currencies, updateCurrency as changeCurrency } from "@/data/currency";
+import { revalidatePath } from "next/cache";
+import { UnauthorizedError } from "@/utils/error";
 
 export async function signOut() {
   try {
@@ -21,8 +21,8 @@ export async function signOut() {
     return error;
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/signin');
+  revalidatePath("/", "layout");
+  redirect("/signin");
 }
 
 export async function updatePassword(
@@ -39,19 +39,19 @@ export async function updatePassword(
     if (error instanceof APIError) return { api: error.message };
   }
 
-  redirect('/signin');
+  redirect("/signin");
 }
 
 export async function updateCurrency(_: ChangeCurrencyError, currency: string) {
-  if (!currency || !currencies.find(c => c.code === currency)) {
-    return { currency: 'Invalid currency' };
+  if (!currency || !currencies.find((c) => c.code === currency)) {
+    return { currency: "Invalid currency" };
   }
 
   try {
     await changeCurrency(currency);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to update currency' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to update currency" };
   }
 
   return {};

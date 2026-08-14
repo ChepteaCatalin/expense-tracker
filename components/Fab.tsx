@@ -1,5 +1,5 @@
-import MuiFab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
+import MuiFab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Fab() {
   return (
@@ -7,10 +7,10 @@ export default function Fab() {
       color="primary"
       aria-label="add"
       sx={{
-        position: 'fixed',
+        position: "fixed",
         bottom: 81,
         right: 10,
-        '@media (pointer: fine)': { bottom: 100 },
+        "@media (pointer: fine)": { bottom: 100 },
       }}
     >
       <AddIcon sx={{ fontSize: 28 }} />

@@ -1,13 +1,13 @@
-import { type TransactionByCategorySearchParams } from '@/types/transaction';
-import { getCategoryNameById } from '@/data/category';
-import { notFound, redirect } from 'next/navigation';
-import { UnauthorizedError } from '@/utils/error';
+import { type TransactionByCategorySearchParams } from "@/types/transaction";
+import { getCategoryNameById } from "@/data/category";
+import { notFound, redirect } from "next/navigation";
+import { UnauthorizedError } from "@/utils/error";
 import {
   dateFromSearchParams,
   notFoundOnInvalidParams,
-} from '@/utils/transactions/url';
-import { getIncomeCategoryTotal } from '@/data/income';
-import Overview from '@/components/transactions/Overview';
+} from "@/utils/transactions/url";
+import { getIncomeCategoryTotal } from "@/data/income";
+import Overview from "@/components/transactions/Overview";
 
 export default async function CategoryIncomesOverview({
   params,
@@ -32,7 +32,7 @@ export default async function CategoryIncomesOverview({
       }),
     ]);
   } catch (err) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
+    if (err instanceof UnauthorizedError) redirect("/signin");
   }
   if (!categoryName) notFound();
 

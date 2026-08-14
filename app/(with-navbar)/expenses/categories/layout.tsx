@@ -1,12 +1,12 @@
-import Heading from '@/components/Heading';
-import PeriodsTabs from '@/components/transactions/PeriodsTabs';
-import { Suspense } from 'react';
-import PeriodTabsFallback from '@/components/transactions/form/PeriodTabsFallback';
-import PageWrapper from '@/components/PageWrapper';
+import Heading from "@/components/Heading";
+import PeriodsTabs from "@/components/transactions/PeriodsTabs";
+import { Suspense } from "react";
+import PeriodTabsFallback from "@/components/transactions/form/PeriodTabsFallback";
+import PageWrapper from "@/components/PageWrapper";
 
 export const metadata = {
-  title: 'Expenses',
-  description: 'Track and organize your spending',
+  title: "Expenses",
+  description: "Track and organize your spending",
 };
 
 export default function ExpenseCategoriesLayout({

@@ -1,22 +1,22 @@
-import 'server-only';
+import "server-only";
 
-import { sql } from '@/lib/neon';
+import { sql } from "@/lib/neon";
 import type {
   TransactionsByDate,
   TransactionCategory,
-} from '@/types/transaction';
-import { cacheLife, cacheTag, updateTag } from 'next/cache';
-import { authGuard } from '@/lib/auth-utils';
-import { userTag } from '@/utils/cache';
+} from "@/types/transaction";
+import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { authGuard } from "@/lib/auth-utils";
+import { userTag } from "@/utils/cache";
 import type {
   SortTransactionBy,
   Transaction,
   TransactionFormValues,
   TransactionFormValuesWithId,
-} from '@/types/transaction';
+} from "@/types/transaction";
 
 export const createExpense = authGuard(
-  session =>
+  (session) =>
     async (expense: TransactionFormValues): Promise<Transaction> => {
       const result = await sql`
         INSERT INTO expense (
@@ -44,11 +44,11 @@ export const createExpense = authGuard(
 
       const createdExpense = result[0];
 
-      if (!createdExpense) throw new Error('Failed to create expense');
+      if (!createdExpense) throw new Error("Failed to create expense");
 
       const tag = userTag(session.user.id);
-      updateTag(tag('expenses'));
-      updateTag(tag('expenses/categories'));
+      updateTag(tag("expenses"));
+      updateTag(tag("expenses/categories"));
       updateTag(tag(`expenses/category/${expense.categoryId}`));
 
       return {
@@ -64,7 +64,7 @@ export const createExpense = authGuard(
 );
 
 export const updateExpense = authGuard(
-  session =>
+  (session) =>
     async (expense: TransactionFormValuesWithId): Promise<Transaction> => {
       const result = await sql`
         UPDATE expense
@@ -89,11 +89,11 @@ export const updateExpense = authGuard(
 
       const editedExpense = result[0];
 
-      if (!editedExpense) throw new Error('Failed to edit expense');
+      if (!editedExpense) throw new Error("Failed to edit expense");
 
       const tag = userTag(session.user.id);
-      updateTag(tag('expenses'));
-      updateTag(tag('expenses/categories'));
+      updateTag(tag("expenses"));
+      updateTag(tag("expenses/categories"));
       updateTag(tag(`expenses/category/${expense.categoryId}`));
       updateTag(tag(`expenses/id/${expense.id}`));
 
@@ -110,7 +110,7 @@ export const updateExpense = authGuard(
 );
 
 export const deleteExpense = authGuard(
-  session =>
+  (session) =>
     async (expenseId: number): Promise<{ id: number; categoryId: number }> => {
       const result = await sql`
         DELETE FROM expense
@@ -121,11 +121,11 @@ export const deleteExpense = authGuard(
 
       const deletedExpense = result[0];
 
-      if (!deletedExpense) throw new Error('Failed to delete expense');
+      if (!deletedExpense) throw new Error("Failed to delete expense");
 
       const tag = userTag(session.user.id);
-      updateTag(tag('expenses'));
-      updateTag(tag('expenses/categories'));
+      updateTag(tag("expenses"));
+      updateTag(tag("expenses/categories"));
       updateTag(tag(`expenses/category/${deletedExpense.category_id}`));
       updateTag(tag(`expenses/id/${expenseId}`));
 
@@ -134,7 +134,7 @@ export const deleteExpense = authGuard(
 );
 
 export const getExpenseCategories = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -142,9 +142,9 @@ export const getExpenseCategories = authGuard(
       from: string;
       to: string;
     }): Promise<TransactionCategory[]> => {
-      'use cache';
-      cacheLife('max');
-      cacheTag(userTag(session.user.id)('expenses/categories'));
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("expenses/categories"));
 
       try {
         const result = await sql`
@@ -164,7 +164,7 @@ export const getExpenseCategories = authGuard(
           ORDER BY total_amount DESC
         `;
 
-        return result.map(row => ({
+        return result.map((row) => ({
           categoryId: row.category_id,
           name: row.name,
           icon: row.icon,
@@ -179,10 +179,10 @@ export const getExpenseCategories = authGuard(
 );
 
 export const getExpenseById = authGuard(
-  session =>
+  (session) =>
     async (expenseId: number): Promise<Transaction | undefined> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       cacheTag(userTag(session.user.id)(`expenses/id/${expenseId}`));
 
       try {
@@ -219,7 +219,7 @@ export const getExpenseById = authGuard(
 );
 
 export const getExpenseCategoryTotal = authGuard(
-  session =>
+  (session) =>
     async ({
       categoryId,
       from,
@@ -229,8 +229,8 @@ export const getExpenseCategoryTotal = authGuard(
       from: string;
       to: string;
     }): Promise<number> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
       try {
@@ -251,20 +251,20 @@ export const getExpenseCategoryTotal = authGuard(
 );
 
 export const getExpensesByCategory = authGuard(
-  session =>
+  (session) =>
     async ({
       categoryId,
       from,
       to,
-      sortBy = 'date',
+      sortBy = "date",
     }: {
       categoryId: string;
       from: string;
       to: string;
       sortBy?: SortTransactionBy;
     }): Promise<TransactionsByDate[]> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
       try {
@@ -290,12 +290,12 @@ export const getExpensesByCategory = authGuard(
           ORDER BY e.date DESC, e.amount DESC
         `;
 
-        const groupedByDate = Object.groupBy(result, row => row.date);
+        const groupedByDate = Object.groupBy(result, (row) => row.date);
 
         const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
           if (!rows) return [];
 
-          const transactions = rows.map(row => ({
+          const transactions = rows.map((row) => ({
             id: row.id,
             amount: +row.amount,
             categoryId: row.category_id,
@@ -317,7 +317,7 @@ export const getExpensesByCategory = authGuard(
           ];
         });
 
-        if (sortBy === 'amount') {
+        if (sortBy === "amount") {
           days.sort(
             (a, b) =>
               getExpensesSum(b.transactions) - getExpensesSum(a.transactions),

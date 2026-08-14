@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import CircularProgress from '@mui/material/CircularProgress';
-import { useRouter, useSearchParams } from 'next/navigation';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import IconButton from '@mui/material/IconButton';
+import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter, useSearchParams } from "next/navigation";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import IconButton from "@mui/material/IconButton";
 import {
   custom,
   getActivePeriodEntry,
   parsePeriod,
-} from '@/utils/transactions/url';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
-import type { OpUnitType, ManipulateType } from 'dayjs';
-import { useTransition } from 'react';
+} from "@/utils/transactions/url";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
+import type { OpUnitType, ManipulateType } from "dayjs";
+import { useTransition } from "react";
 
 export default function DateNavButtons({
   type,
 }: {
-  type: 'expenses' | 'incomes';
+  type: "expenses" | "incomes";
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function DateNavButtons({
         `/${type}/categories?${period}=${dayjs(periodValue)
           .startOf(period as OpUnitType)
           .add(offset, period as ManipulateType)
-          .format('YYYY-MM-DD')}`,
+          .format("YYYY-MM-DD")}`,
       );
     });
   };
@@ -42,7 +42,7 @@ export default function DateNavButtons({
     <Grid
       container
       spacing={1}
-      sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+      sx={{ justifyContent: "space-between", alignItems: "center" }}
     >
       {period !== custom && (
         <IconButton
@@ -53,9 +53,9 @@ export default function DateNavButtons({
           <ArrowBackIcon />
         </IconButton>
       )}
-      <Grid container sx={{ alignItems: 'center', mx: 'auto', gap: 0.75 }}>
+      <Grid container sx={{ alignItems: "center", mx: "auto", gap: 0.75 }}>
         {isPending && <CircularProgress size={14} />}
-        <Typography sx={{ color: 'text.secondary' }}>
+        <Typography sx={{ color: "text.secondary" }}>
           {parsePeriod(searchParams)}
         </Typography>
       </Grid>

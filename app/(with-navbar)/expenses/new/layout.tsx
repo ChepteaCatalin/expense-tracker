@@ -1,11 +1,11 @@
-import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import FormNavigateBackBtn from '../_components/FormNavigateBackBtn';
-import { Suspense } from 'react';
-import Skeleton from '@mui/material/Skeleton';
+import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
+import FormNavigateBackBtn from "../_components/FormNavigateBackBtn";
+import { Suspense } from "react";
+import Skeleton from "@mui/material/Skeleton";
 
 export const metadata = {
-  title: 'New Expense',
-  description: 'Add a new expense to your tracker',
+  title: "New Expense",
+  description: "Add a new expense to your tracker",
 };
 
 export default function NewExpenseLayout({
@@ -23,10 +23,10 @@ export default function NewExpenseLayout({
             <Skeleton
               variant="rectangular"
               sx={{
-                width: '66px',
-                height: '28px',
+                width: "66px",
+                height: "28px",
                 mb: 0.5,
-                borderRadius: '4px',
+                borderRadius: "4px",
               }}
             />
           }

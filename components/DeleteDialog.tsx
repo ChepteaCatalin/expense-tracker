@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
-import { useId } from 'react';
-import ApiFormErrorAlert from './ApiFormErrorAlert';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import { useId } from "react";
+import ApiFormErrorAlert from "./ApiFormErrorAlert";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -46,7 +46,7 @@ export default function DeleteDialog({
       <DialogContent>
         <ApiFormErrorAlert message={error} hide={hideError} sx={{ mb: 2 }} />
         <DialogContentText id={contentId}>
-          Are you sure you want to delete {name ? <b>{`"${name}" `}</b> : ''}
+          Are you sure you want to delete {name ? <b>{`"${name}" `}</b> : ""}
           {type}? <br />
           This action cannot be undone.
         </DialogContentText>

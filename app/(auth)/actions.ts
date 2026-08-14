@@ -1,16 +1,16 @@
-'use server';
+"use server";
 
-import { signInEmail, signUpEmail } from '@/data/auth';
+import { signInEmail, signUpEmail } from "@/data/auth";
 import {
   type SignInFormErrors,
   type SignInFormValues,
   type SignUpFormErrors,
   type SignUpFormValues,
-} from './types';
-import { signInSchema, signUpSchema } from './validation';
-import { getFormErrors } from '@/lib/zod';
-import { APIError } from 'better-auth/api';
-import { redirect } from 'next/navigation';
+} from "./types";
+import { signInSchema, signUpSchema } from "./validation";
+import { getFormErrors } from "@/lib/zod";
+import { APIError } from "better-auth/api";
+import { redirect } from "next/navigation";
 
 export async function signUp(
   _: SignUpFormErrors,
@@ -27,7 +27,7 @@ export async function signUp(
     }
   }
 
-  redirect('/');
+  redirect("/");
 }
 
 export async function signIn(
@@ -45,5 +45,5 @@ export async function signIn(
     }
   }
 
-  redirect('/');
+  redirect("/");
 }

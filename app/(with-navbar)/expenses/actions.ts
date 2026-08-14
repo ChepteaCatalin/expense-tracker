@@ -1,21 +1,21 @@
-'use server';
+"use server";
 
-import { getFormErrors } from '@/lib/zod';
+import { getFormErrors } from "@/lib/zod";
 import {
   type TransactionFormValuesWithId,
   type TransactionFormErrors,
   type TransactionFormValues,
-} from '@/types/transaction';
-import { transactionSchema } from '@/utils/validation';
-import { UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
+} from "@/types/transaction";
+import { transactionSchema } from "@/utils/validation";
+import { UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
 import {
   createExpense as createNewExpense,
   updateExpense as updateExistingExpense,
   deleteExpense as deleteExistingExpense,
-} from '@/data/expense';
-import { toCents } from '@/utils/currency';
-import dayjs from 'dayjs';
+} from "@/data/expense";
+import { toCents } from "@/utils/currency";
+import dayjs from "dayjs";
 
 export async function createExpense(
   searchParams: string,
@@ -31,17 +31,17 @@ export async function createExpense(
       amount: toCents(expense.amount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to add the expense' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to add the expense" };
   }
 
-  if (searchParams.includes('sortBy')) {
+  if (searchParams.includes("sortBy")) {
     redirect(toExpensesCategoryPage(searchParams, +expense.categoryId));
   } else {
     redirect(
       searchParams
         ? `/expenses/categories?${searchParams}`
-        : `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`,
+        : `/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`,
     );
   }
 }
@@ -65,8 +65,8 @@ export async function updateExpense(
       amount: toCents(expense.amount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to edit the expense' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to edit the expense" };
   }
 
   redirect(toExpensesCategoryPage(searchParams, +expense.categoryId));
@@ -80,8 +80,8 @@ export async function deleteExpense(
   try {
     var { categoryId } = await deleteExistingExpense(id);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return 'Failed to delete expense';
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return "Failed to delete expense";
   }
 
   redirect(toExpensesCategoryPage(searchParams, categoryId));
@@ -90,5 +90,5 @@ export async function deleteExpense(
 function toExpensesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/expenses/category/${categoryId}?${searchParams}`
-    : `/expenses/categories?month=${dayjs().format('YYYY-MM-DD')}`;
+    : `/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`;
 }

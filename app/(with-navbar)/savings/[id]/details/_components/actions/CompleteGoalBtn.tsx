@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import CheckIcon from '@mui/icons-material/Check';
-import { useState } from 'react';
-import { CompleteGoalDialog } from './CompleteGoalDialog';
-import Box from '@mui/material/Box';
-import dayjs from 'dayjs';
-import Tooltip from '@mui/material/Tooltip';
+import Button from "@mui/material/Button";
+import CheckIcon from "@mui/icons-material/Check";
+import { useState } from "react";
+import { CompleteGoalDialog } from "./CompleteGoalDialog";
+import Box from "@mui/material/Box";
+import dayjs from "dayjs";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function CompleteGoalBtn({
   id,
@@ -18,17 +18,17 @@ export default function CompleteGoalBtn({
   const [open, setOpen] = useState(false);
 
   const disabled = dayjs()
-    .startOf('day')
-    .isBefore(dayjs(startDate).startOf('day'));
+    .startOf("day")
+    .isBefore(dayjs(startDate).startOf("day"));
 
   return (
     <>
       <Tooltip
         arrow
-        title={disabled ? 'Goal cannot be completed before start date' : ''}
+        title={disabled ? "Goal cannot be completed before start date" : ""}
         disableHoverListener={!disabled}
       >
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: "100%" }}>
           <Button
             variant="outlined"
             startIcon={<CheckIcon />}

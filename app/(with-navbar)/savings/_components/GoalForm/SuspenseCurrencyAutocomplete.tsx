@@ -1,6 +1,6 @@
-import Skeleton from '@mui/material/Skeleton';
-import { Suspense } from 'react';
-import CurrencyAutocomplete from './CurrencyAutocomplete';
+import Skeleton from "@mui/material/Skeleton";
+import { Suspense } from "react";
+import CurrencyAutocomplete from "./CurrencyAutocomplete";
 
 export default function SuspenseCurrencyAutocomplete({
   isEditMode,
@@ -13,7 +13,7 @@ export default function SuspenseCurrencyAutocomplete({
         <Skeleton
           variant="rectangular"
           height={40}
-          sx={{ borderRadius: '4px' }}
+          sx={{ borderRadius: "4px" }}
         />
       }
     >

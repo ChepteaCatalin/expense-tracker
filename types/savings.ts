@@ -1,6 +1,6 @@
-import { type FormDateTime } from '@/lib/MuiDatePicker/types';
-import { type CurrencyOption } from './currency';
-import { type FormErrors } from './form';
+import { type FormDateTime } from "@/lib/MuiDatePicker/types";
+import { type CurrencyOption } from "./currency";
+import { type FormErrors } from "./form";
 
 export interface SavingsGoal {
   id: number;
@@ -19,8 +19,8 @@ export interface SavingsGoal {
 
 export interface SavingsGoalFormValues {
   name: string;
-  initialAmount: number | '';
-  targetAmount: number | '';
+  initialAmount: number | "";
+  targetAmount: number | "";
   currency: CurrencyOption;
   startDate: FormDateTime;
   notes: string;
@@ -43,7 +43,7 @@ export interface SavingsDeposit {
 }
 
 export interface SavingsDepositFormValues {
-  amount: number | '';
+  amount: number | "";
   date: FormDateTime;
   notes: string;
 }

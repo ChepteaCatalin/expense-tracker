@@ -1,15 +1,15 @@
-import 'server-only';
+import "server-only";
 
-import { getSession } from '@/data/auth';
-import { redirect } from 'next/navigation';
-import { cache } from 'react';
-import { UnauthorizedError } from '@/utils/error';
-import { type Session } from './auth';
+import { getSession } from "@/data/auth";
+import { redirect } from "next/navigation";
+import { cache } from "react";
+import { UnauthorizedError } from "@/utils/error";
+import { type Session } from "./auth";
 
 export const requireAuth = cache(async () => {
   const session = await getSession();
 
-  if (!session) redirect('/signin');
+  if (!session) redirect("/signin");
 
   return session;
 });
@@ -31,7 +31,7 @@ export function authGuard<Args extends unknown[], Result>(
 
     const guarded = fn(session);
 
-    if (typeof guarded == 'function') return guarded(...args);
+    if (typeof guarded == "function") return guarded(...args);
     return guarded;
   };
 }

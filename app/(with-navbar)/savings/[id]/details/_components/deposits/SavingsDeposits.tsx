@@ -1,17 +1,17 @@
-import type { SavingsDeposit } from '@/types/savings';
-import { readableCurrency } from '@/utils/currency';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
-import NoSavingsDeposits from './NoSavingsDeposits';
-import AddDepositIconBtn from './AddDepositIconBtn';
-import DeleteDepositBtn from './DeleteDepositBtn';
-import EditDepositBtn from './EditDepositBtn';
+import type { SavingsDeposit } from "@/types/savings";
+import { readableCurrency } from "@/utils/currency";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
+import NoSavingsDeposits from "./NoSavingsDeposits";
+import AddDepositIconBtn from "./AddDepositIconBtn";
+import DeleteDepositBtn from "./DeleteDepositBtn";
+import EditDepositBtn from "./EditDepositBtn";
 
 export default async function SavingsDeposits({
   deposits,
@@ -37,20 +37,20 @@ export default async function SavingsDeposits({
     <Card
       sx={{
         borderRadius: 3,
-        border: '1px solid',
-        borderColor: 'rgba(255,255,255,0.12)',
+        border: "1px solid",
+        borderColor: "rgba(255,255,255,0.12)",
         background:
-          'linear-gradient(140deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 45%, rgba(20,120,80,0.08) 100%)',
-        boxShadow: '0 8px 30px rgba(0,0,0,0.35)',
+          "linear-gradient(140deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 45%, rgba(20,120,80,0.08) 100%)",
+        boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
       }}
     >
-      <CardContent sx={{ p: 2, '&.MuiCardContent-root': { pb: 2 } }}>
+      <CardContent sx={{ p: 2, "&.MuiCardContent-root": { pb: 2 } }}>
         <Stack spacing={2}>
           <Stack
             direction="row"
-            sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+            sx={{ alignItems: "center", justifyContent: "space-between" }}
           >
-            <Stack spacing={0.5} direction="row" sx={{ alignItems: 'center' }}>
+            <Stack spacing={0.5} direction="row" sx={{ alignItems: "center" }}>
               <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 Deposits
               </Typography>
@@ -61,24 +61,24 @@ export default async function SavingsDeposits({
               />
             </Stack>
             <Chip
-              label={`${deposits.length} ${deposits.length === 1 ? 'entry' : 'entries'}`}
+              label={`${deposits.length} ${deposits.length === 1 ? "entry" : "entries"}`}
               size="small"
               sx={{
                 fontWeight: 600,
-                bgcolor: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.18)',
+                bgcolor: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.18)",
               }}
             />
           </Stack>
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+          <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
           {deposits.length > 1 && (
             <>
               <Stats deposits={deposits} currency={goalCurrency} />
-              <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+              <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
             </>
           )}
           <Stack spacing={1.25}>
-            {deposits.map(deposit => (
+            {deposits.map((deposit) => (
               <Stack
                 key={deposit.id}
                 spacing={0.5}
@@ -87,23 +87,23 @@ export default async function SavingsDeposits({
                   px: 1.5,
                   py: 1.25,
                   pr: 0.5,
-                  border: '1px solid rgba(255,255,255,0.12)',
+                  border: "1px solid rgba(255,255,255,0.12)",
                   background:
-                    'linear-gradient(125deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+                    "linear-gradient(125deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)",
                 }}
               >
                 <Stack
                   direction="row"
                   sx={{
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    alignItems: "center",
+                    justifyContent: "space-between",
                     gap: 1.25,
                   }}
                 >
                   <Typography
                     sx={{
                       fontWeight: 700,
-                      color: 'primary.main',
+                      color: "primary.main",
                     }}
                   >
                     +{readableCurrency(deposit.amount)} {goalCurrency}
@@ -111,20 +111,20 @@ export default async function SavingsDeposits({
                   <Stack
                     direction="row"
                     sx={{
-                      alignItems: 'center',
+                      alignItems: "center",
                       gap: 0.5,
                     }}
                   >
                     <Typography
                       variant="body2"
                       sx={{
-                        color: 'text.secondary',
+                        color: "text.secondary",
                         fontWeight: 500,
-                        borderRight: '1px solid rgba(255,255,255,0.3)',
+                        borderRight: "1px solid rgba(255,255,255,0.3)",
                         pr: 1.125,
                       }}
                     >
-                      {dayjs(deposit.date).format('D MMM YYYY')}
+                      {dayjs(deposit.date).format("D MMM YYYY")}
                     </Typography>
                     <Box>
                       <EditDepositBtn
@@ -144,9 +144,9 @@ export default async function SavingsDeposits({
                   <Typography
                     variant="body2"
                     sx={{
-                      color: 'text.secondary',
-                      whiteSpace: 'pre-wrap',
-                      wordBreak: 'break-word',
+                      color: "text.secondary",
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-word",
                     }}
                   >
                     {deposit.notes}
@@ -183,11 +183,11 @@ function Stats({
   return (
     <Box
       sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        display: "grid",
+        gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
         gap: 1.25,
-        '@media (max-width: 700px)': {
-          gridTemplateColumns: '1fr',
+        "@media (max-width: 700px)": {
+          gridTemplateColumns: "1fr",
         },
       }}
     >
@@ -230,20 +230,20 @@ function StatCard({
         borderRadius: 2,
         px: 1.25,
         py: 1,
-        border: '1px solid rgba(255,255,255,0.12)',
+        border: "1px solid rgba(255,255,255,0.12)",
         background:
-          'linear-gradient(140deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%)',
+          "linear-gradient(140deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%)",
       }}
     >
-      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+      <Typography variant="caption" sx={{ color: "text.secondary" }}>
         {label}
       </Typography>
-      <Typography sx={{ fontWeight: 700, color: 'primary.main' }}>
+      <Typography sx={{ fontWeight: 700, color: "primary.main" }}>
         {value} {currency}
       </Typography>
       {date && (
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {dayjs(date).format('D MMM YYYY')}
+        <Typography variant="caption" sx={{ color: "text.secondary" }}>
+          {dayjs(date).format("D MMM YYYY")}
         </Typography>
       )}
     </Stack>

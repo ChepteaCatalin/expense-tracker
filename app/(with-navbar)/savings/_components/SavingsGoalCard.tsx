@@ -1,11 +1,11 @@
-import type { SavingsGoal } from '@/types/savings';
-import { readableCurrency } from '@/utils/currency';
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
-import LinearProgress from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
+import type { SavingsGoal } from "@/types/savings";
+import { readableCurrency } from "@/utils/currency";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
 
 export default function SavingsGoalCard({
   goal: {
@@ -33,22 +33,22 @@ export default function SavingsGoalCard({
       sx={{
         borderRadius: 3,
         background:
-          'linear-gradient(135deg, #1a1a2e 0%, #212121 60%, #1a2e1a 100%)',
-        border: '1px solid',
-        borderColor: isCompleted ? 'primary.main' : 'rgba(255,255,255,0.08)',
+          "linear-gradient(135deg, #1a1a2e 0%, #212121 60%, #1a2e1a 100%)",
+        border: "1px solid",
+        borderColor: isCompleted ? "primary.main" : "rgba(255,255,255,0.08)",
         p: 3,
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         gap: 2.5,
         boxShadow: isCompleted
-          ? '0 0 24px rgba(30, 215, 96, 0.15)'
-          : '0 4px 24px rgba(0,0,0,0.4)',
-        transition: 'box-shadow 0.2s',
+          ? "0 0 24px rgba(30, 215, 96, 0.15)"
+          : "0 4px 24px rgba(0,0,0,0.4)",
+        transition: "box-shadow 0.2s",
         ...(!noHoverEffects && {
-          '&:hover': {
+          "&:hover": {
             boxShadow: isCompleted
-              ? '0 0 36px rgba(30, 215, 96, 0.25)'
-              : '0 8px 32px rgba(0,0,0,0.6)',
+              ? "0 0 36px rgba(30, 215, 96, 0.25)"
+              : "0 8px 32px rgba(0,0,0,0.6)",
           },
         }),
       }}
@@ -61,10 +61,10 @@ export default function SavingsGoalCard({
       />
       <Box
         sx={{
-          display: 'grid',
+          display: "grid",
           gridTemplateColumns: `repeat(${initialAmount !== 0 ? 3 : 2}, 1fr)`,
-          '@media (pointer: coarse)': {
-            gridTemplateColumns: '1fr',
+          "@media (pointer: coarse)": {
+            gridTemplateColumns: "1fr",
           },
           gap: 1.5,
         }}
@@ -72,21 +72,21 @@ export default function SavingsGoalCard({
         {[
           initialAmount !== 0
             ? {
-                label: 'Initial',
+                label: "Initial",
                 value: formatAmount(initialAmount),
               }
             : null,
           {
-            label: 'Current',
+            label: "Current",
             value: formatAmount(currentAmount),
             highlight: true,
           },
           {
-            label: 'Target',
+            label: "Target",
             value: formatAmount(targetAmount),
           },
         ]
-          .filter(item => item !== null)
+          .filter((item) => item !== null)
           .map(({ label, value, highlight }) => (
             <AmountCard
               key={label}
@@ -99,8 +99,8 @@ export default function SavingsGoalCard({
       {!isCompleted && remaining > 0 && (
         <RemainingAmount remaining={formatAmount(remaining)} />
       )}
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.07)' }} />
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+      <Divider sx={{ borderColor: "rgba(255,255,255,0.07)" }} />
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
         <DateRow label="Started" value={startDate} />
         {completedDate && (
           <DateRow label="Completed" value={completedDate} accent />
@@ -111,13 +111,13 @@ export default function SavingsGoalCard({
           variant="body2"
           color="text.secondary"
           sx={{
-            fontStyle: 'italic',
-            bgcolor: 'rgba(255,255,255,0.03)',
+            fontStyle: "italic",
+            bgcolor: "rgba(255,255,255,0.03)",
             borderRadius: 2,
             px: 2,
             py: 1.25,
-            borderLeft: '3px solid',
-            borderColor: 'primary.main',
+            borderLeft: "3px solid",
+            borderColor: "primary.main",
           }}
         >
           {notes}
@@ -137,36 +137,36 @@ function Heading({
   return (
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
         gap: 1,
       }}
     >
       <Typography
         component="h2"
         sx={{
-          fontSize: '1.5rem',
+          fontSize: "1.5rem",
           fontWeight: 700,
-          wordBreak: 'break-word',
+          wordBreak: "break-word",
           lineHeight: 1.2,
-          letterSpacing: '-0.01em',
+          letterSpacing: "-0.01em",
         }}
       >
         {name}
       </Typography>
       <Chip
-        label={isCompleted ? 'Completed' : 'In Progress'}
+        label={isCompleted ? "Completed" : "In Progress"}
         size="small"
         sx={{
           flexShrink: 0,
           fontWeight: 600,
           bgcolor: isCompleted
-            ? 'rgba(30,215,96,0.15)'
-            : 'rgba(255,255,255,0.08)',
-          color: isCompleted ? 'primary.main' : 'text.secondary',
-          border: '1px solid',
-          borderColor: isCompleted ? 'primary.main' : 'rgba(255,255,255,0.12)',
+            ? "rgba(30,215,96,0.15)"
+            : "rgba(255,255,255,0.08)",
+          color: isCompleted ? "primary.main" : "text.secondary",
+          border: "1px solid",
+          borderColor: isCompleted ? "primary.main" : "rgba(255,255,255,0.12)",
         }}
       />
     </Box>
@@ -184,10 +184,10 @@ function Progress({
 }) {
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.75 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.75 }}>
         <Typography
           variant="body2"
-          sx={{ color: 'text.secondary', fontWeight: 500 }}
+          sx={{ color: "text.secondary", fontWeight: 500 }}
         >
           Progress
         </Typography>
@@ -195,7 +195,7 @@ function Progress({
           variant="body2"
           sx={{
             fontWeight: 700,
-            color: isCompleted ? 'primary.main' : 'text.primary',
+            color: isCompleted ? "primary.main" : "text.primary",
           }}
         >
           {((current / target) * 100).toFixed(2)}%
@@ -207,12 +207,12 @@ function Progress({
         sx={{
           height: 8,
           borderRadius: 4,
-          bgcolor: 'rgba(255,255,255,0.08)',
-          '& .MuiLinearProgress-bar': {
+          bgcolor: "rgba(255,255,255,0.08)",
+          "& .MuiLinearProgress-bar": {
             borderRadius: 4,
             background: isCompleted
-              ? 'linear-gradient(90deg, #1ED760, #17a348)'
-              : 'linear-gradient(90deg, #1ED760, #0ea5e9)',
+              ? "linear-gradient(90deg, #1ED760, #17a348)"
+              : "linear-gradient(90deg, #1ED760, #0ea5e9)",
           },
         }}
       />
@@ -232,27 +232,27 @@ function AmountCard({
   return (
     <Box
       sx={{
-        bgcolor: 'rgba(255,255,255,0.04)',
+        bgcolor: "rgba(255,255,255,0.04)",
         borderRadius: 2,
         p: 1.5,
-        textAlign: 'center',
-        border: '1px solid',
+        textAlign: "center",
+        border: "1px solid",
         borderColor: highlight
-          ? 'rgba(30,215,96,0.2)'
-          : 'rgba(255,255,255,0.06)',
+          ? "rgba(30,215,96,0.2)"
+          : "rgba(255,255,255,0.06)",
       }}
     >
       <Typography
         variant="caption"
-        sx={{ color: 'text.secondary', display: 'block', mb: 0.5 }}
+        sx={{ color: "text.secondary", display: "block", mb: 0.5 }}
       >
         {label}
       </Typography>
       <Typography
         sx={{
           fontWeight: 700,
-          fontSize: '0.95rem',
-          color: highlight ? 'primary.main' : 'text.primary',
+          fontSize: "0.95rem",
+          color: highlight ? "primary.main" : "text.primary",
         }}
       >
         {value}
@@ -263,18 +263,18 @@ function AmountCard({
 
 function RemainingAmount({ remaining }: { remaining: string }) {
   return (
-    <Box sx={{ textAlign: 'center' }}>
+    <Box sx={{ textAlign: "center" }}>
       <Typography
         component="span"
         variant="body2"
-        sx={{ color: 'text.primary', fontWeight: 600 }}
+        sx={{ color: "text.primary", fontWeight: 600 }}
       >
-        {remaining}{' '}
+        {remaining}{" "}
       </Typography>
       <Typography
         component="span"
         variant="body2"
-        sx={{ color: 'text.secondary' }}
+        sx={{ color: "text.secondary" }}
       >
         remaining to reach your goal
       </Typography>
@@ -294,22 +294,22 @@ function DateRow({
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
       }}
     >
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+      <Typography variant="body2" sx={{ color: "text.secondary" }}>
         {label}
       </Typography>
       <Typography
         variant="body2"
         sx={{
           fontWeight: 600,
-          color: accent ? 'primary.main' : 'text.primary',
+          color: accent ? "primary.main" : "text.primary",
         }}
       >
-        {dayjs(value).format('D MMMM YYYY')}
+        {dayjs(value).format("D MMMM YYYY")}
       </Typography>
     </Box>
   );

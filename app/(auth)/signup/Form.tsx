@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import PasswordInput from '@/components/PasswordInput';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpSchema } from '../validation';
-import { signUp } from '../actions';
-import GoogleAuthButton from '../_components/GoogleAuthButton';
-import { startTransition, useActionState, useEffect, useState } from 'react';
-import { type SignUpFormValues } from '../types';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import PasswordInput from "@/components/PasswordInput";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "../validation";
+import { signUp } from "../actions";
+import GoogleAuthButton from "../_components/GoogleAuthButton";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import { type SignUpFormValues } from "../types";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
 
 export default function SignUpForm() {
   const {
@@ -22,10 +22,10 @@ export default function SignUpForm() {
     formState: { errors, isSubmitted },
   } = useForm<SignUpFormValues>({
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
     resolver: zodResolver(signUpSchema),
   });
@@ -46,7 +46,7 @@ export default function SignUpForm() {
   return (
     <form
       noValidate
-      onSubmit={handleSubmit(data => {
+      onSubmit={handleSubmit((data) => {
         startTransition(() => {
           setHideApiError(false);
           signUpAction(data);
@@ -60,7 +60,7 @@ export default function SignUpForm() {
           sx={{ mb: 1.5 }}
         />
         <TextField
-          {...register('name')}
+          {...register("name")}
           label="Name"
           fullWidth
           required
@@ -70,7 +70,7 @@ export default function SignUpForm() {
           helperText={errors.name?.message}
         />
         <TextField
-          {...register('email')}
+          {...register("email")}
           label="Email"
           fullWidth
           required
@@ -81,9 +81,9 @@ export default function SignUpForm() {
         />
         <PasswordInput
           label="Password"
-          {...register('password', {
+          {...register("password", {
             onChange: () => {
-              if (isSubmitted) trigger('confirmPassword');
+              if (isSubmitted) trigger("confirmPassword");
             },
           })}
           error={!!errors.password}
@@ -91,7 +91,7 @@ export default function SignUpForm() {
         />
         <PasswordInput
           label="Confirm Password"
-          {...register('confirmPassword')}
+          {...register("confirmPassword")}
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword?.message}
         />

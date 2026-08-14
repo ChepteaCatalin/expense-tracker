@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import ReactECharts from 'echarts-for-react';
-import { barBorderRadius, textColor } from '../_utils/chart';
+import ReactECharts from "echarts-for-react";
+import { barBorderRadius, textColor } from "../_utils/chart";
 
 interface ChartData {
   months: string[];
@@ -13,10 +13,10 @@ interface ChartData {
 export default function NetIncomeChart({ data }: { data: ChartData }) {
   return (
     <ReactECharts
-      style={{ height: '350px' }}
+      style={{ height: "350px" }}
       theme="dark"
       option={{
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         grid: {
           top: 30,
           bottom: 65,
@@ -25,34 +25,34 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
         },
         dataZoom: [
           {
-            type: 'slider',
+            type: "slider",
             right: 5,
             bottom: 10,
             showDetail: false,
           },
         ],
         xAxis: {
-          type: 'category',
+          type: "category",
           data: data.months,
-          axisPointer: { type: 'shadow' },
+          axisPointer: { type: "shadow" },
           axisLabel: { color: textColor },
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           axisLabel: { color: textColor },
         },
         series: [
           {
             name: names[0],
-            type: 'line',
+            type: "line",
             data: data.netIncome,
-            color: '#ffca28',
+            color: "#ffca28",
           },
           {
             name: names[1],
             data: data.income,
-            type: 'bar',
-            color: '#66bb6a',
+            type: "bar",
+            color: "#66bb6a",
             itemStyle: {
               borderRadius: barBorderRadius,
             },
@@ -60,8 +60,8 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
           {
             name: names[2],
             data: data.expenses,
-            type: 'bar',
-            color: '#f44336',
+            type: "bar",
+            color: "#f44336",
             itemStyle: {
               borderRadius: barBorderRadius,
             },
@@ -73,15 +73,15 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
           textStyle: { color: textColor },
         },
         tooltip: {
-          trigger: 'axis',
-          position: 'inside',
+          trigger: "axis",
+          position: "inside",
           confine: true,
           textStyle: { color: textColor },
-          extraCssText: 'z-index: 1000',
+          extraCssText: "z-index: 1000",
         },
       }}
     />
   );
 }
 
-const names = ['Net Income', 'Income', 'Expenses'];
+const names = ["Net Income", "Income", "Expenses"];

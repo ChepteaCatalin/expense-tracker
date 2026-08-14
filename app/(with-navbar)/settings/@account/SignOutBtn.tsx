@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { startTransition, useActionState, useState } from 'react';
-import { signOut } from '../actions';
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
+import Button from "@mui/material/Button";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { startTransition, useActionState, useState } from "react";
+import { signOut } from "../actions";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 
 export default function SignOutBtn() {
   const [signOutUserError, signOutUserAction, isSignOutUserPending] =

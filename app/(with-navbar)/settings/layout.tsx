@@ -1,11 +1,11 @@
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Heading from '@/components/Heading';
-import GitHubLink from '@/components/GitHubLink';
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Heading from "@/components/Heading";
+import GitHubLink from "@/components/GitHubLink";
 
 export const metadata = {
-  title: 'Settings',
-  description: 'Manage your account and preferences',
+  title: "Settings",
+  description: "Manage your account and preferences",
 };
 
 export default function SettingsLayout({
@@ -18,9 +18,9 @@ export default function SettingsLayout({
   preferences: React.ReactNode;
 }) {
   return (
-    <Box sx={{ boxSizing: 'content-box', maxWidth: '600px', mx: 'auto' }}>
+    <Box sx={{ boxSizing: "content-box", maxWidth: "600px", mx: "auto" }}>
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Grid container spacing={6} sx={{ flexDirection: 'column' }}>
+      <Grid container spacing={6} sx={{ flexDirection: "column" }}>
         {account}
         {password}
         {preferences}

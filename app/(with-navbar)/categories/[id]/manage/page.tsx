@@ -1,18 +1,18 @@
-import { getCategoryById } from '@/data/category';
-import { validIdParam } from '@/utils/url';
-import { notFound, redirect } from 'next/navigation';
-import Form from '../../_components/form/Form';
-import { UnauthorizedError } from '@/utils/error';
-import DeleteCategory from '../../_components/DeleteCategory';
-import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import { metadata } from './constants';
-import BackToLink from '@/components/BackToLink';
+import { getCategoryById } from "@/data/category";
+import { validIdParam } from "@/utils/url";
+import { notFound, redirect } from "next/navigation";
+import Form from "../../_components/form/Form";
+import { UnauthorizedError } from "@/utils/error";
+import DeleteCategory from "../../_components/DeleteCategory";
+import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
+import { metadata } from "./constants";
+import BackToLink from "@/components/BackToLink";
 
 export { metadata };
 
 export default async function ManageCategoryPage({
   params,
-}: PageProps<'/categories/[id]/manage'>) {
+}: PageProps<"/categories/[id]/manage">) {
   const { id } = await params;
 
   if (!validIdParam(id)) notFound();
@@ -20,7 +20,7 @@ export default async function ManageCategoryPage({
   try {
     var category = await getCategoryById(+id);
   } catch (err) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
+    if (err instanceof UnauthorizedError) redirect("/signin");
     notFound();
   }
 
@@ -33,7 +33,7 @@ export default async function ManageCategoryPage({
       aboveCard={
         <BackToLink
           href={{
-            pathname: '/categories/all',
+            pathname: "/categories/all",
             query: { type: category.type },
           }}
           pageName="Categories"

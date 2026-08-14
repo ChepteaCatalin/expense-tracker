@@ -1,12 +1,12 @@
-import logo from '@/public/logo.png';
-import Image from 'next/image';
-import Grid from '@mui/material/Grid';
+import logo from "@/public/logo.png";
+import Image from "next/image";
+import Grid from "@mui/material/Grid";
 
 export default function Logo() {
   return (
     <Grid
       container
-      sx={{ flexDirection: 'column', alignItems: 'center', mb: 2 }}
+      sx={{ flexDirection: "column", alignItems: "center", mb: 2 }}
     >
       <Image
         src={logo}
@@ -16,11 +16,11 @@ export default function Logo() {
         fetchPriority="high"
         placeholder="blur"
         style={{
-          width: '150px',
-          height: 'auto',
-          borderRadius: '50%',
-          userSelect: 'none',
-          pointerEvents: 'none',
+          width: "150px",
+          height: "auto",
+          borderRadius: "50%",
+          userSelect: "none",
+          pointerEvents: "none",
         }}
       />
     </Grid>

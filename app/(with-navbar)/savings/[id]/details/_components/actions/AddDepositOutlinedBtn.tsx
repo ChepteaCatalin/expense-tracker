@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
-import AddEditDepositDialog from '../deposits/AddEditDepositDialog';
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
+import AddEditDepositDialog from "../deposits/AddEditDepositDialog";
 
 export default function AddDepositOutlinedBtn({
   id,

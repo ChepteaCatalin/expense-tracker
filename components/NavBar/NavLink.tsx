@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import styles from './NavLink.module.css';
-import { useSelectedLayoutSegment } from 'next/navigation';
-import { clsx } from 'clsx';
+import Link from "next/link";
+import styles from "./NavLink.module.css";
+import { useSelectedLayoutSegment } from "next/navigation";
+import { clsx } from "clsx";
 
 export default function NavLink({
   href,

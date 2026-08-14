@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import type { CategoryTreemapNode } from '@/types/dashboard';
-import ReactECharts from 'echarts-for-react';
-import { textColor } from '../_utils/chart';
+import type { CategoryTreemapNode } from "@/types/dashboard";
+import ReactECharts from "echarts-for-react";
+import { textColor } from "../_utils/chart";
 
 export default function TreemapChart({
   data,
@@ -15,10 +15,10 @@ export default function TreemapChart({
 
   return (
     <ReactECharts
-      style={{ height: '700px' }}
+      style={{ height: "700px" }}
       theme="dark"
       option={{
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         grid: {
           top: 0,
           bottom: 0,
@@ -27,8 +27,8 @@ export default function TreemapChart({
         },
         series: [
           {
-            type: 'treemap',
-            data: data.map(category => ({
+            type: "treemap",
+            data: data.map((category) => ({
               name: category.categoryName,
               value: category.value,
               itemStyle: {
@@ -37,17 +37,17 @@ export default function TreemapChart({
             })),
             label: {
               show: true,
-              color: 'rgba(255, 255, 255, 0.95)',
+              color: "rgba(255, 255, 255, 0.95)",
               fontSize: 14,
               fontWeight: 700,
-              textBorderColor: 'rgba(0, 0, 0, 0.35)',
+              textBorderColor: "rgba(0, 0, 0, 0.35)",
               textBorderWidth: 2,
-              overflow: 'truncate',
+              overflow: "truncate",
             },
           },
         ],
         tooltip: {
-          trigger: 'item',
+          trigger: "item",
           confine: true,
           textStyle: { color: textColor },
           formatter: (params: {
@@ -55,8 +55,8 @@ export default function TreemapChart({
             value: number;
             dataIndex: number;
           }) =>
-            `<span style="color: rgba(255, 255, 255, 0.96); font-weight: 700;">${params.dataIndex === 0 ? 'Total' : params.name}:</span> <strong>${params.value.toLocaleString()}${currency ? ` ${currency}` : ''}</strong> (${totalAmount > 0 ? ((params.value / totalAmount) * 100).toFixed(2) : 0}%)`,
-          extraCssText: 'z-index: 1000',
+            `<span style="color: rgba(255, 255, 255, 0.96); font-weight: 700;">${params.dataIndex === 0 ? "Total" : params.name}:</span> <strong>${params.value.toLocaleString()}${currency ? ` ${currency}` : ""}</strong> (${totalAmount > 0 ? ((params.value / totalAmount) * 100).toFixed(2) : 0}%)`,
+          extraCssText: "z-index: 1000",
         },
       }}
     />

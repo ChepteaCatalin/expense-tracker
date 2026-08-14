@@ -1,15 +1,15 @@
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Grid from '@mui/material/Grid';
-import NavLink from './NavLink';
-import SavingsIcon from '@mui/icons-material/Savings';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import { Suspense } from 'react';
-import ExpensesNavLink from './ExpensesNavLink';
-import IncomeNavLink from './IncomeNavLink';
-import styles from './NavLink.module.css';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Grid from "@mui/material/Grid";
+import NavLink from "./NavLink";
+import SavingsIcon from "@mui/icons-material/Savings";
+import SettingsIcon from "@mui/icons-material/Settings";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import { Suspense } from "react";
+import ExpensesNavLink from "./ExpensesNavLink";
+import IncomeNavLink from "./IncomeNavLink";
+import styles from "./NavLink.module.css";
 
 export default function NavBar() {
   return (
@@ -18,22 +18,22 @@ export default function NavBar() {
       position="fixed"
       color="primary"
       sx={{
-        top: 'auto',
+        top: "auto",
         bottom: 0,
-        background: 'linear-gradient(to top, #1a1a1a, #212121)',
-        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.3)',
+        background: "linear-gradient(to top, #1a1a1a, #212121)",
+        boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.3)",
       }}
     >
       <Toolbar
-        sx={{ '&.MuiToolbar-root': { minHeight: '64px', p: '8px 16px' } }}
+        sx={{ "&.MuiToolbar-root": { minHeight: "64px", p: "8px 16px" } }}
       >
         <Grid
           container
           sx={{
-            justifyContent: 'center',
-            flex: '1',
+            justifyContent: "center",
+            flex: "1",
             columnGap: 0.75,
-            '@media (pointer: fine)': { columnGap: 2 },
+            "@media (pointer: fine)": { columnGap: 2 },
           }}
         >
           <Suspense fallback={<NavBarFallback />}>
@@ -51,7 +51,7 @@ export default function NavBar() {
 
 function NavBarFallback() {
   return (
-    <a className={styles.link} aria-hidden style={{ visibility: 'hidden' }}>
+    <a className={styles.link} aria-hidden style={{ visibility: "hidden" }}>
       <MonetizationOnIcon className={styles.icon} />
       <span className={styles.label}>Expenses</span>
     </a>

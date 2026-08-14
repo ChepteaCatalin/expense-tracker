@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import type { FormDateTime } from '@/lib/MuiDatePicker/types';
-import { toDatePickerValue, validDate } from '@/lib/MuiDatePicker/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
-import { Controller, useForm } from 'react-hook-form';
-import z from 'zod';
-import dayjs from 'dayjs';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { DatePicker } from '@mui/x-date-pickers';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { normalizedSearchParams, validSearchParams } from '../utils';
-import type { PickerValue } from '@mui/x-date-pickers/internals';
-import { useId, useState, useTransition } from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import IconButton from '@mui/material/IconButton';
-import LinearProgress from '@mui/material/LinearProgress';
-import Popover from '@mui/material/Popover';
-import type { DashboardSearchParams } from '@/types/dashboard';
+import type { FormDateTime } from "@/lib/MuiDatePicker/types";
+import { toDatePickerValue, validDate } from "@/lib/MuiDatePicker/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+import dayjs from "dayjs";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import { DatePicker } from "@mui/x-date-pickers";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { normalizedSearchParams, validSearchParams } from "../utils";
+import type { PickerValue } from "@mui/x-date-pickers/internals";
+import { useId, useState, useTransition } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import Popover from "@mui/material/Popover";
+import type { DashboardSearchParams } from "@/types/dashboard";
 
 export default function PeriodPage() {
   const router = useRouter();
@@ -33,41 +33,41 @@ export default function PeriodPage() {
   const id = useId();
 
   const periodParams = {
-    from: searchParams.get('from'),
-    to: searchParams.get('to'),
+    from: searchParams.get("from"),
+    to: searchParams.get("to"),
   };
   if (!validSearchParams(periodParams)) notFound();
   const defaultValues = normalizedSearchParams(periodParams);
 
   const popoverOpened = Boolean(anchorEl);
-  const popoverId = popoverOpened ? 'popover' + id : undefined;
+  const popoverId = popoverOpened ? "popover" + id : undefined;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Stack direction="row" sx={{ mb: 1, alignItems: 'center', gap: 0.5 }}>
+    <Box sx={{ width: "100%" }}>
+      <Stack direction="row" sx={{ mb: 1, alignItems: "center", gap: 0.5 }}>
         <Box
           sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
+            display: "inline-flex",
+            alignItems: "center",
             gap: 1,
             px: 1.5,
             py: 0.75,
             borderRadius: 2,
-            border: '1px solid',
-            borderColor: 'divider',
-            bgcolor: 'background.paper',
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
           }}
         >
           <Typography sx={{ fontWeight: 600 }}>
             {formatPeriodDate(defaultValues.from)}
           </Typography>
-          <ArrowForwardIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+          <ArrowForwardIcon fontSize="small" sx={{ color: "text.secondary" }} />
           <Typography sx={{ fontWeight: 600 }}>
             {formatPeriodDate(defaultValues.to)}
           </Typography>
         </Box>
         <IconButton
-          onClick={event => setAnchorEl(event.currentTarget)}
+          onClick={(event) => setAnchorEl(event.currentTarget)}
           aria-label="choose date range"
           aria-describedby={popoverId}
         >
@@ -79,17 +79,17 @@ export default function PeriodPage() {
           anchorEl={anchorEl}
           onClose={() => setAnchorEl(null)}
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
+            vertical: "bottom",
+            horizontal: "center",
           }}
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: "top",
+            horizontal: "left",
           }}
         >
           <PeriodPopover
             defaultValues={defaultValues}
-            onSubmit={params => {
+            onSubmit={(params) => {
               setAnchorEl(null);
               startNavigation(() => {
                 router.push(`/dashboard/?${params}`);
@@ -99,7 +99,7 @@ export default function PeriodPage() {
         </Popover>
       </Stack>
       {isPending ? (
-        <LinearProgress sx={{ borderRadius: '999px' }} />
+        <LinearProgress sx={{ borderRadius: "999px" }} />
       ) : (
         <Box sx={{ height: 4 }} />
       )}
@@ -120,7 +120,7 @@ function PeriodPopover({
     handleSubmit,
     formState: { errors },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
-    mode: 'onChange',
+    mode: "onChange",
     shouldUnregister: true,
     defaultValues,
     resolver: zodResolver(
@@ -132,12 +132,12 @@ function PeriodPopover({
           if (!fromDate.isValid() || !toDate.isValid()) return true;
 
           return (
-            toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day')
+            toDate.isAfter(fromDate, "day") || toDate.isSame(fromDate, "day")
           );
         },
         {
-          message: 'To date must be on or after From date',
-          path: ['to'],
+          message: "To date must be on or after From date",
+          path: ["to"],
         },
       ),
     ),
@@ -147,16 +147,16 @@ function PeriodPopover({
     <Stack
       component="form"
       noValidate
-      onSubmit={handleSubmit(data => {
+      onSubmit={handleSubmit((data) => {
         onSubmit(
           new URLSearchParams({
-            from: dayjs(data.from).format('YYYY-MM-DD'),
-            to: dayjs(data.to).format('YYYY-MM-DD'),
+            from: dayjs(data.from).format("YYYY-MM-DD"),
+            to: dayjs(data.to).format("YYYY-MM-DD"),
           }).toString(),
         );
       })}
       spacing={1.5}
-      sx={{ p: 1.5, width: '260px' }}
+      sx={{ p: 1.5, width: "260px" }}
     >
       <Typography>Date range:</Typography>
       <Controller
@@ -167,9 +167,9 @@ function PeriodPopover({
             label="From"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDateChange(value => {
+            onChange={handleDateChange((value) => {
               onChange(value);
-              trigger('to');
+              trigger("to");
             })}
             slotProps={{
               textField: {
@@ -189,9 +189,9 @@ function PeriodPopover({
             label="To"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDateChange(value => {
+            onChange={handleDateChange((value) => {
               onChange(value);
-              trigger('from');
+              trigger("from");
             })}
             slotProps={{
               textField: {
@@ -211,10 +211,10 @@ function PeriodPopover({
 }
 
 function formatPeriodDate(value: string | null | undefined) {
-  return dayjs(value).format('D MMM YYYY');
+  return dayjs(value).format("D MMM YYYY");
 }
 
 function handleDateChange(onChange: (...event: any[]) => void) {
   return (date: PickerValue) =>
-    onChange(date?.isValid() ? date.format('YYYY-MM-DD') : null);
+    onChange(date?.isValid() ? date.format("YYYY-MM-DD") : null);
 }

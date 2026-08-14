@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import ReactECharts from 'echarts-for-react';
-import { barBorderRadius, textColor } from '../_utils/chart';
-import type { BreakdownChartData } from '@/types/dashboard';
+import ReactECharts from "echarts-for-react";
+import { barBorderRadius, textColor } from "../_utils/chart";
+import type { BreakdownChartData } from "@/types/dashboard";
 
 export default function CategoryBreakdownChart({
   chartData,
@@ -11,10 +11,10 @@ export default function CategoryBreakdownChart({
 }) {
   return (
     <ReactECharts
-      style={{ height: '700px' }}
+      style={{ height: "700px" }}
       theme="dark"
       option={{
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         grid: {
           top: 35,
           bottom: 65,
@@ -23,27 +23,27 @@ export default function CategoryBreakdownChart({
         },
         dataZoom: [
           {
-            type: 'slider',
+            type: "slider",
             right: 5,
             bottom: 10,
             showDetail: false,
           },
         ],
         xAxis: {
-          type: 'category',
+          type: "category",
           data: chartData.months,
-          axisPointer: { type: 'shadow' },
+          axisPointer: { type: "shadow" },
           axisLabel: { color: textColor },
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           axisLabel: { color: textColor },
         },
         series: chartData.categories.map((category, index) => ({
           name: category.categoryName,
           data: category.data,
-          type: 'bar',
-          stack: 'total',
+          type: "bar",
+          stack: "total",
           color: category.backgroundColor,
           itemStyle: {
             borderRadius:
@@ -53,41 +53,41 @@ export default function CategoryBreakdownChart({
           },
         })),
         legend: {
-          type: 'scroll',
+          type: "scroll",
           top: 0,
-          data: chartData.categories.map(c => ({
+          data: chartData.categories.map((c) => ({
             name: c.categoryName,
             itemStyle: { color: c.backgroundColor },
           })),
           textStyle: { color: textColor },
           pageTextStyle: { color: textColor },
           pageIconColor: textColor,
-          pageIconInactiveColor: 'rgba(255,255,255,0.2)',
+          pageIconInactiveColor: "rgba(255,255,255,0.2)",
         },
         tooltip: {
-          trigger: 'axis',
-          position: 'inside',
+          trigger: "axis",
+          position: "inside",
           confine: true,
           textStyle: { color: textColor },
-          axisPointer: { type: 'shadow' },
+          axisPointer: { type: "shadow" },
           formatter: (params: any[]) => {
             const nonZero = params
-              .filter(p => p.value > 0)
+              .filter((p) => p.value > 0)
               .sort((a, b) => b.value - a.value);
-            if (!nonZero.length) return '';
+            if (!nonZero.length) return "";
             const header = `<div style="margin-bottom:8px">${params[0].name}</div>`;
             const rows = nonZero
               .map(
-                p =>
+                (p) =>
                   `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px">` +
                   `<span>${p.marker} ${p.seriesName}</span>` +
                   `<span style="font-weight:bold;margin-left:auto">${(+p.value).toLocaleString()}</span>` +
                   `</div>`,
               )
-              .join('');
+              .join("");
             return header + rows;
           },
-          extraCssText: 'z-index: 1000',
+          extraCssText: "z-index: 1000",
         },
       }}
     />

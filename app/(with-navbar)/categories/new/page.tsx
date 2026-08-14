@@ -1,12 +1,12 @@
-import BackToLink from '@/components/BackToLink';
-import Form from '../_components/form/Form';
-import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import { Suspense } from 'react';
-import Skeleton from '@mui/material/Skeleton';
+import BackToLink from "@/components/BackToLink";
+import Form from "../_components/form/Form";
+import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
+import { Suspense } from "react";
+import Skeleton from "@mui/material/Skeleton";
 
 export const metadata = {
-  title: 'New Category',
-  description: 'Create a new expense or income category',
+  title: "New Category",
+  description: "Create a new expense or income category",
 };
 
 export default async function NewCategoryPage({
@@ -25,7 +25,7 @@ export default async function NewCategoryPage({
               variant="rectangular"
               width={172}
               height={28}
-              sx={{ mb: 0.5, borderRadius: '4px' }}
+              sx={{ mb: 0.5, borderRadius: "4px" }}
             />
           }
         >
@@ -47,7 +47,7 @@ async function BackToCategoriesLink({
 
   return (
     <BackToLink
-      href={{ pathname: '/categories/all', query: { type } }}
+      href={{ pathname: "/categories/all", query: { type } }}
       pageName="Categories"
       sx={{ mb: 0.5 }}
     />

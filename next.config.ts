@@ -1,8 +1,8 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''};
+    script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""};
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://lh3.googleusercontent.com;
     font-src 'self';
@@ -19,32 +19,32 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   turbopack: {
     rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
       },
     },
   },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
+            key: "Content-Security-Policy",
+            value: cspHeader.replace(/\n/g, ""),
           },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
-            key: 'Permissions-Policy',
+            key: "Permissions-Policy",
             value:
-              'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+              "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
           },
-          { key: 'X-XSS-Protection', value: '0' },
-          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-          { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
+          { key: "X-XSS-Protection", value: "0" },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
         ],
       },
     ];

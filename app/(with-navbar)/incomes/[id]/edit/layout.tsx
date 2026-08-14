@@ -1,11 +1,11 @@
-import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
-import FormNavigateBackBtn from '../../_components/FormNavigateBackBtn';
-import { Suspense } from 'react';
-import Skeleton from '@mui/material/Skeleton';
+import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
+import FormNavigateBackBtn from "../../_components/FormNavigateBackBtn";
+import { Suspense } from "react";
+import Skeleton from "@mui/material/Skeleton";
 
 export const metadata = {
-  title: 'Edit Income',
-  description: 'Edit an existing income',
+  title: "Edit Income",
+  description: "Edit an existing income",
 };
 
 export default function EditIncomeLayout({
@@ -23,10 +23,10 @@ export default function EditIncomeLayout({
             <Skeleton
               variant="rectangular"
               sx={{
-                width: '66px',
-                height: '28px',
+                width: "66px",
+                height: "28px",
                 mb: 0.5,
-                borderRadius: '4px',
+                borderRadius: "4px",
               }}
             />
           }

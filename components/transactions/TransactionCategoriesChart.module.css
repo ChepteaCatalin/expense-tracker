@@ -1,9 +1,9 @@
 .chart {
-    height: 250px;
+  height: 250px;
 }
 
 @media (min-width: 1000px) {
-    .chart {
-        height: 300px;
-    }
+  .chart {
+    height: 300px;
+  }
 }
