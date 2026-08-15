@@ -28,8 +28,8 @@ async function AccountDetails() {
         <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
       </Avatar>
       <div>
-        <p className="text-base font-semibold">{user.name}</p>
-        <p className="text-muted-foreground">{user.email}</p>
+        <p className="text-base font-semibold break-all">{user.name}</p>
+        <p className="text-muted-foreground break-all">{user.email}</p>
       </div>
     </div>
   );
