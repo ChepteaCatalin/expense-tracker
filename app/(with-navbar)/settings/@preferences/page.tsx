@@ -14,7 +14,7 @@ const DEFAULT_CATEGORY_TYPE: CategoryType = "expense";
 export default function PreferencesPage() {
   return (
     <Section title="Preferences">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4">
         <ThemeToggle />
         <Suspense
           fallback={

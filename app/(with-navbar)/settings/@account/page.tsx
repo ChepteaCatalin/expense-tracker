@@ -6,12 +6,12 @@ import Divider from "@mui/material/Divider";
 import { Suspense } from "react";
 import SignOutBtn from "./SignOutBtn";
 import Section from "../_components/Section";
-import AccountDetailsSkeleton from "../_components/AccountDetailsSkeleton";
+import LoadingFallback from "./LoadingFallback";
 
 export default function AccountPage() {
   return (
     <Section title="Account">
-      <Suspense fallback={<AccountDetailsSkeleton />}>
+      <Suspense fallback={<LoadingFallback />}>
         <AccountDetails />
       </Suspense>
     </Section>

@@ -1,9 +1,9 @@
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
-import Section from "./Section";
+import Section from "../_components/Section";
 
-export default function ChangePasswordSkeleton() {
+export default function LoadingFallback() {
   return (
     <Section title="Change Password">
       <Stack spacing={3} sx={{ p: 1 }}>

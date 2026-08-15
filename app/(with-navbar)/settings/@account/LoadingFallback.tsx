@@ -2,7 +2,7 @@ import Divider from "@mui/material/Divider";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 
-export default function AccountDetailsSkeleton() {
+export default function LoadingFallback() {
   return (
     <Stack spacing={3}>
       <Stack
