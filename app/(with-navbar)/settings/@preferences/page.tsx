@@ -2,7 +2,7 @@ import { currencies } from "@/data/currency";
 import Section from "../_components/Section";
 import CurrencyAutocomplete from "./CurrencyAutocomplete";
 import { requireAuth } from "@/lib/auth-utils";
-import Skeleton from "@mui/material/Skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import { type CategoryType } from "@/types/category";
 import Link from "next/link";
@@ -18,11 +18,10 @@ export default function PreferencesPage() {
         <ThemeToggle />
         <Suspense
           fallback={
-            <Skeleton
-              variant="rectangular"
-              height={40}
-              sx={{ borderRadius: "4px", mt: 1 }}
-            />
+            <div className="mb-1 flex flex-col gap-2">
+              <p className="text-sm font-medium">Currency</p>
+              <Skeleton className="h-8" />
+            </div>
           }
         >
           <UserCurrencyAutocomplete />

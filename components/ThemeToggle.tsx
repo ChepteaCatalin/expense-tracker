@@ -17,6 +17,12 @@ export function ThemeToggle() {
     setMounted(true);
   }, []);
 
+  const btnClass = (btnTheme: string) =>
+    cn(
+      theme === btnTheme &&
+        "bg-primary text-primary-foreground hover:text-primary-foreground hover:bg-primary/80 dark:bg-primary dark:hover:bg-primary/80",
+    );
+
   if (!mounted) return <Skeleton className="h-8" />;
   return (
     <div className="flex items-center gap-3">
@@ -24,29 +30,26 @@ export function ThemeToggle() {
       <ButtonGroup>
         <Button
           variant="outline"
-          className={cn(theme === "system" && selectedThemeClasses)}
+          className={btnClass("system")}
           onClick={() => setTheme("system")}
         >
           <LaptopMinimal data-icon="inline-start" /> System
         </Button>
         <Button
           variant="outline"
-          className={cn(theme === "dark" && selectedThemeClasses)}
-          onClick={() => setTheme("dark")}
-        >
-          <Moon data-icon="inline-start" /> Dark
-        </Button>
-        <Button
-          variant="outline"
-          className={cn(theme === "light" && selectedThemeClasses)}
+          className={btnClass("light")}
           onClick={() => setTheme("light")}
         >
           <Sun data-icon="inline-start" /> Light
+        </Button>
+        <Button
+          variant="outline"
+          className={btnClass("dark")}
+          onClick={() => setTheme("dark")}
+        >
+          <Moon data-icon="inline-start" /> Dark
         </Button>
       </ButtonGroup>
     </div>
   );
 }
-
-const selectedThemeClasses =
-  "bg-primary dark:bg-primary hover:bg-primary/80 dark:hover:bg-primary/80";
