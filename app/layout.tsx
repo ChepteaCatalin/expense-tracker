@@ -3,7 +3,6 @@ import { Geist } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
-// import CssBaseline from "@mui/material/CssBaseline";
 import DatePickerProvider from "@/lib/MuiDatePicker/DatePickerProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/lib/dayjs";
@@ -24,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geist.variable} suppressHydrationWarning>
-      <body className="bg-background">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -33,7 +32,6 @@ export default function RootLayout({
         >
           <AppRouterCacheProvider>
             <MuiThemeProvider theme={theme}>
-              {/* <CssBaseline /> */}
               <DatePickerProvider>{children}</DatePickerProvider>
             </MuiThemeProvider>
           </AppRouterCacheProvider>

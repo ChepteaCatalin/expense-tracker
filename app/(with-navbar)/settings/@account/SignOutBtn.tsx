@@ -1,11 +1,11 @@
 "use client";
 
-import Button from "@mui/material/Button";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { startTransition, useActionState, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import { signOut } from "../actions";
-import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
+import { Button } from "@/components/ui/button";
+import { LogOut, AlertCircleIcon, X } from "lucide-react";
+import { Alert, AlertAction, AlertTitle } from "@/components/ui/alert";
 
 export default function SignOutBtn() {
   const [signOutUserError, signOutUserAction, isSignOutUserPending] =
@@ -14,19 +14,14 @@ export default function SignOutBtn() {
   const [hideAlert, setHideAlert] = useState(false);
 
   return (
-    <Box>
+    <div className="w-full">
       {!!signOutUserError && !hideAlert && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to sign out
-        </Alert>
+        <ErrorAlert onClose={() => setHideAlert(true)} />
       )}
       <Button
-        variant="contained"
-        color="error"
-        fullWidth
-        endIcon={<LogoutIcon />}
-        loading={isSignOutUserPending}
-        loadingPosition="start"
+        variant="destructive"
+        className="w-full"
+        disabled={isSignOutUserPending}
         onClick={() => {
           setHideAlert(true);
           startTransition(() => {
@@ -35,8 +30,24 @@ export default function SignOutBtn() {
           });
         }}
       >
-        Sign Out
+        {isSignOutUserPending && <Spinner data-icon="inline-start" />}
+        {isSignOutUserPending ? "Signing Out..." : "Sign Out"}
+        <LogOut data-icon="inline-end" />
       </Button>
-    </Box>
+    </div>
+  );
+}
+
+function ErrorAlert({ onClose }: { onClose: () => void }) {
+  return (
+    <Alert variant="destructive" className="mb-2">
+      <AlertCircleIcon />
+      <AlertTitle>Failed to sign out</AlertTitle>
+      <AlertAction>
+        <Button variant="ghost" size="icon-xs" onClick={onClose}>
+          <X />
+        </Button>
+      </AlertAction>
+    </Alert>
   );
 }

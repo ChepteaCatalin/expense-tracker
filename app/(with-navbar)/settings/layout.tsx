@@ -20,7 +20,7 @@ export default function SettingsLayout({
   return (
     <Box sx={{ boxSizing: "content-box", maxWidth: "600px", mx: "auto" }}>
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Grid container spacing={6} sx={{ flexDirection: "column" }}>
+      <Grid container spacing={4} sx={{ flexDirection: "column" }}>
         {account}
         {password}
         {preferences}

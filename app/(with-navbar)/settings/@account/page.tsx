@@ -1,16 +1,13 @@
 import { requireAuth } from "@/lib/auth-utils";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
-import Divider from "@mui/material/Divider";
 import { Suspense } from "react";
 import SignOutBtn from "./SignOutBtn";
 import Section from "../_components/Section";
 import LoadingFallback from "./LoadingFallback";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function AccountPage() {
   return (
-    <Section title="Account">
+    <Section title="Account" footer={<SignOutBtn />}>
       <Suspense fallback={<LoadingFallback />}>
         <AccountDetails />
       </Suspense>
@@ -22,31 +19,19 @@ async function AccountDetails() {
   const { user } = await requireAuth();
 
   return (
-    <Stack spacing={3}>
-      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-        <Avatar
+    <div className="flex items-center gap-4">
+      <Avatar size="lg">
+        <AvatarImage
           src={user.image || undefined}
-          alt={user.name}
-          sx={{
-            width: 56,
-            height: 56,
-            bgcolor: "primary.main",
-            fontSize: "1.5rem",
-            fontWeight: 600,
-          }}
-        >
-          {getInitials(user.name)}
-        </Avatar>
-        <Stack spacing={0.5}>
-          <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
-            {user.name}
-          </Typography>
-          <Typography sx={{ color: "text.secondary" }}>{user.email}</Typography>
-        </Stack>
-      </Stack>
-      <Divider />
-      <SignOutBtn />
-    </Stack>
+          alt={`${user.name} avatar`}
+        />
+        <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+      </Avatar>
+      <div>
+        <p className="text-base font-semibold">{user.name}</p>
+        <p className="text-muted-foreground">{user.email}</p>
+      </div>
+    </div>
   );
 }
 

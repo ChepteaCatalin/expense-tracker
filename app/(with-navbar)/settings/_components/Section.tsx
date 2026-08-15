@@ -1,11 +1,19 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 
 export default function Section({
   title,
   children,
+  footer,
 }: {
   title: string;
   children?: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   return (
     <Card>
@@ -13,6 +21,7 @@ export default function Section({
         <CardTitle className="text-xl font-semibold">{title}</CardTitle>
       </CardHeader>
       <CardContent>{children}</CardContent>
+      {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   );
 }
