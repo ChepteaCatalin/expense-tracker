@@ -1,41 +1,48 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, LaptopMinimal } from "lucide-react";
 import { useTheme } from "next-themes";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useState, useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Toggle } from "@/components/ui/toggle";
 
 export function ThemeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <Skeleton className="h-8" />;
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button variant="outline" size="icon" aria-label="Toggle theme" />
-        }
+    <div className="flex items-center gap-2">
+      <span className="mr-1 inline-block font-medium">Theme</span>
+      <Toggle
+        variant="outline"
+        pressed={theme === "system"}
+        onPressedChange={() => setTheme("system")}
       >
-        <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-        <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-        <span className="sr-only">Toggle theme</span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <LaptopMinimal />
+        System
+      </Toggle>
+      <Toggle
+        variant="outline"
+        pressed={theme === "dark"}
+        onPressedChange={() => setTheme("dark")}
+      >
+        <Moon />
+        Dark
+      </Toggle>
+      <Toggle
+        variant="outline"
+        pressed={theme === "light"}
+        onPressedChange={() => setTheme("light")}
+      >
+        <Sun />
+        Light
+      </Toggle>
+    </div>
   );
 }

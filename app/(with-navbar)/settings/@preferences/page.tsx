@@ -2,7 +2,6 @@ import { currencies } from "@/data/currency";
 import Section from "../_components/Section";
 import CurrencyAutocomplete from "./CurrencyAutocomplete";
 import { requireAuth } from "@/lib/auth-utils";
-import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Skeleton from "@mui/material/Skeleton";
 import { Suspense } from "react";
@@ -15,7 +14,7 @@ const DEFAULT_CATEGORY_TYPE: CategoryType = "expense";
 export default function PreferencesPage() {
   return (
     <Section title="Preferences">
-      <Grid container spacing={3} sx={{ flexDirection: "column" }}>
+      <div className="flex flex-col gap-6">
         <ThemeToggle />
         <Suspense
           fallback={
@@ -38,7 +37,7 @@ export default function PreferencesPage() {
             Manage Expense and Income Categories
           </Button>
         </Link>
-      </Grid>
+      </div>
     </Section>
   );
 }
