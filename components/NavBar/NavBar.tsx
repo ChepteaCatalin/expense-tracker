@@ -22,6 +22,7 @@ export default function NavBar() {
         bottom: 0,
         background: "linear-gradient(to top, #1a1a1a, #212121)",
         boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.3)",
+        zIndex: 50,
       }}
     >
       <Toolbar
