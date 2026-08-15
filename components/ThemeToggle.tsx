@@ -18,7 +18,7 @@ export function ThemeToggle() {
   if (!mounted) return <Skeleton className="h-8" />;
   return (
     <div className="flex items-center gap-2">
-      <span className="mr-1 inline-block font-medium">Theme</span>
+      <span className="mr-1 inline-block text-sm font-medium">Theme</span>
       <Toggle
         variant="outline"
         pressed={theme === "system"}
