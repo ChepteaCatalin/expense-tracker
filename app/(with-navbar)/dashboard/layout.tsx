@@ -31,7 +31,7 @@ export default function DashboardLayout({
       <Heading
         title={metadata.title}
         subtitle={metadata.description}
-        sx={{ mb: 3 }}
+        //TODO: sx={{ mb: 3 }}
       />
       <Grid container spacing={3}>
         {period}
