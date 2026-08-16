@@ -1,4 +1,4 @@
-import Heading from "@/components/Heading";
+import Heading from "@/components/Heading_v2";
 import GitHubLink from "@/components/GitHubLink";
 
 export const metadata = {
