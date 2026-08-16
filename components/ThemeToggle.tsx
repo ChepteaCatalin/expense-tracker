@@ -23,33 +23,36 @@ export function ThemeToggle() {
         "bg-primary text-primary-foreground hover:text-primary-foreground hover:bg-primary/80 dark:bg-primary dark:hover:bg-primary/80",
     );
 
-  if (!mounted) return <Skeleton className="h-8" />;
   return (
     <div className="flex items-center gap-3">
       <span className="text-sm font-medium">Theme</span>
-      <ButtonGroup>
-        <Button
-          variant="outline"
-          className={btnClass("system")}
-          onClick={() => setTheme("system")}
-        >
-          <LaptopMinimal data-icon="inline-start" /> System
-        </Button>
-        <Button
-          variant="outline"
-          className={btnClass("light")}
-          onClick={() => setTheme("light")}
-        >
-          <Sun data-icon="inline-start" /> Light
-        </Button>
-        <Button
-          variant="outline"
-          className={btnClass("dark")}
-          onClick={() => setTheme("dark")}
-        >
-          <Moon data-icon="inline-start" /> Dark
-        </Button>
-      </ButtonGroup>
+      {mounted ? (
+        <ButtonGroup>
+          <Button
+            variant="outline"
+            className={btnClass("system")}
+            onClick={() => setTheme("system")}
+          >
+            <LaptopMinimal data-icon="inline-start" /> System
+          </Button>
+          <Button
+            variant="outline"
+            className={btnClass("light")}
+            onClick={() => setTheme("light")}
+          >
+            <Sun data-icon="inline-start" /> Light
+          </Button>
+          <Button
+            variant="outline"
+            className={btnClass("dark")}
+            onClick={() => setTheme("dark")}
+          >
+            <Moon data-icon="inline-start" /> Dark
+          </Button>
+        </ButtonGroup>
+      ) : (
+        <Skeleton className="inline h-8 w-59.5" />
+      )}
     </div>
   );
 }

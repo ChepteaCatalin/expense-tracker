@@ -22,7 +22,9 @@ export default function SettingsLayout({
         {account}
         {password}
         {preferences}
-        <GitHubLink />
+        <div className="mx-auto">
+          <GitHubLink />
+        </div>
       </div>
     </div>
   );
