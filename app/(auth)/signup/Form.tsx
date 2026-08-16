@@ -3,7 +3,7 @@
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import PasswordInput from "@/components/PasswordInput";
+import PasswordInput from "@/components/OldPasswordInput"; //TODO: replace with `components/PasswordInput.tsx`
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../validation";

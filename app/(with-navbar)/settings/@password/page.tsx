@@ -1,6 +1,5 @@
 import { requireAuth } from "@/lib/auth-utils";
 import { Suspense } from "react";
-import Section from "../_components/Section";
 import LoadingFallback from "./LoadingFallback";
 import Form from "./Form";
 
@@ -17,9 +16,5 @@ async function ChangePassword() {
 
   if (user.emailVerified) return null;
 
-  return (
-    <Section title="Change Password">
-      <Form key={user.id} />
-    </Section>
-  );
+  return <Form key={user.id} />;
 }

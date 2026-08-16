@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { signIn } from "../actions";
 import GoogleAuthButton from "../_components/GoogleAuthButton";
-import PasswordInput from "@/components/PasswordInput";
+import PasswordInput from "@/components/OldPasswordInput"; //TODO: replace with `components/PasswordInput.tsx`
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { type SignInFormValues } from "../types";
 import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
