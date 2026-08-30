@@ -1,5 +1,5 @@
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 
 export default function ApiFormErrorAlert({
   message,
@@ -13,7 +13,7 @@ export default function ApiFormErrorAlert({
   if (!message || hide) return null;
 
   return (
-    <Box sx={{ width: '100%', ...sx }}>
+    <Box sx={{ width: "100%", ...sx }}>
       <Alert severity="error">{message}</Alert>
     </Box>
   );

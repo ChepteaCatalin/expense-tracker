@@ -1,18 +1,18 @@
-import type { TransactionsByDate } from '@/types/transaction';
+import type { TransactionsByDate } from "@/types/transaction";
 import {
   type SortTransactionBy,
   type TransactionByCategorySearchParams,
-} from '@/types/transaction';
-import { UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
-import { getExpensesByCategory } from '@/data/expense';
+} from "@/types/transaction";
+import { UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
+import { getExpensesByCategory } from "@/data/expense";
 import {
   dateFromSearchParams,
   notFoundOnInvalidParams,
-} from '@/utils/transactions/url';
-import Stack from '@mui/material/Stack';
-import PeriodTransactions from '@/components/transactions/PeriodTransactions';
-import NoTransactionsForPeriod from '@/components/transactions/NoTransactionsForPeriod';
+} from "@/utils/transactions/url";
+import Stack from "@mui/material/Stack";
+import PeriodTransactions from "@/components/transactions/PeriodTransactions";
+import NoTransactionsForPeriod from "@/components/transactions/NoTransactionsForPeriod";
 
 export default async function CategoryExpensesList({
   params,
@@ -31,10 +31,10 @@ export default async function CategoryExpensesList({
     expensesByDate = await getExpensesByCategory({
       categoryId: awaitedParams.id,
       ...dateFromSearchParams(awaitedSearchParams),
-      sortBy: (awaitedSearchParams.sortBy as SortTransactionBy) || 'date',
+      sortBy: (awaitedSearchParams.sortBy as SortTransactionBy) || "date",
     });
   } catch (err) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
+    if (err instanceof UnauthorizedError) redirect("/signin");
   }
 
   if (!expensesByDate.length) {
@@ -48,7 +48,7 @@ export default async function CategoryExpensesList({
 
   return (
     <Stack spacing={2} sx={{ mt: 3 }}>
-      {expensesByDate.map(expense => (
+      {expensesByDate.map((expense) => (
         <PeriodTransactions
           key={expense.date.toISOString()}
           type="expenses"

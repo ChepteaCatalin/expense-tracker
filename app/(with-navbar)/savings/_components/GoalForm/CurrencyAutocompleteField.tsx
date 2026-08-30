@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { type CurrencyOption } from '@/types/currency';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { Controller } from 'react-hook-form';
+import { type CurrencyOption } from "@/types/currency";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { Controller } from "react-hook-form";
 
 export default function CurrencyAutocompleteField({
   currencyOptions,
@@ -20,10 +20,10 @@ export default function CurrencyAutocompleteField({
       {...(!isEditMode && { defaultValue })}
       render={({ field: { value, onChange, disabled } }) => (
         <Autocomplete
-          renderInput={params => <TextField {...params} label="Currency" />}
+          renderInput={(params) => <TextField {...params} label="Currency" />}
           value={value}
           options={currencyOptions}
-          getOptionLabel={option => `${option.currency} (${option.code})`}
+          getOptionLabel={(option) => `${option.currency} (${option.code})`}
           isOptionEqualToValue={(option, value) => option.code === value.code}
           onChange={(_, value) => onChange(value)}
           disabled={disabled}

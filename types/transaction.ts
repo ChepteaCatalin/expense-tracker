@@ -1,6 +1,6 @@
-import type { FormDateTime } from '@/lib/MuiDatePicker/types';
-import type { FormErrors } from './form';
-import type { Category } from './category';
+import type { FormDateTime } from "@/lib/MuiDatePicker/types";
+import type { FormErrors } from "./form";
+import type { Category } from "./category";
 
 export interface Transaction {
   id: number;
@@ -13,8 +13,8 @@ export interface Transaction {
 }
 
 export interface TransactionFormValues {
-  amount: number | '';
-  categoryId: number | '';
+  amount: number | "";
+  categoryId: number | "";
   date: FormDateTime;
   description: string;
 }
@@ -43,7 +43,7 @@ export type DeleteTransactionAction = (
   { id }: { id: number },
 ) => Promise<string>;
 
-export type TransactionType = 'expense' | 'income';
+export type TransactionType = "expense" | "income";
 
 export interface TransactionCategoriesSearchParams {
   day?: string | null;
@@ -59,7 +59,7 @@ export interface TransactionByCategorySearchParams extends TransactionCategories
   sortBy?: SortTransactionBy | null;
 }
 
-export type SortTransactionBy = 'date' | 'amount';
+export type SortTransactionBy = "date" | "amount";
 
 export interface TransactionCategory {
   categoryId: number;
@@ -80,7 +80,7 @@ export type TransactionCategoriesChartData =
   ReadonlyArray<TransactionCategoryChartItem>;
 
 export type TransactionCategoryListItem = Readonly<
-  Pick<Category, 'id' | 'name' | 'icon' | 'strokeColor' | 'backgroundColor'> & {
+  Pick<Category, "id" | "name" | "icon" | "strokeColor" | "backgroundColor"> & {
     amount: number;
     percentage: number;
   }

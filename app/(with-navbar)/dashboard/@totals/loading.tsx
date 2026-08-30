@@ -1,6 +1,6 @@
-import Skeleton from '@mui/material/Skeleton';
-import InsightCard from '../_components/InsightCard';
-import Divider from '@mui/material/Divider';
+import Skeleton from "@mui/material/Skeleton";
+import InsightCard from "../_components/InsightCard";
+import Divider from "@mui/material/Divider";
 
 export default function TotalsLoading() {
   return (
@@ -16,4 +16,4 @@ export default function TotalsLoading() {
   );
 }
 
-const dividerSx = { my: 1, borderColor: 'rgba(255,255,255,0.07)' };
+const dividerSx = { my: 1, borderColor: "rgba(255,255,255,0.07)" };

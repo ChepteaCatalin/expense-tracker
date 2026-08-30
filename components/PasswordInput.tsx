@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useState } from 'react';
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useState } from "react";
 
 interface PasswordInputProps {
   label: string;
@@ -30,7 +30,7 @@ export default function PasswordInput({
 
   return (
     <TextField
-      type={showPassword ? 'text' : 'password'}
+      type={showPassword ? "text" : "password"}
       label={label}
       fullWidth
       required
@@ -48,9 +48,9 @@ export default function PasswordInput({
             <InputAdornment position="end">
               <IconButton
                 aria-label={
-                  showPassword ? 'hide the password' : 'display the password'
+                  showPassword ? "hide the password" : "display the password"
                 }
-                onClick={() => setShowPassword(show => !show)}
+                onClick={() => setShowPassword((show) => !show)}
                 onMouseDown={preserveFocus}
                 onMouseUp={preserveFocus}
                 edge="end"

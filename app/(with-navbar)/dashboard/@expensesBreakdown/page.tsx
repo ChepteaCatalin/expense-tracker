@@ -1,16 +1,16 @@
 import type {
   DashboardSearchParams,
   BreakdownChartData,
-} from '@/types/dashboard';
-import { getValidNormalizedSearchParams } from '../utils';
-import InsightCard from '../_components/InsightCard';
-import { getSession } from '@/data/auth';
-import { getExpenseCategoryBreakdown } from '@/data/dashboard';
-import { redirect } from 'next/navigation';
-import { UnauthorizedError } from '@/utils/error';
-import CategoryBreakdownChart from '../_components/CategoryBreakdownChart';
-import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
-import NoData from '../_components/NoData';
+} from "@/types/dashboard";
+import { getValidNormalizedSearchParams } from "../utils";
+import InsightCard from "../_components/InsightCard";
+import { getSession } from "@/data/auth";
+import { getExpenseCategoryBreakdown } from "@/data/dashboard";
+import { redirect } from "next/navigation";
+import { UnauthorizedError } from "@/utils/error";
+import CategoryBreakdownChart from "../_components/CategoryBreakdownChart";
+import AddExpensesLinkBtn from "../_components/AddExpensesLinkBtn";
+import NoData from "../_components/NoData";
 
 export default async function ExpensesBreakdown({
   searchParams,
@@ -30,7 +30,7 @@ export default async function ExpensesBreakdown({
       getSession(),
     ]);
   } catch (error) {
-    if (error instanceof UnauthorizedError) redirect('/signin');
+    if (error instanceof UnauthorizedError) redirect("/signin");
     throw error;
   }
   const currency = session?.user.currency;

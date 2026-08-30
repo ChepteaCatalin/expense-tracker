@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { startTransition, useActionState, useState } from 'react';
-import { updateCurrency } from '../actions';
-import Box from '@mui/material/Box';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import { type CurrencyOption } from '@/types/currency';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { startTransition, useActionState, useState } from "react";
+import { updateCurrency } from "../actions";
+import Box from "@mui/material/Box";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import { type CurrencyOption } from "@/types/currency";
 
 export default function CurrencyAutocomplete({
   defaultValue,
@@ -30,10 +30,10 @@ export default function CurrencyAutocomplete({
     <Box>
       <ApiFormErrorAlert message={actionErrors.api} sx={{ mb: 1.5 }} />
       <Autocomplete
-        renderInput={params => <TextField {...params} label="Currency" />}
+        renderInput={(params) => <TextField {...params} label="Currency" />}
         value={value}
         options={options}
-        getOptionLabel={option => `${option.currency} (${option.code})`}
+        getOptionLabel={(option) => `${option.currency} (${option.code})`}
         isOptionEqualToValue={(option, value) => option.code === value.code}
         onChange={(_, value) => {
           setValue(value);

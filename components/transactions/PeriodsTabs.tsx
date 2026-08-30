@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useId, useState, useTransition } from 'react';
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useId, useState, useTransition } from "react";
 import {
   custom,
   day,
@@ -12,28 +12,28 @@ import {
   periods,
   week,
   year,
-} from '@/utils/transactions/url';
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import { Controller, useForm } from 'react-hook-form';
-import { DatePicker } from '@mui/x-date-pickers';
+} from "@/utils/transactions/url";
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
+import { Controller, useForm } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers";
 import {
   handleDatePickerChange,
   toDatePickerValue,
   validDate,
-} from '@/lib/MuiDatePicker/utils';
-import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import dayjs from 'dayjs';
-import { type FormDateTime } from '@/lib/MuiDatePicker/types';
-import LinearProgress from '@mui/material/LinearProgress';
+} from "@/lib/MuiDatePicker/utils";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import dayjs from "dayjs";
+import { type FormDateTime } from "@/lib/MuiDatePicker/types";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export default function PeriodsTabs({
   type,
 }: {
-  type: 'expenses' | 'incomes';
+  type: "expenses" | "incomes";
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,22 +45,22 @@ export default function PeriodsTabs({
   );
 
   const popoverOpened = Boolean(anchorEl);
-  const popoverId = popoverOpened ? 'popover' + id : undefined;
+  const popoverId = popoverOpened ? "popover" + id : undefined;
 
   return (
     <Box sx={{ mb: 0.5 }}>
       <Tabs
-        value={periods.find(period => searchParams.has(period)) ?? periods[0]}
+        value={periods.find((period) => searchParams.has(period)) ?? periods[0]}
         onChange={(_event, newValue: string) => {
           if (newValue !== custom) {
             startNavigation(() => {
               router.push(
                 `/${type}/categories?${newValue}=${
                   {
-                    [day]: dayjs().format('YYYY-MM-DD'),
-                    [week]: dayjs().startOf('week').format('YYYY-MM-DD'),
-                    [month]: dayjs().startOf('month').format('YYYY-MM-DD'),
-                    [year]: dayjs().startOf('year').format('YYYY-MM-DD'),
+                    [day]: dayjs().format("YYYY-MM-DD"),
+                    [week]: dayjs().startOf("week").format("YYYY-MM-DD"),
+                    [month]: dayjs().startOf("month").format("YYYY-MM-DD"),
+                    [year]: dayjs().startOf("year").format("YYYY-MM-DD"),
                   }[newValue]
                 }`,
               );
@@ -70,15 +70,15 @@ export default function PeriodsTabs({
         aria-label="periods tabs"
         sx={{
           mt: -1,
-          minHeight: '32px',
-          '& .MuiTabs-list': {
-            justifyContent: 'center',
+          minHeight: "32px",
+          "& .MuiTabs-list": {
+            justifyContent: "center",
           },
-          '& .MuiTab-root': {
-            textTransform: 'capitalize',
+          "& .MuiTab-root": {
+            textTransform: "capitalize",
             py: 0.5,
-            minWidth: 'auto',
-            minHeight: '32px',
+            minWidth: "auto",
+            minHeight: "32px",
           },
         }}
       >
@@ -90,7 +90,7 @@ export default function PeriodsTabs({
             label={period}
             id={`tab-${id}-${index}`}
             aria-controls={`tabpanel-${id}-${index}`}
-            onClick={event => {
+            onClick={(event) => {
               if (period === custom) setAnchorEl(event.currentTarget);
             }}
           />
@@ -102,17 +102,17 @@ export default function PeriodsTabs({
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
       >
         <CustomPeriodPopover
           type={type}
-          submitRange={params => {
+          submitRange={(params) => {
             setAnchorEl(null);
             startNavigation(() => {
               router.push(`/${type}/categories/?${params}`);
@@ -121,7 +121,7 @@ export default function PeriodsTabs({
         />
       </Popover>
       {isPending ? (
-        <LinearProgress sx={{ mt: 0.5, borderRadius: '999px' }} />
+        <LinearProgress sx={{ mt: 0.5, borderRadius: "999px" }} />
       ) : (
         <Box sx={{ height: 4, mt: 0.5 }} />
       )}
@@ -133,7 +133,7 @@ function CustomPeriodPopover({
   type,
   submitRange,
 }: {
-  type: 'expenses' | 'incomes';
+  type: "expenses" | "incomes";
   submitRange: (params: string) => void;
 }) {
   const searchParams = useSearchParams();
@@ -145,10 +145,10 @@ function CustomPeriodPopover({
     formState: { errors },
   } = useForm<{ from: FormDateTime; to: FormDateTime }>({
     shouldUnregister: true,
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      from: searchParams.get('from'),
-      to: searchParams.get('to'),
+      from: searchParams.get("from"),
+      to: searchParams.get("to"),
     },
     resolver: zodResolver(
       z.object({ from: validDate, to: validDate }).refine(
@@ -159,12 +159,12 @@ function CustomPeriodPopover({
           if (!fromDate.isValid() || !toDate.isValid()) return true;
 
           return (
-            toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day')
+            toDate.isAfter(fromDate, "day") || toDate.isSame(fromDate, "day")
           );
         },
         {
-          message: 'To date must be on or after From date',
-          path: ['to'],
+          message: "To date must be on or after From date",
+          path: ["to"],
         },
       ),
     ),
@@ -174,11 +174,11 @@ function CustomPeriodPopover({
     <Stack
       component="form"
       noValidate
-      onSubmit={handleSubmit(data => {
+      onSubmit={handleSubmit((data) => {
         submitRange(buildCustomPeriodParams(data));
       })}
       spacing={1.5}
-      sx={{ p: 1.5, width: '260px' }}
+      sx={{ p: 1.5, width: "260px" }}
     >
       <Typography>Choose date range:</Typography>
       <Controller
@@ -189,9 +189,9 @@ function CustomPeriodPopover({
             label="From"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDatePickerChange(value => {
+            onChange={handleDatePickerChange((value) => {
               onChange(value);
-              trigger('to');
+              trigger("to");
             })}
             slotProps={{
               textField: {
@@ -211,9 +211,9 @@ function CustomPeriodPopover({
             label="To"
             name={name}
             value={toDatePickerValue(value)}
-            onChange={handleDatePickerChange(value => {
+            onChange={handleDatePickerChange((value) => {
               onChange(value);
-              trigger('from');
+              trigger("from");
             })}
             slotProps={{
               textField: {
@@ -226,7 +226,7 @@ function CustomPeriodPopover({
         )}
       />
       <Button type="submit" variant="contained">
-        View {type === 'expenses' ? 'Expenses' : 'Income'}
+        View {type === "expenses" ? "Expenses" : "Income"}
       </Button>
     </Stack>
   );
@@ -237,8 +237,8 @@ function buildCustomPeriodParams(data: {
   to: FormDateTime;
 }) {
   return new URLSearchParams({
-    [custom]: 'true',
-    from: dayjs(data.from).format('YYYY-MM-DD'),
-    to: dayjs(data.to).format('YYYY-MM-DD'),
+    [custom]: "true",
+    from: dayjs(data.from).format("YYYY-MM-DD"),
+    to: dayjs(data.to).format("YYYY-MM-DD"),
   }).toString();
 }

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import InsightError from '../_components/InsightError';
+import InsightError from "../_components/InsightError";
 
 export default function NetIncomeError({
   unstable_retry,

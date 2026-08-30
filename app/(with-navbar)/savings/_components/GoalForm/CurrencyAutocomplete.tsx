@@ -1,6 +1,6 @@
-import { currencies } from '@/data/currency';
-import CurrencyAutocompleteField from './CurrencyAutocompleteField';
-import { getSession } from '@/data/auth';
+import { currencies } from "@/data/currency";
+import CurrencyAutocompleteField from "./CurrencyAutocompleteField";
+import { getSession } from "@/data/auth";
 
 export default async function CurrencyAutocomplete({
   isEditMode,
@@ -8,7 +8,7 @@ export default async function CurrencyAutocomplete({
   isEditMode?: boolean;
 }) {
   const currency =
-    (await getSession().catch(() => null))?.user?.currency ?? 'MDL';
+    (await getSession().catch(() => null))?.user?.currency ?? "MDL";
 
   return (
     <CurrencyAutocompleteField
@@ -17,7 +17,7 @@ export default async function CurrencyAutocomplete({
         currency,
       }))}
       isEditMode={isEditMode}
-      defaultValue={currencies.find(c => c.code === currency)}
+      defaultValue={currencies.find((c) => c.code === currency)}
     />
   );
 }

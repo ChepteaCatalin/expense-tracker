@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import type { SavingsDeposit, SavingsDepositFormValues } from '@/types/savings';
-import { fromCents } from '@/utils/currency';
-import { zodResolver } from '@hookform/resolvers/zod';
-import dayjs from 'dayjs';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import type { SavingsDeposit, SavingsDepositFormValues } from "@/types/savings";
+import { fromCents } from "@/utils/currency";
+import { zodResolver } from "@hookform/resolvers/zod";
+import dayjs from "dayjs";
 import {
   startTransition,
   useActionState,
@@ -15,25 +15,25 @@ import {
   useId,
   useRef,
   useState,
-} from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { savingsDepositSchema } from '../../../../validation';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import { normalizeAmountNumberInput } from '@/utils/input';
-import SaveIcon from '@mui/icons-material/Save';
-import Button from '@mui/material/Button';
-import InputAdornment from '@mui/material/InputAdornment';
-import { DatePicker } from '@mui/x-date-pickers';
+} from "react";
+import { Controller, useForm } from "react-hook-form";
+import { savingsDepositSchema } from "../../../../validation";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import { normalizeAmountNumberInput } from "@/utils/input";
+import SaveIcon from "@mui/icons-material/Save";
+import Button from "@mui/material/Button";
+import InputAdornment from "@mui/material/InputAdornment";
+import { DatePicker } from "@mui/x-date-pickers";
 import {
   handleDatePickerChange,
   toDatePickerValue,
-} from '@/lib/MuiDatePicker/utils';
+} from "@/lib/MuiDatePicker/utils";
 import {
   createSavingsDeposit,
   updateSavingsDeposit,
-} from '../../../../actions';
+} from "../../../../actions";
 
 interface AddEditDepositDialogProps {
   handleClose: () => void;
@@ -110,9 +110,9 @@ export default function AddEditDepositDialog({
     >
       <DialogTitle
         id={titleId}
-        sx={{ pb: 1, fontWeight: 600, fontSize: '1.5rem' }}
+        sx={{ pb: 1, fontWeight: 600, fontSize: "1.5rem" }}
       >
-        {isEditMode ? 'Edit' : 'Add'} Deposit
+        {isEditMode ? "Edit" : "Add"} Deposit
       </DialogTitle>
       <DialogContent>
         <ApiFormErrorAlert
@@ -125,7 +125,7 @@ export default function AddEditDepositDialog({
           spacing={3}
           component="form"
           noValidate
-          onSubmit={handleSubmit(data => {
+          onSubmit={handleSubmit((data) => {
             startTransition(() => {
               setHideApiError(false);
               if (isEditMode) {
@@ -138,7 +138,7 @@ export default function AddEditDepositDialog({
           sx={{ mt: 1 }}
         >
           <TextField
-            {...register('amount', {
+            {...register("amount", {
               setValueAs: normalizeAmountNumberInput,
             })}
             label="Amount"
@@ -149,7 +149,7 @@ export default function AddEditDepositDialog({
             helperText={errors.amount?.message}
             slotProps={{
               htmlInput: {
-                inputMode: 'decimal',
+                inputMode: "decimal",
                 onClick: (e: React.MouseEvent<HTMLInputElement>) =>
                   e.currentTarget.select(),
               },
@@ -185,7 +185,7 @@ export default function AddEditDepositDialog({
             )}
           />
           <TextField
-            {...register('notes')}
+            {...register("notes")}
             label="Notes"
             autoComplete="off"
             spellCheck="false"
@@ -200,7 +200,7 @@ export default function AddEditDepositDialog({
           />
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ flexDirection: 'column', gap: 2, px: 3, pb: 2 }}>
+      <DialogActions sx={{ flexDirection: "column", gap: 2, px: 3, pb: 2 }}>
         <Button
           type="submit"
           form={formId}
@@ -220,7 +220,7 @@ export default function AddEditDepositDialog({
           variant="outlined"
           onClick={handleClose}
           fullWidth
-          sx={{ '&.MuiButtonBase-root': { ml: 0 } }}
+          sx={{ "&.MuiButtonBase-root": { ml: 0 } }}
         >
           Cancel
         </Button>
@@ -232,15 +232,15 @@ export default function AddEditDepositDialog({
 function getDefaultValues(deposit?: SavingsDeposit): SavingsDepositFormValues {
   if (!deposit) {
     return {
-      amount: '',
+      amount: "",
       date: dayjs().toISOString(),
-      notes: '',
+      notes: "",
     };
   }
 
   return {
     amount: fromCents(deposit.amount),
     date: dayjs(deposit.date).toISOString(),
-    notes: deposit?.notes ?? '',
+    notes: deposit?.notes ?? "",
   };
 }

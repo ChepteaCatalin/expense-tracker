@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { useState } from 'react';
-import { ReopenGoalDialog } from './ReopenGoalDialog';
+import Button from "@mui/material/Button";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { useState } from "react";
+import { ReopenGoalDialog } from "./ReopenGoalDialog";
 
 export default function ReopenGoalBtn({ id }: { id: number }) {
   const [open, setOpen] = useState(false);

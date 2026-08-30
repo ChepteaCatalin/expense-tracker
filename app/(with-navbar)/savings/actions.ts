@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import type {
   SavingsDepositFormErrors,
@@ -7,11 +7,11 @@ import type {
   SavingsGoalFormErrors,
   SavingsGoalFormValues,
   SavingsGoalFormValuesWithId,
-} from '@/types/savings';
-import { savingsDepositSchema, savingsGoalSchema } from './validation';
-import { getFormErrors } from '@/lib/zod';
-import { isUniqueViolationError, UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
+} from "@/types/savings";
+import { savingsDepositSchema, savingsGoalSchema } from "./validation";
+import { getFormErrors } from "@/lib/zod";
+import { isUniqueViolationError, UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
 import {
   createSavingsGoal as createNewSavingsGoal,
   updateSavingsGoal as updateExistingSavingsGoal,
@@ -21,8 +21,8 @@ import {
   reopenSavingsGoal as markAsReopened,
   deleteSavingsDeposit as deleteExistingSavingsDeposit,
   updateSavingsDeposit as updateExistingSavingsDeposit,
-} from '@/data/savings';
-import { toCents } from '@/utils/currency';
+} from "@/data/savings";
+import { toCents } from "@/utils/currency";
 
 export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
@@ -43,11 +43,11 @@ export async function createSavingsGoal(
       initialAmount: toCents(goal.initialAmount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
+    if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
-      return { api: 'A goal with this name already exists' };
+      return { api: "A goal with this name already exists" };
     }
-    return { api: 'Failed to create the goal' };
+    return { api: "Failed to create the goal" };
   }
 
   redirect(`/savings`);
@@ -72,11 +72,11 @@ export async function updateSavingsGoal(
       initialAmount: toCents(goal.initialAmount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
+    if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
-      return { api: 'A goal with this name already exists' };
+      return { api: "A goal with this name already exists" };
     }
-    return { api: 'Failed to update the goal' };
+    return { api: "Failed to update the goal" };
   }
 
   redirect(`/savings/${goal.id}/details`);
@@ -86,8 +86,8 @@ export async function deleteSavingsGoal(_: string, id: number) {
   try {
     await deleteExistingSavingsGoal(id);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return 'Failed to delete savings goal';
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return "Failed to delete savings goal";
   }
 
   redirect(`/savings`);
@@ -110,8 +110,8 @@ export async function createSavingsDeposit(
       amount: toCents(deposit.amount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to create goal deposit' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to create goal deposit" };
   }
 
   return {};
@@ -124,8 +124,8 @@ export async function completeSavingsGoal(
   try {
     await markAsCompleted(id);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return 'Failed to complete savings goal';
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return "Failed to complete savings goal";
   }
 }
 
@@ -136,8 +136,8 @@ export async function reopenSavingsGoal(
   try {
     await markAsReopened(id);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return 'Failed to reopen savings goal';
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return "Failed to reopen savings goal";
   }
 }
 
@@ -145,11 +145,11 @@ export async function deleteSavingsDeposit(_: string, id: number) {
   try {
     await deleteExistingSavingsDeposit(id);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return 'Failed to delete deposit';
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return "Failed to delete deposit";
   }
 
-  return '';
+  return "";
 }
 
 export async function updateSavingsDeposit(
@@ -169,8 +169,8 @@ export async function updateSavingsDeposit(
       amount: toCents(deposit.amount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to update goal deposit' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to update goal deposit" };
   }
 
   return {};

@@ -1,12 +1,12 @@
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Skeleton from '@mui/material/Skeleton';
-import TitledCardPageWrapper from '@/components/TitledCardPageWrapper';
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
+import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 
 export const metadata = {
-  title: 'Categories',
-  description: 'Manage your expense and income categories',
+  title: "Categories",
+  description: "Manage your expense and income categories",
 };
 
 export default function CategoriesLoading() {
@@ -18,7 +18,7 @@ export default function CategoriesLoading() {
         <Skeleton
           variant="rectangular"
           height={50}
-          sx={{ mb: 1.5, borderRadius: '10px' }}
+          sx={{ mb: 1.5, borderRadius: "10px" }}
         />
       }
     >
@@ -26,14 +26,14 @@ export default function CategoriesLoading() {
         <Skeleton
           variant="rectangular"
           height={300}
-          sx={{ borderRadius: '10px' }}
+          sx={{ borderRadius: "10px" }}
         />
-        <Grid container spacing={3} sx={{ mt: 3, flexDirection: 'column' }}>
+        <Grid container spacing={3} sx={{ mt: 3, flexDirection: "column" }}>
           <Divider />
           <Skeleton
             variant="rectangular"
             height={40}
-            sx={{ borderRadius: '4px' }}
+            sx={{ borderRadius: "4px" }}
           />
         </Grid>
       </Box>

@@ -1,29 +1,29 @@
-'use client';
+"use client";
 
-import type { Transaction } from '@/types/transaction';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { transactionSchema } from '@/utils/validation';
-import { startTransition, useActionState, useEffect, useState } from 'react';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import SaveIcon from '@mui/icons-material/Save';
-import TextField from '@mui/material/TextField';
-import type { Category } from '@/types/category';
-import CategoriesInput from './CategoriesInput';
-import Link from 'next/link';
-import { DatePicker } from '@mui/x-date-pickers';
+import type { Transaction } from "@/types/transaction";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { transactionSchema } from "@/utils/validation";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import SaveIcon from "@mui/icons-material/Save";
+import TextField from "@mui/material/TextField";
+import type { Category } from "@/types/category";
+import CategoriesInput from "./CategoriesInput";
+import Link from "next/link";
+import { DatePicker } from "@mui/x-date-pickers";
 import {
   toDatePickerValue,
   handleDatePickerChange,
-} from '@/lib/MuiDatePicker/utils';
-import InputAdornment from '@mui/material/InputAdornment';
-import dayjs from 'dayjs';
-import { fromCents } from '@/utils/currency';
-import DeleteTransaction from './DeleteTransaction';
-import { useSearchParams } from 'next/navigation';
+} from "@/lib/MuiDatePicker/utils";
+import InputAdornment from "@mui/material/InputAdornment";
+import dayjs from "dayjs";
+import { fromCents } from "@/utils/currency";
+import DeleteTransaction from "./DeleteTransaction";
+import { useSearchParams } from "next/navigation";
 import type {
   CreateTransactionAction,
   DeleteTransactionAction,
@@ -32,9 +32,9 @@ import type {
   TransactionFormValuesWithId,
   TransactionType,
   UpdateTransactionAction,
-} from '@/types/transaction';
-import { capitalizeFirstLetter } from '@/utils/string';
-import { normalizeAmountNumberInput } from '@/utils/input';
+} from "@/types/transaction";
+import { capitalizeFirstLetter } from "@/utils/string";
+import { normalizeAmountNumberInput } from "@/utils/input";
 
 interface FormProps {
   type: TransactionType;
@@ -118,7 +118,7 @@ export default function Form({
         spacing={3}
         component="form"
         noValidate
-        onSubmit={handleSubmit(data => {
+        onSubmit={handleSubmit((data) => {
           startTransition(() => {
             setHideApiError(false);
             if (isEditMode)
@@ -128,7 +128,7 @@ export default function Form({
         })}
       >
         <TextField
-          {...register('amount', { setValueAs: normalizeAmountNumberInput })}
+          {...register("amount", { setValueAs: normalizeAmountNumberInput })}
           label="Amount"
           required
           autoComplete="off"
@@ -137,7 +137,7 @@ export default function Form({
           helperText={errors.amount?.message}
           slotProps={{
             htmlInput: {
-              inputMode: 'decimal',
+              inputMode: "decimal",
               onClick: (e: React.MouseEvent<HTMLInputElement>) =>
                 e.currentTarget.select(),
             },
@@ -148,7 +148,7 @@ export default function Form({
               ),
             },
           }}
-          sx={{ maxWidth: 150, alignSelf: 'center' }}
+          sx={{ maxWidth: 150, alignSelf: "center" }}
         />
         <CategoriesInput categories={categories} disabled={disabledForm} />
         <Controller
@@ -172,7 +172,7 @@ export default function Form({
           )}
         />
         <TextField
-          {...register('description')}
+          {...register("description")}
           label="Description"
           autoComplete="off"
           spellCheck="false"
@@ -187,7 +187,7 @@ export default function Form({
         <Divider />
         <Link
           href={{
-            pathname: '/categories/all',
+            pathname: "/categories/all",
             query: { type },
           }}
         >
@@ -232,10 +232,10 @@ function getDefaultValues(transaction?: Transaction): TransactionFormValues {
   }
 
   return {
-    amount: '',
-    categoryId: '',
+    amount: "",
+    categoryId: "",
     date: dayjs().toISOString(),
-    description: '',
+    description: "",
   };
 }
 

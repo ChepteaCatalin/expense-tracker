@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import BackToLink from '@/components/BackToLink';
-import { useSearchParams } from 'next/navigation';
+import BackToLink from "@/components/BackToLink";
+import { useSearchParams } from "next/navigation";
 
 export default function BackToCategoriesBtn({
   type,
 }: {
-  type: 'expenses' | 'incomes';
+  type: "expenses" | "incomes";
 }) {
   const searchParams = useSearchParams();
 
   const backBtnSearchParams = new URLSearchParams(searchParams.toString());
-  backBtnSearchParams.delete('sortBy');
+  backBtnSearchParams.delete("sortBy");
 
   return (
     <BackToLink

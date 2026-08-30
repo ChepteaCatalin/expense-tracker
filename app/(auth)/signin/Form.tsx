@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { signInSchema } from '../validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import { signIn } from '../actions';
-import GoogleAuthButton from '../_components/GoogleAuthButton';
-import PasswordInput from '@/components/PasswordInput';
-import { startTransition, useActionState, useEffect, useState } from 'react';
-import { type SignInFormValues } from '../types';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
+import { useForm } from "react-hook-form";
+import { signInSchema } from "../validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import { signIn } from "../actions";
+import GoogleAuthButton from "../_components/GoogleAuthButton";
+import PasswordInput from "@/components/PasswordInput";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import { type SignInFormValues } from "../types";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
 
 export default function SignInForm() {
   const {
@@ -20,7 +20,7 @@ export default function SignInForm() {
     subscribe,
     formState: { errors },
   } = useForm<SignInFormValues>({
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: "", password: "" },
     resolver: zodResolver(signInSchema),
   });
 
@@ -40,7 +40,7 @@ export default function SignInForm() {
   return (
     <form
       noValidate
-      onSubmit={handleSubmit(data => {
+      onSubmit={handleSubmit((data) => {
         startTransition(() => {
           setHideApiError(false);
           signInAction(data);
@@ -54,7 +54,7 @@ export default function SignInForm() {
           sx={{ mb: 1.5 }}
         />
         <TextField
-          {...register('email')}
+          {...register("email")}
           label="Email"
           fullWidth
           required
@@ -64,7 +64,7 @@ export default function SignInForm() {
           helperText={errors.email?.message}
         />
         <PasswordInput
-          {...register('password')}
+          {...register("password")}
           label="Password"
           error={!!errors.password}
           helperText={errors.password?.message}

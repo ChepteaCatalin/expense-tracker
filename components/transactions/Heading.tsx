@@ -1,17 +1,17 @@
-import Grid from '@mui/material/Grid';
-import Skeleton from '@mui/material/Skeleton';
-import { Suspense } from 'react';
-import BackToCategoriesBtn from '@/components/transactions/BackToCategoriesBtn';
-import SortBy from '@/components/transactions/SortBy';
+import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
+import { Suspense } from "react";
+import BackToCategoriesBtn from "@/components/transactions/BackToCategoriesBtn";
+import SortBy from "@/components/transactions/SortBy";
 
-export default function Heading({ type }: { type: 'incomes' | 'expenses' }) {
+export default function Heading({ type }: { type: "incomes" | "expenses" }) {
   return (
     <Grid
       container
       spacing={2}
       sx={{
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        justifyContent: "space-between",
+        alignItems: "center",
         mb: 1.25,
       }}
     >
@@ -20,9 +20,9 @@ export default function Heading({ type }: { type: 'incomes' | 'expenses' }) {
           <Skeleton
             variant="rectangular"
             sx={{
-              width: '66px',
-              height: '28px',
-              borderRadius: '4px',
+              width: "66px",
+              height: "28px",
+              borderRadius: "4px",
             }}
           />
         }
@@ -33,7 +33,7 @@ export default function Heading({ type }: { type: 'incomes' | 'expenses' }) {
         fallback={
           <Skeleton
             variant="rectangular"
-            sx={{ width: '205px', height: '40px', borderRadius: '4px' }}
+            sx={{ width: "205px", height: "40px", borderRadius: "4px" }}
           />
         }
       >

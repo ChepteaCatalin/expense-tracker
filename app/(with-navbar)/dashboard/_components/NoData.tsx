@@ -1,10 +1,10 @@
-import InsightCard from './InsightCard';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
-import Typography from '@mui/material/Typography';
-import Link from 'next/link';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import Grid from '@mui/material/Grid';
+import InsightCard from "./InsightCard";
+import SearchOffIcon from "@mui/icons-material/SearchOff";
+import Typography from "@mui/material/Typography";
+import Link from "next/link";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import Grid from "@mui/material/Grid";
 
 export default function NoData({
   title,
@@ -20,11 +20,11 @@ export default function NoData({
       <Grid
         container
         sx={{
-          alignItems: 'center',
-          flexDirection: 'column',
+          alignItems: "center",
+          flexDirection: "column",
         }}
       >
-        <SearchOffIcon sx={{ fontSize: '60px', fill: 'rgb(210, 210, 210)' }} />
+        <SearchOffIcon sx={{ fontSize: "60px", fill: "rgb(210, 210, 210)" }} />
         <Typography>No data found for this insight</Typography>
         {link && (
           <Link href={link.href}>

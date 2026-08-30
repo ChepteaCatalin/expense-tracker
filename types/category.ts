@@ -1,6 +1,6 @@
-import type { FormErrors } from './form';
+import type { FormErrors } from "./form";
 
-export type CategoryType = 'expense' | 'income';
+export type CategoryType = "expense" | "income";
 
 export interface Category {
   id: number;

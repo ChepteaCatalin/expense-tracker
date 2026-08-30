@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import { type ChangePasswordFormValues } from '../types';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { changePasswordSchema } from '../validation';
-import PasswordInput from '@/components/PasswordInput';
-import { startTransition, useActionState, useEffect, useState } from 'react';
-import { updatePassword } from '../actions';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import { type ChangePasswordFormValues } from "../types";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { changePasswordSchema } from "../validation";
+import PasswordInput from "@/components/PasswordInput";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import { updatePassword } from "../actions";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
 
 export default function Form() {
   const {
@@ -21,9 +21,9 @@ export default function Form() {
     formState: { errors, isSubmitted },
   } = useForm<ChangePasswordFormValues>({
     defaultValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmNewPassword: '',
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
     resolver: zodResolver(changePasswordSchema),
   });
@@ -48,7 +48,7 @@ export default function Form() {
     <Stack
       component="form"
       noValidate
-      onSubmit={handleSubmit(data => {
+      onSubmit={handleSubmit((data) => {
         startTransition(() => {
           setHideApiError(false);
           changePasswordAction(data);
@@ -63,9 +63,9 @@ export default function Form() {
         sx={{ mb: 1.5 }}
       />
       <PasswordInput
-        {...register('currentPassword', {
+        {...register("currentPassword", {
           onChange: () => {
-            if (isSubmitted) trigger('newPassword');
+            if (isSubmitted) trigger("newPassword");
           },
         })}
         label="Current Password"
@@ -73,9 +73,9 @@ export default function Form() {
         helperText={errors.currentPassword?.message}
       />
       <PasswordInput
-        {...register('newPassword', {
+        {...register("newPassword", {
           onChange: () => {
-            if (isSubmitted) trigger('confirmNewPassword');
+            if (isSubmitted) trigger("confirmNewPassword");
           },
         })}
         label="New Password"
@@ -83,7 +83,7 @@ export default function Form() {
         helperText={errors.newPassword?.message}
       />
       <PasswordInput
-        {...register('confirmNewPassword')}
+        {...register("confirmNewPassword")}
         label="Confirm New Password"
         error={!!errors.confirmNewPassword}
         helperText={errors.confirmNewPassword?.message}

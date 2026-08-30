@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import DeleteDialog from '@/components/DeleteDialog';
-import Button from '@mui/material/Button';
-import { startTransition, useActionState, useState } from 'react';
-import { deleteCategory } from '../actions';
-import { type CategoryType } from '@/types/category';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteDialog from "@/components/DeleteDialog";
+import Button from "@mui/material/Button";
+import { startTransition, useActionState, useState } from "react";
+import { deleteCategory } from "../actions";
+import { type CategoryType } from "@/types/category";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function DeleteCategory({
   id,
@@ -21,7 +21,7 @@ export default function DeleteCategory({
 
   const [actionError, deleteAction, isPending] = useActionState(
     deleteCategory,
-    '',
+    "",
   );
 
   return (

@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import DeleteDialog from '@/components/DeleteDialog';
-import Button from '@mui/material/Button';
-import { startTransition, useActionState, useState } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useSearchParams } from 'next/navigation';
+import DeleteDialog from "@/components/DeleteDialog";
+import Button from "@mui/material/Button";
+import { startTransition, useActionState, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useSearchParams } from "next/navigation";
 import type {
   DeleteTransactionAction,
   TransactionType,
-} from '@/types/transaction';
+} from "@/types/transaction";
 
 interface DeleteTransactionProps {
   id: number;
@@ -28,7 +28,7 @@ export default function DeleteTransaction({
 
   const [actionError, deleteAction, isPending] = useActionState(
     action.bind(null, searchParams.toString()),
-    '',
+    "",
   );
 
   return (

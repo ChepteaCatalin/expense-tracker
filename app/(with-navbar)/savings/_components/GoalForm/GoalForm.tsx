@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import type { SavingsGoal, SavingsGoalFormValues } from '@/types/savings';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import { FormProvider, useForm } from 'react-hook-form';
-import { savingsGoalSchema } from '../../validation';
-import Button from '@mui/material/Button';
-import SaveIcon from '@mui/icons-material/Save';
-import { normalizeAmountNumberInput } from '@/utils/input';
-import Grid from '@mui/material/Grid';
-import { startTransition, useActionState, useEffect, useState } from 'react';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import { createSavingsGoal, updateSavingsGoal } from '../../actions';
-import Divider from '@mui/material/Divider';
-import { fromCents } from '@/utils/currency';
-import type { CurrencyOption } from '@/types/currency';
-import dayjs from 'dayjs';
+import type { SavingsGoal, SavingsGoalFormValues } from "@/types/savings";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import { FormProvider, useForm } from "react-hook-form";
+import { savingsGoalSchema } from "../../validation";
+import Button from "@mui/material/Button";
+import SaveIcon from "@mui/icons-material/Save";
+import { normalizeAmountNumberInput } from "@/utils/input";
+import Grid from "@mui/material/Grid";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import { createSavingsGoal, updateSavingsGoal } from "../../actions";
+import Divider from "@mui/material/Divider";
+import { fromCents } from "@/utils/currency";
+import type { CurrencyOption } from "@/types/currency";
+import dayjs from "dayjs";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -88,7 +88,7 @@ export default function GoalForm({
         spacing={3}
         component="form"
         noValidate
-        onSubmit={handleSubmit(data => {
+        onSubmit={handleSubmit((data) => {
           startTransition(() => {
             setHideApiError(false);
             if (isEditMode) updateGoalAction({ ...data, id: goal.id });
@@ -97,7 +97,7 @@ export default function GoalForm({
         })}
       >
         <TextField
-          {...register('name')}
+          {...register("name")}
           label="Name"
           fullWidth
           required
@@ -112,9 +112,9 @@ export default function GoalForm({
         {currencyAutocomplete}
         <Grid container spacing={2}>
           <TextField
-            {...register('initialAmount', {
+            {...register("initialAmount", {
               setValueAs: normalizeAmountNumberInput,
-              onChange: () => trigger('targetAmount'),
+              onChange: () => trigger("targetAmount"),
             })}
             label="Initial Amount"
             required
@@ -124,7 +124,7 @@ export default function GoalForm({
             helperText={errors.initialAmount?.message}
             slotProps={{
               htmlInput: {
-                inputMode: 'decimal',
+                inputMode: "decimal",
                 onClick: (e: React.MouseEvent<HTMLInputElement>) =>
                   e.currentTarget.select(),
               },
@@ -133,9 +133,9 @@ export default function GoalForm({
             sx={{ flex: 1 }}
           />
           <TextField
-            {...register('targetAmount', {
+            {...register("targetAmount", {
               setValueAs: normalizeAmountNumberInput,
-              onChange: () => trigger('targetAmount'),
+              onChange: () => trigger("targetAmount"),
             })}
             label="Target Amount"
             required
@@ -145,7 +145,7 @@ export default function GoalForm({
             helperText={errors.targetAmount?.message}
             slotProps={{
               htmlInput: {
-                inputMode: 'decimal',
+                inputMode: "decimal",
                 onClick: (e: React.MouseEvent<HTMLInputElement>) =>
                   e.currentTarget.select(),
               },
@@ -156,7 +156,7 @@ export default function GoalForm({
         </Grid>
         {startDateField}
         <TextField
-          {...register('notes')}
+          {...register("notes")}
           label="Notes"
           autoComplete="off"
           spellCheck="false"
@@ -197,16 +197,16 @@ function getDefaultValues(
       name: goal.name,
       initialAmount: fromCents(goal.initialAmount),
       targetAmount: fromCents(goal.targetAmount),
-      notes: goal.notes || '',
+      notes: goal.notes || "",
       currency: defaultCurrency!,
       startDate: dayjs(goal.startDate).toISOString(),
     };
   }
 
   return {
-    name: '',
+    name: "",
     initialAmount: 0,
-    targetAmount: '',
-    notes: '',
+    targetAmount: "",
+    notes: "",
   } as SavingsGoalFormValues;
 }

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
-import { useState } from 'react';
-import AddEditDepositDialog from './AddEditDepositDialog';
-import type { SavingsDeposit } from '@/types/savings';
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import { useState } from "react";
+import AddEditDepositDialog from "./AddEditDepositDialog";
+import type { SavingsDeposit } from "@/types/savings";
 
 export default function EditDepositBtn({
   deposit,

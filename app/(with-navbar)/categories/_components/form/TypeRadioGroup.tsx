@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import { notFound, useSearchParams } from 'next/navigation';
-import { useEffect, useId } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import { isValidCategoryType } from '../../utils';
-import { type CategoryType } from '@/types/category';
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import { notFound, useSearchParams } from "next/navigation";
+import { useEffect, useId } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { isValidCategoryType } from "../../utils";
+import { type CategoryType } from "@/types/category";
 
 export default function TypeRadioGroup({
   isEditMode,
@@ -21,14 +21,14 @@ export default function TypeRadioGroup({
   error: boolean;
 }) {
   const searchParams = useSearchParams();
-  const urlCategoryType = searchParams.get('type');
+  const urlCategoryType = searchParams.get("type");
   const { setValue } = useFormContext();
 
   const radioGroupId = useId();
 
   useEffect(() => {
     if (!isEditMode) {
-      setValue('type', urlCategoryType);
+      setValue("type", urlCategoryType);
     }
   }, [isEditMode, setValue, urlCategoryType]);
 
@@ -47,7 +47,7 @@ export default function TypeRadioGroup({
         >
           <FormLabel
             id={radioGroupId}
-            sx={{ '&.Mui-disabled': { color: 'text.secondary' } }}
+            sx={{ "&.Mui-disabled": { color: "text.secondary" } }}
           >
             Type
           </FormLabel>
@@ -62,13 +62,13 @@ export default function TypeRadioGroup({
               control={<Radio />}
               label="Expense"
               value="expense"
-              disabled={disabled || editingCategoryType === 'income'}
+              disabled={disabled || editingCategoryType === "income"}
             />
             <FormControlLabel
               control={<Radio />}
               label="Income"
               value="income"
-              disabled={disabled || editingCategoryType === 'expense'}
+              disabled={disabled || editingCategoryType === "expense"}
             />
           </RadioGroup>
         </FormControl>

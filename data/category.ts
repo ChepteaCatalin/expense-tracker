@@ -1,17 +1,17 @@
-import 'server-only';
+import "server-only";
 
-import { sql } from '@/lib/neon';
+import { sql } from "@/lib/neon";
 import type {
   Category,
   CategoryFormValues,
   CategoryType,
-} from '@/types/category';
-import { cacheLife, cacheTag, updateTag } from 'next/cache';
-import { authGuard } from '@/lib/auth-utils';
-import { userTag } from '@/utils/cache';
+} from "@/types/category";
+import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { authGuard } from "@/lib/auth-utils";
+import { userTag } from "@/utils/cache";
 
 export const createCategory = authGuard(
-  session =>
+  (session) =>
     async (category: CategoryFormValues): Promise<Category> => {
       const result = await sql`
         INSERT INTO category (
@@ -32,7 +32,7 @@ export const createCategory = authGuard(
         RETURNING *
       `;
 
-      if (!result[0]) throw new Error('Failed to create category');
+      if (!result[0]) throw new Error("Failed to create category");
 
       updateTag(userTag(session.user.id)(`categories/type/${category.type}`));
 
@@ -41,7 +41,7 @@ export const createCategory = authGuard(
 );
 
 export const updateCategory = authGuard(
-  session =>
+  (session) =>
     async (category: Category): Promise<Category> => {
       const result = await sql`
         UPDATE category 
@@ -55,14 +55,14 @@ export const updateCategory = authGuard(
         RETURNING *
       `;
 
-      if (!result[0]) throw new Error('Category not found or update failed');
+      if (!result[0]) throw new Error("Category not found or update failed");
 
       const tag = userTag(session.user.id);
-      updateTag(tag(category.type === 'expense' ? 'expenses' : 'incomes'));
+      updateTag(tag(category.type === "expense" ? "expenses" : "incomes"));
       updateTag(tag(`categories/type/${category.type}`));
       updateTag(tag(`categories/id/${category.id}`));
-      updateTag(tag('expenses/categories'));
-      updateTag(tag('incomes/categories'));
+      updateTag(tag("expenses/categories"));
+      updateTag(tag("incomes/categories"));
       updateTag(tag(`expenses/category/${category.id}`));
       updateTag(tag(`incomes/category/${category.id}`));
 
@@ -71,31 +71,31 @@ export const updateCategory = authGuard(
 );
 
 export const deleteCategory = authGuard(
-  session => async (categoryId: number) => {
+  (session) => async (categoryId: number) => {
     const result = await sql`
       DELETE FROM category
       WHERE id = ${categoryId} AND user_id = ${session.user.id}
       RETURNING id, type
     `;
 
-    if (!result[0]) throw new Error('Category not found or delete failed');
+    if (!result[0]) throw new Error("Category not found or delete failed");
 
     const tag = userTag(session.user.id);
-    updateTag(tag(result[0].type === 'expense' ? 'expenses' : 'incomes'));
+    updateTag(tag(result[0].type === "expense" ? "expenses" : "incomes"));
     updateTag(tag(`categories/type/${result[0].type}`));
     updateTag(tag(`categories/id/${categoryId}`));
-    updateTag(tag('expenses/categories'));
-    updateTag(tag('incomes/categories'));
+    updateTag(tag("expenses/categories"));
+    updateTag(tag("incomes/categories"));
     updateTag(tag(`expenses/category/${categoryId}`));
     updateTag(tag(`incomes/category/${categoryId}`));
   },
 );
 
 export const getAllCategoriesByType = authGuard(
-  session =>
+  (session) =>
     async (type: CategoryType): Promise<Category[] | Array<never>> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       cacheTag(userTag(session.user.id)(`categories/type/${type}`));
 
       const result = await sql`
@@ -120,10 +120,10 @@ export const getAllCategoriesByType = authGuard(
 );
 
 export const getCategoryById = authGuard(
-  session =>
+  (session) =>
     async (categoryId: number): Promise<Category | undefined> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       cacheTag(userTag(session.user.id)(`categories/id/${categoryId}`));
 
       const result = await sql`
@@ -146,10 +146,10 @@ export const getCategoryById = authGuard(
 );
 
 export const getCategoryNameById = authGuard(
-  session =>
+  (session) =>
     async (categoryId: number): Promise<string | undefined> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       cacheTag(userTag(session.user.id)(`categories/id/${categoryId}`));
 
       const result = await sql`

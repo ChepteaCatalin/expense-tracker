@@ -1,6 +1,6 @@
-import { type CategoryIcon } from '@/types/category';
-import { Controller, useWatch } from 'react-hook-form';
-import Box from '@mui/material/Box';
+import { type CategoryIcon } from "@/types/category";
+import { Controller, useWatch } from "react-hook-form";
+import Box from "@mui/material/Box";
 
 export default function Icon({
   icon,
@@ -9,9 +9,9 @@ export default function Icon({
   icon: CategoryIcon;
   disabled: boolean;
 }) {
-  const strokeColor = useWatch({ name: 'strokeColor' });
-  const backgroundColor = useWatch({ name: 'backgroundColor' });
-  const isSelected = useWatch({ name: 'icon' }) === icon.src;
+  const strokeColor = useWatch({ name: "strokeColor" });
+  const backgroundColor = useWatch({ name: "backgroundColor" });
+  const isSelected = useWatch({ name: "icon" }) === icon.src;
 
   return (
     <Controller
@@ -20,24 +20,24 @@ export default function Icon({
         <Box
           sx={{
             p: 0.5,
-            borderRadius: '8px',
+            borderRadius: "8px",
             ...(isSelected && {
-              backgroundColor: 'rgba(30, 215, 96, 0.10)',
+              backgroundColor: "rgba(30, 215, 96, 0.10)",
               boxShadow:
-                '0 2px 6px rgba(30, 215, 96, 0.14), inset 0 0 0 1px rgba(30, 215, 96, 0.28)',
+                "0 2px 6px rgba(30, 215, 96, 0.14), inset 0 0 0 1px rgba(30, 215, 96, 0.28)",
             }),
           }}
         >
           <icon.Component
             onClick={() => !disabled && onChange(icon.src)}
             style={{
-              display: 'block',
-              borderRadius: '50%',
-              padding: '3px',
-              boxSizing: 'content-box',
-              cursor: 'pointer',
+              display: "block",
+              borderRadius: "50%",
+              padding: "3px",
+              boxSizing: "content-box",
+              cursor: "pointer",
               ...(isSelected ? { backgroundColor, fill: strokeColor } : {}),
-              ...(disabled ? { cursor: 'not-allowed' } : {}),
+              ...(disabled ? { cursor: "not-allowed" } : {}),
             }}
           />
         </Box>

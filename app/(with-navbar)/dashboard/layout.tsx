@@ -1,10 +1,10 @@
-import Heading from '@/components/Heading';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import Heading from "@/components/Heading";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 export const metadata = {
-  title: 'Dashboard',
-  description: 'View your financial overview and insights.',
+  title: "Dashboard",
+  description: "View your financial overview and insights.",
 };
 
 export default function DashboardLayout({

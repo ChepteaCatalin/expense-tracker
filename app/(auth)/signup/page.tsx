@@ -1,18 +1,18 @@
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
-import Logo from '../_components/Logo';
-import Form from './Form';
-import Link from 'next/link';
-import linkStyles from '../_components/Link.module.css';
-import Box from '@mui/material/Box';
-import GitHubLink from '@/components/GitHubLink';
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
+import Logo from "../_components/Logo";
+import Form from "./Form";
+import Link from "next/link";
+import linkStyles from "../_components/Link.module.css";
+import Box from "@mui/material/Box";
+import GitHubLink from "@/components/GitHubLink";
 
 const spacing = 2.5;
 
 export const metadata = {
-  title: 'Sign Up',
-  description: 'Create an account to manage your finances with Expense Tracker',
+  title: "Sign Up",
+  description: "Create an account to manage your finances with Expense Tracker",
 };
 
 export default function SignUpPage() {
@@ -21,9 +21,9 @@ export default function SignUpPage() {
       component="main"
       container
       sx={{
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         minHeight: `calc(100vh - ${2 * spacing * 8}px)`,
         my: spacing,
       }}
@@ -31,17 +31,17 @@ export default function SignUpPage() {
       <Logo />
       <Card
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           p: spacing,
           mx: spacing,
           gap: spacing,
-          borderRadius: '10px',
-          maxWidth: '400px',
+          borderRadius: "10px",
+          maxWidth: "400px",
         }}
       >
-        <Typography component="h1" sx={{ fontWeight: 700, fontSize: '1.5rem' }}>
+        <Typography component="h1" sx={{ fontWeight: 700, fontSize: "1.5rem" }}>
           Sign Up
         </Typography>
         <Form />
@@ -52,7 +52,7 @@ export default function SignUpPage() {
           </Link>
         </Grid>
       </Card>
-      <Box sx={{ mt: 2, textAlign: 'center' }}>
+      <Box sx={{ mt: 2, textAlign: "center" }}>
         <GitHubLink />
       </Box>
     </Grid>

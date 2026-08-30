@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import {
   startTransition,
   useId,
   useState,
   useActionState,
   useEffect,
-} from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
-import DialogContent from '@mui/material/DialogContent';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContentText from '@mui/material/DialogContentText';
-import { reopenSavingsGoal } from '../../../../actions';
+} from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import DialogContent from "@mui/material/DialogContent";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContentText from "@mui/material/DialogContentText";
+import { reopenSavingsGoal } from "../../../../actions";
 
 export function ReopenGoalDialog({
   id,
@@ -26,7 +26,7 @@ export function ReopenGoalDialog({
 }) {
   const [error, reopenGoalAction, isPending] = useActionState(
     reopenSavingsGoal,
-    '',
+    "",
   );
 
   const titleId = useId();

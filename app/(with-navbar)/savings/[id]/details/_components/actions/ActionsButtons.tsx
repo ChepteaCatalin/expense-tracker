@@ -1,13 +1,13 @@
-import EditIcon from '@mui/icons-material/Edit';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import DeleteGoalBtn from './DeleteGoalBtn';
-import Link from 'next/link';
-import type { SavingsGoal } from '@/types/savings';
-import CompleteGoalBtn from './CompleteGoalBtn';
-import ReopenGoalBtn from './ReopenGoalBtn';
-import Stack from '@mui/material/Stack';
+import EditIcon from "@mui/icons-material/Edit";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import DeleteGoalBtn from "./DeleteGoalBtn";
+import Link from "next/link";
+import type { SavingsGoal } from "@/types/savings";
+import CompleteGoalBtn from "./CompleteGoalBtn";
+import ReopenGoalBtn from "./ReopenGoalBtn";
+import Stack from "@mui/material/Stack";
 
 export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
   return (
@@ -15,10 +15,10 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       sx={{
         p: 2,
         borderRadius: 3,
-        border: '1px solid',
-        borderColor: 'divider',
+        border: "1px solid",
+        borderColor: "divider",
         background:
-          'linear-gradient(145deg, color-mix(in srgb, var(--mui-palette-primary-main) 4%, transparent), transparent 65%)',
+          "linear-gradient(145deg, color-mix(in srgb, var(--mui-palette-primary-main) 4%, transparent), transparent 65%)",
       }}
     >
       <Typography
@@ -30,11 +30,11 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       </Typography>
       <Stack direction="row" spacing={1.5}>
         {goal.isCompleted ? (
-          <Box sx={{ width: '100%' }}>
+          <Box sx={{ width: "100%" }}>
             <EditGoalBtn disabled />
           </Box>
         ) : (
-          <Link href={`/savings/${goal.id}/edit`} style={{ width: '100%' }}>
+          <Link href={`/savings/${goal.id}/edit`} style={{ width: "100%" }}>
             <EditGoalBtn />
           </Link>
         )}

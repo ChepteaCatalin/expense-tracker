@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import DeleteDialog from '@/components/DeleteDialog';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
-import { useActionState, useState, startTransition } from 'react';
-import { deleteSavingsGoal } from '../../../../actions';
+import DeleteDialog from "@/components/DeleteDialog";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Button from "@mui/material/Button";
+import { useActionState, useState, startTransition } from "react";
+import { deleteSavingsGoal } from "../../../../actions";
 
 export default function DeleteGoalBtn({
   id,
@@ -18,7 +18,7 @@ export default function DeleteGoalBtn({
 
   const [actionError, deleteAction, isPending] = useActionState(
     deleteSavingsGoal,
-    '',
+    "",
   );
 
   return (

@@ -1,4 +1,4 @@
-export function toCents(amount: number | '') {
+export function toCents(amount: number | "") {
   return Math.round(+amount * 100);
 }
 
@@ -7,7 +7,7 @@ export function fromCents(amount: number) {
 }
 
 export function readableCurrency(value: number) {
-  return new Intl.NumberFormat('en-US')
+  return new Intl.NumberFormat("en-US")
     .format(fromCents(value))
-    .replace(/,/g, ' ');
+    .replace(/,/g, " ");
 }

@@ -1,5 +1,5 @@
-import Skeleton from '@mui/material/Skeleton';
-import InsightCard from '../_components/InsightCard';
+import Skeleton from "@mui/material/Skeleton";
+import InsightCard from "../_components/InsightCard";
 
 export default function NetIncomeLoading() {
   return (
@@ -7,7 +7,7 @@ export default function NetIncomeLoading() {
       <Skeleton
         variant="rectangular"
         height={350}
-        sx={{ borderRadius: '4px' }}
+        sx={{ borderRadius: "4px" }}
       />
     </InsightCard>
   );

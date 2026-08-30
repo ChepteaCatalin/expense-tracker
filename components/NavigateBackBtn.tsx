@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Button from '@mui/material/Button';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { useRouter } from 'next/navigation';
-import type { SxProps, Theme } from '@mui/material/styles';
+import Button from "@mui/material/Button";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { useRouter } from "next/navigation";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 export default function NavigateBackBtn({
   pageName,
-  fallbackHref = '/',
+  fallbackHref = "/",
   sx,
 }: {
   pageName?: string;
@@ -30,14 +30,14 @@ export default function NavigateBackBtn({
       sx={{
         py: 0,
         px: 0.5,
-        '& .MuiButton-startIcon': { mr: 0.5 },
+        "& .MuiButton-startIcon": { mr: 0.5 },
         mb: 0.5,
         ...sx,
       }}
       startIcon={<ChevronLeftIcon />}
       onClick={navigateBack}
     >
-      {pageName ? `Back to ${pageName}` : 'Back'}
+      {pageName ? `Back to ${pageName}` : "Back"}
     </Button>
   );
 }

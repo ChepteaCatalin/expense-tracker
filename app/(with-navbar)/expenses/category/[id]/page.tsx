@@ -1,12 +1,12 @@
-import { Suspense } from 'react';
-import Box from '@mui/material/Box';
-import CategoryExpensesList from './_components/CategoryExpensesList';
-import { type TransactionByCategorySearchParams } from '@/types/transaction';
-import CategoryExpensesOverview from './_components/CategoryExpensesOverview';
-import Heading from '@/components/transactions/Heading';
-import Skeleton from '@mui/material/Skeleton';
-import CategoryTransactionsListFallback from '@/components/transactions/CategoryTransactionsListFallback';
-import NewExpenseFab from '../../_components/NewExpenseFab';
+import { Suspense } from "react";
+import Box from "@mui/material/Box";
+import CategoryExpensesList from "./_components/CategoryExpensesList";
+import { type TransactionByCategorySearchParams } from "@/types/transaction";
+import CategoryExpensesOverview from "./_components/CategoryExpensesOverview";
+import Heading from "@/components/transactions/Heading";
+import Skeleton from "@mui/material/Skeleton";
+import CategoryTransactionsListFallback from "@/components/transactions/CategoryTransactionsListFallback";
+import NewExpenseFab from "../../_components/NewExpenseFab";
 
 export default function ExpensesCategoryPage({
   params,
@@ -24,7 +24,7 @@ export default function ExpensesCategoryPage({
             variant="rectangular"
             width="100%"
             height={209}
-            sx={{ borderRadius: '12px' }}
+            sx={{ borderRadius: "12px" }}
           />
         }
       >

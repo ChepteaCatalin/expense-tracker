@@ -1,4 +1,4 @@
-import { createAuthClient } from 'better-auth/react';
+import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
@@ -6,6 +6,6 @@ export const authClient = createAuthClient({
 
 export function signInWithGoogle() {
   return authClient.signIn.social({
-    provider: 'google',
+    provider: "google",
   });
 }

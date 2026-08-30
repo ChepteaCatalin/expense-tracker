@@ -1,9 +1,9 @@
-import 'server-only';
+import "server-only";
 
-import { sql } from '@/lib/neon';
-import { authGuard } from '@/lib/auth-utils';
-import { cacheLife, cacheTag } from 'next/cache';
-import { userTag } from '@/utils/cache';
+import { sql } from "@/lib/neon";
+import { authGuard } from "@/lib/auth-utils";
+import { cacheLife, cacheTag } from "next/cache";
+import { userTag } from "@/utils/cache";
 import type {
   BreakdownChartData,
   CategoryBreakdown,
@@ -11,10 +11,10 @@ import type {
   MonthlyMetric,
   SavingsChartData,
   TotalsMetrics,
-} from '@/types/dashboard';
+} from "@/types/dashboard";
 
 export const getTotals = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -22,10 +22,10 @@ export const getTotals = authGuard(
       from: string;
       to: string;
     }): Promise<TotalsMetrics> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       const tag = userTag(session.user.id);
-      cacheTag(tag('expenses'), tag('incomes'), tag('savings'));
+      cacheTag(tag("expenses"), tag("incomes"), tag("savings"));
 
       const [totalsResult, savingsResult] = await Promise.all([
         sql`
@@ -72,7 +72,7 @@ export const getTotals = authGuard(
       return {
         expenses: +row.expenses,
         income: +row.income,
-        savingsByCurrency: savingsResult.map(r => ({
+        savingsByCurrency: savingsResult.map((r) => ({
           currency: r.currency as string,
           total: +r.total,
         })),
@@ -81,7 +81,7 @@ export const getTotals = authGuard(
 );
 
 export const getMonthlyMetrics = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -89,10 +89,10 @@ export const getMonthlyMetrics = authGuard(
       from: string;
       to: string;
     }): Promise<MonthlyMetric[]> => {
-      'use cache';
-      cacheLife('max');
+      "use cache";
+      cacheLife("max");
       const tag = userTag(session.user.id);
-      cacheTag(tag('expenses'), tag('incomes'));
+      cacheTag(tag("expenses"), tag("incomes"));
 
       const rows = await sql`
         SELECT
@@ -125,7 +125,7 @@ export const getMonthlyMetrics = authGuard(
         ORDER BY months.month
       `;
 
-      return rows.map(r => ({
+      return rows.map((r) => ({
         month: r.month as string,
         income: +r.income,
         expenses: +r.expenses,
@@ -135,7 +135,7 @@ export const getMonthlyMetrics = authGuard(
 );
 
 export const getSavingsChartData = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -143,9 +143,9 @@ export const getSavingsChartData = authGuard(
       from: string;
       to: string;
     }): Promise<SavingsChartData> => {
-      'use cache';
-      cacheLife('max');
-      cacheTag(userTag(session.user.id)('savings'));
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("savings"));
 
       const rows = await sql`
         WITH months AS (
@@ -197,7 +197,9 @@ export const getSavingsChartData = authGuard(
         ORDER BY currencies.currency, months.month
       `;
 
-      const months = Array.from(new Set(rows.map(row => row.month as string)));
+      const months = Array.from(
+        new Set(rows.map((row) => row.month as string)),
+      );
       const seriesMap = new Map<string, number[]>();
 
       for (const row of rows) {
@@ -219,7 +221,7 @@ export const getSavingsChartData = authGuard(
 );
 
 export const getExpenseCategoryBreakdown = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -227,9 +229,9 @@ export const getExpenseCategoryBreakdown = authGuard(
       from: string;
       to: string;
     }): Promise<BreakdownChartData> => {
-      'use cache';
-      cacheLife('max');
-      cacheTag(userTag(session.user.id)('expenses'));
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("expenses"));
 
       const rows = await sql`
         WITH category_totals AS (
@@ -295,7 +297,7 @@ export const getExpenseCategoryBreakdown = authGuard(
 );
 
 export const getIncomeCategoryBreakdown = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -303,9 +305,9 @@ export const getIncomeCategoryBreakdown = authGuard(
       from: string;
       to: string;
     }): Promise<BreakdownChartData> => {
-      'use cache';
-      cacheLife('max');
-      cacheTag(userTag(session.user.id)('incomes'));
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("incomes"));
 
       const rows = await sql`
         WITH category_totals AS (
@@ -371,7 +373,7 @@ export const getIncomeCategoryBreakdown = authGuard(
 );
 
 export const getExpenseCategoryTreemapData = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -379,9 +381,9 @@ export const getExpenseCategoryTreemapData = authGuard(
       from: string;
       to: string;
     }): Promise<CategoryTreemapNode[]> => {
-      'use cache';
-      cacheLife('max');
-      cacheTag(userTag(session.user.id)('expenses'));
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("expenses"));
 
       const rows = await sql`
         SELECT
@@ -400,7 +402,7 @@ export const getExpenseCategoryTreemapData = authGuard(
         ORDER BY SUM(e.amount) DESC, LOWER(c.name)
       `;
 
-      return rows.map(row => ({
+      return rows.map((row) => ({
         categoryId: +row.category_id,
         categoryName: row.category_name as string,
         backgroundColor: row.background_color as string,
@@ -410,7 +412,7 @@ export const getExpenseCategoryTreemapData = authGuard(
 );
 
 export const getIncomeCategoryTreemapData = authGuard(
-  session =>
+  (session) =>
     async ({
       from,
       to,
@@ -418,9 +420,9 @@ export const getIncomeCategoryTreemapData = authGuard(
       from: string;
       to: string;
     }): Promise<CategoryTreemapNode[]> => {
-      'use cache';
-      cacheLife('max');
-      cacheTag(userTag(session.user.id)('incomes'));
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("incomes"));
 
       const rows = await sql`
         SELECT
@@ -439,7 +441,7 @@ export const getIncomeCategoryTreemapData = authGuard(
         ORDER BY SUM(i.amount) DESC, LOWER(c.name)
       `;
 
-      return rows.map(row => ({
+      return rows.map((row) => ({
         categoryId: +row.category_id,
         categoryName: row.category_name as string,
         backgroundColor: row.background_color as string,

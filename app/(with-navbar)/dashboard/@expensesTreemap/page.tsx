@@ -1,16 +1,16 @@
-import { getSession } from '@/data/auth';
-import InsightCard from '../_components/InsightCard';
-import TreemapChart from '../_components/TreemapChart';
-import { getValidNormalizedSearchParams } from '../utils';
+import { getSession } from "@/data/auth";
+import InsightCard from "../_components/InsightCard";
+import TreemapChart from "../_components/TreemapChart";
+import { getValidNormalizedSearchParams } from "../utils";
 import type {
   CategoryTreemapNode,
   DashboardSearchParams,
-} from '@/types/dashboard';
-import { getExpenseCategoryTreemapData } from '@/data/dashboard';
-import { UnauthorizedError } from '@/utils/error';
-import { redirect } from 'next/navigation';
-import NoData from '../_components/NoData';
-import AddExpensesLinkBtn from '../_components/AddExpensesLinkBtn';
+} from "@/types/dashboard";
+import { getExpenseCategoryTreemapData } from "@/data/dashboard";
+import { UnauthorizedError } from "@/utils/error";
+import { redirect } from "next/navigation";
+import NoData from "../_components/NoData";
+import AddExpensesLinkBtn from "../_components/AddExpensesLinkBtn";
 
 export default async function ExpensesTreemap({
   searchParams,
@@ -30,7 +30,7 @@ export default async function ExpensesTreemap({
       getSession(),
     ]);
   } catch (error) {
-    if (error instanceof UnauthorizedError) redirect('/signin');
+    if (error instanceof UnauthorizedError) redirect("/signin");
     throw error;
   }
   const currency = session?.user.currency;

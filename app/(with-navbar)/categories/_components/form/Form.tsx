@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import TextField from '@mui/material/TextField';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { type Category, type CategoryFormValues } from '@/types/category';
+import TextField from "@mui/material/TextField";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { type Category, type CategoryFormValues } from "@/types/category";
 import {
   startTransition,
   Suspense,
   useActionState,
   useEffect,
   useState,
-} from 'react';
-import Grid from '@mui/material/Grid';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { categorySchema } from '../../validation';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { categoryIcons } from '@/utils/category-icons';
-import Icon from './Icon';
-import ColorInput from './ColorInput';
-import Button from '@mui/material/Button';
-import { createCategory, updateCategory } from '../../actions';
-import Divider from '@mui/material/Divider';
-import ApiFormErrorAlert from '@/components/ApiFormErrorAlert';
-import SaveIcon from '@mui/icons-material/Save';
-import TypeRadioGroup from './TypeRadioGroup';
-import Skeleton from '@mui/material/Skeleton';
+} from "react";
+import Grid from "@mui/material/Grid";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { categorySchema } from "../../validation";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { categoryIcons } from "@/utils/category-icons";
+import Icon from "./Icon";
+import ColorInput from "./ColorInput";
+import Button from "@mui/material/Button";
+import { createCategory, updateCategory } from "../../actions";
+import Divider from "@mui/material/Divider";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import SaveIcon from "@mui/icons-material/Save";
+import TypeRadioGroup from "./TypeRadioGroup";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function Form({ category }: { category?: Category }) {
   const isEditMode = !!category;
@@ -81,17 +81,17 @@ export default function Form({ category }: { category?: Category }) {
         spacing={3}
         component="form"
         noValidate
-        onSubmit={handleSubmit(data => {
+        onSubmit={handleSubmit((data) => {
           startTransition(() => {
             setHideApiError(false);
             if (isEditMode) updateCategoryAction({ ...category, ...data });
             else createCategoryAction(data);
           });
         })}
-        sx={{ flexDirection: 'column' }}
+        sx={{ flexDirection: "column" }}
       >
         <TextField
-          {...register('name')}
+          {...register("name")}
           label="Name"
           fullWidth
           required
@@ -111,18 +111,18 @@ export default function Form({ category }: { category?: Category }) {
           />
         </Suspense>
         <Box sx={{ mt: -1.125 }}>
-          <Typography sx={{ color: 'text.secondary' }}>Icon</Typography>
+          <Typography sx={{ color: "text.secondary" }}>Icon</Typography>
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, 54px)',
-              maxHeight: '264px',
-              overflowY: 'auto',
-              justifyContent: 'center',
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, 54px)",
+              maxHeight: "264px",
+              overflowY: "auto",
+              justifyContent: "center",
               gap: 2,
             }}
           >
-            {categoryIcons.map(icon => (
+            {categoryIcons.map((icon) => (
               <Icon key={icon.src} icon={icon} disabled={disabledForm} />
             ))}
           </Box>
@@ -184,10 +184,10 @@ function getDefaultValues(category?: Category): CategoryFormValues {
     };
 
   return {
-    name: '',
-    icon: '/category-icons/other.svg',
-    strokeColor: 'rgb(30, 215, 96)',
-    backgroundColor: 'rgba(30, 215, 96, 0.12)',
+    name: "",
+    icon: "/category-icons/other.svg",
+    strokeColor: "rgb(30, 215, 96)",
+    backgroundColor: "rgba(30, 215, 96, 0.12)",
   } as CategoryFormValues;
 }
 
@@ -199,7 +199,7 @@ function TypeRadioGroupSkeleton() {
         variant="rectangular"
         height={42}
         width="35%"
-        sx={{ borderRadius: '4px' }}
+        sx={{ borderRadius: "4px" }}
       />
     </Box>
   );

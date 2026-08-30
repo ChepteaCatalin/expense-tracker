@@ -1,40 +1,40 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
-import nextVitals from 'eslint-config-next/core-web-vitals';
-import nextTs from 'eslint-config-next/typescript';
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
     rules: {
-      'no-restricted-imports': [
-        'error',
+      "no-restricted-imports": [
+        "error",
         {
           paths: [
             //TODO: remove this once `optimizePackageImports` is no longer experimental
             {
-              name: '@mui/icons-material',
+              name: "@mui/icons-material",
               message:
-                'Import specific icons from @mui/icons-material/IconName instead of destructuring from the main package.',
+                "Import specific icons from @mui/icons-material/IconName instead of destructuring from the main package.",
             },
             // TODO: remove this once `optimizePackageImports` is no longer experimental
             {
-              name: '@mui/material',
+              name: "@mui/material",
               message:
-                'Import specific components from @mui/material/ComponentName instead of destructuring from the main package.',
+                "Import specific components from @mui/material/ComponentName instead of destructuring from the main package.",
             },
           ],
         },
       ],
-      'no-var': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
+      "no-var": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        { prefer: "type-imports", fixStyle: "inline-type-imports" },
       ],
     },
   },
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);
 
 export default eslintConfig;

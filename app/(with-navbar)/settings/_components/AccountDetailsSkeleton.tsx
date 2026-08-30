@@ -1,6 +1,6 @@
-import Divider from '@mui/material/Divider';
-import Skeleton from '@mui/material/Skeleton';
-import Stack from '@mui/material/Stack';
+import Divider from "@mui/material/Divider";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 
 export default function AccountDetailsSkeleton() {
   return (
@@ -8,7 +8,7 @@ export default function AccountDetailsSkeleton() {
       <Stack
         direction="row"
         spacing={2}
-        sx={{ alignItems: 'center', height: '60px' }}
+        sx={{ alignItems: "center", height: "60px" }}
       >
         <Skeleton variant="circular" width={56} height={56} />
         <Stack spacing={0.5} sx={{ flex: 1 }}>
@@ -20,7 +20,7 @@ export default function AccountDetailsSkeleton() {
       <Skeleton
         variant="rectangular"
         height={40}
-        sx={{ borderRadius: '4px' }}
+        sx={{ borderRadius: "4px" }}
       />
     </Stack>
   );

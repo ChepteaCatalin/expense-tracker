@@ -1,8 +1,8 @@
-import type { DashboardSearchParams } from '@/types/dashboard';
-import { parseURLDate } from '@/utils/url';
-import dayjs from 'dayjs';
-import { notFound } from 'next/navigation';
-import { connection } from 'next/server';
+import type { DashboardSearchParams } from "@/types/dashboard";
+import { parseURLDate } from "@/utils/url";
+import dayjs from "dayjs";
+import { notFound } from "next/navigation";
+import { connection } from "next/server";
 
 export async function getValidNormalizedSearchParams(
   searchParams: Promise<DashboardSearchParams>,
@@ -24,7 +24,7 @@ export function validSearchParams({ from, to }: DashboardSearchParams) {
   return (
     fromDate.isValid() &&
     toDate.isValid() &&
-    (toDate.isAfter(fromDate, 'day') || toDate.isSame(fromDate, 'day'))
+    (toDate.isAfter(fromDate, "day") || toDate.isSame(fromDate, "day"))
   );
 }
 
@@ -34,8 +34,8 @@ export function normalizedSearchParams({
 }: DashboardSearchParams): DashboardSearchParams {
   if (!from && !to)
     return {
-      from: dayjs().startOf('year').format('YYYY-MM-DD'),
-      to: dayjs().format('YYYY-MM-DD'),
+      from: dayjs().startOf("year").format("YYYY-MM-DD"),
+      to: dayjs().format("YYYY-MM-DD"),
     };
 
   return { from, to };

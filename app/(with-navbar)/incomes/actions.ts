@@ -1,21 +1,21 @@
-'use server';
+"use server";
 
 import {
   type TransactionFormErrors,
   type TransactionFormValues,
   type TransactionFormValuesWithId,
-} from '@/types/transaction';
-import { transactionSchema } from '@/utils/validation';
+} from "@/types/transaction";
+import { transactionSchema } from "@/utils/validation";
 import {
   createIncome as createNewIncome,
   updateIncome as updateExistingIncome,
   deleteIncome as deleteExistingIncome,
-} from '@/data/income';
-import { toCents } from '@/utils/currency';
-import { getFormErrors } from '@/lib/zod';
-import dayjs from 'dayjs';
-import { redirect } from 'next/navigation';
-import { UnauthorizedError } from '@/utils/error';
+} from "@/data/income";
+import { toCents } from "@/utils/currency";
+import { getFormErrors } from "@/lib/zod";
+import dayjs from "dayjs";
+import { redirect } from "next/navigation";
+import { UnauthorizedError } from "@/utils/error";
 
 export async function createIncome(
   searchParams: string,
@@ -31,17 +31,17 @@ export async function createIncome(
       amount: toCents(income.amount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to add the income' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to add the income" };
   }
 
-  if (searchParams.includes('sortBy')) {
+  if (searchParams.includes("sortBy")) {
     redirect(toIncomesCategoryPage(searchParams, +income.categoryId));
   } else {
     redirect(
       searchParams
         ? `/incomes/categories?${searchParams}`
-        : `/incomes/categories?month=${dayjs().format('YYYY-MM-DD')}`,
+        : `/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`,
     );
   }
 }
@@ -65,8 +65,8 @@ export async function updateIncome(
       amount: toCents(income.amount),
     });
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return { api: 'Failed to edit the income' };
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return { api: "Failed to edit the income" };
   }
 
   redirect(toIncomesCategoryPage(searchParams, +income.categoryId));
@@ -80,8 +80,8 @@ export async function deleteIncome(
   try {
     var { categoryId } = await deleteExistingIncome(id);
   } catch (err: any) {
-    if (err instanceof UnauthorizedError) redirect('/signin');
-    return 'Failed to delete income';
+    if (err instanceof UnauthorizedError) redirect("/signin");
+    return "Failed to delete income";
   }
 
   redirect(toIncomesCategoryPage(searchParams, categoryId));
@@ -90,5 +90,5 @@ export async function deleteIncome(
 function toIncomesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/incomes/category/${categoryId}?${searchParams}`
-    : `/incomes/categories?month=${dayjs().format('YYYY-MM-DD')}`;
+    : `/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`;
 }
