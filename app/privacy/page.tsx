@@ -7,11 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import NextLink from "next/link";
 import Logo from "../(auth)/_components/Logo";
-import linkStyles from "../(auth)/_components/Link.module.css";
 import Heading from "@/components/Heading";
 import GitHubLink from "@/components/GitHubLink";
+import BackToApp from "./BackToApp";
 
 export const metadata = {
   title: "Privacy Policy",
@@ -309,9 +308,7 @@ export default function PrivacyPolicyPage() {
           fontWeight: 600,
         }}
       >
-        <NextLink href="/signin" className={linkStyles.link}>
-          Back to the app
-        </NextLink>
+        <BackToApp />
       </Box>
       <GitHubLink />
     </Box>
