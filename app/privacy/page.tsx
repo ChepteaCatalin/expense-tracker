@@ -73,7 +73,6 @@ export default function PrivacyPolicyPage() {
       <Heading
         title="Privacy Policy"
         subtitle={`Last updated: ${LAST_UPDATED}`}
-        sx={{ mb: 4 }}
       />
 
       <Section title="Who we are">
