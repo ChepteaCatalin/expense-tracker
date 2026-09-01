@@ -1,4 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function GitHubLink() {
   return (
@@ -6,7 +7,10 @@ export default function GitHubLink() {
       href="https://github.com/ChepteaCatalin/expense-tracker"
       target="_blank"
       rel="noopener noreferrer"
-      className={buttonVariants({ variant: "outline", size: "lg" })}
+      className={cn(
+        buttonVariants({ variant: "outline", size: "lg" }),
+        "border", // without this the button border is not visible in light mode
+      )}
     >
       <GithubIcon data-icon="inline-start" />
       View source code on GitHub
