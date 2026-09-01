@@ -1,6 +1,10 @@
 "use server";
 
-import { changePassword, signOut as signOutUser } from "@/data/auth";
+import {
+  changePassword,
+  deleteUser,
+  signOut as signOutUser,
+} from "@/data/auth";
 import { redirect } from "next/navigation";
 import {
   type ChangeCurrencyError,
@@ -55,4 +59,21 @@ export async function updateCurrency(_: ChangeCurrencyError, currency: string) {
   }
 
   return {};
+}
+
+export async function deleteAccount(): Promise<string> {
+  try {
+    await deleteUser();
+  } catch (error) {
+    if (error instanceof APIError) {
+      if (error.body?.code === "SESSION_EXPIRED") {
+        return "For security reasons, this action requires a recent sign-in. Please sign out, sign back in, and try again.";
+      }
+      return error.message;
+    }
+    return "Failed to delete account";
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/signup");
 }

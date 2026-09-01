@@ -62,3 +62,10 @@ export async function changePassword({
     headers: await headers(),
   });
 }
+
+export async function deleteUser() {
+  return auth.api.deleteUser({
+    body: {},
+    headers: await headers(),
+  });
+}

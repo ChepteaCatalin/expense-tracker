@@ -27,6 +27,9 @@ export const auth = betterAuth({
         defaultValue: "MDL",
       },
     },
+    deleteUser: {
+      enabled: true,
+    },
   },
   session: {
     cookieCache: {

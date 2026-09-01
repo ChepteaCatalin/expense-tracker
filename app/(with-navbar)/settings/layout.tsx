@@ -10,10 +10,12 @@ export default function SettingsLayout({
   account,
   password,
   preferences,
+  privacy,
 }: {
   account: React.ReactNode;
   password: React.ReactNode;
   preferences: React.ReactNode;
+  privacy: React.ReactNode;
 }) {
   return (
     <div className="mx-auto box-content max-w-150">
@@ -22,6 +24,7 @@ export default function SettingsLayout({
         {account}
         {password}
         {preferences}
+        {privacy}
         <div className="mx-auto">
           <GitHubLink />
         </div>

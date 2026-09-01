@@ -51,6 +51,16 @@ export default function SignInPage() {
             Sign Up
           </Link>
         </Grid>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.secondary", textAlign: "center", mt: -0.75 }}
+        >
+          By signing in, you agree to our{" "}
+          <Link href="/privacy" className={linkStyles.link}>
+            Privacy Policy
+          </Link>
+          .
+        </Typography>
       </Card>
       <Box sx={{ mt: 2, textAlign: "center" }}>
         <GitHubLink />
