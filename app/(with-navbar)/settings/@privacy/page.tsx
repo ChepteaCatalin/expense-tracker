@@ -1,49 +1,47 @@
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import DownloadIcon from "@mui/icons-material/Download";
-import NextLink from "next/link";
-import linkStyles from "@/app/(auth)/_components/Link.module.css";
+import Link from "next/link";
 import Section from "../_components/Section";
-import DeleteAccountBtn from "./DeleteAccountBtn";
+import { Separator } from "@/components/ui/separator";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Download } from "lucide-react";
+import { DeleteAccount } from "./DeleteAccount";
 
 export default function PrivacyPage() {
   return (
-    <Section title="Privacy & Data">
-      <Grid container spacing={3} sx={{ flexDirection: "column" }}>
-        <Grid>
-          <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+    <Section
+      title="Privacy & Data"
+      footer={
+        <p className="mx-auto font-medium">
+          Read how we handle your data in our{" "}
+          <Link href="/privacy" className="text-primary-light hover:underline">
+            Privacy Policy
+          </Link>
+          .
+        </p>
+      }
+    >
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-muted-foreground">
             Download a copy of all your data (profile, categories, expenses,
             income, and savings) as a JSON file.
-          </Typography>
-          <Button
-            component="a"
+          </p>
+          <a
             href="/api/export"
-            variant="outlined"
-            fullWidth
-            startIcon={<DownloadIcon />}
+            className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
           >
-            Export My Data
-          </Button>
-        </Grid>
-        <Divider />
-        <Grid>
-          <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+            <Download data-icon="inline-start" /> Export my Data
+          </a>
+        </div>
+        <Separator />
+        <div className="flex flex-col gap-2">
+          <p className="text-muted-foreground">
             Permanently delete your account and all associated data — expenses,
             income, savings, and categories. This cannot be undone.
-          </Typography>
-          <DeleteAccountBtn />
-        </Grid>
-        <Divider />
-        <Typography sx={{ color: "text.secondary", textAlign: "center" }}>
-          Read how we handle your data in our{" "}
-          <NextLink href="/privacy" className={linkStyles.link}>
-            Privacy Policy
-          </NextLink>
-          .
-        </Typography>
-      </Grid>
+          </p>
+          <DeleteAccount />
+        </div>
+      </div>
     </Section>
   );
 }

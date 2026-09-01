@@ -66,9 +66,12 @@ export async function deleteAccount(): Promise<string> {
     await deleteUser();
   } catch (error) {
     if (error instanceof APIError) {
-      if (error.body?.code === "SESSION_EXPIRED") {
-        return "For security reasons, this action requires a recent sign-in. Please sign out, sign back in, and try again.";
+      if (
+        ["SESSION_EXPIRED", "UNAUTHORIZED"].includes(error.body?.code || "")
+      ) {
+        redirect("/signin");
       }
+
       return error.message;
     }
     return "Failed to delete account";

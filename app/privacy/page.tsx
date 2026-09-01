@@ -246,8 +246,8 @@ export default function PrivacyPolicyPage() {
           </Item>
           <Item>
             <b>Erase</b> your data (Art. 17) — use{" "}
-            <b>Settings → Privacy &amp; Data → Delete account</b> to permanently
-            delete your account and all associated data;
+            <b>Settings -&gt; Privacy &amp; Data -&gt; Delete Account</b> to
+            permanently delete your account and all associated data;
           </Item>
           <Item>
             <b>Restrict</b> processing (Art. 18) and <b>object</b> to processing
@@ -255,8 +255,8 @@ export default function PrivacyPolicyPage() {
           </Item>
           <Item>
             <b>Data portability</b> (Art. 20) — use{" "}
-            <b>Settings → Privacy &amp; Data → Export my data</b> to download
-            all your data as a machine-readable JSON file;
+            <b>Settings -&gt; Privacy &amp; Data -&gt; Export my Data</b> to
+            download all your data as a machine-readable JSON file;
           </Item>
           <Item>
             <b>Lodge a complaint</b> with the data protection supervisory

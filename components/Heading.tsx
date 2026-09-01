@@ -7,7 +7,7 @@ export default function Heading({
 }) {
   return (
     <div className="mb-9">
-      <h1 className="text-page-title text-4xl font-bold">{title}</h1>
+      <h1 className="text-primary-light text-4xl font-bold">{title}</h1>
       {subtitle && (
         <p className="text-muted-foreground font-semibold">{subtitle}</p>
       )}
