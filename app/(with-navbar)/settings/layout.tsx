@@ -12,10 +12,12 @@ export default function SettingsLayout({
   account,
   password,
   preferences,
+  privacy,
 }: {
   account: React.ReactNode;
   password: React.ReactNode;
   preferences: React.ReactNode;
+  privacy: React.ReactNode;
 }) {
   return (
     <Box sx={{ boxSizing: "content-box", maxWidth: "600px", mx: "auto" }}>
@@ -24,6 +26,7 @@ export default function SettingsLayout({
         {account}
         {password}
         {preferences}
+        {privacy}
         <GitHubLink />
       </Grid>
     </Box>
