@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Logo from "../(auth)/_components/Logo";
+import Logo from "@/components/Logo";
 import Heading from "@/components/Heading";
 import GitHubLink from "@/components/GitHubLink";
 import BackToApp from "./BackToApp";
