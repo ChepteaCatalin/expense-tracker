@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description: "Manage your finances with ease",
   appleWebApp: { title: "Expense Tracker" },
 };
+export const viewport: Viewport = { viewportFit: "cover" };
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 
