@@ -19,11 +19,12 @@ export default function NavLink({
   return (
     <Link
       href={href}
+      aria-current={isActive ? "page" : undefined}
       className={cn(
-        "text-foreground flex flex-col items-center gap-0.5 rounded-[10px] p-1.5 transition-all duration-300 ease-in-out lg:gap-1 lg:px-4 lg:py-2",
+        "text-muted-foreground focus-visible:ring-ring flex flex-1 basis-0 flex-col items-center justify-center gap-0.5 rounded-[10px] px-1 py-1.5 transition-all duration-300 ease-in-out focus-visible:ring-2 focus-visible:outline-none lg:gap-1 lg:py-2",
         isActive
-          ? "text-primary bg-[rgba(75,125,92,0.08)] shadow-[0_2px_8px_rgba(75,125,92,0.15)] dark:bg-[rgba(75,125,92,0.3)] dark:text-[#1ed760] dark:shadow-[0_2px_8px_rgba(30,215,96,0.2)]"
-          : "hover:text-primary hover:-translate-y-0.5 hover:bg-[rgba(75,125,92,0.04)] dark:hover:bg-[rgba(30,215,96,0.03)] dark:hover:text-[#1ed760]",
+          ? "text-primary dark:text-primary-light bg-primary/8 shadow-primary/15 dark:bg-primary/25 dark:shadow-primary/20 shadow-[0_2px_8px]"
+          : "hover:text-primary dark:hover:text-primary-light hover:bg-primary/5 dark:hover:bg-primary/10 hover:-translate-y-0.5",
       )}
     >
       <Icon className="size-5 lg:size-7" />
