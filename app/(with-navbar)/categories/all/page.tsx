@@ -13,6 +13,7 @@ import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { isValidCategoryType } from "../utils";
 import TypeToggle from "../_components/TypeToggle";
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
+import { NoCategories } from "../_components/NoCategories";
 
 export const metadata = {
   title: "Categories",
@@ -99,15 +100,7 @@ export default async function CategoriesPage({
             })}
           </Box>
         ) : (
-          <Grid
-            container
-            sx={{ alignItems: "center", flexDirection: "column" }}
-          >
-            <SearchOffIcon
-              sx={{ fontSize: "60px", fill: "rgb(210, 210, 210)" }}
-            />
-            <Typography>No {type} categories found</Typography>
-          </Grid>
+          <NoCategories type={type} />
         )}
         <Grid container spacing={3} sx={{ mt: 3, flexDirection: "column" }}>
           <Divider />
