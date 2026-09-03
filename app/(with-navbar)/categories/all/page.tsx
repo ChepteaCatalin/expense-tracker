@@ -11,7 +11,7 @@ import { categoryIcons } from "@/utils/category-icons";
 import Typography from "@mui/material/Typography";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { isValidCategoryType } from "../utils";
-import TypeToggle from "../_components/TypeToggle/TypeToggle";
+import TypeToggle from "../_components/TypeToggle";
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 
 export const metadata = {

@@ -10,7 +10,7 @@ import {
 import { updateCurrency } from "../actions";
 import { type ChangeCurrencyError } from "../types";
 import { type CurrencyOption } from "@/types/currency";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 import {
   Combobox,
   ComboboxContent,

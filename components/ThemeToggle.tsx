@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();

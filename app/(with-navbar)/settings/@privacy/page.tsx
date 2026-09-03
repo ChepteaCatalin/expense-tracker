@@ -2,7 +2,7 @@ import Link from "next/link";
 import Section from "../_components/Section";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 import { Download } from "lucide-react";
 import { DeleteAccount } from "./DeleteAccount";
 
