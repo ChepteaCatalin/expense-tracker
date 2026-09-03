@@ -39,15 +39,7 @@ export default async function CategoriesPage({
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={<TypeToggle />}
-      footer={
-        <Link
-          href={{ pathname: "/categories/new", query: { type } }}
-          className={cn(buttonVariants({ variant: "default" }), "w-full")}
-        >
-          <Plus data-icon="inline-start" />
-          New Category
-        </Link>
-      }
+      footer={<CardFooter type={type} />}
     >
       <Box>
         {categories.length ? (
@@ -111,5 +103,17 @@ export default async function CategoriesPage({
         )}
       </Box>
     </TitledCardPageWrapper>
+  );
+}
+
+function CardFooter({ type }: { type: string }) {
+  return (
+    <Link
+      href={{ pathname: "/categories/new", query: { type } }}
+      className={cn(buttonVariants({ variant: "default" }), "w-full")}
+    >
+      <Plus data-icon="inline-start" />
+      New Category
+    </Link>
   );
 }

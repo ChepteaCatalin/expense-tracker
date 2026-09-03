@@ -1,8 +1,5 @@
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Skeleton from "@mui/material/Skeleton";
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata = {
   title: "Categories",
@@ -14,29 +11,10 @@ export default function CategoriesLoading() {
     <TitledCardPageWrapper
       title={metadata.title}
       subtitle={metadata.description}
-      aboveCard={
-        <Skeleton
-          variant="rectangular"
-          height={50}
-          sx={{ mb: 1.5, borderRadius: "10px" }}
-        />
-      }
+      aboveCard={<Skeleton className="mb-2 h-11.5 w-full rounded-xl" />}
+      footer={<Skeleton className="h-8 w-full rounded-lg" />}
     >
-      <Box>
-        <Skeleton
-          variant="rectangular"
-          height={300}
-          sx={{ borderRadius: "10px" }}
-        />
-        <Grid container spacing={3} sx={{ mt: 3, flexDirection: "column" }}>
-          <Divider />
-          <Skeleton
-            variant="rectangular"
-            height={40}
-            sx={{ borderRadius: "4px" }}
-          />
-        </Grid>
-      </Box>
+      <Skeleton className="aspect-video w-full" />
     </TitledCardPageWrapper>
   );
 }
