@@ -47,7 +47,7 @@ export async function updatePassword(
 }
 
 export async function updateCurrency(_: ChangeCurrencyError, currency: string) {
-  if (!currency || !currencies.find(c => c.code === currency)) {
+  if (!currency || !currencies.find((c) => c.code === currency)) {
     return { currency: "Invalid currency" };
   }
 
