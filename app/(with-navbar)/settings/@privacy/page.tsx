@@ -16,7 +16,6 @@ export default function PrivacyPage() {
           <Link href="/privacy" className="text-primary-light hover:underline">
             Privacy Policy
           </Link>
-          .
         </p>
       }
     >

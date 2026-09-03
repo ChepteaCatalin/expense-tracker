@@ -59,7 +59,6 @@ export default function SignInPage() {
           <Link href="/privacy" className={linkStyles.link}>
             Privacy Policy
           </Link>
-          .
         </Typography>
       </Card>
       <Box sx={{ mt: 2, textAlign: "center" }}>

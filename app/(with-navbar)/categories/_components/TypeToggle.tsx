@@ -56,7 +56,7 @@ export default function TypeToggle() {
                 }
               }}
               className={cn(
-                "relative z-10 flex cursor-pointer items-center justify-center gap-2 rounded-lg py-2 text-sm font-bold transition-colors duration-300 outline-none select-none",
+                "relative z-10 flex cursor-pointer items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold transition-colors duration-300 outline-none select-none",
                 "focus-visible:ring-ring/60 focus-visible:ring-2",
                 isActive
                   ? "text-primary dark:text-primary-light"

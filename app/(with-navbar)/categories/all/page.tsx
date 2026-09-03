@@ -1,19 +1,17 @@
 import { getAllCategoriesByType } from "@/data/category";
 import { UnauthorizedError } from "@/utils/error";
 import { notFound, redirect } from "next/navigation";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import { categoryIcons } from "@/utils/category-icons";
 import Typography from "@mui/material/Typography";
-import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { isValidCategoryType } from "../utils";
 import TypeToggle from "../_components/TypeToggle";
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 import { NoCategories } from "../_components/NoCategories";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
+import { Plus } from "lucide-react";
 
 export const metadata = {
   title: "Categories",
@@ -41,6 +39,15 @@ export default async function CategoriesPage({
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={<TypeToggle />}
+      footer={
+        <Link
+          href={{ pathname: "/categories/new", query: { type } }}
+          className={cn(buttonVariants({ variant: "default" }), "w-full")}
+        >
+          <Plus data-icon="inline-start" />
+          New Category
+        </Link>
+      }
     >
       <Box>
         {categories.length ? (
@@ -102,14 +109,6 @@ export default async function CategoriesPage({
         ) : (
           <NoCategories type={type} />
         )}
-        <Grid container spacing={3} sx={{ mt: 3, flexDirection: "column" }}>
-          <Divider />
-          <Link href={{ pathname: "/categories/new", query: { type } }}>
-            <Button variant="contained" startIcon={<AddIcon />} fullWidth>
-              New Category
-            </Button>
-          </Link>
-        </Grid>
       </Box>
     </TitledCardPageWrapper>
   );
