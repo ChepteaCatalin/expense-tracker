@@ -15,10 +15,8 @@ import { categorySchema } from "../../validation";
 import { categoryIcons } from "@/utils/category-icons";
 import Icon from "./Icon";
 import ColorInput from "./ColorInput";
-import Button from "@mui/material/Button";
 import { createCategory, updateCategory } from "../../actions";
 import ApiFormErrorAlert from "@/components/ApiFormErrorAlert_v2";
-import SaveIcon from "@mui/icons-material/Save";
 import TypeRadioGroup from "./TypeRadioGroup";
 import {
   Field,
@@ -31,6 +29,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Save } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Form({ category }: { category?: Category }) {
   const isEditMode = !!category;
@@ -173,18 +175,21 @@ export default function Form({ category }: { category?: Category }) {
             />
           </div>
         </FieldGroup>
+        <Separator className="my-3" />
         <Button
           type="submit"
           disabled={
-            !hideApiError &&
-            (!!createCategoryErrors.api || !!updateCategoryErrors.api)
+            disabledForm ||
+            (!hideApiError &&
+              (!!createCategoryErrors.api || !!updateCategoryErrors.api))
           }
-          loading={isPendingCreate || isPendingUpdate}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-          fullWidth
+          className="w-full"
         >
+          {disabledForm ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Save data-icon="inline-start" />
+          )}
           Save
         </Button>
       </form>
