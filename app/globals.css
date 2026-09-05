@@ -131,3 +131,13 @@
     @apply font-sans;
   }
 }
+
+@layer components {
+  .rc-color-picker-panel {
+    background-color: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    margin-bottom: -10px !important;
+  }
+}

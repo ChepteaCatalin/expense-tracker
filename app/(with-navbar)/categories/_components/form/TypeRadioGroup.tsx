@@ -34,40 +34,49 @@ export default function TypeRadioGroup({
 
   if (!isEditMode && !isValidCategoryType(urlCategoryType)) notFound();
 
-  const expenseDisabled = editingCategoryType === "income";
-  const incomeDisabled = editingCategoryType === "expense";
-
   return (
     <Controller
       name="type"
       defaultValue={urlCategoryType}
-      render={({ field }) => (
-        <FieldSet>
-          <FieldLegend variant="label">Type</FieldLegend>
-          <RadioGroup
-            name={field.name}
-            value={field.value}
-            onValueChange={field.onChange}
-          >
-            <Field orientation="horizontal" data-disabled={expenseDisabled}>
-              <RadioGroupItem
-                value="expense"
-                id={`${id}-expense`}
-                disabled={expenseDisabled}
-              />
-              <FieldLabel htmlFor={`${id}-expense`}>Expense</FieldLabel>
-            </Field>
-            <Field orientation="horizontal" data-disabled={incomeDisabled}>
-              <RadioGroupItem
-                value="income"
-                id={`${id}-income`}
-                disabled={incomeDisabled}
-              />
-              <FieldLabel htmlFor={`${id}-income`}>Income</FieldLabel>
-            </Field>
-          </RadioGroup>
-        </FieldSet>
-      )}
+      render={({ field }) => {
+        const expenseDisabled =
+          field.disabled || editingCategoryType === "income";
+        const incomeDisabled =
+          field.disabled || editingCategoryType === "expense";
+
+        return (
+          <FieldSet>
+            <FieldLegend
+              variant="label"
+              className={`${field.disabled ? "opacity-50" : ""}`}
+            >
+              Type
+            </FieldLegend>
+            <RadioGroup
+              name={field.name}
+              value={field.value}
+              onValueChange={field.onChange}
+            >
+              <Field orientation="horizontal" data-disabled={expenseDisabled}>
+                <RadioGroupItem
+                  value="expense"
+                  id={`${id}-expense`}
+                  disabled={expenseDisabled}
+                />
+                <FieldLabel htmlFor={`${id}-expense`}>Expense</FieldLabel>
+              </Field>
+              <Field orientation="horizontal" data-disabled={incomeDisabled}>
+                <RadioGroupItem
+                  value="income"
+                  id={`${id}-income`}
+                  disabled={incomeDisabled}
+                />
+                <FieldLabel htmlFor={`${id}-income`}>Income</FieldLabel>
+              </Field>
+            </RadioGroup>
+          </FieldSet>
+        );
+      }}
     />
   );
 }

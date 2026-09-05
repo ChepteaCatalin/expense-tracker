@@ -94,13 +94,17 @@ export default function Form({ category }: { category?: Category }) {
             name="name"
             control={control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field
+                data-invalid={fieldState.invalid}
+                data-disabled={field.disabled}
+              >
                 <FieldLabel htmlFor={`${id}-name`}>
                   Name <span className="text-destructive">*</span>
                 </FieldLabel>
                 <Input
                   {...field}
                   required
+                  disabled={field.disabled}
                   id={`${id}-name`}
                   aria-invalid={fieldState.invalid}
                   autoComplete="off"
@@ -123,7 +127,12 @@ export default function Form({ category }: { category?: Category }) {
             control={control}
             render={({ field }) => (
               <FieldSet>
-                <FieldLegend variant="label">Icon</FieldLegend>
+                <FieldLegend
+                  variant="label"
+                  className={`${field.disabled ? "opacity-50" : ""}`}
+                >
+                  Icon
+                </FieldLegend>
                 <RadioGroup
                   name={field.name}
                   value={field.value}
