@@ -49,7 +49,6 @@ async function BackToCategoriesLink({
     <BackToLink
       href={{ pathname: "/categories/all", query: { type } }}
       pageName="Categories"
-      sx={{ mb: 0.5 }}
     />
   );
 }

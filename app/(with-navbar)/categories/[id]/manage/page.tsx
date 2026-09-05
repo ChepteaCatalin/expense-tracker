@@ -37,7 +37,6 @@ export default async function ManageCategoryPage({
             query: { type: category.type },
           }}
           pageName="Categories"
-          sx={{ mb: 0.5 }}
         />
       }
     >
