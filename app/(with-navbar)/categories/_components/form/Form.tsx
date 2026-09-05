@@ -10,7 +10,6 @@ import {
   useId,
   useState,
 } from "react";
-import Grid from "@mui/material/Grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "../../validation";
 import { categoryIcons } from "@/utils/category-icons";
@@ -18,8 +17,7 @@ import Icon from "./Icon";
 import ColorInput from "./ColorInput";
 import Button from "@mui/material/Button";
 import { createCategory, updateCategory } from "../../actions";
-import Divider from "@mui/material/Divider";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import ApiFormErrorAlert from "@/components/ApiFormErrorAlert_v2";
 import SaveIcon from "@mui/icons-material/Save";
 import TypeRadioGroup from "./TypeRadioGroup";
 import {
@@ -77,7 +75,7 @@ export default function Form({ category }: { category?: Category }) {
       <ApiFormErrorAlert
         hide={hideApiError}
         message={createCategoryErrors.api || updateCategoryErrors.api}
-        sx={{ mb: 3 }}
+        className="mb-4"
       />
       <form
         noValidate
@@ -148,7 +146,7 @@ export default function Form({ category }: { category?: Category }) {
               </FieldSet>
             )}
           />
-          <Grid container spacing={2}>
+          <div className="space-x-3">
             <Controller
               control={control}
               name="backgroundColor"
@@ -173,9 +171,8 @@ export default function Form({ category }: { category?: Category }) {
                 />
               )}
             />
-          </Grid>
+          </div>
         </FieldGroup>
-        <Divider />
         <Button
           type="submit"
           disabled={
