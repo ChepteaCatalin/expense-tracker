@@ -13,8 +13,6 @@ import {
 import Grid from "@mui/material/Grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "../../validation";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { categoryIcons } from "@/utils/category-icons";
 import Icon from "./Icon";
 import ColorInput from "./ColorInput";
@@ -29,8 +27,11 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { RadioGroup } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Form({ category }: { category?: Category }) {
@@ -117,23 +118,27 @@ export default function Form({ category }: { category?: Category }) {
               editingCategoryType={category?.type}
             />
           </Suspense>
-          <Box sx={{ mt: -1.125 }}>
-            <Typography sx={{ color: "text.secondary" }}>Icon</Typography>
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, 54px)",
-                maxHeight: "264px",
-                overflowY: "auto",
-                justifyContent: "center",
-                gap: 2,
-              }}
-            >
-              {categoryIcons.map((icon) => (
-                <Icon key={icon.src} icon={icon} disabled={disabledForm} />
-              ))}
-            </Box>
-          </Box>
+          <Controller
+            name="icon"
+            control={control}
+            render={({ field }) => (
+              <FieldSet>
+                <FieldLegend variant="label">Icon</FieldLegend>
+                <RadioGroup
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={field.disabled}
+                  aria-label="Icon"
+                  className="border-input dark:bg-input/30 aria-invalid:border-destructive max-h-66 grid-cols-[repeat(auto-fill,minmax(3.25rem,1fr))] content-start gap-1 overflow-y-auto overscroll-contain rounded-lg border p-1.5"
+                >
+                  {categoryIcons.map((icon) => (
+                    <Icon key={icon.src} icon={icon} />
+                  ))}
+                </RadioGroup>
+              </FieldSet>
+            )}
+          />
           <Grid container spacing={2}>
             <Controller
               control={control}
@@ -194,8 +199,8 @@ function getDefaultValues(category?: Category): CategoryFormValues {
   return {
     name: "",
     icon: "/category-icons/other.svg",
-    strokeColor: "rgb(30, 215, 96)",
-    backgroundColor: "rgba(30, 215, 96, 0.12)",
+    strokeColor: "rgb(52, 211, 153)",
+    backgroundColor: "rgb(6, 95, 70)",
   } as CategoryFormValues;
 }
 
