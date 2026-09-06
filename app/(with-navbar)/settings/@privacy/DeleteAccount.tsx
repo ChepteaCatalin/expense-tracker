@@ -18,8 +18,7 @@ import { Button } from "@/components/ui/button";
 import { startTransition, useActionState, useState } from "react";
 import { deleteAccount } from "../actions";
 import { Spinner } from "@/components/ui/spinner";
-import { AlertCircleIcon } from "lucide-react";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 
 const CONFIRMATION_TEXT = "delete my account";
 
@@ -77,14 +76,11 @@ export function DeleteAccount() {
               autoComplete="off"
             />
           </div>
-          {actionError && !hideError && (
-            <div className="mt-2 w-full px-3">
-              <Alert variant="destructive">
-                <AlertCircleIcon />
-                <AlertTitle>{actionError}</AlertTitle>
-              </Alert>
-            </div>
-          )}
+          <ActionErrorAlert
+            message={actionError}
+            hide={hideError}
+            className="mt-3 max-w-66.5"
+          />
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>

@@ -2,8 +2,7 @@ import { AlertCircleIcon, X } from "lucide-react";
 import { Alert, AlertAction, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
-//TODO: rename this file (remove _v2)
-export default function ApiFormErrorAlert({
+export default function ActionErrorAlert({
   message,
   hide,
   onClose,

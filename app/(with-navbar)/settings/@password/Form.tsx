@@ -14,7 +14,7 @@ import {
   useId,
 } from "react";
 import { updatePassword } from "../actions";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert_v2";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 import { FieldGroup } from "@/components/ui/field";
 import PasswordInput from "@/components/PasswordInput";
 import Section from "../_components/Section";
@@ -78,7 +78,7 @@ export default function Form() {
             });
           })}
         >
-          <ApiFormErrorAlert
+          <ActionErrorAlert
             hide={hideApiError}
             message={actionErrors.api}
             className="mb-3"

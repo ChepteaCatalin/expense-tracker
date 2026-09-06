@@ -7,8 +7,6 @@ import DeleteCategory from "../../_components/DeleteCategory";
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 import { metadata } from "./constants";
 import BackToLink from "@/components/BackToLink";
-import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
 
 export { metadata };
 
@@ -43,16 +41,7 @@ export default async function ManageCategoryPage({
       }
     >
       <Form key={category.updatedAt.toISOString()} category={category} />
-      {/* TODO: do this */}
-      <DeleteCategory
-        id={category.id}
-        type={category.type}
-        name={category.name}
-      />
-      <Button variant="destructive" className="mt-3 w-full">
-        <Trash2Icon data-icon="inline-start" />
-        Delete
-      </Button>
+      <DeleteCategory id={category.id} type={category.type} />
     </TitledCardPageWrapper>
   );
 }

@@ -16,7 +16,7 @@ import { categoryIcons } from "@/utils/category-icons";
 import Icon from "./Icon";
 import ColorInput from "./ColorInput";
 import { createCategory, updateCategory } from "../../actions";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert_v2";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 import TypeRadioGroup from "./TypeRadioGroup";
 import {
   Field,
@@ -74,7 +74,7 @@ export default function Form({ category }: { category?: Category }) {
 
   return (
     <FormProvider {...methods}>
-      <ApiFormErrorAlert
+      <ActionErrorAlert
         hide={hideApiError}
         message={createCategoryErrors.api || updateCategoryErrors.api}
         className="mb-4"
@@ -186,11 +186,15 @@ export default function Form({ category }: { category?: Category }) {
           className="w-full"
         >
           {disabledForm ? (
-            <Spinner data-icon="inline-start" />
+            <>
+              <Spinner data-icon="inline-start" /> Saving...
+            </>
           ) : (
-            <Save data-icon="inline-start" />
+            <>
+              <Save data-icon="inline-start" />
+              Save
+            </>
           )}
-          Save
         </Button>
       </form>
     </FormProvider>

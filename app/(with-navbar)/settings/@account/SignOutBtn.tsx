@@ -5,7 +5,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { signOut } from "../actions";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert_v2";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 
 export default function SignOutBtn() {
   const [signOutUserError, signOutUserAction, isSignOutUserPending] =
@@ -16,7 +16,7 @@ export default function SignOutBtn() {
   return (
     <div className="w-full">
       {!!signOutUserError && !hideAlert && (
-        <ApiFormErrorAlert
+        <ActionErrorAlert
           message="Failed to sign out"
           onClose={() => setHideAlert(true)}
           className="mb-2"
