@@ -28,11 +28,11 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { TypeRadioGroupSkeleton } from "./TypeRadioGroupSkeleton";
 
 export default function Form({ category }: { category?: Category }) {
   const isEditMode = !!category;
@@ -213,14 +213,4 @@ function getDefaultValues(category?: Category): CategoryFormValues {
     strokeColor: "rgb(52, 211, 153)",
     backgroundColor: "rgb(6, 95, 70)",
   } as CategoryFormValues;
-}
-
-function TypeRadioGroupSkeleton() {
-  return (
-    <div>
-      <Skeleton className="mb-1.5 h-5 w-8" />
-      <Skeleton className="mb-2 h-5 w-20" />
-      <Skeleton className="h-5 w-18" />
-    </div>
-  );
 }

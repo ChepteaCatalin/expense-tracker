@@ -1,64 +1,38 @@
 import Heading from "@/components/Heading";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Skeleton from "@mui/material/Skeleton";
 import { metadata } from "./constants";
 import PageWrapper from "@/components/PageWrapper";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent } from "@/components/ui/card";
+import { TypeRadioGroupSkeleton } from "../../_components/form/TypeRadioGroupSkeleton";
+import { Separator } from "@/components/ui/separator";
 
 export default function ManageCategoryLoading() {
   return (
     <PageWrapper>
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Skeleton
-        variant="rectangular"
-        height={28}
-        sx={{ mb: 0.5, width: "180px", borderRadius: "4px" }}
-      />
-      <Card sx={{ borderRadius: "10px", pt: 1, px: 1 }}>
+      <Skeleton className="mb-1 h-8 w-42" />
+      <Card>
         <CardContent>
-          <Grid container spacing={3} sx={{ flexDirection: "column" }}>
-            <Skeleton
-              variant="rectangular"
-              height={40}
-              sx={{ borderRadius: "4px" }}
-            />
-            <Box>
-              <Skeleton variant="text" height={23} width="10%" />
-              <Skeleton
-                variant="rectangular"
-                height={33}
-                width="35%"
-                sx={{ borderRadius: "4px" }}
-              />
-            </Box>
-            <Box>
-              <Skeleton variant="text" height={24} width="10%" />
-              <Skeleton
-                variant="rectangular"
-                height={264}
-                sx={{ borderRadius: "10px" }}
-              />
-            </Box>
-            <Skeleton
-              variant="rectangular"
-              height={44}
-              sx={{ borderRadius: "4px" }}
-            />
-            <Divider />
-            <Skeleton
-              variant="rectangular"
-              height={40}
-              sx={{ borderRadius: "4px" }}
-            />
-            <Skeleton
-              variant="rectangular"
-              height={40}
-              sx={{ borderRadius: "4px" }}
-            />
-          </Grid>
+          <div className="space-y-5">
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-13" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+            <TypeRadioGroupSkeleton />
+            <div className="space-y-1">
+              <Skeleton className="h-5 w-7" />
+              <Skeleton className="h-66 w-full lg:h-45" />
+            </div>
+            <div className="flex gap-3">
+              <Skeleton className="h-9 w-30" />
+              <Skeleton className="h-9 w-21" />
+            </div>
+          </div>
+          <Separator className="my-3" />
+          <div className="space-y-3">
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+          </div>
         </CardContent>
       </Card>
     </PageWrapper>

@@ -35,8 +35,9 @@ export default function ColorInput({
           <Button variant="ghost" size="lg" disabled={disabled}>
             {label}
             <Circle
-              style={{ fill: localValue, color: localValue }}
               data-icon="inline-end"
+              style={{ fill: localValue }}
+              className="foreground"
             />
           </Button>
         }
