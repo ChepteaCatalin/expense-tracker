@@ -1,6 +1,5 @@
 "use client";
 
-import TextField from "@mui/material/TextField";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { type Category, type CategoryFormValues } from "@/types/category";
 import {
@@ -8,23 +7,32 @@ import {
   Suspense,
   useActionState,
   useEffect,
+  useId,
   useState,
 } from "react";
-import Grid from "@mui/material/Grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "../../validation";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { categoryIcons } from "@/utils/category-icons";
 import Icon from "./Icon";
 import ColorInput from "./ColorInput";
-import Button from "@mui/material/Button";
 import { createCategory, updateCategory } from "../../actions";
-import Divider from "@mui/material/Divider";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
-import SaveIcon from "@mui/icons-material/Save";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 import TypeRadioGroup from "./TypeRadioGroup";
-import Skeleton from "@mui/material/Skeleton";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { RadioGroup } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Save } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { TypeRadioGroupSkeleton } from "./TypeRadioGroupSkeleton";
 
 export default function Form({ category }: { category?: Category }) {
   const isEditMode = !!category;
@@ -42,16 +50,11 @@ export default function Form({ category }: { category?: Category }) {
     resolver: zodResolver(categorySchema),
     disabled: disabledForm,
   });
-  const {
-    control,
-    register,
-    reset,
-    subscribe,
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { control, reset, subscribe, handleSubmit } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
+
+  const id = useId();
 
   useEffect(
     () =>
@@ -71,15 +74,12 @@ export default function Form({ category }: { category?: Category }) {
 
   return (
     <FormProvider {...methods}>
-      <ApiFormErrorAlert
+      <ActionErrorAlert
         hide={hideApiError}
         message={createCategoryErrors.api || updateCategoryErrors.api}
-        sx={{ mb: 3 }}
+        className="mb-4"
       />
-      <Grid
-        container
-        spacing={3}
-        component="form"
+      <form
         noValidate
         onSubmit={handleSubmit((data) => {
           startTransition(() => {
@@ -88,87 +88,115 @@ export default function Form({ category }: { category?: Category }) {
             else createCategoryAction(data);
           });
         })}
-        sx={{ flexDirection: "column" }}
       >
-        <TextField
-          {...register("name")}
-          label="Name"
-          fullWidth
-          required
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.name}
-          helperText={errors.name?.message}
-          slotProps={{
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
-        <Suspense fallback={<TypeRadioGroupSkeleton />}>
-          <TypeRadioGroup
-            isEditMode={isEditMode}
-            editingCategoryType={category?.type}
-            error={!!errors.type}
-          />
-        </Suspense>
-        <Box sx={{ mt: -1.125 }}>
-          <Typography sx={{ color: "text.secondary" }}>Icon</Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, 54px)",
-              maxHeight: "264px",
-              overflowY: "auto",
-              justifyContent: "center",
-              gap: 2,
-            }}
-          >
-            {categoryIcons.map((icon) => (
-              <Icon key={icon.src} icon={icon} disabled={disabledForm} />
-            ))}
-          </Box>
-        </Box>
-        <Grid container spacing={2}>
+        <FieldGroup>
           <Controller
+            name="name"
             control={control}
-            name="backgroundColor"
-            render={({ field: { onChange, value, disabled } }) => (
-              <ColorInput
-                label="Background"
-                value={value}
-                onChange={onChange}
-                disabled={disabled}
-              />
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                data-disabled={field.disabled}
+              >
+                <FieldLabel htmlFor={`${id}-name`}>
+                  Name <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  required
+                  disabled={field.disabled}
+                  id={`${id}-name`}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
           />
+          <Suspense fallback={<TypeRadioGroupSkeleton />}>
+            <TypeRadioGroup
+              isEditMode={isEditMode}
+              editingCategoryType={category?.type}
+            />
+          </Suspense>
           <Controller
+            name="icon"
             control={control}
-            name="strokeColor"
-            render={({ field: { onChange, value, disabled } }) => (
-              <ColorInput
-                label="Stroke"
-                value={value}
-                onChange={onChange}
-                disabled={disabled}
-              />
+            render={({ field }) => (
+              <FieldSet>
+                <FieldLegend
+                  variant="label"
+                  className={`${field.disabled ? "opacity-50" : ""}`}
+                >
+                  Icon
+                </FieldLegend>
+                <RadioGroup
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={field.disabled}
+                  aria-label="Icon"
+                  className="border-input dark:bg-input/30 aria-invalid:border-destructive max-h-66 grid-cols-[repeat(auto-fill,minmax(3.25rem,1fr))] content-start gap-1 overflow-y-auto overscroll-contain rounded-lg border p-1.5"
+                >
+                  {categoryIcons.map((icon) => (
+                    <Icon key={icon.src} icon={icon} />
+                  ))}
+                </RadioGroup>
+              </FieldSet>
             )}
           />
-        </Grid>
-        <Divider />
+          <div className="space-x-3">
+            <Controller
+              control={control}
+              name="backgroundColor"
+              render={({ field: { onChange, value, disabled } }) => (
+                <ColorInput
+                  label="Background"
+                  value={value}
+                  onChange={onChange}
+                  disabled={disabled}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="strokeColor"
+              render={({ field: { onChange, value, disabled } }) => (
+                <ColorInput
+                  label="Stroke"
+                  value={value}
+                  onChange={onChange}
+                  disabled={disabled}
+                />
+              )}
+            />
+          </div>
+        </FieldGroup>
+        <Separator className="my-3" />
         <Button
           type="submit"
           disabled={
-            !hideApiError &&
-            (!!createCategoryErrors.api || !!updateCategoryErrors.api)
+            disabledForm ||
+            (!hideApiError &&
+              (!!createCategoryErrors.api || !!updateCategoryErrors.api))
           }
-          loading={isPendingCreate || isPendingUpdate}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-          fullWidth
+          className="w-full"
         >
-          Save
+          {disabledForm ? (
+            <>
+              <Spinner data-icon="inline-start" /> Saving...
+            </>
+          ) : (
+            <>
+              <Save data-icon="inline-start" />
+              Save
+            </>
+          )}
         </Button>
-      </Grid>
+      </form>
     </FormProvider>
   );
 }
@@ -186,21 +214,7 @@ function getDefaultValues(category?: Category): CategoryFormValues {
   return {
     name: "",
     icon: "/category-icons/other.svg",
-    strokeColor: "rgb(30, 215, 96)",
-    backgroundColor: "rgba(30, 215, 96, 0.12)",
+    strokeColor: "rgb(52, 211, 153)",
+    backgroundColor: "rgb(6, 95, 70)",
   } as CategoryFormValues;
-}
-
-function TypeRadioGroupSkeleton() {
-  return (
-    <Box>
-      <Skeleton variant="text" height={23} width="10%" />
-      <Skeleton
-        variant="rectangular"
-        height={42}
-        width="35%"
-        sx={{ borderRadius: "4px" }}
-      />
-    </Box>
-  );
 }

@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import NavBar from "@/components/NavBar/NavBar";
 
 export default function WithNavBarLayout({
@@ -7,9 +6,9 @@ export default function WithNavBarLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Box component="main" sx={{ py: 4, px: 3, mb: 11.25 }}>
+    <main className="mb-[calc(90px+env(safe-area-inset-bottom))] px-6 py-8">
       {children}
       <NavBar />
-    </Box>
+    </main>
   );
 }

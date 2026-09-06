@@ -37,16 +37,11 @@ export default async function ManageCategoryPage({
             query: { type: category.type },
           }}
           pageName="Categories"
-          sx={{ mb: 0.5 }}
         />
       }
     >
       <Form key={category.updatedAt.toISOString()} category={category} />
-      <DeleteCategory
-        id={category.id}
-        type={category.type}
-        name={category.name}
-      />
+      <DeleteCategory id={category.id} type={category.type} />
     </TitledCardPageWrapper>
   );
 }

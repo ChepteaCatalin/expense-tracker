@@ -1,8 +1,12 @@
 import ColorPicker from "@/components/ColorPicker";
-import Popover from "@mui/material/Popover";
-import { useEffect, useId, useState } from "react";
-import Button from "@mui/material/Button";
-import CircleIcon from "@mui/icons-material/Circle";
+import { useEffect, useState } from "react";
+import { Circle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface ColorInputProps {
   label: string;
@@ -18,10 +22,6 @@ export default function ColorInput({
   disabled,
 }: ColorInputProps) {
   const [localValue, setLocalValue] = useState(value);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  const id = useId();
-  const open = !!anchorEl;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -29,33 +29,26 @@ export default function ColorInput({
   }, [value]);
 
   return (
-    <>
-      <Button
-        color="inherit"
-        onClick={(event) => setAnchorEl(event.currentTarget)}
-        endIcon={
-          <CircleIcon
-            sx={{ color: localValue, width: "32px", height: "32px" }}
-          />
+    <Popover>
+      <PopoverTrigger
+        render={
+          <Button variant="ghost" size="lg" disabled={disabled}>
+            {label}
+            <Circle
+              data-icon="inline-end"
+              style={{ fill: localValue }}
+              className="foreground"
+            />
+          </Button>
         }
-        disabled={disabled}
-        sx={{ "& .MuiButton-icon": { ml: 0.5 }, color: "text.secondary" }}
-      >
-        {label}
-      </Button>
-      <Popover
-        id={open ? id : undefined}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-      >
+      />
+      <PopoverContent>
         <ColorPicker
           value={localValue}
           onChange={(color: any) => setLocalValue(color.toRgbString())}
           onChangeComplete={(color: any) => onChange(color.toRgbString())}
         />
-      </Popover>
-    </>
+      </PopoverContent>
+    </Popover>
   );
 }
