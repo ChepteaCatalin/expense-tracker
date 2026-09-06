@@ -88,10 +88,10 @@ export default function SignInForm() {
           {isPending ? (
             <>
               <Spinner data-icon="inline-start" />
-              Signing In...
+              Logging In...
             </>
           ) : (
-            "Sign In"
+            "Log In"
           )}
         </Button>
         <GoogleAuthButton />
