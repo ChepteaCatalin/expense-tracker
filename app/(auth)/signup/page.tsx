@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import Logo from "@/components/Logo";
 import Form from "./Form";
 import Link from "next/link";
-import linkStyles from "../_components/Link.module.css";
 import Box from "@mui/material/Box";
 import GitHubLink from "@/components/GitHubLink";
 
@@ -47,7 +46,7 @@ export default function SignUpPage() {
         <Form />
         <Grid container spacing={0.5} sx={{ mt: -0.75 }}>
           <Typography>Already have an account?</Typography>
-          <Link href="/signin" className={linkStyles.link}>
+          <Link href="/signin" className="text-primary-light hover:underline">
             Sign In
           </Link>
         </Grid>
@@ -56,7 +55,7 @@ export default function SignUpPage() {
           sx={{ color: "text.secondary", textAlign: "center", mt: -0.75 }}
         >
           By creating an account, you agree to our{" "}
-          <Link href="/privacy" className={linkStyles.link}>
+          <Link href="/privacy" className="text-primary-light hover:underline">
             Privacy Policy
           </Link>
         </Typography>

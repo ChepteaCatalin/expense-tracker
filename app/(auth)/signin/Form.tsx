@@ -3,23 +3,26 @@
 import { useForm } from "react-hook-form";
 import { signInSchema } from "../validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
+import { Controller } from "react-hook-form";
 import { signIn } from "../actions";
 import GoogleAuthButton from "../_components/GoogleAuthButton";
-import PasswordInput from "@/components/OldPasswordInput"; //TODO: replace with `components/PasswordInput.tsx`
+import PasswordInput from "@/components/PasswordInput";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { type SignInFormValues } from "../types";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 
 export default function SignInForm() {
-  const {
-    register,
-    handleSubmit,
-    subscribe,
-    formState: { errors },
-  } = useForm<SignInFormValues>({
+  const { handleSubmit, subscribe, control } = useForm<SignInFormValues>({
     defaultValues: { email: "", password: "" },
     resolver: zodResolver(signInSchema),
   });
@@ -47,42 +50,52 @@ export default function SignInForm() {
         });
       })}
     >
-      <Grid container spacing={2}>
-        <ApiFormErrorAlert
-          hide={hideApiError}
-          message={actionErrors.api}
-          sx={{ mb: 1.5 }}
+      <ActionErrorAlert
+        hide={hideApiError}
+        message={actionErrors.api}
+        className="mb-3"
+      />
+      <FieldGroup>
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>
+                Email<span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                required
+                aria-invalid={fieldState.invalid}
+                autoComplete="email"
+                spellCheck="false"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
-        <TextField
-          {...register("email")}
-          label="Email"
-          fullWidth
-          required
-          autoComplete="email"
-          spellCheck="false"
-          error={!!errors.email}
-          helperText={errors.email?.message}
-        />
-        <PasswordInput
-          {...register("password")}
-          label="Password"
-          error={!!errors.password}
-          helperText={errors.password?.message}
-        />
-      </Grid>
-      <Grid container spacing={1.5} sx={{ mt: 4 }}>
+        <PasswordInput control={control} name="password" label="Password" />
+      </FieldGroup>
+      <Separator className="my-5" />
+      <div className="space-y-3">
         <Button
           type="submit"
-          disabled={!hideApiError && !!actionErrors.api}
-          loading={isPending}
-          loadingPosition="start"
-          variant="contained"
-          fullWidth
+          disabled={isPending || (!hideApiError && !!actionErrors.api)}
+          className="w-full"
         >
-          Sign In
+          {isPending ? (
+            <>
+              <Spinner data-icon="inline-start" />
+              Signing In...
+            </>
+          ) : (
+            "Sign In"
+          )}
         </Button>
         <GoogleAuthButton />
-      </Grid>
+      </div>
     </form>
   );
 }

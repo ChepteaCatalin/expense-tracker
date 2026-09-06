@@ -14,6 +14,7 @@ import { Eye, EyeOff } from "lucide-react";
 interface PasswordInputProps {
   label: string;
   name: string;
+  control?: any;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -21,6 +22,7 @@ export default function PasswordInput({
   label,
   name,
   onChange,
+  control,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const id = useId();
@@ -30,6 +32,7 @@ export default function PasswordInput({
   return (
     <Controller
       name={name}
+      control={control}
       render={({
         field: { onChange: fieldOnChange, ...restField },
         fieldState,
