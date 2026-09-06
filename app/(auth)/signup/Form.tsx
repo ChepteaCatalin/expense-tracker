@@ -1,25 +1,32 @@
 "use client";
 
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import PasswordInput from "@/components/OldPasswordInput"; //TODO: replace with `components/PasswordInput.tsx`
-import { useForm } from "react-hook-form";
+import PasswordInput from "@/components/PasswordInput";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../validation";
 import { signUp } from "../actions";
 import GoogleAuthButton from "../_components/GoogleAuthButton";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { type SignUpFormValues } from "../types";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 export default function SignUpForm() {
   const {
-    register,
+    control,
     trigger,
     handleSubmit,
     subscribe,
-    formState: { errors, isSubmitted },
+    formState: { isSubmitted },
   } = useForm<SignUpFormValues>({
     defaultValues: {
       name: "",
@@ -53,62 +60,87 @@ export default function SignUpForm() {
         });
       })}
     >
-      <Grid container spacing={2}>
-        <ApiFormErrorAlert
-          hide={hideApiError}
-          message={actionErrors.api}
-          sx={{ mb: 1.5 }}
+      <ActionErrorAlert
+        hide={hideApiError}
+        message={actionErrors.api}
+        className="mb-3"
+      />
+      <FieldGroup>
+        <Controller
+          name="name"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>
+                Name<span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                required
+                aria-invalid={fieldState.invalid}
+                autoComplete="name"
+                spellCheck="false"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
-        <TextField
-          {...register("name")}
-          label="Name"
-          fullWidth
-          required
-          autoComplete="name"
-          spellCheck="false"
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
-        <TextField
-          {...register("email")}
-          label="Email"
-          fullWidth
-          required
-          autoComplete="email"
-          spellCheck="false"
-          error={!!errors.email}
-          helperText={errors.email?.message}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>
+                Email<span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                required
+                aria-invalid={fieldState.invalid}
+                autoComplete="email"
+                spellCheck="false"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
         <PasswordInput
+          control={control}
+          name="password"
           label="Password"
-          {...register("password", {
-            onChange: () => {
-              if (isSubmitted) trigger("confirmPassword");
-            },
-          })}
-          error={!!errors.password}
-          helperText={errors.password?.message}
+          onChange={() => {
+            if (isSubmitted) trigger("confirmPassword");
+          }}
         />
         <PasswordInput
+          control={control}
+          name="confirmPassword"
           label="Confirm Password"
-          {...register("confirmPassword")}
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
+          onChange={() => {
+            if (isSubmitted) trigger("confirmPassword");
+          }}
         />
-      </Grid>
-      <Grid container spacing={1.5} sx={{ mt: 4 }}>
+      </FieldGroup>
+      <Separator className="my-5" />
+      <div className="space-y-3">
         <Button
           type="submit"
-          disabled={!hideApiError && !!actionErrors.api}
-          loading={isPending}
-          loadingPosition="start"
-          variant="contained"
-          fullWidth
+          disabled={isPending || (!hideApiError && !!actionErrors.api)}
+          className="w-full"
         >
-          Create account
+          {isPending ? (
+            <>
+              <Spinner data-icon="inline-start" />
+              Creating Account...
+            </>
+          ) : (
+            "Create Account"
+          )}
         </Button>
         <GoogleAuthButton />
-      </Grid>
+      </div>
     </form>
   );
 }

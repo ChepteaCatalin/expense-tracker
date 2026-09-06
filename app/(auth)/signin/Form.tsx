@@ -22,7 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import ActionErrorAlert from "@/components/ActionErrorAlert";
 
 export default function SignInForm() {
-  const { handleSubmit, subscribe, control } = useForm<SignInFormValues>({
+  const { control, handleSubmit, subscribe } = useForm<SignInFormValues>({
     defaultValues: { email: "", password: "" },
     resolver: zodResolver(signInSchema),
   });
