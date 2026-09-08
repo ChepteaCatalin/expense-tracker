@@ -1,8 +1,6 @@
 "use client";
 
 import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useId, useState, useTransition } from "react";
 import {
@@ -29,6 +27,8 @@ import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import { type FormDateTime } from "@/lib/MuiDatePicker/types";
 import LinearProgress from "@mui/material/LinearProgress";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { capitalizeFirstLetter } from "@/utils/string";
 
 export default function PeriodsTabs({
   type,
@@ -48,10 +48,10 @@ export default function PeriodsTabs({
   const popoverId = popoverOpened ? "popover" + id : undefined;
 
   return (
-    <Box sx={{ mb: 0.5 }}>
+    <div className="mb-1">
       <Tabs
         value={periods.find((period) => searchParams.has(period)) ?? periods[0]}
-        onChange={(_event, newValue: string) => {
+        onValueChange={(newValue: string) => {
           if (newValue !== custom) {
             startNavigation(() => {
               router.push(
@@ -67,34 +67,21 @@ export default function PeriodsTabs({
             });
           }
         }}
-        aria-label="periods tabs"
-        sx={{
-          mt: -1,
-          minHeight: "32px",
-          "& .MuiTabs-list": {
-            justifyContent: "center",
-          },
-          "& .MuiTab-root": {
-            textTransform: "capitalize",
-            py: 0.5,
-            minWidth: "auto",
-            minHeight: "32px",
-          },
-        }}
       >
-        {periods.map((period, index) => (
-          <Tab
-            key={period}
-            disabled={isPending}
-            value={period}
-            label={period}
-            id={`tab-${id}-${index}`}
-            aria-controls={`tabpanel-${id}-${index}`}
-            onClick={(event) => {
-              if (period === custom) setAnchorEl(event.currentTarget);
-            }}
-          />
-        ))}
+        <TabsList variant="line" className="mx-auto">
+          {periods.map((period) => (
+            <TabsTrigger
+              key={period}
+              disabled={isPending}
+              value={period}
+              onClick={(event) => {
+                if (period === custom) setAnchorEl(event.currentTarget);
+              }}
+            >
+              {capitalizeFirstLetter(period)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
       </Tabs>
       <Popover
         id={popoverId}
@@ -125,7 +112,7 @@ export default function PeriodsTabs({
       ) : (
         <Box sx={{ height: 4, mt: 0.5 }} />
       )}
-    </Box>
+    </div>
   );
 }
 
