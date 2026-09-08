@@ -1,6 +1,5 @@
 "use client";
 
-import Box from "@mui/material/Box";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useId, useState, useTransition } from "react";
 import {
@@ -26,7 +25,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import { type FormDateTime } from "@/lib/MuiDatePicker/types";
-import LinearProgress from "@mui/material/LinearProgress";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { capitalizeFirstLetter } from "@/utils/string";
 
@@ -108,9 +107,9 @@ export default function PeriodsTabs({
         />
       </Popover>
       {isPending ? (
-        <LinearProgress sx={{ mt: 0.5, borderRadius: "999px" }} />
+        <Progress indeterminate className="mt-1" />
       ) : (
-        <Box sx={{ height: 4, mt: 0.5 }} />
+        <div className="mt-1 h-1" />
       )}
     </div>
   );
