@@ -70,14 +70,14 @@ export default function PeriodsTabs({
               </TabsTrigger>
             ) : (
               <Popover
-                key={custom}
+                key={period}
                 open={calendarOpen}
                 onOpenChange={setCalendarOpen}
               >
                 <PopoverTrigger
                   render={
-                    <TabsTrigger disabled={isPending} value={custom}>
-                      {capitalizeFirstLetter(custom)}
+                    <TabsTrigger disabled={isPending} value={period}>
+                      {capitalizeFirstLetter(period)}
                     </TabsTrigger>
                   }
                 />
