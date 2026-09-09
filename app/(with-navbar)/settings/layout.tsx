@@ -1,5 +1,3 @@
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Heading from "@/components/Heading";
 import GitHubLink from "@/components/GitHubLink";
 
@@ -20,15 +18,17 @@ export default function SettingsLayout({
   privacy: React.ReactNode;
 }) {
   return (
-    <Box sx={{ boxSizing: "content-box", maxWidth: "600px", mx: "auto" }}>
+    <div className="mx-auto box-content max-w-150">
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Grid container spacing={6} sx={{ flexDirection: "column" }}>
+      <div className="grid gap-8">
         {account}
         {password}
         {preferences}
         {privacy}
-        <GitHubLink />
-      </Grid>
-    </Box>
+        <div className="mx-auto">
+          <GitHubLink />
+        </div>
+      </div>
+    </div>
   );
 }

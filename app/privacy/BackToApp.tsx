@@ -1,10 +1,16 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import Button from "@mui/material/Button";
+import { ArrowLeft } from "lucide-react";
 
 export default function BackToApp() {
   const router = useRouter();
 
-  return <Button onClick={() => router.back()}>Back to the app</Button>;
+  return (
+    <Button variant="outline" size="lg" onClick={() => router.back()}>
+      <ArrowLeft data-icon="inline-start" />
+      Back to the app
+    </Button>
+  );
 }

@@ -1,12 +1,11 @@
 import { requireAuth } from "@/lib/auth-utils";
 import { Suspense } from "react";
-import Section from "../_components/Section";
-import ChangePasswordSkeleton from "../_components/ChangePasswordSkeleton";
+import LoadingFallback from "./LoadingFallback";
 import Form from "./Form";
 
 export default function PasswordPage() {
   return (
-    <Suspense fallback={<ChangePasswordSkeleton />}>
+    <Suspense fallback={<LoadingFallback />}>
       <ChangePassword />
     </Suspense>
   );
@@ -17,9 +16,5 @@ async function ChangePassword() {
 
   if (user.emailVerified) return null;
 
-  return (
-    <Section title="Change Password">
-      <Form key={user.id} />
-    </Section>
-  );
+  return <Form key={user.id} />;
 }

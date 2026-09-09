@@ -2,7 +2,7 @@ import BackToLink from "@/components/BackToLink";
 import Form from "../_components/form/Form";
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 import { Suspense } from "react";
-import Skeleton from "@mui/material/Skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata = {
   title: "New Category",
@@ -19,16 +19,7 @@ export default async function NewCategoryPage({
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
-        <Suspense
-          fallback={
-            <Skeleton
-              variant="rectangular"
-              width={172}
-              height={28}
-              sx={{ mb: 0.5, borderRadius: "4px" }}
-            />
-          }
-        >
+        <Suspense fallback={<Skeleton className="mb-1 h-8 w-42" />}>
           <BackToCategoriesLink searchParams={searchParams} />
         </Suspense>
       }
@@ -49,7 +40,6 @@ async function BackToCategoriesLink({
     <BackToLink
       href={{ pathname: "/categories/all", query: { type } }}
       pageName="Categories"
-      sx={{ mb: 0.5 }}
     />
   );
 }
