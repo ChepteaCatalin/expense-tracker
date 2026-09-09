@@ -76,7 +76,15 @@ export default function PeriodsTabs({
               >
                 <PopoverTrigger
                   render={
-                    <TabsTrigger disabled={isPending} value={period}>
+                    <TabsTrigger
+                      disabled={isPending}
+                      value={period}
+                      className={
+                        isPending
+                          ? "[&&:hover]:text-muted-foreground opacity-50"
+                          : ""
+                      }
+                    >
                       {capitalizeFirstLetter(period)}
                     </TabsTrigger>
                   }
