@@ -6,6 +6,7 @@ import theme from "./theme";
 import DatePickerProvider from "@/lib/MuiDatePicker/DatePickerProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/lib/dayjs";
+import "@/lib/date-fns";
 import "./globals.css";
 
 export const metadata: Metadata = {
