@@ -75,7 +75,7 @@ export default function DateNavButtons({
       )}
       <div className="mx-auto flex items-center gap-1.5">
         {isPending && <Spinner className="text-primary-light" />}
-        <p>{parsePeriod(searchParams)}</p>
+        <p className="text-base">{parsePeriod(searchParams)}</p>
       </div>
       {period !== custom && (
         <Button

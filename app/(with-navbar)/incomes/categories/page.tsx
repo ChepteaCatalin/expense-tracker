@@ -1,6 +1,4 @@
 import TransactionCategoriesChart from "@/components/transactions/TransactionCategoriesChart";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import Stack from "@mui/material/Stack";
 import CategoryListItem from "@/components/transactions/CategoryListItem";
 import NoIncomesForPeriod from "./_components/NoIncomesForPeriod";
@@ -9,7 +7,6 @@ import {
   validSearchParams,
 } from "@/utils/transactions/url";
 import { notFound, redirect } from "next/navigation";
-import Box from "@mui/material/Box";
 import DateNavButtons from "@/components/transactions/DateNavButtons";
 import type {
   TransactionCategory,
@@ -20,6 +17,7 @@ import { getSession } from "@/data/auth";
 import NewIncomeFab from "../_components/NewIncomeFab";
 import { getCategoryPercentages } from "@/utils/transactions/misc";
 import { getIncomeCategories } from "@/data/income";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default async function IncomeCategoriesPage({
   searchParams,
@@ -45,22 +43,9 @@ export default async function IncomeCategoriesPage({
   const categoryPercentages = getCategoryPercentages(incomesByCategory);
 
   return (
-    <Box>
-      <Card
-        sx={{
-          borderRadius: "12px",
-          pt: 1,
-          px: 1,
-          border: "1px solid",
-          borderColor: "rgba(255, 255, 255, 0.08)",
-          background:
-            "linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)",
-          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.16)",
-        }}
-      >
-        <CardContent
-          sx={{ p: 0, "&:last-child": { pb: 1 }, position: "relative" }}
-        >
+    <div>
+      <Card className="[--card-spacing:--spacing(2)]">
+        <CardContent>
           <DateNavButtons type="incomes" />
           <TransactionCategoriesChart
             currency={currency}
@@ -96,6 +81,6 @@ export default async function IncomeCategoriesPage({
         )}
       </Stack>
       <NewIncomeFab searchParams={params} />
-    </Box>
+    </div>
   );
 }
