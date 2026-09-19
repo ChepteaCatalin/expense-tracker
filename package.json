@@ -17,7 +17,7 @@
     "@mui/material": "^9.4.0",
     "@mui/material-nextjs": "^9.4.0",
     "@mui/utils": "^9.4.0",
-    "@mui/x-date-pickers": "^9.12.0",
+    "@mui/x-date-pickers": "^9.14.0",
     "@neondatabase/serverless": "^1.1.0",
     "@rc-component/color-picker": "^3.1.1",
     "better-auth": "1.6.29",
@@ -25,20 +25,20 @@
     "dayjs": "^1.11.23",
     "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.6",
-    "next": "16.3.4",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "react-hook-form": "^7.87.0",
-    "zod": "^4.5.4"
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.88.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
-    "@types/node": "^26.4.0",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/node": "^26.6.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "16.3.5",
     "typescript": "^6.0.3"
   }
 }
