@@ -44,6 +44,7 @@ export default async function Overview({
           pointerEvents: "none",
         },
       }}
+      className="mb-6"
     >
       <CardContent sx={{ p: 3, "&.MuiCardContent-root:last-child": { pb: 3 } }}>
         <Stack

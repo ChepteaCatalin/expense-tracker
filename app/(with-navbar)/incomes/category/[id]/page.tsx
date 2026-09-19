@@ -25,6 +25,7 @@ export default function IncomesCategoryPage({
             width="100%"
             height={209}
             sx={{ borderRadius: "12px" }}
+            className="mb-6"
           />
         }
       >

@@ -1,7 +1,7 @@
 import TransactionCategoriesChart from "@/components/transactions/TransactionCategoriesChart";
 import Stack from "@mui/material/Stack";
 import CategoryListItem from "@/components/transactions/CategoryListItem";
-import NoIncomesForPeriod from "./_components/NoIncomesForPeriod";
+import NoTransactionsForPeriod from "@/components/transactions/NoTransactionsForPeriod";
 import {
   dateFromSearchParams,
   validSearchParams,
@@ -59,7 +59,7 @@ export default async function IncomeCategoriesPage({
       </Card>
       <Stack spacing={1.25} sx={{ mt: 2 }}>
         {!incomesByCategory.length ? (
-          <NoIncomesForPeriod searchParams={params} />
+          <NoTransactionsForPeriod type="incomes" searchParams={params} />
         ) : (
           incomesByCategory.map((c) => (
             <CategoryListItem
