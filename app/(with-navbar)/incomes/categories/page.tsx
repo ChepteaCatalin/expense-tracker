@@ -1,5 +1,4 @@
 import TransactionCategoriesChart from "@/components/transactions/TransactionCategoriesChart";
-import Stack from "@mui/material/Stack";
 import CategoryListItem from "@/components/transactions/CategoryListItem";
 import NoTransactionsForPeriod from "@/components/transactions/NoTransactionsForPeriod";
 import {
@@ -57,7 +56,7 @@ export default async function IncomeCategoriesPage({
           />
         </CardContent>
       </Card>
-      <Stack spacing={1.25} sx={{ mt: 2 }}>
+      <div className="mt-4 flex flex-col gap-2.5">
         {!incomesByCategory.length ? (
           <NoTransactionsForPeriod type="incomes" searchParams={params} />
         ) : (
@@ -79,7 +78,7 @@ export default async function IncomeCategoriesPage({
             />
           ))
         )}
-      </Stack>
+      </div>
       <NewIncomeFab searchParams={params} />
     </div>
   );

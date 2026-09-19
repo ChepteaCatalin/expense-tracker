@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
 
 export default function ExpenseCategoriesLoading() {
   return (
@@ -16,13 +15,13 @@ export default function ExpenseCategoriesLoading() {
           />
         </CardContent>
       </Card>
-      <Stack spacing={1.25} sx={{ mt: 2 }}>
+      <div className="mt-4 flex flex-col gap-2.5">
         <CategoryListItem />
         <CategoryListItem />
         <CategoryListItem />
         <CategoryListItem />
         <CategoryListItem />
-      </Stack>
+      </div>
     </Box>
   );
 }
