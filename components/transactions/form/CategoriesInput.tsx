@@ -1,8 +1,8 @@
-import Box from "@mui/material/Box";
 import { categoryIcons } from "@/utils/category-icons";
 import type { Category } from "@/types/category";
-import Typography from "@mui/material/Typography";
 import { Controller, useFormState } from "react-hook-form";
+import { useEffect, useRef } from "react";
+import { cn } from "cn";
 
 export default function CategoriesInput({
   categories,
@@ -13,90 +13,108 @@ export default function CategoriesInput({
 }) {
   const { errors } = useFormState();
 
+  const selectedRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(function scrollSelectedIntoView() {
+    selectedRef.current?.scrollIntoView({
+      behavior: "instant",
+      block: "nearest",
+    });
+  }, []);
+
   return (
-    <Box>
-      <Box>
-        <Typography>Category *</Typography>
+    <div>
+      <div className="mb-2">
+        <p className="font-medium">
+          Category <span className="text-destructive">*</span>
+        </p>
         {errors.categoryId && (
-          <Typography color="error" variant="body2">
+          <p className="text-destructive">
             {String(errors.categoryId.message)}
-          </Typography>
+          </p>
         )}
-      </Box>
+      </div>
       <Controller
         name="categoryId"
         render={({ field: { onChange, value } }) => (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, 100px)",
-              maxHeight: "458px",
-              overflowY: "auto",
-              alignContent: "start",
-              columnGap: 1,
-              rowGap: 4,
-              mt: 1,
-            }}
-          >
+          <ul className="-m-1 grid max-h-114.5 grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] content-start gap-x-1 gap-y-3 overflow-y-auto overscroll-contain p-1">
             {categories.map((category) => {
-              const icon = categoryIcons.find(
+              const Icon = categoryIcons.find(
                 (icon) => category.icon === icon.src,
-              );
-
-              if (!icon) return null;
+              )!.Component;
 
               const isSelected = category.id == value;
 
               return (
-                <Box
+                <li
+                  ref={isSelected ? selectedRef : null}
                   key={category.id}
-                  sx={{
-                    backgroundColor: isSelected
-                      ? category.backgroundColor
-                      : "transparent",
-                    borderRadius: "8px",
-                    p: 0.5,
-                    cursor: disabled ? "not-allowed" : "pointer",
+                  onClick={(e) => {
+                    if (!disabled) {
+                      onChange(category.id);
+                      e.currentTarget?.scrollIntoView({
+                        behavior: "instant",
+                        block: "nearest",
+                      });
+                    }
                   }}
-                  onClick={() => !disabled && onChange(category.id)}
+                  className="group hover:bg-accent focus-visible:ring-ring/60 flex flex-col items-center gap-1.5 rounded-lg p-2 transition-colors outline-none focus-visible:ring-2"
+                  style={{
+                    cursor: disabled ? "not-allowed" : "pointer",
+                    ...(isSelected && {
+                      backgroundColor: category.backgroundColor,
+                    }),
+                  }}
                 >
-                  <icon.Component
+                  <Icon
+                    aria-hidden
+                    className={cn(
+                      "box-content block size-10 shrink-0 rounded-full p-0.75 transition-transform duration-200 ease-out",
+                      !isSelected && "group-hover:scale-105",
+                    )}
                     style={{
-                      display: "block",
-                      borderRadius: "50%",
-                      padding: "3px",
-                      boxSizing: "content-box",
-                      marginLeft: "auto",
-                      marginRight: "auto",
                       backgroundColor: category.backgroundColor,
                       fill: category.strokeColor,
                     }}
                   />
-                  <Typography
-                    sx={{
-                      textAlign: "center",
-                      mt: 0.3,
-                      px: 1,
-                      fontSize: "0.875rem",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
-                      color: (theme) =>
-                        isSelected
-                          ? theme.palette.getContrastText(
-                              category.backgroundColor,
-                            )
-                          : "common.white",
+                  <span
+                    title={category.name}
+                    className="w-full truncate text-center text-sm font-medium"
+                    style={{
+                      ...(isSelected && {
+                        color: getContrastText(category.backgroundColor),
+                      }),
                     }}
                   >
                     {category.name}
-                  </Typography>
-                </Box>
+                  </span>
+                </li>
               );
             })}
-          </Box>
+          </ul>
         )}
       />
-    </Box>
+    </div>
   );
+}
+
+function getContrastText(rgb: string) {
+  const match = rgb.match(/\d+(?:\.\d+)?/g);
+
+  if (!match || match.length < 3) return "#000";
+
+  const [r, g, b] = match.map(Number);
+
+  const luminance = [r, g, b]
+    .map((channel) => {
+      const value = channel / 255;
+      return value <= 0.03928
+        ? value / 12.92
+        : Math.pow((value + 0.055) / 1.055, 2.4);
+    })
+    .reduce((sum, value, i) => {
+      return sum + value * [0.2126, 0.7152, 0.0722][i];
+    }, 0);
+
+  return luminance > 0.179 ? "#000" : "#fff";
 }

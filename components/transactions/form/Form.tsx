@@ -4,22 +4,18 @@ import type { Transaction } from "@/types/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { transactionSchema } from "@/utils/validation";
-import { startTransition, useActionState, useEffect, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
-import Stack from "@mui/material/Stack";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import SaveIcon from "@mui/icons-material/Save";
-import TextField from "@mui/material/TextField";
+import { Separator } from "@/components/ui/separator";
 import type { Category } from "@/types/category";
 import CategoriesInput from "./CategoriesInput";
 import Link from "next/link";
-import { DatePicker } from "@mui/x-date-pickers";
-import {
-  toDatePickerValue,
-  handleDatePickerChange,
-} from "@/lib/MuiDatePicker/utils";
-import InputAdornment from "@mui/material/InputAdornment";
 import dayjs from "dayjs";
 import { fromCents } from "@/utils/currency";
 import DeleteTransaction from "./DeleteTransaction";
@@ -34,7 +30,19 @@ import type {
   UpdateTransactionAction,
 } from "@/types/transaction";
 import { capitalizeFirstLetter } from "@/utils/string";
-import { normalizeAmountNumberInput } from "@/utils/input";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import AmountInput from "@/components/AmountInput";
+import DatePicker from "@/components/DatePicker";
+import { Textarea } from "@/components/ui/textarea";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
+import { Save } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface FormProps {
   type: TransactionType;
@@ -79,16 +87,11 @@ export default function Form({
     resolver: zodResolver(transactionSchema),
     disabled: disabledForm,
   });
-  const {
-    register,
-    control,
-    subscribe,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = methods;
+  const { control, subscribe, handleSubmit, reset } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
+
+  const id = useId();
 
   useEffect(
     () =>
@@ -114,9 +117,7 @@ export default function Form({
         message={createTransactionErrors.api || updateTransactionErrors.api}
         sx={{ mb: 3 }}
       />
-      <Stack
-        spacing={3}
-        component="form"
+      <form
         noValidate
         onSubmit={handleSubmit((data) => {
           startTransition(() => {
@@ -127,86 +128,95 @@ export default function Form({
           });
         })}
       >
-        <TextField
-          {...register("amount", { setValueAs: normalizeAmountNumberInput })}
-          label="Amount"
-          required
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.amount}
-          helperText={errors.amount?.message}
-          slotProps={{
-            htmlInput: {
-              inputMode: "decimal",
-              onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                e.currentTarget.select(),
-            },
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-            input: {
-              endAdornment: (
-                <InputAdornment position="end">{currency}</InputAdornment>
-              ),
-            },
-          }}
-          sx={{ maxWidth: 150, alignSelf: "center" }}
-        />
-        <CategoriesInput categories={categories} disabled={disabledForm} />
-        <Controller
-          name="date"
-          control={control}
-          render={({ field: { name, value, onChange, disabled } }) => (
-            <DatePicker
-              label="Date"
-              name={name}
-              disabled={disabled}
-              value={toDatePickerValue(value)}
-              onChange={handleDatePickerChange(onChange)}
-              slotProps={{
-                textField: {
-                  required: true,
-                  error: !!errors.date,
-                  helperText: errors.date?.message,
-                },
-              }}
+        <FieldGroup>
+          <div className="flex gap-4">
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={`${id}-amount`}>
+                    Amount <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <AmountInput
+                    {...field}
+                    currency={currency}
+                    required
+                    id={`${id}-amount`}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-          )}
-        />
-        <TextField
-          {...register("description")}
-          label="Description"
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.description}
-          helperText={errors.description?.message}
-          multiline
-          maxRows={10}
-          slotProps={{
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
-        <Divider />
+            <Controller
+              name="date"
+              control={control}
+              render={({ field: { value, onChange, disabled } }) => (
+                <Field>
+                  <FieldLabel>Date</FieldLabel>
+                  <DatePicker
+                    value={value}
+                    onChange={onChange}
+                    disabled={disabled}
+                  />
+                </Field>
+              )}
+            />
+          </div>
+          <CategoriesInput categories={categories} disabled={disabledForm} />
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={`${id}-description`}>
+                  Description
+                </FieldLabel>
+                <Textarea
+                  {...field}
+                  id={`${id}-description`}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                  className="max-h-145"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+        <Separator className="my-5" />
         <Link
           href={{
             pathname: "/categories/all",
             query: { type },
           }}
+          className={cn(
+            buttonVariants({ variant: "secondary" }),
+            "mb-3 w-full",
+          )}
         >
-          <Button variant="outlined" fullWidth>
-            Manage {capitalizeFirstLetter(type)} Categories
-          </Button>
+          Manage {capitalizeFirstLetter(type)} Categories
         </Link>
         <Button
           type="submit"
           disabled={
-            !hideApiError &&
-            (!!createTransactionErrors.api || !!updateTransactionErrors.api)
+            disabledForm ||
+            (!hideApiError &&
+              (!!createTransactionErrors.api || !!updateTransactionErrors.api))
           }
-          loading={isPendingCreate || isPendingUpdate}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-          fullWidth
+          className="w-full"
         >
+          {disabledForm ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Save data-icon="inline-start" />
+          )}
           Save
         </Button>
         {isEditMode && (
@@ -216,7 +226,7 @@ export default function Form({
             action={deleteAction!}
           />
         )}
-      </Stack>
+      </form>
     </FormProvider>
   );
 }
