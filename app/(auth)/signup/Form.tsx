@@ -97,6 +97,7 @@ export default function SignUpForm() {
               <Input
                 {...field}
                 id={field.name}
+                type="email"
                 required
                 aria-invalid={fieldState.invalid}
                 autoComplete="email"

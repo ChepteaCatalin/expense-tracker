@@ -67,6 +67,7 @@ export default function SignInForm() {
               <Input
                 {...field}
                 id={field.name}
+                type="email"
                 required
                 aria-invalid={fieldState.invalid}
                 autoComplete="email"
