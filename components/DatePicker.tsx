@@ -30,7 +30,7 @@ export default function DatePicker({
         render={
           <Button
             variant="outline"
-            className="justify-start font-normal"
+            className="justify-start font-normal disabled:bg-[color-mix(in_oklab,var(--input)_80%,transparent)]!"
             disabled={disabled}
           >
             {value ? format(date!, "d MMMM yyyy") : <span>Pick a date</span>}
