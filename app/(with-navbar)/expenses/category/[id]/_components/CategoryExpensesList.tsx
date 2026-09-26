@@ -10,7 +10,6 @@ import {
   dateFromSearchParams,
   notFoundOnInvalidParams,
 } from "@/utils/transactions/url";
-import Stack from "@mui/material/Stack";
 import PeriodTransactions from "@/components/transactions/PeriodTransactions";
 import NoTransactionsForPeriod from "@/components/transactions/NoTransactionsForPeriod";
 
@@ -47,7 +46,7 @@ export default async function CategoryExpensesList({
   }
 
   return (
-    <Stack spacing={2} sx={{ mt: 3 }}>
+    <div className="space-y-4">
       {expensesByDate.map((expense) => (
         <PeriodTransactions
           key={expense.date.toISOString()}
@@ -58,6 +57,6 @@ export default async function CategoryExpensesList({
           ).toString()}
         />
       ))}
-    </Stack>
+    </div>
   );
 }
