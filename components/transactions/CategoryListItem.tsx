@@ -1,8 +1,4 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import { categoryIcons } from "@/utils/category-icons";
-import Grid from "@mui/material/Grid";
 import type { TransactionCategoryListItem } from "@/types/transaction";
 import { readableCurrency } from "@/utils/currency";
 import Link from "next/link";
@@ -10,6 +6,8 @@ import type {
   SortTransactionBy,
   TransactionCategoriesSearchParams,
 } from "@/types/transaction";
+import { Badge } from "../ui/badge";
+import { Card, CardContent } from "../ui/card";
 
 export default function CategoryListItem({
   type,
@@ -35,106 +33,35 @@ export default function CategoryListItem({
           sortBy: "date" satisfies SortTransactionBy,
         } as Record<string, string | string[]>,
       }}
-      style={{ textDecoration: "none" }}
     >
       <Card
         role="button"
-        sx={{
-          borderRadius: "12px",
-          cursor: "pointer",
-          border: "1px solid",
-          borderColor: "rgba(255, 255, 255, 0.08)",
-          background:
-            "linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)",
-          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.16)",
-          transition:
-            "transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease",
-          "&:hover": {
-            bgcolor: "action.hover",
-            borderColor: "rgba(255, 255, 255, 0.14)",
-            transform: "translateY(-1px)",
-            boxShadow: "0 12px 28px rgba(0, 0, 0, 0.22)",
-          },
-        }}
+        className="hover:bg-foreground/8 hover:ring-foreground/20 transition-all duration-150 ease-out [--card-spacing:--spacing(2.5)] hover:-translate-y-0.5 hover:shadow-lg"
       >
-        <CardContent
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 2,
-            p: 1.35,
-            "&:last-child": { pb: 1.35 },
-          }}
-        >
-          <Grid
-            container
-            sx={{ alignItems: "center", gap: 1.1, flexWrap: "nowrap" }}
-          >
+        <CardContent className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 flex-nowrap items-center gap-2">
             {Icon && (
               <Icon
+                className="h-8 w-8 flex-none rounded-full p-0.75 text-[32px]"
                 style={{
-                  width: "32px",
-                  height: "32px",
-                  fontSize: "32px",
-                  padding: "3px",
-                  borderRadius: "50%",
                   backgroundColor: category.backgroundColor,
                   fill: category.strokeColor,
-                  flex: "none",
                 }}
               />
             )}
-            <Typography
-              sx={{
-                color: "text.pale",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                letterSpacing: 0.15,
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-              }}
+            <p
+              title={category.name}
+              className="text-foreground min-w-0 overflow-hidden font-semibold text-ellipsis whitespace-nowrap"
             >
               {category.name}
-            </Typography>
-          </Grid>
-          <Grid
-            container
-            sx={{
-              gap: 1.25,
-              flexWrap: "nowrap",
-              flex: "none",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "0.8125rem",
-                color: "rgba(123, 211, 137, 0.95)",
-                whiteSpace: "nowrap",
-                lineHeight: 1,
-                fontWeight: 600,
-                px: 0.7,
-                py: 0.3,
-                borderRadius: 999,
-                bgcolor: "rgba(30, 215, 96, 0.14)",
-                border: "1px solid rgba(30, 215, 96, 0.24)",
-              }}
-            >
-              {category.percentage.toFixed(2)}%
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "0.875rem",
-                fontWeight: 700,
-                color: "success.light",
-                whiteSpace: "nowrap",
-              }}
-            >
+            </p>
+          </div>
+          <div className="flex flex-none flex-nowrap items-center gap-2.5">
+            <Badge variant="outline">{category.percentage.toFixed(2)}%</Badge>
+            <p className="text-primary-light font-bold whitespace-nowrap">
               {`${readableCurrency(category.amount)} ${currency}`}
-            </Typography>
-          </Grid>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </Link>

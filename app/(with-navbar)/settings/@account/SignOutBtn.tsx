@@ -1,11 +1,11 @@
 "use client";
 
-import Button from "@mui/material/Button";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { startTransition, useActionState, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import { signOut } from "../actions";
-import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 
 export default function SignOutBtn() {
   const [signOutUserError, signOutUserAction, isSignOutUserPending] =
@@ -14,19 +14,18 @@ export default function SignOutBtn() {
   const [hideAlert, setHideAlert] = useState(false);
 
   return (
-    <Box>
+    <div className="w-full">
       {!!signOutUserError && !hideAlert && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to sign out
-        </Alert>
+        <ActionErrorAlert
+          message="Failed to sign out"
+          onClose={() => setHideAlert(true)}
+          className="mb-2"
+        />
       )}
       <Button
-        variant="contained"
-        color="error"
-        fullWidth
-        endIcon={<LogoutIcon />}
-        loading={isSignOutUserPending}
-        loadingPosition="start"
+        variant="destructive"
+        className="w-full"
+        disabled={isSignOutUserPending}
         onClick={() => {
           setHideAlert(true);
           startTransition(() => {
@@ -35,8 +34,10 @@ export default function SignOutBtn() {
           });
         }}
       >
-        Sign Out
+        {isSignOutUserPending && <Spinner data-icon="inline-start" />}
+        {isSignOutUserPending ? "Signing Out..." : "Sign Out"}
+        <LogOut data-icon="inline-end" />
       </Button>
-    </Box>
+    </div>
   );
 }

@@ -1,74 +1,75 @@
 "use client";
 
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useState } from "react";
+import { Controller } from "react-hook-form";
+import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { useId, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 interface PasswordInputProps {
   label: string;
-  ref?: React.Ref<HTMLInputElement>;
-  name?: string;
+  name: string;
+  control?: any;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onBlur?: React.FocusEventHandler<HTMLInputElement>;
-  error?: boolean;
-  helperText?: string;
 }
 
 export default function PasswordInput({
   label,
   name,
-  ref,
   onChange,
-  onBlur,
-  error,
-  helperText,
+  control,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const id = useId();
+
+  const eyeBtnText = showPassword ? "Hide Password" : "Display Password";
 
   return (
-    <TextField
-      type={showPassword ? "text" : "password"}
-      label={label}
-      fullWidth
-      required
-      autoComplete="new-password"
-      spellCheck="false"
+    <Controller
       name={name}
-      ref={ref}
-      onChange={onChange}
-      onBlur={onBlur}
-      error={error}
-      helperText={helperText}
-      slotProps={{
-        input: {
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label={
-                  showPassword ? "hide the password" : "display the password"
-                }
+      control={control}
+      render={({
+        field: { onChange: fieldOnChange, ...restField },
+        fieldState,
+      }) => (
+        <Field data-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={id}>
+            {label}
+            <span className="text-destructive">*</span>
+          </FieldLabel>
+          <InputGroup>
+            <InputGroupInput
+              {...restField}
+              type={showPassword ? "text" : "password"}
+              onChange={(e) => {
+                fieldOnChange(e);
+                onChange?.(e);
+              }}
+              aria-invalid={fieldState.invalid}
+              id={id}
+              required
+              autoComplete="new-password"
+              spellCheck="false"
+            />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
                 onClick={() => setShowPassword((show) => !show)}
-                onMouseDown={preserveFocus}
-                onMouseUp={preserveFocus}
-                edge="end"
+                aria-label={eyeBtnText}
+                title={eyeBtnText}
+                size="icon-xs"
               >
-                {showPassword ? (
-                  <VisibilityOff fontSize="small" />
-                ) : (
-                  <Visibility fontSize="small" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
-        },
-      }}
+                {showPassword ? <EyeOff /> : <Eye />}
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
     />
   );
-}
-
-function preserveFocus(event: React.MouseEvent<HTMLButtonElement>) {
-  event.preventDefault();
 }

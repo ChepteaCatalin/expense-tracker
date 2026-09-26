@@ -1,40 +1,75 @@
-import Box from "@mui/material/Box";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
 
 export default function GitHubLink() {
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Link
-        href="https://github.com/ChepteaCatalin/expense-tracker"
-        target="_blank"
-        rel="noopener noreferrer"
-        underline="none"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          px: 3,
-          py: 1.25,
-          borderRadius: "999px",
-          border: "1px solid",
-          borderColor: "rgba(255,255,255,0.08)",
-          color: "text.secondary",
-          bgcolor: "rgba(255,255,255,0.03)",
-          transition: "all 0.2s ease",
-          "&:hover": {
-            borderColor: "primary.main",
-            color: "primary.main",
-            bgcolor: "rgba(30,215,96,0.06)",
-          },
-        }}
+    <a
+      href="https://github.com/ChepteaCatalin/expense-tracker"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        buttonVariants({ variant: "outline", size: "lg" }),
+        "border", // without this the button border is not visible in light mode
+      )}
+    >
+      <GithubIcon data-icon="inline-start" />
+      View source code on GitHub
+    </a>
+  );
+}
+
+function GithubIcon({
+  size = undefined,
+  color = "#000000",
+  strokeWidth = 2,
+  background = "transparent",
+  opacity = 1,
+  rotation = 0,
+  shadow = 0,
+  flipHorizontal = false,
+  flipVertical = false,
+  padding = 0,
+}) {
+  const transforms = [];
+  if (rotation !== 0) transforms.push(`rotate(${rotation}deg)`);
+  if (flipHorizontal) transforms.push("scaleX(-1)");
+  if (flipVertical) transforms.push("scaleY(-1)");
+
+  const viewBoxSize = 24 + padding * 2;
+  const viewBoxOffset = -padding;
+  const viewBox = `${viewBoxOffset} ${viewBoxOffset} ${viewBoxSize} ${viewBoxSize}`;
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={viewBox}
+      width={size}
+      height={size}
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{
+        opacity,
+        transform: transforms.join(" ") || undefined,
+        filter:
+          shadow > 0
+            ? `drop-shadow(0 ${shadow}px ${shadow * 2}px rgba(0,0,0,0.3))`
+            : undefined,
+        backgroundColor: background !== "transparent" ? background : undefined,
+      }}
+    >
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
       >
-        <GitHubIcon sx={{ fontSize: "1.1rem" }} />
-        <Typography variant="body2" component="span" sx={{ fontWeight: 500 }}>
-          View source code on GitHub
-        </Typography>
-      </Link>
-    </Box>
+        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5c.08-1.25-.27-2.48-1-3.5c.28-1.15.28-2.35 0-3.5c0 0-1 0-3 1.5c-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5c-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4" />
+        <path d="M9 18c-4.51 2-5-2-7-2" />
+      </g>
+    </svg>
   );
 }

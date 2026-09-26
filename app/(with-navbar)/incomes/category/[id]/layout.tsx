@@ -16,7 +16,7 @@ export default function IncomesByCategoryLayout({
       <Heading
         title={metadata.title}
         subtitle={metadata.description}
-        sx={{ mb: 5 }}
+        //TODO: sx={{ mb: 5 }}
       />
       {children}
     </PageWrapper>

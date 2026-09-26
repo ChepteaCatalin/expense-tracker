@@ -4,7 +4,7 @@ import CategoryExpensesList from "./_components/CategoryExpensesList";
 import { type TransactionByCategorySearchParams } from "@/types/transaction";
 import CategoryExpensesOverview from "./_components/CategoryExpensesOverview";
 import Heading from "@/components/transactions/Heading";
-import Skeleton from "@mui/material/Skeleton";
+import OverviewSkeleton from "@/components/transactions/OverviewSkeleton";
 import CategoryTransactionsListFallback from "@/components/transactions/CategoryTransactionsListFallback";
 import NewExpenseFab from "../../_components/NewExpenseFab";
 
@@ -18,16 +18,7 @@ export default function ExpensesCategoryPage({
   return (
     <Box sx={{ pb: 3 }}>
       <Heading type="expenses" />
-      <Suspense
-        fallback={
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={209}
-            sx={{ borderRadius: "12px" }}
-          />
-        }
-      >
+      <Suspense fallback={<OverviewSkeleton />}>
         <CategoryExpensesOverview params={params} searchParams={searchParams} />
       </Suspense>
       <Suspense fallback={<CategoryTransactionsListFallback />}>

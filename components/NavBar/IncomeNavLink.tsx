@@ -2,13 +2,13 @@
 
 import dayjs from "dayjs";
 import NavLink from "./NavLink";
-import PaymentsIcon from "@mui/icons-material/Payments";
+import { HandCoins } from "lucide-react";
 
 export default function IncomeNavLink() {
   return (
     <NavLink
       href={`/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`}
-      Icon={PaymentsIcon}
+      Icon={HandCoins}
       text="Income"
     />
   );

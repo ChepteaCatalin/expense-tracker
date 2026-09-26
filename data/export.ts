@@ -4,7 +4,7 @@ import { sql } from "@/lib/neon";
 import { authGuard } from "@/lib/auth-utils";
 import { fromCents } from "@/utils/currency";
 
-export const getUserDataExport = authGuard(session => async () => {
+export const getUserDataExport = authGuard((session) => async () => {
   const userId = session.user.id;
 
   const [categories, expenses, incomes, savingsGoals, savingsDeposits] =
@@ -61,7 +61,7 @@ export const getUserDataExport = authGuard(session => async () => {
       currency: session.user.currency,
       createdAt: session.user.createdAt,
     },
-    categories: categories.map(row => ({
+    categories: categories.map((row) => ({
       id: row.id,
       name: row.name,
       type: row.type,
@@ -73,7 +73,7 @@ export const getUserDataExport = authGuard(session => async () => {
     })),
     expenses: expenses.map(transactionFromDb),
     incomes: incomes.map(transactionFromDb),
-    savingsGoals: savingsGoals.map(row => ({
+    savingsGoals: savingsGoals.map((row) => ({
       id: row.id,
       name: row.name,
       initialAmount: fromCents(row.initial_amount),
@@ -86,7 +86,7 @@ export const getUserDataExport = authGuard(session => async () => {
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     })),
-    savingsDeposits: savingsDeposits.map(row => ({
+    savingsDeposits: savingsDeposits.map((row) => ({
       id: row.id,
       savingsGoalId: row.savings_goal_id,
       savingsGoalName: row.savings_goal_name,

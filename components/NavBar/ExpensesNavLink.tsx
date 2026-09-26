@@ -2,13 +2,13 @@
 
 import dayjs from "dayjs";
 import NavLink from "./NavLink";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import { CircleDollarSign } from "lucide-react";
 
 export default function ExpensesNavLink() {
   return (
     <NavLink
       href={`/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`}
-      Icon={MonetizationOnIcon}
+      Icon={CircleDollarSign}
       text="Expenses"
     />
   );

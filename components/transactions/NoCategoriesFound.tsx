@@ -1,22 +1,21 @@
-import Grid from "@mui/material/Grid";
-import SearchOffIcon from "@mui/icons-material/SearchOff";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import type { CategoryType } from "@/types/category";
 import { capitalizeFirstLetter } from "@/utils/string";
+import { SearchX, Plus } from "lucide-react";
+import { buttonVariants } from "../ui/button";
 
 export default function NoCategoriesFound({ type }: { type: CategoryType }) {
   return (
-    <Grid container sx={{ alignItems: "center", flexDirection: "column" }}>
-      <SearchOffIcon sx={{ fontSize: "60px", fill: "rgb(210, 210, 210)" }} />
-      <Typography>No {type} categories found</Typography>
-      <Link href={{ pathname: "/categories/all", query: { type } }}>
-        <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
-          Add {capitalizeFirstLetter(type)} Categories
-        </Button>
+    <div className="flex flex-col items-center gap-2">
+      <SearchX className="text-muted-foreground h-12 w-12" />
+      <p className="font-medium">No {type} categories found</p>
+      <Link
+        href={{ pathname: "/categories/all", query: { type } }}
+        className={buttonVariants({ variant: "default" })}
+      >
+        <Plus data-icon="inline-start" />
+        Add {capitalizeFirstLetter(type)} Categories
       </Link>
-    </Grid>
+    </div>
   );
 }
