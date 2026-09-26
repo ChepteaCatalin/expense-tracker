@@ -13,11 +13,7 @@ export default function ExpensesByCategoryLayout({
 }) {
   return (
     <PageWrapper>
-      <Heading
-        title={metadata.title}
-        subtitle={metadata.description}
-        //TODO: sx={{ mb: 5 }}
-      />
+      <Heading title={metadata.title} subtitle={metadata.description} />
       {children}
     </PageWrapper>
   );

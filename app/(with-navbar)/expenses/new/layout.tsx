@@ -1,7 +1,7 @@
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 import FormNavigateBackBtn from "../_components/FormNavigateBackBtn";
 import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import BackBtnSkeleton from "@/components/BackBtnSkeleton";
 
 export const metadata = {
   title: "New Expense",
@@ -18,7 +18,7 @@ export default function NewExpenseLayout({
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
-        <Suspense fallback={<Skeleton className="mb-1 h-8 w-19" />}>
+        <Suspense fallback={<BackBtnSkeleton />}>
           <FormNavigateBackBtn />
         </Suspense>
       }
