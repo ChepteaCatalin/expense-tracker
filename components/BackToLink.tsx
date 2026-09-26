@@ -7,14 +7,16 @@ import { ChevronLeft } from "lucide-react";
 export default function BackToLink({
   href,
   pageName,
+  className,
 }: {
   href: string | UrlObject;
   pageName?: string;
+  className?: string;
 }) {
   return (
     <Link
       href={href}
-      className={cn(buttonVariants({ variant: "ghost" }), "mb-1")}
+      className={cn(buttonVariants({ variant: "ghost" }), "mb-1", className)}
     >
       <ChevronLeft data-icon="inline-start" />
       {pageName ? `Back to ${pageName}` : "Back"}

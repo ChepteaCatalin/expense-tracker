@@ -51,7 +51,7 @@ export default function CategoryListItem({
             )}
             <p
               title={category.name}
-              className="text-foreground min-w-0 overflow-hidden font-semibold text-ellipsis whitespace-nowrap"
+              className="text-foreground min-w-0 truncate font-semibold"
             >
               {category.name}
             </p>

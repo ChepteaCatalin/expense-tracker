@@ -5,8 +5,10 @@ import { useSearchParams } from "next/navigation";
 
 export default function BackToCategoriesBtn({
   type,
+  className,
 }: {
   type: "expenses" | "incomes";
+  className?: string;
 }) {
   const searchParams = useSearchParams();
 
@@ -16,6 +18,7 @@ export default function BackToCategoriesBtn({
   return (
     <BackToLink
       href={`/${type}/categories?${backBtnSearchParams.toString()}`}
+      className={className}
     />
   );
 }
