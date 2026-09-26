@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Box from "@mui/material/Box";
 import { type TransactionByCategorySearchParams } from "@/types/transaction";
-import Skeleton from "@mui/material/Skeleton";
+import OverviewSkeleton from "@/components/transactions/OverviewSkeleton";
 import CategoryIncomesList from "./_components/CategoryIncomesList";
 import Heading from "@/components/transactions/Heading";
 import CategoryIncomesOverview from "./_components/CategoryIncomesOverview";
@@ -18,17 +18,7 @@ export default function IncomesCategoryPage({
   return (
     <Box sx={{ pb: 3 }}>
       <Heading type="incomes" />
-      <Suspense
-        fallback={
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={209}
-            sx={{ borderRadius: "12px" }}
-            className="mb-6"
-          />
-        }
-      >
+      <Suspense fallback={<OverviewSkeleton />}>
         <CategoryIncomesOverview params={params} searchParams={searchParams} />
       </Suspense>
       <Suspense fallback={<CategoryTransactionsListFallback />}>

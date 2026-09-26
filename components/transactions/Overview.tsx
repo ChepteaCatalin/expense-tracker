@@ -1,11 +1,8 @@
 import type { TransactionByCategorySearchParams } from "@/types/transaction";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import { Card, CardContent } from "../ui/card";
+import { Badge } from "../ui/badge";
 import { parsePeriod } from "@/utils/transactions/url";
 import { readableCurrency } from "@/utils/currency";
-import Stack from "@mui/material/Stack";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import { getSession } from "@/data/auth";
 
@@ -19,87 +16,40 @@ export default async function Overview({
   categoryTotal: number;
 }) {
   const currency = (await getSession())?.user.currency;
+  const period = parsePeriod(
+    new URLSearchParams(
+      Object.entries(searchParams).flatMap(([key, value]) =>
+        typeof value === "string" ? [[key, value]] : [],
+      ),
+    ) as unknown as ReadonlyURLSearchParams,
+  );
 
   return (
-    <Card
-      sx={{
-        position: "relative",
-        overflow: "hidden",
-        borderRadius: 3,
-        border: "1px solid",
-        borderColor: "rgba(255, 255, 255, 0.1)",
-        background:
-          "linear-gradient(145deg, rgba(30, 215, 96, 0.18) 0%, rgba(33, 33, 33, 0.95) 45%, rgba(18, 18, 18, 0.95) 100%)",
-        boxShadow: "0 16px 38px rgba(0, 0, 0, 0.35)",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: -70,
-          right: -70,
-          width: 190,
-          height: 190,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(30, 215, 96, 0.4), transparent 70%)",
-          pointerEvents: "none",
-        },
-      }}
-      className="mb-6"
-    >
-      <CardContent sx={{ p: 3, "&.MuiCardContent-root:last-child": { pb: 3 } }}>
-        <Stack
-          direction="row"
-          sx={{ justifyContent: "space-between", alignItems: "center" }}
+    <Card className="from-primary/12 via-card to-card ring-primary/20 before:from-primary/30 after:via-primary/50 dark:from-primary/25 dark:ring-foreground/10 dark:before:from-primary/40 relative mb-6 overflow-hidden rounded-2xl bg-linear-145 via-50% py-0 shadow-lg shadow-black/10 before:pointer-events-none before:absolute before:-top-24 before:-right-24 before:size-56 before:rounded-full before:bg-radial before:to-transparent before:to-70% before:blur-2xl after:pointer-events-none after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-linear-to-r after:from-transparent after:to-transparent dark:shadow-black/40">
+      <CardContent className="relative p-6">
+        <p className="text-muted-foreground text-xs font-medium tracking-[0.14em] uppercase">
+          Category overview
+        </p>
+        <p
+          title={categoryName}
+          className="mt-2 truncate text-2xl leading-8 font-bold tracking-tight"
         >
-          <Stack spacing={0.75} sx={{ minWidth: 0, flex: 1 }}>
-            <Typography
-              variant="overline"
-              sx={{ letterSpacing: 1.1, color: "rgba(255, 255, 255, 0.75)" }}
-            >
-              Category overview
-            </Typography>
-            <Typography
-              variant="h5"
-              component="p"
-              sx={{
-                lineHeight: 1.15,
-                fontWeight: 700,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {categoryName}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {parsePeriod(
-                new URLSearchParams(
-                  Object.entries(searchParams).flatMap(([key, value]) =>
-                    typeof value === "string" ? [[key, value]] : [],
-                  ),
-                ) as unknown as ReadonlyURLSearchParams,
-              )}
-            </Typography>
-          </Stack>
-        </Stack>
-        <Typography
-          variant="h3"
-          component="p"
-          sx={{ mt: 2.5, lineHeight: 1, fontWeight: 800 }}
+          {categoryName}
+        </p>
+        <Badge
+          variant="outline"
+          className="border-primary/25 bg-background/60 text-muted-foreground dark:bg-background/30 mt-2 tabular-nums backdrop-blur-sm"
         >
-          {readableCurrency(categoryTotal!)}
-          <Box
-            component="span"
-            sx={{
-              ml: 1,
-              color: "text.secondary",
-              fontSize: "1.25rem",
-              fontWeight: 500,
-            }}
-          >
+          {period}
+        </Badge>
+        <div className="mt-6 flex flex-wrap items-baseline gap-x-2">
+          <span className="text-5xl leading-none font-extrabold tracking-tight tabular-nums">
+            {readableCurrency(categoryTotal)}
+          </span>
+          <span className="text-muted-foreground text-xl leading-none font-medium">
             {currency}
-          </Box>
-        </Typography>
+          </span>
+        </div>
       </CardContent>
     </Card>
   );
