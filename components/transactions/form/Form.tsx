@@ -210,7 +210,7 @@ export default function Form({
             (!hideApiError &&
               (!!createTransactionErrors.api || !!updateTransactionErrors.api))
           }
-          className="w-full"
+          className="mb-3 w-full"
         >
           {disabledForm ? (
             <Spinner data-icon="inline-start" />
