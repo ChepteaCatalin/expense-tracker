@@ -2,21 +2,33 @@
 
 import type { SavingsGoal, SavingsGoalFormValues } from "@/types/savings";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import { FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { savingsGoalSchema } from "../../validation";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import { normalizeAmountNumberInput } from "@/utils/input";
 import Grid from "@mui/material/Grid";
-import { startTransition, useActionState, useEffect, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
 import { createSavingsGoal, updateSavingsGoal } from "../../actions";
 import Divider from "@mui/material/Divider";
 import { fromCents } from "@/utils/currency";
 import type { CurrencyOption } from "@/types/currency";
 import dayjs from "dayjs";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -50,6 +62,7 @@ export default function GoalForm({
     disabled: isMutating,
   });
   const {
+    control,
     register,
     handleSubmit,
     trigger,
@@ -59,6 +72,8 @@ export default function GoalForm({
   } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
+
+  const id = useId();
 
   useEffect(
     () =>
@@ -84,9 +99,7 @@ export default function GoalForm({
         message={createGoalErrors.api || updateGoalErrors.api}
         sx={{ mb: 3 }}
       />
-      <Stack
-        spacing={3}
-        component="form"
+      <form
         noValidate
         onSubmit={handleSubmit((data) => {
           startTransition(() => {
@@ -96,79 +109,95 @@ export default function GoalForm({
           });
         })}
       >
-        <TextField
-          {...register("name")}
-          label="Name"
-          fullWidth
-          required
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.name}
-          helperText={errors.name?.message}
-          slotProps={{
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
-        {currencyAutocomplete}
-        <Grid container spacing={2}>
-          <TextField
-            {...register("initialAmount", {
-              setValueAs: normalizeAmountNumberInput,
-              onChange: () => trigger("targetAmount"),
-            })}
-            label="Initial Amount"
-            required
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.initialAmount}
-            helperText={errors.initialAmount?.message}
-            slotProps={{
-              htmlInput: {
-                inputMode: "decimal",
-                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                  e.currentTarget.select(),
-              },
-              inputLabel: { shrink: true },
-            }}
-            sx={{ flex: 1 }}
+        <FieldGroup>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                data-disabled={field.disabled}
+              >
+                <FieldLabel htmlFor={`${id}-name`}>
+                  Name <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  required
+                  disabled={field.disabled}
+                  id={`${id}-name`}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
+          {currencyAutocomplete}
+          <Grid container spacing={2}>
+            <TextField
+              {...register("initialAmount", {
+                setValueAs: normalizeAmountNumberInput,
+                onChange: () => trigger("targetAmount"),
+              })}
+              label="Initial Amount"
+              required
+              autoComplete="off"
+              spellCheck="false"
+              error={!!errors.initialAmount}
+              helperText={errors.initialAmount?.message}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "decimal",
+                  onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+                    e.currentTarget.select(),
+                },
+                inputLabel: { shrink: true },
+              }}
+              sx={{ flex: 1 }}
+            />
+            <TextField
+              {...register("targetAmount", {
+                setValueAs: normalizeAmountNumberInput,
+                onChange: () => trigger("targetAmount"),
+              })}
+              label="Target Amount"
+              required
+              autoComplete="off"
+              spellCheck="false"
+              error={!!errors.targetAmount}
+              helperText={errors.targetAmount?.message}
+              slotProps={{
+                htmlInput: {
+                  inputMode: "decimal",
+                  onClick: (e: React.MouseEvent<HTMLInputElement>) =>
+                    e.currentTarget.select(),
+                },
+                inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
+              }}
+              sx={{ flex: 1 }}
+            />
+          </Grid>
+          {startDateField}
           <TextField
-            {...register("targetAmount", {
-              setValueAs: normalizeAmountNumberInput,
-              onChange: () => trigger("targetAmount"),
-            })}
-            label="Target Amount"
-            required
+            {...register("notes")}
+            label="Notes"
             autoComplete="off"
             spellCheck="false"
-            error={!!errors.targetAmount}
-            helperText={errors.targetAmount?.message}
+            error={!!errors.notes}
+            helperText={errors.notes?.message}
+            multiline
+            minRows={2}
+            maxRows={10}
             slotProps={{
-              htmlInput: {
-                inputMode: "decimal",
-                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                  e.currentTarget.select(),
-              },
               inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
             }}
-            sx={{ flex: 1 }}
           />
-        </Grid>
-        {startDateField}
-        <TextField
-          {...register("notes")}
-          label="Notes"
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.notes}
-          helperText={errors.notes?.message}
-          multiline
-          minRows={2}
-          maxRows={10}
-          slotProps={{
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
+        </FieldGroup>
+
         <Divider />
         <Button
           type="submit"
@@ -183,7 +212,7 @@ export default function GoalForm({
         >
           Save
         </Button>
-      </Stack>
+      </form>
     </FormProvider>
   );
 }
