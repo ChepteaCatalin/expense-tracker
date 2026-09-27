@@ -8,7 +8,6 @@ import { savingsGoalSchema } from "../../validation";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import { normalizeAmountNumberInput } from "@/utils/input";
-import Grid from "@mui/material/Grid";
 import {
   startTransition,
   useActionState,
@@ -29,6 +28,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import AmountInput from "@/components/AmountInput";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -137,27 +137,30 @@ export default function GoalForm({
             )}
           />
           {currencyAutocomplete}
-          <Grid container spacing={2}>
-            <TextField
-              {...register("initialAmount", {
-                setValueAs: normalizeAmountNumberInput,
-                onChange: () => trigger("targetAmount"),
-              })}
-              label="Initial Amount"
-              required
-              autoComplete="off"
-              spellCheck="false"
-              error={!!errors.initialAmount}
-              helperText={errors.initialAmount?.message}
-              slotProps={{
-                htmlInput: {
-                  inputMode: "decimal",
-                  onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                    e.currentTarget.select(),
-                },
-                inputLabel: { shrink: true },
-              }}
-              sx={{ flex: 1 }}
+          <div className="flex gap-4">
+            <Controller
+              name="initialAmount"
+              control={control}
+              render={({ field: { onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="flex-1">
+                  <FieldLabel htmlFor={`${id}-initial-amount`}>
+                    Initial Amount <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <AmountInput
+                    {...field}
+                    onChange={(value) => {
+                      onChange(value);
+                      trigger("targetAmount");
+                    }}
+                    required
+                    id={`${id}-initial-amount`}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
             <TextField
               {...register("targetAmount", {
@@ -180,7 +183,7 @@ export default function GoalForm({
               }}
               sx={{ flex: 1 }}
             />
-          </Grid>
+          </div>
           {startDateField}
           <TextField
             {...register("notes")}
