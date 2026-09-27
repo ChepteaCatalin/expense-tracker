@@ -7,7 +7,6 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { savingsGoalSchema } from "../../validation";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
-import { normalizeAmountNumberInput } from "@/utils/input";
 import {
   startTransition,
   useActionState,
@@ -162,26 +161,29 @@ export default function GoalForm({
                 </Field>
               )}
             />
-            <TextField
-              {...register("targetAmount", {
-                setValueAs: normalizeAmountNumberInput,
-                onChange: () => trigger("targetAmount"),
-              })}
-              label="Target Amount"
-              required
-              autoComplete="off"
-              spellCheck="false"
-              error={!!errors.targetAmount}
-              helperText={errors.targetAmount?.message}
-              slotProps={{
-                htmlInput: {
-                  inputMode: "decimal",
-                  onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                    e.currentTarget.select(),
-                },
-                inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-              }}
-              sx={{ flex: 1 }}
+            <Controller
+              name="targetAmount"
+              control={control}
+              render={({ field: { onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="flex-1">
+                  <FieldLabel htmlFor={`${id}-target-amount`}>
+                    Target Amount <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <AmountInput
+                    {...field}
+                    onChange={(value) => {
+                      onChange(value);
+                      trigger("targetAmount");
+                    }}
+                    required
+                    id={`${id}-target-amount`}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
           </div>
           {startDateField}
