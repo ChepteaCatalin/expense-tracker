@@ -7,8 +7,10 @@ import {
 } from "@/utils/transactions/url";
 import { notFound, redirect } from "next/navigation";
 import DateNavButtons from "@/components/transactions/DateNavButtons";
-import type { TransactionCategory } from "@/types/transaction";
-import { type TransactionCategoriesSearchParams } from "@/types/transaction";
+import type {
+  TransactionCategory,
+  TransactionCategoriesSearchParams,
+} from "@/types/transaction";
 import { getExpenseCategories } from "@/data/expense";
 import { UnauthorizedError } from "@/utils/error";
 import { getSession } from "@/data/auth";

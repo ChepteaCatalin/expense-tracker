@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import Box from "@mui/material/Box";
 import { type TransactionByCategorySearchParams } from "@/types/transaction";
 import OverviewSkeleton from "@/components/transactions/OverviewSkeleton";
 import CategoryIncomesList from "./_components/CategoryIncomesList";
@@ -16,7 +15,7 @@ export default function IncomesCategoryPage({
   searchParams: Promise<TransactionByCategorySearchParams>;
 }) {
   return (
-    <Box sx={{ pb: 3 }}>
+    <div className="pb-6">
       <Heading type="incomes" />
       <Suspense fallback={<OverviewSkeleton />}>
         <CategoryIncomesOverview params={params} searchParams={searchParams} />
@@ -27,6 +26,6 @@ export default function IncomesCategoryPage({
       <Suspense>
         <NewIncomeFab searchParams={searchParams} />
       </Suspense>
-    </Box>
+    </div>
   );
 }

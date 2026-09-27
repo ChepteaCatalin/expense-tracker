@@ -23,11 +23,7 @@ export default async function SavingsPage() {
 
   return (
     <PageWrapper>
-      <Heading
-        title={metadata.title}
-        subtitle={metadata.description}
-        //TODO: sx={{ mb: 5 }}
-      />
+      <Heading title={metadata.title} subtitle={metadata.description} />
       <Stack spacing={3}>
         {savingsGoals.length ? (
           savingsGoals.map((goal) => (
