@@ -4,8 +4,6 @@ import type { SavingsGoal, SavingsGoalFormValues } from "@/types/savings";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { savingsGoalSchema } from "../../validation";
-import Button from "@mui/material/Button";
-import SaveIcon from "@mui/icons-material/Save";
 import {
   startTransition,
   useActionState,
@@ -13,9 +11,7 @@ import {
   useId,
   useState,
 } from "react";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
 import { createSavingsGoal, updateSavingsGoal } from "../../actions";
-import Divider from "@mui/material/Divider";
 import { fromCents } from "@/utils/currency";
 import type { CurrencyOption } from "@/types/currency";
 import dayjs from "dayjs";
@@ -28,6 +24,12 @@ import {
 import { Input } from "@/components/ui/input";
 import AmountInput from "@/components/AmountInput";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
+import { Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
+import { cn } from "cn";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -85,10 +87,10 @@ export default function GoalForm({
 
   return (
     <FormProvider {...methods}>
-      <ApiFormErrorAlert
+      <ActionErrorAlert
         hide={hideApiError}
         message={createGoalErrors.api || updateGoalErrors.api}
-        sx={{ mb: 3 }}
+        className="mb-6"
       />
       <form
         noValidate
@@ -134,7 +136,10 @@ export default function GoalForm({
               control={control}
               render={({ field: { onChange, ...field }, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="flex-1">
-                  <FieldLabel htmlFor={`${id}-initial-amount`}>
+                  <FieldLabel
+                    htmlFor={`${id}-initial-amount`}
+                    className={cn({ "opacity-50": field.disabled })}
+                  >
                     Initial Amount <span className="text-destructive">*</span>
                   </FieldLabel>
                   <AmountInput
@@ -158,7 +163,10 @@ export default function GoalForm({
               control={control}
               render={({ field: { onChange, ...field }, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="flex-1">
-                  <FieldLabel htmlFor={`${id}-target-amount`}>
+                  <FieldLabel
+                    htmlFor={`${id}-target-amount`}
+                    className={cn({ "opacity-50": field.disabled })}
+                  >
                     Target Amount <span className="text-destructive">*</span>
                   </FieldLabel>
                   <AmountInput
@@ -184,7 +192,12 @@ export default function GoalForm({
             control={control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={`${id}-notes`}>Notes</FieldLabel>
+                <FieldLabel
+                  htmlFor={`${id}-notes`}
+                  className={cn({ "opacity-50": field.disabled })}
+                >
+                  Notes
+                </FieldLabel>
                 <Textarea
                   {...field}
                   id={`${id}-notes`}
@@ -200,19 +213,21 @@ export default function GoalForm({
             )}
           />
         </FieldGroup>
-
-        <Divider />
+        <Separator className="my-5" />
         <Button
           type="submit"
           disabled={
-            !hideApiError && (!!createGoalErrors.api || !!updateGoalErrors.api)
+            isMutating ||
+            (!hideApiError &&
+              (!!createGoalErrors.api || !!updateGoalErrors.api))
           }
-          loading={isMutating}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-          fullWidth
+          className="w-full"
         >
+          {isMutating ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Save data-icon="inline-start" />
+          )}
           Save
         </Button>
       </form>

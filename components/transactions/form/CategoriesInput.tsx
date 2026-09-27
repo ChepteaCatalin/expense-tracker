@@ -25,7 +25,7 @@ export default function CategoriesInput({
   return (
     <div>
       <div className="mb-2">
-        <p className="font-medium">
+        <p className={cn("font-medium", { "opacity-50": disabled })}>
           Category <span className="text-destructive">*</span>
         </p>
         {errors.categoryId && (

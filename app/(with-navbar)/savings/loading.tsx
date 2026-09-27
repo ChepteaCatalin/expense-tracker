@@ -1,26 +1,13 @@
 import Heading from "@/components/Heading";
-import Stack from "@mui/material/Stack";
 import { metadata } from "./constants";
-import Skeleton from "@mui/material/Skeleton";
 import PageWrapper from "@/components/PageWrapper";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SavingsGoalsLoading() {
   return (
     <PageWrapper>
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Stack spacing={3}>
-        <SavingsGoalCard />
-      </Stack>
+      <Skeleton className="h-80 rounded-2xl" />
     </PageWrapper>
-  );
-}
-
-function SavingsGoalCard() {
-  return (
-    <Skeleton
-      variant="rectangular"
-      height={331}
-      sx={{ borderRadius: "12px" }}
-    />
   );
 }

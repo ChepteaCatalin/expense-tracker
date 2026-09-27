@@ -2,6 +2,7 @@
 
 import DatePicker from "@/components/DatePicker";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { cn } from "cn";
 import { Controller } from "react-hook-form";
 
 export default function StartDateField({
@@ -15,7 +16,9 @@ export default function StartDateField({
       {...(!isEditMode && { defaultValue: new Date().toISOString() })}
       render={({ field: { value, onChange, disabled } }) => (
         <Field>
-          <FieldLabel>Start Date</FieldLabel>
+          <FieldLabel className={cn({ "opacity-50": disabled })}>
+            Start Date
+          </FieldLabel>
           <DatePicker value={value} onChange={onChange} disabled={disabled} />
         </Field>
       )}

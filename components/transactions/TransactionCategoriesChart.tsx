@@ -13,7 +13,7 @@ export default function TransactionCategoriesChart({
   data: TransactionCategoriesChartData;
   currency: string;
 }) {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const sum = data.reduce((sum, item) => sum + item.value, 0);
 
@@ -21,7 +21,7 @@ export default function TransactionCategoriesChart({
     <div className="h-62.5 lg:h-75">
       <ReactECharts
         style={{ height: "100%" }}
-        theme={theme}
+        theme={resolvedTheme}
         option={{
           textStyle,
           backgroundColor: "transparent",
@@ -49,7 +49,7 @@ export default function TransactionCategoriesChart({
               radius: [innerRadius(sum), "95%"],
               itemStyle: {
                 borderColor:
-                  theme === "dark"
+                  resolvedTheme === "dark"
                     ? "rgb(227, 227, 227)"
                     : "rgb(133, 133, 133)",
                 borderWidth: 1,

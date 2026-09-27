@@ -11,7 +11,6 @@ import {
   useId,
   useState,
 } from "react";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
 import { Separator } from "@/components/ui/separator";
 import type { Category } from "@/types/category";
 import CategoriesInput from "./CategoriesInput";
@@ -43,6 +42,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { Save } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
 
 interface FormProps {
   type: TransactionType;
@@ -112,10 +112,10 @@ export default function Form({
 
   return (
     <FormProvider {...methods}>
-      <ApiFormErrorAlert
+      <ActionErrorAlert
         hide={hideApiError}
         message={createTransactionErrors.api || updateTransactionErrors.api}
-        sx={{ mb: 3 }}
+        className="mb-6"
       />
       <form
         noValidate
@@ -135,7 +135,10 @@ export default function Form({
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={`${id}-amount`}>
+                  <FieldLabel
+                    htmlFor={`${id}-amount`}
+                    className={cn({ "opacity-50": field.disabled })}
+                  >
                     Amount <span className="text-destructive">*</span>
                   </FieldLabel>
                   <AmountInput
@@ -156,7 +159,9 @@ export default function Form({
               control={control}
               render={({ field: { value, onChange, disabled } }) => (
                 <Field>
-                  <FieldLabel>Date</FieldLabel>
+                  <FieldLabel className={cn({ "opacity-50": disabled })}>
+                    Date
+                  </FieldLabel>
                   <DatePicker
                     value={value}
                     onChange={onChange}
@@ -172,7 +177,10 @@ export default function Form({
             control={control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={`${id}-description`}>
+                <FieldLabel
+                  htmlFor={`${id}-description`}
+                  className={cn({ "opacity-50": field.disabled })}
+                >
                   Description
                 </FieldLabel>
                 <Textarea
