@@ -2,7 +2,6 @@
 
 import type { SavingsGoal, SavingsGoalFormValues } from "@/types/savings";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TextField from "@mui/material/TextField";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { savingsGoalSchema } from "../../validation";
 import Button from "@mui/material/Button";
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import AmountInput from "@/components/AmountInput";
+import { Textarea } from "@/components/ui/textarea";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -60,15 +60,7 @@ export default function GoalForm({
     resolver: zodResolver(savingsGoalSchema),
     disabled: isMutating,
   });
-  const {
-    control,
-    register,
-    handleSubmit,
-    trigger,
-    subscribe,
-    reset,
-    formState: { errors },
-  } = methods;
+  const { control, handleSubmit, trigger, subscribe, reset } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
 
@@ -187,19 +179,25 @@ export default function GoalForm({
             />
           </div>
           {startDateField}
-          <TextField
-            {...register("notes")}
-            label="Notes"
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.notes}
-            helperText={errors.notes?.message}
-            multiline
-            minRows={2}
-            maxRows={10}
-            slotProps={{
-              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-            }}
+          <Controller
+            name="notes"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={`${id}-notes`}>Notes</FieldLabel>
+                <Textarea
+                  {...field}
+                  id={`${id}-notes`}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                  className="max-h-145"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
         </FieldGroup>
 
