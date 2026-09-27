@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  handleDatePickerChange,
-  toDatePickerValue,
-} from "@/lib/MuiDatePicker/utils";
-import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import DatePicker from "@/components/DatePicker";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Controller } from "react-hook-form";
 
 export default function StartDateField({
@@ -16,25 +12,12 @@ export default function StartDateField({
   return (
     <Controller
       name="startDate"
-      {...(!isEditMode && { defaultValue: dayjs().toISOString() })}
-      render={({
-        field: { name, value, onChange, disabled },
-        fieldState: { error },
-      }) => (
-        <DatePicker
-          label="Start Date"
-          name={name}
-          disabled={disabled}
-          value={toDatePickerValue(value)}
-          onChange={handleDatePickerChange(onChange)}
-          slotProps={{
-            textField: {
-              required: true,
-              error: !!error,
-              helperText: error?.message?.toString(),
-            },
-          }}
-        />
+      {...(!isEditMode && { defaultValue: new Date().toISOString() })}
+      render={({ field: { value, onChange, disabled } }) => (
+        <Field>
+          <FieldLabel>Start Date</FieldLabel>
+          <DatePicker value={value} onChange={onChange} disabled={disabled} />
+        </Field>
       )}
     />
   );

@@ -1,5 +1,5 @@
-// TODO: all these should be removed
-
+// TODO: all these should be removed, or at least moved somewhere else
+//TODO: remove the whole folder
 import type { PickerValue } from "@mui/x-date-pickers/internals";
 import dayjs from "dayjs";
 import z from "zod";
