@@ -10,7 +10,6 @@ export default function SavingsGoalsLoading() {
       <Heading title={metadata.title} subtitle={metadata.description} />
       <Stack spacing={3}>
         <SavingsGoalCard />
-        <SavingsGoalCard />
       </Stack>
     </PageWrapper>
   );
