@@ -1,4 +1,4 @@
-import DeleteGoalBtn from "./DeleteGoalBtn";
+import DeleteGoal from "./DeleteGoal";
 import CompleteGoal from "./CompleteGoal";
 import Link from "next/link";
 import type { SavingsGoal } from "@/types/savings";
@@ -35,7 +35,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
         ) : (
           <CompleteGoal id={goal.id} startDate={goal.startDate} />
         )}
-        <DeleteGoalBtn id={goal.id} name={goal.name} />
+        <DeleteGoal id={goal.id} />
       </CardContent>
     </Card>
   );
