@@ -2,12 +2,12 @@ import DeleteGoalBtn from "./DeleteGoalBtn";
 import CompleteGoal from "./CompleteGoal";
 import Link from "next/link";
 import type { SavingsGoal } from "@/types/savings";
-import ReopenGoalBtn from "./ReopenGoalBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
+import ReopenGoal from "./ReopenGoal";
 
 export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
   return (
@@ -31,7 +31,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
           )}
         </div>
         {goal.isCompleted ? (
-          <ReopenGoalBtn id={goal.id} />
+          <ReopenGoal id={goal.id} />
         ) : (
           <CompleteGoal id={goal.id} startDate={goal.startDate} />
         )}
