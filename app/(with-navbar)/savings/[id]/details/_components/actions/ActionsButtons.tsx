@@ -1,7 +1,7 @@
 import DeleteGoalBtn from "./DeleteGoalBtn";
+import CompleteGoal from "./CompleteGoal";
 import Link from "next/link";
 import type { SavingsGoal } from "@/types/savings";
-import CompleteGoalBtn from "./CompleteGoalBtn";
 import ReopenGoalBtn from "./ReopenGoalBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,13 +18,13 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
       <CardContent className="flex gap-3">
         <div className="w-full">
           {goal.isCompleted ? (
-            <Button variant="outline" disabled className="w-full">
+            <Button variant="secondary" disabled className="w-full">
               <Edit data-icon="inline-start" /> Edit
             </Button>
           ) : (
             <Link
               href={`/savings/${goal.id}/edit`}
-              className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+              className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
             >
               <Edit data-icon="inline-start" /> Edit
             </Link>
@@ -33,7 +33,7 @@ export default function ActionsButtons({ goal }: { goal: SavingsGoal }) {
         {goal.isCompleted ? (
           <ReopenGoalBtn id={goal.id} />
         ) : (
-          <CompleteGoalBtn id={goal.id} startDate={goal.startDate} />
+          <CompleteGoal id={goal.id} startDate={goal.startDate} />
         )}
         <DeleteGoalBtn id={goal.id} name={goal.name} />
       </CardContent>

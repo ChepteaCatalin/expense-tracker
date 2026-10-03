@@ -5,6 +5,7 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import DatePickerProvider from "@/lib/MuiDatePicker/DatePickerProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/lib/dayjs";
 import "@/lib/date-fns";
 import "./globals.css";
@@ -34,7 +35,9 @@ export default function RootLayout({
         >
           <AppRouterCacheProvider>
             <MuiThemeProvider theme={theme}>
-              <DatePickerProvider>{children}</DatePickerProvider>
+              <DatePickerProvider>
+                <TooltipProvider>{children}</TooltipProvider>
+              </DatePickerProvider>
             </MuiThemeProvider>
           </AppRouterCacheProvider>
         </ThemeProvider>
