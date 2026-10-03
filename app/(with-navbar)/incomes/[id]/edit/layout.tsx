@@ -1,7 +1,7 @@
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 import FormNavigateBackBtn from "../../_components/FormNavigateBackBtn";
 import { Suspense } from "react";
-import Skeleton from "@mui/material/Skeleton";
+import BackBtnSkeleton from "@/components/BackBtnSkeleton";
 
 export const metadata = {
   title: "Edit Income",
@@ -18,19 +18,7 @@ export default function EditIncomeLayout({
       title={metadata.title}
       subtitle={metadata.description}
       aboveCard={
-        <Suspense
-          fallback={
-            <Skeleton
-              variant="rectangular"
-              sx={{
-                width: "66px",
-                height: "28px",
-                mb: 0.5,
-                borderRadius: "4px",
-              }}
-            />
-          }
-        >
+        <Suspense fallback={<BackBtnSkeleton />}>
           <FormNavigateBackBtn />
         </Suspense>
       }

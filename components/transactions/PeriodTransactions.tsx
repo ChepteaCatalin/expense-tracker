@@ -2,15 +2,9 @@ import { getSession } from "@/data/auth";
 import type { TransactionsByDate } from "@/types/transaction";
 import { categoryIcons } from "@/utils/category-icons";
 import { readableCurrency } from "@/utils/currency";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { Card } from "../ui/card";
 
 export default async function PeriodTransactions({
   type,
@@ -27,123 +21,48 @@ export default async function PeriodTransactions({
   )?.Component;
 
   return (
-    <Box>
-      <Typography
-        sx={{
-          fontSize: "0.875rem",
-          fontWeight: 600,
-          ml: 1,
-          color: "text.pale",
-          letterSpacing: 0.2,
-        }}
-      >
+    <div>
+      <p className="text-muted-foreground mb-0.5 ml-2 text-sm font-semibold">
         {dayjs(transactions.date).format("D MMMM YYYY")}
-      </Typography>
-      <Card
-        sx={{
-          borderRadius: "14px",
-          border: "1px solid",
-          borderColor: "rgba(255, 255, 255, 0.1)",
-          background:
-            "linear-gradient(160deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
-          boxShadow: "0 10px 24px rgba(0, 0, 0, 0.2)",
-        }}
-      >
-        <CardContent sx={{ "&.MuiCardContent-root": { p: 1.25 } }}>
-          <Stack spacing={0.5}>
-            {transactions.transactions.map((transactionItem, index) => (
-              <Box key={transactionItem.id}>
-                <Link
-                  href={`/${type}/${transactionItem.id}/edit?${searchParams}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Box
-                    role="button"
-                    sx={{
-                      cursor: "pointer",
-                      px: 0.75,
-                      py: 0.5,
-                      borderRadius: 1.5,
-                      transition:
-                        "background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease",
-                      "&:hover": {
-                        bgcolor: "action.hover",
-                        transform: "translateX(2px)",
-                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-                      },
+      </p>
+      <Card className="divide-foreground/10 gap-0 divide-y py-0">
+        {transactions.transactions.map((transactionItem) => (
+          <Link
+            key={transactionItem.id}
+            href={`/${type}/${transactionItem.id}/edit?${searchParams}`}
+            className="hover:bg-foreground/8 block px-2.5 py-2.5 transition-colors duration-150 ease-out"
+            style={{ textDecoration: "none" }}
+          >
+            <div className="flex flex-nowrap items-center justify-between gap-4">
+              <div className="flex min-w-0 flex-nowrap items-center gap-2">
+                {Icon && (
+                  <Icon
+                    className="h-8 w-8 flex-none rounded-full p-0.75 text-[32px]"
+                    style={{
+                      backgroundColor: transactions.backgroundColor,
+                      fill: transactions.strokeColor,
                     }}
-                  >
-                    <Grid
-                      container
-                      spacing={2}
-                      sx={{
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        flexWrap: "nowrap",
-                      }}
-                    >
-                      <Grid
-                        container
-                        spacing={1}
-                        sx={{ flexWrap: "nowrap", alignItems: "center" }}
-                      >
-                        {Icon && (
-                          <Icon
-                            style={{
-                              width: "32px",
-                              height: "32px",
-                              fontSize: "32px",
-                              padding: "3px",
-                              borderRadius: "50%",
-                              backgroundColor: transactions.backgroundColor,
-                              fill: transactions.strokeColor,
-                              flex: "none",
-                            }}
-                          />
-                        )}
-                        <Typography
-                          sx={{
-                            color: "text.pale",
-                            fontWeight: 500,
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {transactions.categoryName}
-                        </Typography>
-                      </Grid>
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          color: "success.light",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {`${readableCurrency(transactionItem.amount)} ${currency}`}
-                      </Typography>
-                    </Grid>
-                    <Typography
-                      sx={{
-                        color: "text.secondary",
-                        fontSize: "0.8125rem",
-                        mt: 0.25,
-                      }}
-                    >
-                      {transactionItem.description}
-                    </Typography>
-                  </Box>
-                </Link>
-                {index !== transactions.transactions.length - 1 && (
-                  <Divider
-                    sx={{ mt: 0.5, borderColor: "rgba(255, 255, 255, 0.08)" }}
                   />
                 )}
-              </Box>
-            ))}
-          </Stack>
-        </CardContent>
+                <p
+                  title={transactions.categoryName}
+                  className="text-foreground min-w-0 truncate font-semibold"
+                >
+                  {transactions.categoryName}
+                </p>
+              </div>
+              <p className="text-primary-light font-bold whitespace-nowrap">
+                {`${readableCurrency(transactionItem.amount)} ${currency}`}
+              </p>
+            </div>
+            {transactionItem.description && (
+              <p className="text-muted-foreground mt-1 pl-10 text-[0.8125rem] wrap-break-word">
+                {transactionItem.description}
+              </p>
+            )}
+          </Link>
+        ))}
       </Card>
-    </Box>
+    </div>
   );
 }

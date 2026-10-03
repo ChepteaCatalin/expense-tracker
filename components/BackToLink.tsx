@@ -1,31 +1,25 @@
-import Button from "@mui/material/Button";
-import type { SxProps, Theme } from "@mui/material/styles";
+import { cn } from "cn";
 import Link from "next/link";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import type { UrlObject } from "url";
+import { buttonVariants } from "./ui/button";
+import { ChevronLeft } from "lucide-react";
 
 export default function BackToLink({
   href,
   pageName,
-  sx,
+  className,
 }: {
   href: string | UrlObject;
   pageName?: string;
-  sx?: SxProps<Theme>;
+  className?: string;
 }) {
   return (
-    <Link href={href}>
-      <Button
-        sx={{
-          py: 0,
-          px: 0.5,
-          "& .MuiButton-startIcon": { mr: 0.5 },
-          ...sx,
-        }}
-        startIcon={<ChevronLeftIcon />}
-      >
-        {pageName ? `Back to ${pageName}` : "Back"}
-      </Button>
+    <Link
+      href={href}
+      className={cn(buttonVariants({ variant: "ghost" }), "mb-1", className)}
+    >
+      <ChevronLeft data-icon="inline-start" />
+      {pageName ? `Back to ${pageName}` : "Back"}
     </Link>
   );
 }

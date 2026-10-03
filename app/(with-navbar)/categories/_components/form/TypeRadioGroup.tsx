@@ -1,30 +1,30 @@
 "use client";
 
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import { notFound, useSearchParams } from "next/navigation";
 import { useEffect, useId } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { isValidCategoryType } from "../../utils";
 import { type CategoryType } from "@/types/category";
+import {
+  Field,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function TypeRadioGroup({
   isEditMode,
   editingCategoryType,
-  error,
 }: {
   isEditMode: boolean;
   editingCategoryType?: CategoryType;
-  error: boolean;
 }) {
   const searchParams = useSearchParams();
   const urlCategoryType = searchParams.get("type");
   const { setValue } = useFormContext();
 
-  const radioGroupId = useId();
+  const id = useId();
 
   useEffect(() => {
     if (!isEditMode) {
@@ -37,42 +37,46 @@ export default function TypeRadioGroup({
   return (
     <Controller
       name="type"
-      {...(!isEditMode && { defaultValue: urlCategoryType })}
-      render={({ field: { onChange, onBlur, value, ref, disabled } }) => (
-        <FormControl
-          onBlur={onBlur}
-          ref={ref}
-          error={!!error}
-          disabled={isEditMode}
-        >
-          <FormLabel
-            id={radioGroupId}
-            sx={{ "&.Mui-disabled": { color: "text.secondary" } }}
-          >
-            Type
-          </FormLabel>
-          <RadioGroup
-            name="type"
-            value={value}
-            onChange={(_, value) => onChange(value)}
-            row
-            aria-labelledby={radioGroupId}
-          >
-            <FormControlLabel
-              control={<Radio />}
-              label="Expense"
-              value="expense"
-              disabled={disabled || editingCategoryType === "income"}
-            />
-            <FormControlLabel
-              control={<Radio />}
-              label="Income"
-              value="income"
-              disabled={disabled || editingCategoryType === "expense"}
-            />
-          </RadioGroup>
-        </FormControl>
-      )}
+      defaultValue={urlCategoryType}
+      render={({ field }) => {
+        const expenseDisabled =
+          field.disabled || editingCategoryType === "income";
+        const incomeDisabled =
+          field.disabled || editingCategoryType === "expense";
+
+        return (
+          <FieldSet>
+            <FieldLegend
+              variant="label"
+              className={`${field.disabled ? "opacity-50" : ""}`}
+            >
+              Type
+            </FieldLegend>
+            <RadioGroup
+              name={field.name}
+              value={field.value}
+              onValueChange={field.onChange}
+            >
+              <Field orientation="horizontal" data-disabled={expenseDisabled}>
+                <RadioGroupItem
+                  value="expense"
+                  id={`${id}-expense`}
+                  disabled={expenseDisabled}
+                />
+                <FieldLabel htmlFor={`${id}-expense`}>Expense</FieldLabel>
+              </Field>
+              <Field orientation="horizontal" data-disabled={incomeDisabled}>
+                <RadioGroupItem
+                  value="income"
+                  id={`${id}-income`}
+                  disabled={incomeDisabled}
+                />
+                <FieldLabel htmlFor={`${id}-income`}>Income</FieldLabel>
+              </Field>
+            </RadioGroup>
+          </FieldSet>
+        );
+      }}
     />
   );
 }

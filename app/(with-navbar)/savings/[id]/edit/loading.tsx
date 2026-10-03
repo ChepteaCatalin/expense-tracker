@@ -1,42 +1,37 @@
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-import type { SxProps, Theme } from "@mui/material/styles";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EditSavingsGoalPage() {
   return (
-    <Stack spacing={3}>
-      <InputSkeleton />
-      <InputSkeleton />
-      <Grid container spacing={2}>
-        <InputSkeleton sx={{ flex: 1 }} />
-        <InputSkeleton sx={{ flex: 1 }} />
-      </Grid>
-      <InputSkeleton />
-      <InputSkeleton height={63} />
-      <Divider />
-      <Skeleton
-        variant="rectangular"
-        height={40}
-        sx={{ borderRadius: "4px" }}
-      />
-    </Stack>
-  );
-}
-
-function InputSkeleton({
-  sx,
-  height,
-}: {
-  sx?: SxProps<Theme>;
-  height?: number;
-}) {
-  return (
-    <Skeleton
-      variant="rectangular"
-      height={height || 40}
-      sx={{ borderRadius: "4px", ...sx }}
-    />
+    <div className="space-y-5">
+      <div className="space-y-2">
+        <Skeleton className="h-5 w-13" />
+        <Skeleton className="h-8 w-full" />
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-5 w-18.25" />
+        <Skeleton className="h-8 w-full" />
+      </div>
+      <div className="flex gap-4">
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-5 w-26" />
+          <Skeleton className="h-8" />
+        </div>
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-5 w-27.5" />
+          <Skeleton className="h-8" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-5 w-16.75" />
+        <Skeleton className="h-8 w-full" />
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-5 w-10" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+      <Separator className="my-5" />
+      <Skeleton className="h-8 w-full" />
+    </div>
   );
 }

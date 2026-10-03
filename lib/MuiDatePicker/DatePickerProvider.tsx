@@ -1,5 +1,8 @@
 "use client";
 
+//TODO: remove this file
+//TODO: remove the whole folder
+
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "@/lib/dayjs";

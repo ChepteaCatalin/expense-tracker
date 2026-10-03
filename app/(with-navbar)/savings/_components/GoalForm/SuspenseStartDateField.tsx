@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import StartDateField from "./StartDateField";
-import Skeleton from "@mui/material/Skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SuspenseStartDateField({
   isEditMode,
@@ -10,11 +10,10 @@ export default function SuspenseStartDateField({
   return (
     <Suspense
       fallback={
-        <Skeleton
-          variant="rectangular"
-          height={40}
-          sx={{ borderRadius: "4px" }}
-        />
+        <div className="space-y-2">
+          <Skeleton className="h-5 w-16.75" />
+          <Skeleton className="h-8" />
+        </div>
       }
     >
       <StartDateField isEditMode={isEditMode} />

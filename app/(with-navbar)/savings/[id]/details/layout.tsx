@@ -13,11 +13,7 @@ export default function SavingsGoalDetailsLayout({
 }) {
   return (
     <PageWrapper>
-      <Heading
-        title={metadata.title}
-        subtitle={metadata.description}
-        sx={{ mb: 5 }}
-      />
+      <Heading title={metadata.title} subtitle={metadata.description} />
       {children}
     </PageWrapper>
   );
