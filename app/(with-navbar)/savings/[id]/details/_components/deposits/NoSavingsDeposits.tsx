@@ -1,6 +1,7 @@
-import AddDepositOutlinedBtn from "../actions/AddDepositOutlinedBtn";
 import { Card, CardContent } from "@/components/ui/card";
-import { SearchX } from "lucide-react";
+import { SearchX, Plus } from "lucide-react";
+import AddEditDepositDialog from "./AddEditDepositDialog";
+import { Button } from "@/components/ui/button";
 
 export default function NoSavingsDeposits({
   goalId,
@@ -16,10 +17,14 @@ export default function NoSavingsDeposits({
       <CardContent className="space-y-2 text-center">
         <SearchX className="text-muted-foreground mx-auto h-12 w-12" />
         <p className="font-medium">There are no deposits yet</p>
-        <AddDepositOutlinedBtn
-          id={goalId}
+        <AddEditDepositDialog
+          goalId={goalId}
           currency={goalCurrency}
-          disabled={isGoalCompleted}
+          triggerBtn={
+            <Button disabled={isGoalCompleted}>
+              <Plus data-icon="inline-start" /> Add Deposit
+            </Button>
+          }
         />
       </CardContent>
     </Card>

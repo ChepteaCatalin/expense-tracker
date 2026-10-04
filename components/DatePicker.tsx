@@ -40,9 +40,10 @@ export default function DatePicker({
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
+          required
           selected={date}
           onSelect={(date) => {
-            onChange(formatISO(date!));
+            onChange(formatISO(date));
             setOpen(false);
           }}
           defaultMonth={date}

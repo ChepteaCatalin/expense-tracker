@@ -9,9 +9,10 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import NoSavingsDeposits from "./NoSavingsDeposits";
-import AddDepositIconBtn from "./AddDepositIconBtn";
+import AddEditDepositDialog from "./AddEditDepositDialog";
+import { Button } from "@/components/ui/button";
+import { Pencil, Plus } from "lucide-react";
 import DeleteDepositBtn from "./DeleteDepositBtn";
-import EditDepositBtn from "./EditDepositBtn";
 
 export default async function SavingsDeposits({
   deposits,
@@ -54,10 +55,19 @@ export default async function SavingsDeposits({
               <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 Deposits
               </Typography>
-              <AddDepositIconBtn
-                id={goalId}
-                isGoalCompleted={isGoalCompleted}
-                goalCurrency={goalCurrency}
+              <AddEditDepositDialog
+                goalId={goalId}
+                currency={goalCurrency}
+                triggerBtn={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Add deposit"
+                    disabled={isGoalCompleted}
+                  >
+                    <Plus />
+                  </Button>
+                }
               />
             </Stack>
             <Chip
@@ -127,11 +137,20 @@ export default async function SavingsDeposits({
                       {dayjs(deposit.date).format("D MMM YYYY")}
                     </Typography>
                     <Box>
-                      <EditDepositBtn
-                        deposit={deposit}
+                      <AddEditDepositDialog
                         goalId={goalId}
-                        isGoalCompleted={isGoalCompleted}
-                        goalCurrency={goalCurrency}
+                        deposit={deposit}
+                        currency={goalCurrency}
+                        triggerBtn={
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            aria-label="Edit deposit"
+                            disabled={isGoalCompleted}
+                          >
+                            <Pencil />
+                          </Button>
+                        }
                       />
                       <DeleteDepositBtn
                         id={deposit.id}
