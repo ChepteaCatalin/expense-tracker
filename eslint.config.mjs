@@ -12,12 +12,14 @@ const eslintConfig = defineConfig([
         {
           paths: [
             //TODO: remove this once `optimizePackageImports` is no longer experimental
+            //TODO: remove this once getting read of mui
             {
               name: "@mui/icons-material",
               message:
                 "Import specific icons from @mui/icons-material/IconName instead of destructuring from the main package.",
             },
-            // TODO: remove this once `optimizePackageImports` is no longer experimental
+            //TODO: remove this once `optimizePackageImports` is no longer experimental
+            //TODO: remove this once getting read of mui
             {
               name: "@mui/material",
               message:

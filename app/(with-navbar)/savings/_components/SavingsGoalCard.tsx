@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import type { SavingsGoal } from "@/types/savings";
 import { readableCurrency } from "@/utils/currency";
 import { cn } from "cn";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 
 export default function SavingsGoalCard({
   goal: {
@@ -219,7 +219,7 @@ function DateRow({
       <p
         className={cn("text-sm font-semibold", accent && "text-primary-light")}
       >
-        {dayjs(value).format("D MMMM YYYY")}
+        {format(value, "d MMMM yyyy")}
       </p>
     </div>
   );
