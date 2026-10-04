@@ -7,7 +7,7 @@ export default function SavingsGoalsLoading() {
   return (
     <PageWrapper>
       <Heading title={metadata.title} subtitle={metadata.description} />
-      <Skeleton className="h-80 rounded-2xl" />
+      <Skeleton className="h-120 rounded-2xl lg:h-80" />
     </PageWrapper>
   );
 }

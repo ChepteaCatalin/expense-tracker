@@ -3,7 +3,6 @@ import { validIdParam } from "@/utils/url";
 import type { SavingsDeposit, SavingsGoal } from "@/types/savings";
 import { UnauthorizedError } from "@/utils/error";
 import { getSavingsDepositsByGoalId, getSavingsGoalById } from "@/data/savings";
-import Stack from "@mui/material/Stack";
 import SavingsGoalCard from "../../_components/SavingsGoalCard";
 import ActionsButtons from "./_components/actions/ActionsButtons";
 import { BackToSavingsLink } from "../../_components/BackToSavingsLink";
@@ -33,7 +32,7 @@ export default async function SavingsGoalDetailsPage({
   return (
     <>
       <BackToSavingsLink />
-      <Stack spacing={3}>
+      <div className="flex flex-col gap-6">
         <SavingsGoalCard goal={goal} noHoverEffects />
         <ActionsButtons goal={goal} />
         <SavingsDeposits
@@ -42,7 +41,7 @@ export default async function SavingsGoalDetailsPage({
           goalId={goal.id}
           goalCurrency={goal.currency}
         />
-      </Stack>
+      </div>
     </>
   );
 }

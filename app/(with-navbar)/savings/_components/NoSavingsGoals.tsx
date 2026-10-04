@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import CardContent from "@mui/material/CardContent";
+import { Card, CardContent } from "@/components/ui/card";
 import { SearchX, Plus } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 export default function NoSavingsGoals() {
   return (
-    <Card className="p-0">
+    <Card>
       <CardContent className="space-y-2 text-center">
         <SearchX className="text-muted-foreground mx-auto h-12 w-12" />
         <p className="font-medium">There are no savings goals yet</p>
