@@ -12,7 +12,7 @@ import NoSavingsDeposits from "./NoSavingsDeposits";
 import AddEditDepositDialog from "./AddEditDepositDialog";
 import { Button } from "@/components/ui/button";
 import { Pencil, Plus } from "lucide-react";
-import DeleteDepositBtn from "./DeleteDepositBtn";
+import DeleteDeposit from "./DeleteDeposit";
 
 export default async function SavingsDeposits({
   deposits,
@@ -152,7 +152,7 @@ export default async function SavingsDeposits({
                           </Button>
                         }
                       />
-                      <DeleteDepositBtn
+                      <DeleteDeposit
                         id={deposit.id}
                         isGoalCompleted={isGoalCompleted}
                       />
