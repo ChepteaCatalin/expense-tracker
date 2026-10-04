@@ -28,11 +28,7 @@ export default function DashboardLayout({
 }) {
   return (
     <Box>
-      <Heading
-        title={metadata.title}
-        subtitle={metadata.description}
-        //TODO: sx={{ mb: 3 }}
-      />
+      <Heading title={metadata.title} subtitle={metadata.description} />
       <Grid container spacing={3}>
         {period}
         <Grid size={{ xs: 12, md: 4 }}>{totals}</Grid>

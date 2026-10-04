@@ -10,7 +10,6 @@ import {
   week,
   year,
 } from "@/utils/transactions/url";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { capitalizeFirstLetter } from "@/utils/string";
@@ -22,8 +21,9 @@ import {
   startOfWeek,
   startOfYear,
 } from "date-fns";
-import { type DateRange } from "react-day-picker";
-import { Calendar } from "@/components/ui/calendar";
+import DateRangeForm, {
+  type SelectedDateRange,
+} from "@/components/DateRangeForm";
 import {
   Popover,
   PopoverContent,
@@ -123,42 +123,26 @@ function RangeCalendar({
 }) {
   const searchParams = useSearchParams();
 
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
-    const today = new Date();
-    const fromParam = searchParams.get("from");
-    const toParam = searchParams.get("to");
-
-    return {
-      from: fromParam ? parseISO(fromParam) : today,
-      to: toParam ? parseISO(toParam) : addDays(today, 30),
-    };
-  });
+  const today = new Date();
+  const fromParam = searchParams.get("from");
+  const toParam = searchParams.get("to");
 
   return (
-    <>
-      <Calendar
-        mode="range"
-        defaultMonth={dateRange?.from}
-        selected={dateRange}
-        onSelect={setDateRange}
-        numberOfMonths={2}
-      />
-      <Button
-        onClick={() => {
-          onNavigate(buildCustomPeriodParams(dateRange));
-        }}
-        className="mx-2 mb-2"
-      >
-        View {type === "expenses" ? "Expenses" : "Income"}
-      </Button>
-    </>
+    <DateRangeForm
+      defaultValue={{
+        from: fromParam ? parseISO(fromParam) : today,
+        to: toParam ? parseISO(toParam) : addDays(today, 30),
+      }}
+      submitLabel={`View ${type === "expenses" ? "Expenses" : "Income"}`}
+      onSubmit={(range) => onNavigate(buildCustomPeriodParams(range))}
+    />
   );
 }
 
-function buildCustomPeriodParams(data: DateRange | undefined) {
+function buildCustomPeriodParams({ from, to }: SelectedDateRange) {
   return new URLSearchParams({
     [custom]: "true",
-    from: data?.from ? format(data.from, "yyyy-MM-dd") : "",
-    to: data?.to ? format(data.to, "yyyy-MM-dd") : "",
+    from: format(from, "yyyy-MM-dd"),
+    to: format(to, "yyyy-MM-dd"),
   }).toString();
 }
