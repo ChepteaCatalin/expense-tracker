@@ -2,7 +2,7 @@ import { getSession } from "@/data/auth";
 import type { TransactionsByDate } from "@/types/transaction";
 import { categoryIcons } from "@/utils/category-icons";
 import { readableCurrency } from "@/utils/currency";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 import Link from "next/link";
 import { Card } from "../ui/card";
 
@@ -23,7 +23,7 @@ export default async function PeriodTransactions({
   return (
     <div>
       <p className="text-muted-foreground mb-0.5 ml-2 text-sm font-semibold">
-        {dayjs(transactions.date).format("D MMMM YYYY")}
+        {format(transactions.date, "d MMMM yyyy")}
       </p>
       <Card className="divide-foreground/10 gap-0 divide-y py-0">
         {transactions.transactions.map((transactionItem) => (

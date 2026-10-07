@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { format, isValid, parseISO } from "date-fns";
 
 export function validIdParam(id: string): boolean {
   const s = id.trim();
@@ -8,12 +8,18 @@ export function validIdParam(id: string): boolean {
 
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
-export function parseURLDate(date: string | null | undefined) {
-  if (typeof date !== "string" || !isoDateRegex.test(date)) return dayjs("");
+export function parseURLDate(date: string | null | undefined): Date {
+  if (typeof date !== "string" || !isoDateRegex.test(date)) {
+    return new Date(NaN);
+  }
 
-  const parsedDate = dayjs(date);
-  if (!parsedDate.isValid() || parsedDate.format("YYYY-MM-DD") !== date) {
-    return dayjs("");
+  const parsedDate = parseISO(date);
+  if (
+    !isValid(parsedDate) ||
+    parsedDate.getFullYear() < 100 ||
+    format(parsedDate, "yyyy-MM-dd") !== date
+  ) {
+    return new Date(NaN);
   }
 
   return parsedDate;

@@ -1,13 +1,13 @@
 "use client";
 
-import dayjs from "dayjs";
+import { format } from "date-fns";
 import NavLink from "./NavLink";
 import { CircleDollarSign } from "lucide-react";
 
 export default function ExpensesNavLink() {
   return (
     <NavLink
-      href={`/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`}
+      href={`/expenses/categories?month=${format(new Date(), "yyyy-MM-dd")}`}
       Icon={CircleDollarSign}
       text="Expenses"
     />

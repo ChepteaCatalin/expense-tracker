@@ -1,6 +1,6 @@
 import type { DashboardSearchParams } from "@/types/dashboard";
 import { parseURLDate } from "@/utils/url";
-import dayjs from "dayjs";
+import { format, isAfter, isSameDay, isValid, startOfYear } from "date-fns";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
@@ -22,9 +22,9 @@ export function validSearchParams({ from, to }: DashboardSearchParams) {
   const toDate = parseURLDate(to);
 
   return (
-    fromDate.isValid() &&
-    toDate.isValid() &&
-    (toDate.isAfter(fromDate, "day") || toDate.isSame(fromDate, "day"))
+    isValid(fromDate) &&
+    isValid(toDate) &&
+    (isAfter(toDate, fromDate) || isSameDay(toDate, fromDate))
   );
 }
 
@@ -34,8 +34,8 @@ export function normalizedSearchParams({
 }: DashboardSearchParams): DashboardSearchParams {
   if (!from && !to)
     return {
-      from: dayjs().startOf("year").format("YYYY-MM-DD"),
-      to: dayjs().format("YYYY-MM-DD"),
+      from: format(startOfYear(new Date()), "yyyy-MM-dd"),
+      to: format(new Date(), "yyyy-MM-dd"),
     };
 
   return { from, to };

@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import type { Category } from "@/types/category";
 import CategoriesInput from "./CategoriesInput";
 import Link from "next/link";
-import dayjs from "dayjs";
 import { fromCents } from "@/utils/currency";
 import DeleteTransaction from "./DeleteTransaction";
 import { useSearchParams } from "next/navigation";
@@ -244,7 +243,7 @@ function getDefaultValues(transaction?: Transaction): TransactionFormValues {
     return {
       amount: fromCents(transaction.amount),
       categoryId: transaction.categoryId,
-      date: dayjs(transaction.date).toISOString(),
+      date: new Date(transaction.date).toISOString(),
       description: transaction.description,
     };
   }
@@ -252,7 +251,7 @@ function getDefaultValues(transaction?: Transaction): TransactionFormValues {
   return {
     amount: "",
     categoryId: "",
-    date: dayjs().toISOString(),
+    date: new Date().toISOString(),
     description: "",
   };
 }

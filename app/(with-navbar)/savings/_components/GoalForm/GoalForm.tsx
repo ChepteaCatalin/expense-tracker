@@ -14,7 +14,6 @@ import {
 import { createSavingsGoal, updateSavingsGoal } from "../../actions";
 import { fromCents } from "@/utils/currency";
 import type { CurrencyOption } from "@/types/currency";
-import dayjs from "dayjs";
 import {
   Field,
   FieldError,
@@ -246,7 +245,7 @@ function getDefaultValues(
       targetAmount: fromCents(goal.targetAmount),
       notes: goal.notes || "",
       currency: defaultCurrency!,
-      startDate: dayjs(goal.startDate).toISOString(),
+      startDate: new Date(goal.startDate).toISOString(),
     };
   }
 
