@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/lib/date-fns";
+import { APPLE_TOUCH_ICON } from "./apple-touch-icon";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,6 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geist.variable} suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href={APPLE_TOUCH_ICON} />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
