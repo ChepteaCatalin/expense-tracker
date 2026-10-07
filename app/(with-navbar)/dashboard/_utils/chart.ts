@@ -1,4 +1,5 @@
 import type { ThemeColors } from "@/hooks/use-theme-colors";
+import { tooltipZIndexCss } from "@/lib/echarts";
 
 export const barBorderRadius = [2, 2, 0, 0];
 
@@ -25,6 +26,6 @@ export function tooltipStyle(colors: ThemeColors) {
     backgroundColor: colors.popover,
     borderColor: colors.border,
     textStyle: { color: colors.popoverForeground },
-    extraCssText: "z-index: 1000",
+    extraCssText: tooltipZIndexCss,
   };
 }
