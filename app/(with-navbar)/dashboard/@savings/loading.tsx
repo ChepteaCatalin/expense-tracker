@@ -1,14 +1,10 @@
-import Skeleton from "@mui/material/Skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import InsightCard from "../_components/InsightCard";
 
 export default function SavingsLoading() {
   return (
     <InsightCard title="Savings">
-      <Skeleton
-        variant="rectangular"
-        height={500}
-        sx={{ borderRadius: "4px" }}
-      />
+      <Skeleton className="h-125 w-full rounded-sm" />
     </InsightCard>
   );
 }

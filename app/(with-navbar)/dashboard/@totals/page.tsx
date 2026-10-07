@@ -1,9 +1,8 @@
-import Typography from "@mui/material/Typography";
 import { getValidNormalizedSearchParams } from "../utils";
 import InsightCard from "../_components/InsightCard";
 import type { DashboardSearchParams, TotalsMetrics } from "@/types/dashboard";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
+import { cn } from "cn";
+import { Separator } from "@/components/ui/separator";
 import { getSession } from "@/data/auth";
 import { readableCurrency } from "@/utils/currency";
 import { getTotals } from "@/data/dashboard";
@@ -51,26 +50,26 @@ export default async function TotalsPage({
         label="Income"
         value={totals.income}
         currency={currency}
-        color="success.main"
+        className="text-primary-light"
       />
-      <Divider sx={dividerSx} />
+      <Separator className="my-2" />
       <MetricRow
         label="Expenses"
         value={totals.expenses}
         currency={currency}
-        color="error.main"
+        className="text-destructive"
       />
-      <Divider sx={dividerSx} />
+      <Separator className="my-2" />
       <MetricRow
         label="Net Income"
         value={netIncome}
         currency={currency}
-        color={netIncome >= 0 ? "success.main" : "error.main"}
+        className={netIncome >= 0 ? "text-primary-light" : "text-destructive"}
         highlight
       />
-      <Divider sx={dividerSx} />
+      <Separator className="my-2" />
       {totals.savingsByCurrency.length === 0 ? (
-        <MetricRow label="Savings" value={0} color="info.main" />
+        <MetricRow label="Savings" value={0} className="text-chart-2" />
       ) : (
         totals.savingsByCurrency.map(({ currency, total }) => (
           <MetricRow
@@ -78,7 +77,7 @@ export default async function TotalsPage({
             label="Savings"
             value={total}
             currency={currency}
-            color="info.main"
+            className="text-chart-2"
           />
         ))
       )}
@@ -90,38 +89,28 @@ function MetricRow({
   label,
   value,
   currency,
-  color,
+  className,
   highlight,
 }: {
   label: string;
   value: number;
   currency?: string;
-  color: string;
+  className: string;
   highlight?: boolean;
 }) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        px: highlight ? 1 : 0,
-        py: highlight ? 0.5 : 0,
-        borderRadius: highlight ? 1 : 0,
-        bgcolor: highlight ? "rgba(255,255,255,0.04)" : "transparent",
-      }}
+    <div
+      className={cn(
+        "flex items-center justify-between text-sm",
+        highlight && "bg-muted rounded-sm px-2 py-1",
+      )}
     >
-      <Typography variant="body2" sx={{ color: "text.secondary" }}>
-        {label}
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{ fontWeight: highlight ? 700 : 600, color }}
+      <span className="text-muted-foreground">{label}</span>
+      <span
+        className={cn(highlight ? "font-bold" : "font-semibold", className)}
       >
         {readableCurrency(value)} {currency ?? ""}
-      </Typography>
-    </Box>
+      </span>
+    </div>
   );
 }
-
-const dividerSx = { my: 1, borderColor: "rgba(255,255,255,0.07)" };
