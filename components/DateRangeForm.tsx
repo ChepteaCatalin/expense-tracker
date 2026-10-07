@@ -56,6 +56,7 @@ export default function DateRangeForm({
         render={({ field: { value, onChange } }) => (
           <Calendar
             mode="range"
+            resetOnSelect
             defaultMonth={value?.from}
             selected={value ?? undefined}
             onSelect={(range) => onChange(range ?? null)}

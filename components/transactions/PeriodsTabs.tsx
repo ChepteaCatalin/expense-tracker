@@ -18,9 +18,9 @@ import {
   format,
   parseISO,
   startOfMonth,
-  startOfWeek,
   startOfYear,
 } from "date-fns";
+import { startOfWeek } from "@/lib/date-fns";
 import DateRangeForm, {
   type SelectedDateRange,
 } from "@/components/DateRangeForm";

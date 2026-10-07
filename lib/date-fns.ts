@@ -1,3 +1,10 @@
-import { setDefaultOptions } from "date-fns";
+import {
+  endOfWeek as dateFnsEndOfWeek,
+  startOfWeek as dateFnsStartOfWeek,
+} from "date-fns";
 
-setDefaultOptions({ weekStartsOn: 1 });
+export const startOfWeek = (date: Date) =>
+  dateFnsStartOfWeek(date, { weekStartsOn: 1 });
+
+export const endOfWeek = (date: Date) =>
+  dateFnsEndOfWeek(date, { weekStartsOn: 1 });

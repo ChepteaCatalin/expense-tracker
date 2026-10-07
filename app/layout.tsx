@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import "@/lib/date-fns";
 import { APPLE_TOUCH_ICON } from "./apple-touch-icon";
 import "./globals.css";
 

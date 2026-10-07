@@ -1,7 +1,6 @@
 import type { TransactionCategoriesSearchParams } from "@/types/transaction";
 import {
   endOfMonth,
-  endOfWeek,
   endOfYear,
   format,
   isAfter,
@@ -9,9 +8,9 @@ import {
   isValid,
   parseISO,
   startOfMonth,
-  startOfWeek,
   startOfYear,
 } from "date-fns";
+import { endOfWeek, startOfWeek } from "@/lib/date-fns";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { parseURLDate, validIdParam } from "@/utils/url";

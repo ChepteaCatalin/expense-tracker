@@ -19,9 +19,9 @@ import {
   parseISO,
   startOfDay,
   startOfMonth,
-  startOfWeek,
   startOfYear,
 } from "date-fns";
+import { startOfWeek } from "@/lib/date-fns";
 import { useTransition } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";

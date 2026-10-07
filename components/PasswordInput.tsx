@@ -59,6 +59,7 @@ export default function PasswordInput({
             <InputGroupAddon align="inline-end">
               <InputGroupButton
                 onClick={() => setShowPassword((show) => !show)}
+                onMouseDown={(e) => e.preventDefault()}
                 aria-label={eyeBtnText}
                 title={eyeBtnText}
                 size="icon-xs"
