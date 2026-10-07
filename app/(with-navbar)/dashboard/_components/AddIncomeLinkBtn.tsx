@@ -1,16 +1,18 @@
 "use client";
 
-import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import Link from "next/link";
-import AddIcon from "@mui/icons-material/Add";
+import { cn } from "cn";
+import { buttonVariants } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 export default function AddIncomeLinkBtn() {
   return (
-    <Link href={`/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`}>
-      <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
-        Add Income
-      </Button>
+    <Link
+      href={`/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`}
+      className={cn(buttonVariants({ variant: "default" }), "mt-3")}
+    >
+      <Plus /> Add Income
     </Link>
   );
 }
