@@ -2,21 +2,33 @@
 
 import type { SavingsGoal, SavingsGoalFormValues } from "@/types/savings";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import { FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { savingsGoalSchema } from "../../validation";
-import Button from "@mui/material/Button";
-import SaveIcon from "@mui/icons-material/Save";
-import { normalizeAmountNumberInput } from "@/utils/input";
-import Grid from "@mui/material/Grid";
-import { startTransition, useActionState, useEffect, useState } from "react";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 import { createSavingsGoal, updateSavingsGoal } from "../../actions";
-import Divider from "@mui/material/Divider";
 import { fromCents } from "@/utils/currency";
 import type { CurrencyOption } from "@/types/currency";
-import dayjs from "dayjs";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import AmountInput from "@/components/AmountInput";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
+import { Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
+import { cn } from "cn";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -49,16 +61,11 @@ export default function GoalForm({
     resolver: zodResolver(savingsGoalSchema),
     disabled: isMutating,
   });
-  const {
-    register,
-    handleSubmit,
-    trigger,
-    subscribe,
-    reset,
-    formState: { errors },
-  } = methods;
+  const { control, handleSubmit, trigger, subscribe, reset } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
+
+  const id = useId();
 
   useEffect(
     () =>
@@ -79,14 +86,12 @@ export default function GoalForm({
 
   return (
     <FormProvider {...methods}>
-      <ApiFormErrorAlert
+      <ActionErrorAlert
         hide={hideApiError}
         message={createGoalErrors.api || updateGoalErrors.api}
-        sx={{ mb: 3 }}
+        className="mb-6"
       />
-      <Stack
-        spacing={3}
-        component="form"
+      <form
         noValidate
         onSubmit={handleSubmit((data) => {
           startTransition(() => {
@@ -96,94 +101,135 @@ export default function GoalForm({
           });
         })}
       >
-        <TextField
-          {...register("name")}
-          label="Name"
-          fullWidth
-          required
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.name}
-          helperText={errors.name?.message}
-          slotProps={{
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
-        {currencyAutocomplete}
-        <Grid container spacing={2}>
-          <TextField
-            {...register("initialAmount", {
-              setValueAs: normalizeAmountNumberInput,
-              onChange: () => trigger("targetAmount"),
-            })}
-            label="Initial Amount"
-            required
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.initialAmount}
-            helperText={errors.initialAmount?.message}
-            slotProps={{
-              htmlInput: {
-                inputMode: "decimal",
-                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                  e.currentTarget.select(),
-              },
-              inputLabel: { shrink: true },
-            }}
-            sx={{ flex: 1 }}
+        <FieldGroup>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                data-disabled={field.disabled}
+              >
+                <FieldLabel htmlFor={`${id}-name`}>
+                  Name <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  required
+                  disabled={field.disabled}
+                  id={`${id}-name`}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-          <TextField
-            {...register("targetAmount", {
-              setValueAs: normalizeAmountNumberInput,
-              onChange: () => trigger("targetAmount"),
-            })}
-            label="Target Amount"
-            required
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.targetAmount}
-            helperText={errors.targetAmount?.message}
-            slotProps={{
-              htmlInput: {
-                inputMode: "decimal",
-                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                  e.currentTarget.select(),
-              },
-              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-            }}
-            sx={{ flex: 1 }}
+          {currencyAutocomplete}
+          <div className="flex gap-4">
+            <Controller
+              name="initialAmount"
+              control={control}
+              render={({ field: { onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="flex-1">
+                  <FieldLabel
+                    htmlFor={`${id}-initial-amount`}
+                    className={cn({ "opacity-50": field.disabled })}
+                  >
+                    Initial Amount <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <AmountInput
+                    {...field}
+                    onChange={(value) => {
+                      onChange(value);
+                      trigger("targetAmount");
+                    }}
+                    required
+                    id={`${id}-initial-amount`}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="targetAmount"
+              control={control}
+              render={({ field: { onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="flex-1">
+                  <FieldLabel
+                    htmlFor={`${id}-target-amount`}
+                    className={cn({ "opacity-50": field.disabled })}
+                  >
+                    Target Amount <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <AmountInput
+                    {...field}
+                    onChange={(value) => {
+                      onChange(value);
+                      trigger("targetAmount");
+                    }}
+                    required
+                    id={`${id}-target-amount`}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          {startDateField}
+          <Controller
+            name="notes"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel
+                  htmlFor={`${id}-notes`}
+                  className={cn({ "opacity-50": field.disabled })}
+                >
+                  Notes
+                </FieldLabel>
+                <Textarea
+                  {...field}
+                  id={`${id}-notes`}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                  className="max-h-145"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </Grid>
-        {startDateField}
-        <TextField
-          {...register("notes")}
-          label="Notes"
-          autoComplete="off"
-          spellCheck="false"
-          error={!!errors.notes}
-          helperText={errors.notes?.message}
-          multiline
-          minRows={2}
-          maxRows={10}
-          slotProps={{
-            inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-          }}
-        />
-        <Divider />
+        </FieldGroup>
+        <Separator className="my-5" />
         <Button
           type="submit"
           disabled={
-            !hideApiError && (!!createGoalErrors.api || !!updateGoalErrors.api)
+            isMutating ||
+            (!hideApiError &&
+              (!!createGoalErrors.api || !!updateGoalErrors.api))
           }
-          loading={isMutating}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-          fullWidth
+          className="w-full"
         >
+          {isMutating ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <Save data-icon="inline-start" />
+          )}
           Save
         </Button>
-      </Stack>
+      </form>
     </FormProvider>
   );
 }
@@ -199,7 +245,7 @@ function getDefaultValues(
       targetAmount: fromCents(goal.targetAmount),
       notes: goal.notes || "",
       currency: defaultCurrency!,
-      startDate: dayjs(goal.startDate).toISOString(),
+      startDate: new Date(goal.startDate).toISOString(),
     };
   }
 

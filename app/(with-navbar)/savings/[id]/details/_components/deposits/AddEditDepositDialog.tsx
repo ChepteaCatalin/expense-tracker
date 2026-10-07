@@ -1,14 +1,10 @@
 "use client";
 
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import type { SavingsDeposit, SavingsDepositFormValues } from "@/types/savings";
 import { fromCents } from "@/utils/currency";
 import { zodResolver } from "@hookform/resolvers/zod";
-import dayjs from "dayjs";
 import {
+  type ReactElement,
   startTransition,
   useActionState,
   useEffect,
@@ -18,36 +14,72 @@ import {
 } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { savingsDepositSchema } from "../../../../validation";
-import ApiFormErrorAlert from "@/components/ApiFormErrorAlert";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import { normalizeAmountNumberInput } from "@/utils/input";
-import SaveIcon from "@mui/icons-material/Save";
-import Button from "@mui/material/Button";
-import InputAdornment from "@mui/material/InputAdornment";
-import { DatePicker } from "@mui/x-date-pickers";
-import {
-  handleDatePickerChange,
-  toDatePickerValue,
-} from "@/lib/MuiDatePicker/utils";
 import {
   createSavingsDeposit,
   updateSavingsDeposit,
 } from "../../../../actions";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { cn } from "cn";
+import AmountInput from "@/components/AmountInput";
+import DatePicker from "@/components/DatePicker";
+import { Textarea } from "@/components/ui/textarea";
+import ActionErrorAlert from "@/components/ActionErrorAlert";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 interface AddEditDepositDialogProps {
-  handleClose: () => void;
   goalId: number;
+  triggerBtn: ReactElement;
   currency?: string;
   deposit?: SavingsDeposit;
 }
 
 export default function AddEditDepositDialog({
-  handleClose,
   goalId,
   currency,
   deposit,
+  triggerBtn,
 }: AddEditDepositDialogProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={triggerBtn} />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{deposit ? "Edit" : "Add"} Deposit</DialogTitle>
+        </DialogHeader>
+        <DepositForm
+          goalId={goalId}
+          currency={currency}
+          deposit={deposit}
+          onSuccess={() => setOpen(false)}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DepositForm({
+  goalId,
+  currency,
+  deposit,
+  onSuccess,
+}: Omit<AddEditDepositDialogProps, "triggerBtn"> & { onSuccess: () => void }) {
   const isEditMode = !!deposit;
 
   const [createDepositErrors, createDepositAction, isPendingCreate] =
@@ -62,17 +94,13 @@ export default function AddEditDepositDialog({
     resolver: zodResolver(savingsDepositSchema),
     disabled: isMutating,
   });
-  const {
-    control,
-    register,
-    handleSubmit,
-    subscribe,
-    formState: { errors },
-  } = methods;
+  const { control, handleSubmit, subscribe } = methods;
 
   const [hideApiError, setHideApiError] = useState(false);
-  const titleId = useId();
+
   const formId = useId();
+  const amountInputId = useId();
+  const notesInputId = useId();
   const prevMutatingRef = useRef(false);
 
   useEffect(
@@ -86,146 +114,124 @@ export default function AddEditDepositDialog({
 
   useEffect(
     function closeDialogOnSuccess() {
-      const wasM = prevMutatingRef.current;
+      const wasMutating = prevMutatingRef.current;
       prevMutatingRef.current = isMutating;
 
-      const finishedMutating = wasM && !isMutating;
+      const finishedMutating = wasMutating && !isMutating;
       if (!finishedMutating) return;
 
       const hasErrors =
         Object.keys(createDepositErrors).length > 0 ||
         Object.keys(updateDepositErrors).length > 0;
-      if (!hasErrors) handleClose();
+      if (!hasErrors) onSuccess();
     },
-    [isMutating, createDepositErrors, updateDepositErrors, handleClose],
+    [isMutating, createDepositErrors, updateDepositErrors, onSuccess],
   );
 
   return (
-    <Dialog
-      open
-      fullWidth
-      maxWidth="xs"
-      onClose={handleClose}
-      aria-labelledby={titleId}
-    >
-      <DialogTitle
-        id={titleId}
-        sx={{ pb: 1, fontWeight: 600, fontSize: "1.5rem" }}
+    <>
+      <ActionErrorAlert
+        hide={hideApiError}
+        message={createDepositErrors.api || updateDepositErrors.api}
+      />
+      <form
+        id={formId}
+        noValidate
+        onSubmit={handleSubmit((data) => {
+          startTransition(() => {
+            setHideApiError(false);
+            if (isEditMode) {
+              updateDepositAction({ ...data, id: deposit.id, goalId });
+            } else {
+              createDepositAction({ ...data, goalId });
+            }
+          });
+        })}
       >
-        {isEditMode ? "Edit" : "Add"} Deposit
-      </DialogTitle>
-      <DialogContent>
-        <ApiFormErrorAlert
-          hide={hideApiError}
-          message={createDepositErrors.api || updateDepositErrors.api}
-          sx={{ mb: 2 }}
-        />
-        <Stack
-          id={formId}
-          spacing={3}
-          component="form"
-          noValidate
-          onSubmit={handleSubmit((data) => {
-            startTransition(() => {
-              setHideApiError(false);
-              if (isEditMode) {
-                updateDepositAction({ ...data, id: deposit.id, goalId });
-              } else {
-                createDepositAction({ ...data, goalId });
-              }
-            });
-          })}
-          sx={{ mt: 1 }}
-        >
-          <TextField
-            {...register("amount", {
-              setValueAs: normalizeAmountNumberInput,
-            })}
-            label="Amount"
-            required
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.amount}
-            helperText={errors.amount?.message}
-            slotProps={{
-              htmlInput: {
-                inputMode: "decimal",
-                onClick: (e: React.MouseEvent<HTMLInputElement>) =>
-                  e.currentTarget.select(),
-              },
-              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">{currency}</InputAdornment>
-                ),
-              },
-            }}
-          />
+        <FieldGroup>
           <Controller
+            name="amount"
             control={control}
-            name="date"
-            render={({
-              field: { name, value, onChange, disabled },
-              fieldState: { error },
-            }) => (
-              <DatePicker
-                label="Date"
-                name={name}
-                disabled={disabled}
-                value={toDatePickerValue(value)}
-                onChange={handleDatePickerChange(onChange)}
-                slotProps={{
-                  textField: {
-                    required: true,
-                    error: !!error,
-                    helperText: error?.message?.toString(),
-                  },
-                }}
-              />
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel
+                  htmlFor={amountInputId}
+                  className={cn({ "opacity-50": field.disabled })}
+                >
+                  Amount <span className="text-destructive">*</span>
+                </FieldLabel>
+                <AmountInput
+                  {...field}
+                  currency={currency}
+                  required
+                  id={amountInputId}
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
             )}
           />
-          <TextField
-            {...register("notes")}
-            label="Notes"
-            autoComplete="off"
-            spellCheck="false"
-            error={!!errors.notes}
-            helperText={errors.notes?.message}
-            multiline
-            minRows={2}
-            maxRows={10}
-            slotProps={{
-              inputLabel: isEditMode ? { shrink: isEditMode } : undefined,
-            }}
+          <Controller
+            name="date"
+            control={control}
+            render={({ field: { value, onChange, disabled } }) => (
+              <Field>
+                <FieldLabel className={cn({ "opacity-50": disabled })}>
+                  Date
+                </FieldLabel>
+                <DatePicker
+                  value={value}
+                  onChange={onChange}
+                  disabled={disabled}
+                />
+              </Field>
+            )}
           />
-        </Stack>
-      </DialogContent>
-      <DialogActions sx={{ flexDirection: "column", gap: 2, px: 3, pb: 2 }}>
+          <Controller
+            name="notes"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel
+                  htmlFor={notesInputId}
+                  className={cn({ "opacity-50": field.disabled })}
+                >
+                  Notes
+                </FieldLabel>
+                <Textarea
+                  {...field}
+                  id={notesInputId}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  spellCheck="false"
+                  className="max-h-145"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </FieldGroup>
+      </form>
+      <DialogFooter>
+        <DialogClose render={<Button variant="outline">Cancel</Button>} />
         <Button
           type="submit"
           form={formId}
           disabled={
-            !hideApiError &&
-            (!!createDepositErrors.api || !!updateDepositErrors.api)
+            isMutating ||
+            (!hideApiError &&
+              (!!createDepositErrors.api || !!updateDepositErrors.api))
           }
-          loading={isMutating}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-          fullWidth
         >
+          {isMutating && <Spinner data-icon="inline-start" />}
           Save
         </Button>
-        <Button
-          variant="outlined"
-          onClick={handleClose}
-          fullWidth
-          sx={{ "&.MuiButtonBase-root": { ml: 0 } }}
-        >
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </DialogFooter>
+    </>
   );
 }
 
@@ -233,14 +239,14 @@ function getDefaultValues(deposit?: SavingsDeposit): SavingsDepositFormValues {
   if (!deposit) {
     return {
       amount: "",
-      date: dayjs().toISOString(),
+      date: new Date().toISOString(),
       notes: "",
     };
   }
 
   return {
     amount: fromCents(deposit.amount),
-    date: dayjs(deposit.date).toISOString(),
+    date: deposit.date.toISOString(),
     notes: deposit?.notes ?? "",
   };
 }

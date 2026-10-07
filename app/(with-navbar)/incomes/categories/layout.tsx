@@ -1,7 +1,7 @@
 import Heading from "@/components/Heading";
 import PeriodsTabs from "@/components/transactions/PeriodsTabs";
 import { Suspense } from "react";
-import PeriodTabsFallback from "@/components/transactions/form/PeriodTabsFallback";
+import PeriodTabsFallback from "@/components/transactions/PeriodTabsFallback";
 import PageWrapper from "@/components/PageWrapper";
 
 export const metadata = {

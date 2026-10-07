@@ -13,7 +13,7 @@ import {
 } from "@/data/income";
 import { toCents } from "@/utils/currency";
 import { getFormErrors } from "@/lib/zod";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 import { redirect } from "next/navigation";
 import { UnauthorizedError } from "@/utils/error";
 
@@ -41,7 +41,7 @@ export async function createIncome(
     redirect(
       searchParams
         ? `/incomes/categories?${searchParams}`
-        : `/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`,
+        : `/incomes/categories?month=${format(new Date(), "yyyy-MM-dd")}`,
     );
   }
 }
@@ -90,5 +90,5 @@ export async function deleteIncome(
 function toIncomesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/incomes/category/${categoryId}?${searchParams}`
-    : `/incomes/categories?month=${dayjs().format("YYYY-MM-DD")}`;
+    : `/incomes/categories?month=${format(new Date(), "yyyy-MM-dd")}`;
 }

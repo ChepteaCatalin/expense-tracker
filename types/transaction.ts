@@ -1,4 +1,3 @@
-import type { FormDateTime } from "@/lib/MuiDatePicker/types";
 import type { FormErrors } from "./form";
 import type { Category } from "./category";
 
@@ -15,7 +14,7 @@ export interface Transaction {
 export interface TransactionFormValues {
   amount: number | "";
   categoryId: number | "";
-  date: FormDateTime;
+  date: string | null;
   description: string;
 }
 

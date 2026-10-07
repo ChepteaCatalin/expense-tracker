@@ -1,15 +1,7 @@
-import Box from "@mui/material/Box";
-import type { BoxProps } from "@mui/material/Box";
-
-export default function PageWrapper({ sx, children }: BoxProps) {
-  return (
-    <Box
-      sx={[
-        { boxSizing: "content-box", maxWidth: "610px", mx: "auto" },
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-    >
-      {children}
-    </Box>
-  );
+export default function PageWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <div className="mx-auto box-content max-w-152.5">{children}</div>;
 }

@@ -1,5 +1,16 @@
 import type { TransactionCategoriesSearchParams } from "@/types/transaction";
-import dayjs from "dayjs";
+import {
+  endOfMonth,
+  endOfYear,
+  format,
+  isAfter,
+  isSameDay,
+  isValid,
+  parseISO,
+  startOfMonth,
+  startOfYear,
+} from "date-fns";
+import { endOfWeek, startOfWeek } from "@/lib/date-fns";
 import type { ReadonlyURLSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { parseURLDate, validIdParam } from "@/utils/url";
@@ -42,7 +53,7 @@ export function validSearchParams(
     return (
       searchParams.from == null &&
       searchParams.to == null &&
-      parseURLDate(periodValue).isValid()
+      isValid(parseURLDate(periodValue))
     );
   }
 
@@ -52,9 +63,9 @@ export function validSearchParams(
   const toDate = parseURLDate(searchParams.to);
 
   return (
-    fromDate.isValid() &&
-    toDate.isValid() &&
-    (toDate.isAfter(fromDate, "day") || toDate.isSame(fromDate, "day"))
+    isValid(fromDate) &&
+    isValid(toDate) &&
+    (isAfter(toDate, fromDate) || isSameDay(toDate, fromDate))
   );
 }
 
@@ -66,28 +77,28 @@ export function dateFromSearchParams(
   switch (period) {
     case day:
       return {
-        from: dayjs(periodValue).format("YYYY-MM-DD"),
-        to: dayjs(periodValue).format("YYYY-MM-DD"),
+        from: formatDateParam(periodValue, "yyyy-MM-dd"),
+        to: formatDateParam(periodValue, "yyyy-MM-dd"),
       };
     case week:
       return {
-        from: dayjs(periodValue).startOf("week").format("YYYY-MM-DD"),
-        to: dayjs(periodValue).endOf("week").format("YYYY-MM-DD"),
+        from: formatDateParam(periodValue, "yyyy-MM-dd", startOfWeek),
+        to: formatDateParam(periodValue, "yyyy-MM-dd", endOfWeek),
       };
     case month:
       return {
-        from: dayjs(periodValue).startOf("month").format("YYYY-MM-DD"),
-        to: dayjs(periodValue).endOf("month").format("YYYY-MM-DD"),
+        from: formatDateParam(periodValue, "yyyy-MM-dd", startOfMonth),
+        to: formatDateParam(periodValue, "yyyy-MM-dd", endOfMonth),
       };
     case year:
       return {
-        from: dayjs(periodValue).startOf("year").format("YYYY-MM-DD"),
-        to: dayjs(periodValue).endOf("year").format("YYYY-MM-DD"),
+        from: formatDateParam(periodValue, "yyyy-MM-dd", startOfYear),
+        to: formatDateParam(periodValue, "yyyy-MM-dd", endOfYear),
       };
     case custom:
       return {
-        from: dayjs(searchParams.from).format("YYYY-MM-DD"),
-        to: dayjs(searchParams.to).format("YYYY-MM-DD"),
+        from: formatDateParam(searchParams.from, "yyyy-MM-dd"),
+        to: formatDateParam(searchParams.to, "yyyy-MM-dd"),
       };
     default:
       return { from: "", to: "" };
@@ -134,23 +145,33 @@ export function parsePeriod(searchParams: ReadonlyURLSearchParams): string {
   if (!period) return "";
   if (period === custom) {
     return (
-      dayjs(searchParams.get("from")).format("D MMM YYYY") +
+      formatDateParam(searchParams.get("from"), "d MMM yyyy") +
       " - " +
-      dayjs(searchParams.get("to")).format("D MMM YYYY")
+      formatDateParam(searchParams.get("to"), "d MMM yyyy")
     );
   }
 
   return (
     {
-      [day]: dayjs(periodValue).format("ddd D MMM YYYY"),
+      [day]: formatDateParam(periodValue, "EEE d MMM yyyy"),
       [week]:
-        dayjs(periodValue).startOf("week").format("D MMM") +
+        formatDateParam(periodValue, "d MMM", startOfWeek) +
         " - " +
-        dayjs(periodValue).endOf("week").format("D MMM YYYY"),
-      [month]: dayjs(periodValue).startOf("month").format("MMM YYYY"),
-      [year]: dayjs(periodValue).startOf("year").format("YYYY"),
+        formatDateParam(periodValue, "d MMM yyyy", endOfWeek),
+      [month]: formatDateParam(periodValue, "MMM yyyy", startOfMonth),
+      [year]: formatDateParam(periodValue, "yyyy", startOfYear),
     }[period] || ""
   );
+}
+
+function formatDateParam(
+  date: string | null | undefined,
+  pattern: string,
+  transform: (date: Date) => Date = (date) => date,
+): string {
+  const parsedDate = date == null ? new Date(NaN) : parseISO(date);
+  if (!isValid(parsedDate)) return "Invalid Date";
+  return format(transform(parsedDate), pattern);
 }
 
 function validSortBySearchParam(sortBy: SortTransactionBy) {

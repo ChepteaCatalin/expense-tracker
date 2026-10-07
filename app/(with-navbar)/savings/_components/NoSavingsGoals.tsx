@@ -1,34 +1,21 @@
-import Grid from "@mui/material/Grid";
-import SearchOffIcon from "@mui/icons-material/SearchOff";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import { Card, CardContent } from "@/components/ui/card";
+import { SearchX, Plus } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function NoSavingsGoals() {
   return (
-    <Card
-      sx={{
-        borderRadius: "10px",
-        background:
-          "linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-      }}
-    >
-      <CardContent>
-        <Grid container sx={{ alignItems: "center", flexDirection: "column" }}>
-          <SearchOffIcon
-            sx={{ fontSize: "60px", fill: "rgb(210, 210, 210)" }}
-          />
-          <Typography>There are no savings goals yet</Typography>
-          <Link href="/savings/new">
-            <Button variant="outlined" startIcon={<AddIcon />} sx={{ mt: 1.5 }}>
-              Add Savings Goal
-            </Button>
-          </Link>
-        </Grid>
+    <Card>
+      <CardContent className="space-y-2 text-center">
+        <SearchX className="text-muted-foreground mx-auto h-12 w-12" />
+        <p className="font-medium">There are no savings goals yet</p>
+        <Link
+          href="/savings/new"
+          className={buttonVariants({ variant: "default" })}
+        >
+          <Plus data-icon="inline-start" />
+          Add Savings Goal
+        </Link>
       </CardContent>
     </Card>
   );

@@ -1,21 +1,15 @@
-import Box from "@mui/material/Box";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
+import BackBtnSkeleton from "@/components/BackBtnSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SavingsGoalDetailsLoading() {
   return (
-    <Box>
-      <Skeleton
-        variant="rectangular"
-        width={88}
-        height={28}
-        sx={{ borderRadius: 1, mb: 0.5 }}
-      />
-      <Stack spacing={3}>
-        <Skeleton variant="rectangular" height={330} sx={{ borderRadius: 3 }} />
-        <Skeleton variant="rectangular" height={106} sx={{ borderRadius: 3 }} />
-        <Skeleton variant="rectangular" height={264} sx={{ borderRadius: 3 }} />
-      </Stack>
-    </Box>
+    <div>
+      <BackBtnSkeleton />
+      <div className="flex flex-col gap-6">
+        <Skeleton className="h-120 rounded-2xl lg:h-80" />
+        <Skeleton className="h-25.5 rounded-2xl" />
+        <Skeleton className="h-41.25 rounded-2xl" />
+      </div>
+    </div>
   );
 }

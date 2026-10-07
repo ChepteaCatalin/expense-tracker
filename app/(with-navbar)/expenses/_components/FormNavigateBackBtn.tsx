@@ -1,12 +1,12 @@
 "use client";
 
 import NavigateBackBtn from "@/components/NavigateBackBtn";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 
 export default function FormNavigateBackBtn() {
   return (
     <NavigateBackBtn
-      fallbackHref={`/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`}
+      fallbackHref={`/expenses/categories?month=${format(new Date(), "yyyy-MM-dd")}`}
     />
   );
 }

@@ -1,5 +1,4 @@
 import Fab from "@/components/Fab";
-import Stack from "@mui/material/Stack";
 import Link from "next/link";
 import SavingsGoalCard from "./_components/SavingsGoalCard";
 import Heading from "@/components/Heading";
@@ -23,12 +22,8 @@ export default async function SavingsPage() {
 
   return (
     <PageWrapper>
-      <Heading
-        title={metadata.title}
-        subtitle={metadata.description}
-        sx={{ mb: 5 }}
-      />
-      <Stack spacing={3}>
+      <Heading title={metadata.title} subtitle={metadata.description} />
+      <div className="flex flex-col gap-6">
         {savingsGoals.length ? (
           savingsGoals.map((goal) => (
             <Link
@@ -45,7 +40,7 @@ export default async function SavingsPage() {
         <Link href="/savings/new">
           <Fab />
         </Link>
-      </Stack>
+      </div>
     </PageWrapper>
   );
 }

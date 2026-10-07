@@ -1,6 +1,4 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function InsightCard({
   title,
@@ -10,36 +8,13 @@ export default function InsightCard({
   children: React.ReactNode;
 }) {
   return (
-    <Card
-      sx={{
-        borderRadius: 4,
-        border: BORDER,
-        background:
-          "linear-gradient(160deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)",
-        height: "100%",
-      }}
-    >
-      <CardHeader
-        title={title}
-        slotProps={{
-          title: {
-            component: "h2",
-            sx: {
-              fontSize: "1rem",
-              fontWeight: 700,
-            },
-          },
-        }}
-        sx={{
-          py: 1,
-          borderBottom: BORDER,
-        }}
-      />
-      <CardContent sx={{ "&.MuiCardContent-root": { p: 2 } }}>
-        {children}
-      </CardContent>
+    <Card className="h-full pt-0">
+      <CardHeader className="border-b pt-2 [.border-b]:pb-2">
+        <CardTitle>
+          <h2 className="font-bold">{title}</h2>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>{children}</CardContent>
     </Card>
   );
 }
-
-const BORDER = "1px solid rgba(255, 255, 255, 0.1)";

@@ -15,7 +15,7 @@ import {
   deleteExpense as deleteExistingExpense,
 } from "@/data/expense";
 import { toCents } from "@/utils/currency";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 
 export async function createExpense(
   searchParams: string,
@@ -41,7 +41,7 @@ export async function createExpense(
     redirect(
       searchParams
         ? `/expenses/categories?${searchParams}`
-        : `/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`,
+        : `/expenses/categories?month=${format(new Date(), "yyyy-MM-dd")}`,
     );
   }
 }
@@ -90,5 +90,5 @@ export async function deleteExpense(
 function toExpensesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/expenses/category/${categoryId}?${searchParams}`
-    : `/expenses/categories?month=${dayjs().format("YYYY-MM-DD")}`;
+    : `/expenses/categories?month=${format(new Date(), "yyyy-MM-dd")}`;
 }

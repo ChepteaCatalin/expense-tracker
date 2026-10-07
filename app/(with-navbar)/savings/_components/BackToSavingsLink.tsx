@@ -1,21 +1,5 @@
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Button from "@mui/material/Button";
-import Link from "next/link";
+import BackToLink from "@/components/BackToLink";
 
-export function BackToSavingsLink() {
-  return (
-    <Link href="/savings">
-      <Button
-        sx={{
-          py: 0,
-          px: 0.5,
-          "& .MuiButton-startIcon": { mr: 0.5 },
-          mb: 0.5,
-        }}
-        startIcon={<ChevronLeftIcon />}
-      >
-        Savings
-      </Button>
-    </Link>
-  );
+export function BackToSavingsLink({ className }: { className?: string }) {
+  return <BackToLink href="/savings" className={className} />;
 }

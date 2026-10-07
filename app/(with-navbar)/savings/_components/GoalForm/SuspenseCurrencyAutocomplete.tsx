@@ -1,6 +1,6 @@
-import Skeleton from "@mui/material/Skeleton";
 import { Suspense } from "react";
 import CurrencyAutocomplete from "./CurrencyAutocomplete";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SuspenseCurrencyAutocomplete({
   isEditMode,
@@ -10,11 +10,10 @@ export default function SuspenseCurrencyAutocomplete({
   return (
     <Suspense
       fallback={
-        <Skeleton
-          variant="rectangular"
-          height={40}
-          sx={{ borderRadius: "4px" }}
-        />
+        <div className="space-y-2">
+          <Skeleton className="h-5 w-18.25" />
+          <Skeleton className="h-8" />
+        </div>
       }
     >
       <CurrencyAutocomplete isEditMode={isEditMode} />

@@ -1,25 +1,27 @@
 import Heading from "@/components/Heading";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import PageWrapper from "./PageWrapper";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function TitledCardPageWrapper({
   title,
   subtitle,
   children,
   aboveCard,
+  footer,
 }: {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
   aboveCard?: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   return (
     <PageWrapper>
       <Heading title={title} subtitle={subtitle} />
       {aboveCard}
-      <Card sx={{ borderRadius: "10px", pt: 1, px: 1 }}>
+      <Card>
         <CardContent>{children}</CardContent>
+        {footer && <CardFooter>{footer}</CardFooter>}
       </Card>
     </PageWrapper>
   );

@@ -1,9 +1,7 @@
-import Grid from "@mui/material/Grid";
-import SearchOffIcon from "@mui/icons-material/SearchOff";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import AddDepositOutlinedBtn from "../actions/AddDepositOutlinedBtn";
+import { Card, CardContent } from "@/components/ui/card";
+import { SearchX, Plus } from "lucide-react";
+import AddEditDepositDialog from "./AddEditDepositDialog";
+import { Button } from "@/components/ui/button";
 
 export default function NoSavingsDeposits({
   goalId,
@@ -15,26 +13,19 @@ export default function NoSavingsDeposits({
   isGoalCompleted?: boolean;
 }) {
   return (
-    <Card
-      sx={{
-        borderRadius: 3,
-        background:
-          "linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-      }}
-    >
-      <CardContent>
-        <Grid container sx={{ alignItems: "center", flexDirection: "column" }}>
-          <SearchOffIcon
-            sx={{ fontSize: "60px", fill: "rgb(210, 210, 210)" }}
-          />
-          <Typography sx={{ mb: 1.5 }}>There are no deposits yet</Typography>
-          <AddDepositOutlinedBtn
-            id={goalId}
-            currency={goalCurrency}
-            disabled={isGoalCompleted}
-          />
-        </Grid>
+    <Card>
+      <CardContent className="space-y-2 text-center">
+        <SearchX className="text-muted-foreground mx-auto h-12 w-12" />
+        <p className="font-medium">There are no deposits yet</p>
+        <AddEditDepositDialog
+          goalId={goalId}
+          currency={goalCurrency}
+          triggerBtn={
+            <Button disabled={isGoalCompleted}>
+              <Plus data-icon="inline-start" /> Add Deposit
+            </Button>
+          }
+        />
       </CardContent>
     </Card>
   );

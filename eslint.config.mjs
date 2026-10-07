@@ -7,25 +7,6 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [
-            //TODO: remove this once `optimizePackageImports` is no longer experimental
-            {
-              name: "@mui/icons-material",
-              message:
-                "Import specific icons from @mui/icons-material/IconName instead of destructuring from the main package.",
-            },
-            // TODO: remove this once `optimizePackageImports` is no longer experimental
-            {
-              name: "@mui/material",
-              message:
-                "Import specific components from @mui/material/ComponentName instead of destructuring from the main package.",
-            },
-          ],
-        },
-      ],
       "no-var": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/consistent-type-imports": [

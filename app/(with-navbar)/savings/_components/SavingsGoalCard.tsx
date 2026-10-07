@@ -1,11 +1,11 @@
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Progress, ProgressLabel } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 import type { SavingsGoal } from "@/types/savings";
 import { readableCurrency } from "@/utils/currency";
-import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
-import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
-import dayjs from "dayjs";
+import { cn } from "cn";
+import { format } from "date-fns";
 
 export default function SavingsGoalCard({
   goal: {
@@ -29,45 +29,31 @@ export default function SavingsGoalCard({
   const formatAmount = formatAmountWithCurrency(currency);
 
   return (
-    <Box
-      sx={{
-        borderRadius: 3,
-        background:
-          "linear-gradient(135deg, #1a1a2e 0%, #212121 60%, #1a2e1a 100%)",
-        border: "1px solid",
-        borderColor: isCompleted ? "primary.main" : "rgba(255,255,255,0.08)",
-        p: 3,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2.5,
-        boxShadow: isCompleted
-          ? "0 0 24px rgba(30, 215, 96, 0.15)"
-          : "0 4px 24px rgba(0,0,0,0.4)",
-        transition: "box-shadow 0.2s",
-        ...(!noHoverEffects && {
-          "&:hover": {
-            boxShadow: isCompleted
-              ? "0 0 36px rgba(30, 215, 96, 0.25)"
-              : "0 8px 32px rgba(0,0,0,0.6)",
-          },
-        }),
-      }}
+    <Card
+      className={cn(
+        "via-card to-primary/8 dark:to-primary/15 @container gap-5 rounded-2xl bg-linear-135 from-sky-500/6 via-60% p-6 transition-shadow dark:from-sky-500/10",
+        isCompleted
+          ? "ring-primary-light/60 shadow-primary-light/15 dark:ring-primary-light/70 shadow-[0_0_24px]"
+          : "shadow-lg shadow-black/10 dark:shadow-black/40",
+        !noHoverEffects &&
+          (isCompleted
+            ? "hover:shadow-primary-light/25 hover:shadow-[0_0_36px]"
+            : "hover:shadow-xl hover:shadow-black/15 dark:hover:shadow-black/60"),
+      )}
     >
       <Heading name={name} isCompleted={isCompleted} />
-      <Progress
+      <GoalProgress
         current={currentAmount}
         target={targetAmount}
         isCompleted={isCompleted}
       />
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${initialAmount !== 0 ? 3 : 2}, 1fr)`,
-          "@media (pointer: coarse)": {
-            gridTemplateColumns: "1fr",
-          },
-          gap: 1.5,
-        }}
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-3",
+          initialAmount !== 0
+            ? "pointer-fine:@lg:grid-cols-3"
+            : "pointer-fine:@sm:grid-cols-2",
+        )}
       >
         {[
           initialAmount !== 0
@@ -95,35 +81,23 @@ export default function SavingsGoalCard({
               highlight={highlight}
             />
           ))}
-      </Box>
+      </div>
       {!isCompleted && remaining > 0 && (
         <RemainingAmount remaining={formatAmount(remaining)} />
       )}
-      <Divider sx={{ borderColor: "rgba(255,255,255,0.07)" }} />
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+      <Separator />
+      <div className="flex flex-col gap-1.5">
         <DateRow label="Started" value={startDate} />
         {completedDate && (
           <DateRow label="Completed" value={completedDate} accent />
         )}
-      </Box>
+      </div>
       {notes && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{
-            fontStyle: "italic",
-            bgcolor: "rgba(255,255,255,0.03)",
-            borderRadius: 2,
-            px: 2,
-            py: 1.25,
-            borderLeft: "3px solid",
-            borderColor: "primary.main",
-          }}
-        >
+        <p className="border-primary-light bg-muted/60 text-muted-foreground dark:bg-muted/30 rounded-lg border-l-3 px-4 py-2.5 text-sm italic">
           {notes}
-        </Typography>
+        </p>
       )}
-    </Box>
+    </Card>
   );
 }
 
@@ -135,45 +109,26 @@ function Heading({
   isCompleted: boolean;
 }) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "flex-start",
-        justifyContent: "space-between",
-        gap: 1,
-      }}
-    >
-      <Typography
-        component="h2"
-        sx={{
-          fontSize: "1.5rem",
-          fontWeight: 700,
-          wordBreak: "break-word",
-          lineHeight: 1.2,
-          letterSpacing: "-0.01em",
-        }}
-      >
+    <div className="flex items-start justify-between gap-2">
+      <h2 className="text-2xl leading-[1.2] font-bold tracking-[-0.01em] wrap-break-word">
         {name}
-      </Typography>
-      <Chip
-        label={isCompleted ? "Completed" : "In Progress"}
-        size="small"
-        sx={{
-          flexShrink: 0,
-          fontWeight: 600,
-          bgcolor: isCompleted
-            ? "rgba(30,215,96,0.15)"
-            : "rgba(255,255,255,0.08)",
-          color: isCompleted ? "primary.main" : "text.secondary",
-          border: "1px solid",
-          borderColor: isCompleted ? "primary.main" : "rgba(255,255,255,0.12)",
-        }}
-      />
-    </Box>
+      </h2>
+      <Badge
+        variant="outline"
+        className={cn(
+          "h-6 px-2.5 font-semibold",
+          isCompleted
+            ? "border-primary-light/60 bg-primary/10 text-primary-light dark:bg-primary/25"
+            : "border-border bg-muted text-muted-foreground dark:bg-muted/50",
+        )}
+      >
+        {isCompleted ? "Completed" : "In Progress"}
+      </Badge>
+    </div>
   );
 }
 
-function Progress({
+function GoalProgress({
   current,
   target,
   isCompleted,
@@ -182,41 +137,28 @@ function Progress({
   target: number;
   isCompleted: boolean;
 }) {
+  const percentage = (current / target) * 100;
+
   return (
-    <Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.75 }}>
-        <Typography
-          variant="body2"
-          sx={{ color: "text.secondary", fontWeight: 500 }}
-        >
-          Progress
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            fontWeight: 700,
-            color: isCompleted ? "primary.main" : "text.primary",
-          }}
-        >
-          {((current / target) * 100).toFixed(2)}%
-        </Typography>
-      </Box>
-      <LinearProgress
-        variant="determinate"
-        value={Math.min((current / target) * 100, 100)}
-        sx={{
-          height: 8,
-          borderRadius: 4,
-          bgcolor: "rgba(255,255,255,0.08)",
-          "& .MuiLinearProgress-bar": {
-            borderRadius: 4,
-            background: isCompleted
-              ? "linear-gradient(90deg, #1ED760, #17a348)"
-              : "linear-gradient(90deg, #1ED760, #0ea5e9)",
-          },
-        }}
-      />
-    </Box>
+    <Progress
+      value={Math.min(percentage, 100)}
+      className={cn(
+        "gap-x-2 gap-y-1.5 **:data-[slot=progress-indicator]:rounded-full **:data-[slot=progress-indicator]:bg-linear-to-r *:data-[slot=progress-track]:h-2",
+        isCompleted
+          ? "**:data-[slot=progress-indicator]:from-primary-light **:data-[slot=progress-indicator]:to-primary"
+          : "**:data-[slot=progress-indicator]:from-primary-light **:data-[slot=progress-indicator]:to-sky-500",
+      )}
+    >
+      <ProgressLabel className="text-muted-foreground">Progress</ProgressLabel>
+      <span
+        className={cn(
+          "ml-auto text-sm font-bold tabular-nums",
+          isCompleted && "text-primary-light",
+        )}
+      >
+        {percentage.toFixed(2)}%
+      </span>
+    </Progress>
   );
 }
 
@@ -230,55 +172,35 @@ function AmountCard({
   highlight?: boolean;
 }) {
   return (
-    <Box
-      sx={{
-        bgcolor: "rgba(255,255,255,0.04)",
-        borderRadius: 2,
-        p: 1.5,
-        textAlign: "center",
-        border: "1px solid",
-        borderColor: highlight
-          ? "rgba(30,215,96,0.2)"
-          : "rgba(255,255,255,0.06)",
-      }}
+    <div
+      className={cn(
+        "min-w-0 rounded-lg border p-3 text-center",
+        highlight
+          ? "border-primary-light/30 bg-primary/5 dark:bg-primary/10"
+          : "bg-muted/40 dark:bg-muted/20",
+      )}
     >
-      <Typography
-        variant="caption"
-        sx={{ color: "text.secondary", display: "block", mb: 0.5 }}
-      >
-        {label}
-      </Typography>
-      <Typography
-        sx={{
-          fontWeight: 700,
-          fontSize: "0.95rem",
-          color: highlight ? "primary.main" : "text.primary",
-        }}
+      <span className="text-muted-foreground mb-1 block text-xs">{label}</span>
+      <p
+        className={cn(
+          "text-[0.95rem] font-bold wrap-break-word tabular-nums",
+          highlight && "text-primary-light",
+        )}
       >
         {value}
-      </Typography>
-    </Box>
+      </p>
+    </div>
   );
 }
 
 function RemainingAmount({ remaining }: { remaining: string }) {
   return (
-    <Box sx={{ textAlign: "center" }}>
-      <Typography
-        component="span"
-        variant="body2"
-        sx={{ color: "text.primary", fontWeight: 600 }}
-      >
-        {remaining}{" "}
-      </Typography>
-      <Typography
-        component="span"
-        variant="body2"
-        sx={{ color: "text.secondary" }}
-      >
+    <div className="text-center">
+      <span className="text-sm font-semibold">{remaining} </span>
+      <span className="text-muted-foreground text-sm">
         remaining to reach your goal
-      </Typography>
-    </Box>
+      </span>
+    </div>
   );
 }
 
@@ -292,26 +214,14 @@ function DateRow({
   accent?: boolean;
 }) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <Typography variant="body2" sx={{ color: "text.secondary" }}>
-        {label}
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          fontWeight: 600,
-          color: accent ? "primary.main" : "text.primary",
-        }}
+    <div className="flex items-center justify-between">
+      <p className="text-muted-foreground text-sm">{label}</p>
+      <p
+        className={cn("text-sm font-semibold", accent && "text-primary-light")}
       >
-        {dayjs(value).format("D MMMM YYYY")}
-      </Typography>
-    </Box>
+        {format(value, "d MMMM yyyy")}
+      </p>
+    </div>
   );
 }
 
