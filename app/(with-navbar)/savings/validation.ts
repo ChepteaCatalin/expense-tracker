@@ -1,5 +1,4 @@
-import { validDate } from "@/lib/MuiDatePicker/utils";
-import { amountValidation } from "@/utils/validation";
+import { amountValidation, validDate } from "@/utils/validation";
 import z from "zod";
 
 export const savingsGoalSchema = z

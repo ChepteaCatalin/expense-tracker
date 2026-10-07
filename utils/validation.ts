@@ -1,5 +1,16 @@
-import { validDate } from "@/lib/MuiDatePicker/utils";
 import z from "zod";
+
+const invalidDateError = "Please enter a valid date";
+export const validDate = z
+  .any()
+  .refine((v) => v, { message: invalidDateError })
+  .pipe(
+    z
+      .string({ message: invalidDateError })
+      .refine((v) => !isNaN(Date.parse(v)), {
+        message: invalidDateError,
+      }),
+  );
 
 export const amountValidation = z
   .any()

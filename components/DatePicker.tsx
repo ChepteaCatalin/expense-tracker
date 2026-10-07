@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { format, formatISO } from "date-fns";
-import type { FormDateTime } from "@/lib/MuiDatePicker/types";
 import { useState } from "react";
 
 export default function DatePicker({
@@ -16,7 +15,7 @@ export default function DatePicker({
   onChange,
   disabled,
 }: {
-  value: FormDateTime;
+  value: string | null;
   onChange: (date: string) => void;
   disabled?: boolean;
 }) {

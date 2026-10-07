@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
-import DatePickerProvider from "@/lib/MuiDatePicker/DatePickerProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/lib/dayjs";
@@ -33,13 +29,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AppRouterCacheProvider>
-            <MuiThemeProvider theme={theme}>
-              <DatePickerProvider>
-                <TooltipProvider>{children}</TooltipProvider>
-              </DatePickerProvider>
-            </MuiThemeProvider>
-          </AppRouterCacheProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
