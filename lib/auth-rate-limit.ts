@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { GenericEndpointContext } from "better-auth";
-import { APIError, getIp, getSessionFromCtx } from "better-auth/api";
+import { APIError, getIP, getSessionFromCtx } from "better-auth/api";
 import {
   consumeRateLimit,
   hashRateLimitKey,
@@ -39,7 +39,7 @@ export async function enforceAuthRateLimits(ctx: GenericEndpointContext) {
   const checks: Array<[key: string, rule: RateLimitRule]> = [];
 
   const source = ctx.request ?? ctx.headers;
-  const ip = source ? getIp(source, ctx.context.options) : null;
+  const ip = source ? getIP(source, ctx.context.options) : null;
   if (rules.ip && ip) {
     checks.push([`auth:${path}:ip:${hashRateLimitKey(ip)}`, rules.ip]);
   }

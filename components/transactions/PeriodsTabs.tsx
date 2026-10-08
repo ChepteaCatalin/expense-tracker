@@ -13,13 +13,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { capitalizeFirstLetter } from "@/utils/string";
-import {
-  addDays,
-  format,
-  parseISO,
-  startOfMonth,
-  startOfYear,
-} from "date-fns";
+import { addDays, format, parseISO, startOfMonth, startOfYear } from "date-fns";
 import { startOfWeek } from "@/lib/date-fns";
 import DateRangeForm, {
   type SelectedDateRange,

@@ -85,41 +85,5 @@ export async function consumeRateLimit(
 
 /** Shared Postgres storage for better-auth's built-in `/api/auth` limiter. */
 export const rateLimitStorage: RateLimitStorage = {
-  async get(key) {
-    try {
-      const [row] = await sql<{
-        key: string;
-        count: number;
-        window_start: string;
-      }>`
-        SELECT key, count, window_start
-        FROM rate_limit
-        WHERE key = ${key}
-      `;
-      if (!row) return null;
-
-      return {
-        key: row.key,
-        count: Number(row.count),
-        lastRequest: Number(row.window_start),
-      };
-    } catch (error) {
-      console.error("Rate limit read failed", error);
-      return null;
-    }
-  },
-  async set(key, value) {
-    try {
-      await sql`
-        INSERT INTO rate_limit (key, count, window_start)
-        VALUES (${key}, ${value.count}, ${value.lastRequest})
-        ON CONFLICT (key) DO UPDATE SET
-          count = EXCLUDED.count,
-          window_start = EXCLUDED.window_start
-      `;
-    } catch (error) {
-      console.error("Rate limit write failed", error);
-    }
-  },
   consume: consumeRateLimit,
 };
