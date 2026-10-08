@@ -20,10 +20,9 @@ Internal accountability documentation for Expense Tracker, kept under Art. 5(2),
 
 ### Processor checklist (Art. 28)
 
-- [ ] Vercel DPA accepted (https://vercel.com/legal/dpa)
-- [ ] Neon DPA accepted (https://neon.com/dpa)
-- [ ] Neon project region stays in the EU (currently `aws-eu-central-1` for prod, preview, and dev)
-- [ ] Google Cloud OAuth consent screen links to the Privacy Policy
+- [x] Vercel DPA accepted (https://vercel.com/legal/dpa)
+- [x] Neon DPA accepted (https://neon.com/dpa)
+- [x] Neon project region stays in the EU (currently `aws-eu-central-1` for prod, preview, and dev)
 
 ## 2. Data subject requests (Art. 12–22)
 
