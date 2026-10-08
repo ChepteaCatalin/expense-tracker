@@ -28,7 +28,7 @@ export async function signInEmail({
   });
 }
 
-export function signUpEmail({
+export async function signUpEmail({
   name,
   email,
   password,
@@ -39,6 +39,7 @@ export function signUpEmail({
 }) {
   return auth.api.signUpEmail({
     body: { name, email, password },
+    headers: await headers(),
   });
 }
 

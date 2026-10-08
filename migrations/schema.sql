@@ -3,8 +3,8 @@
 --
 
 
--- Dumped from database version 17.10 (322a063)
--- Dumped by pg_dump version 18.3
+-- Dumped from database version 17.11 (7d7ea2a)
+-- Dumped by pg_dump version 18.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -34,6 +34,7 @@ DROP INDEX IF EXISTS public.idx_savings_goal_user_completed;
 DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_id;
 DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_date;
 DROP INDEX IF EXISTS public.idx_savings_deposit_date;
+DROP INDEX IF EXISTS public.idx_rate_limit_window_start;
 DROP INDEX IF EXISTS public.idx_income_user_id;
 DROP INDEX IF EXISTS public.idx_income_user_date;
 DROP INDEX IF EXISTS public.idx_income_date;
@@ -55,6 +56,7 @@ ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_toke
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey;
 ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS savings_goal_pkey;
 ALTER TABLE IF EXISTS ONLY public.savings_deposit DROP CONSTRAINT IF EXISTS savings_deposit_pkey;
+ALTER TABLE IF EXISTS ONLY public.rate_limit DROP CONSTRAINT IF EXISTS rate_limit_pkey;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS income_pkey;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS expense_pkey;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS category_pkey;
@@ -64,6 +66,7 @@ DROP TABLE IF EXISTS public."user";
 DROP TABLE IF EXISTS public.session;
 DROP TABLE IF EXISTS public.savings_goal;
 DROP TABLE IF EXISTS public.savings_deposit;
+DROP TABLE IF EXISTS public.rate_limit;
 DROP TABLE IF EXISTS public.income;
 DROP TABLE IF EXISTS public.expense;
 DROP TABLE IF EXISTS public.category;
@@ -386,6 +389,17 @@ ALTER TABLE public.income ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: rate_limit; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.rate_limit (
+    key text NOT NULL,
+    count integer NOT NULL,
+    window_start bigint NOT NULL
+);
+
+
+--
 -- Name: savings_deposit; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -529,6 +543,14 @@ ALTER TABLE ONLY public.expense
 
 ALTER TABLE ONLY public.income
     ADD CONSTRAINT income_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rate_limit rate_limit_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rate_limit
+    ADD CONSTRAINT rate_limit_pkey PRIMARY KEY (key);
 
 
 --
@@ -685,6 +707,13 @@ CREATE INDEX idx_income_user_date ON public.income USING btree (user_id, date);
 --
 
 CREATE INDEX idx_income_user_id ON public.income USING btree (user_id);
+
+
+--
+-- Name: idx_rate_limit_window_start; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_rate_limit_window_start ON public.rate_limit USING btree (window_start);
 
 
 --

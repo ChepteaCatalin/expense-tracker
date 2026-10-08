@@ -1,7 +1,7 @@
 "use client";
 
 import type { CategoryTreemapNode } from "@/types/dashboard";
-import { textStyle } from "@/lib/echarts";
+import { escapeHtml, textStyle } from "@/lib/echarts";
 import ReactECharts from "echarts-for-react";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { tooltipStyle } from "../_utils/chart";
@@ -68,7 +68,7 @@ export default function TreemapChart({
                 value: number;
                 dataIndex: number;
               }) =>
-                `<b>${params.dataIndex === 0 ? "Total" : params.name}:</b> <b>${params.value.toLocaleString()}${currency ? ` ${currency}` : ""}</b> (${totalAmount > 0 ? ((params.value / totalAmount) * 100).toFixed(2) : 0}%)`,
+                `<b>${params.dataIndex === 0 ? "Total" : escapeHtml(params.name)}:</b> <b>${params.value.toLocaleString()}${currency ? ` ${currency}` : ""}</b> (${totalAmount > 0 ? ((params.value / totalAmount) * 100).toFixed(2) : 0}%)`,
             },
           }}
         />

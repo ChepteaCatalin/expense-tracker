@@ -2,7 +2,10 @@ import "server-only";
 
 import { Pool } from "@neondatabase/serverless";
 import { betterAuth } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
+import { enforceAuthRateLimits } from "@/lib/auth-rate-limit";
+import { rateLimitStorage } from "@/lib/rate-limit";
 
 export const auth = betterAuth({
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
@@ -20,6 +23,12 @@ export const auth = betterAuth({
     },
   },
   plugins: [nextCookies()],
+  rateLimit: {
+    customStorage: rateLimitStorage,
+  },
+  hooks: {
+    before: createAuthMiddleware(enforceAuthRateLimits),
+  },
   user: {
     additionalFields: {
       currency: {

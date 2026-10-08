@@ -1,6 +1,6 @@
 "use client";
 
-import { textStyle, tooltipZIndexCss } from "@/lib/echarts";
+import { escapeHtml, textStyle, tooltipZIndexCss } from "@/lib/echarts";
 import type { TransactionCategoriesChartData } from "@/types/transaction";
 import { readableCurrency } from "@/utils/currency";
 import ReactECharts from "echarts-for-react";
@@ -39,7 +39,7 @@ export default function TransactionCategoriesChart({
             position: "inside",
             confine: true,
             formatter: (params: any) =>
-              `${params.marker} <b>${params.name}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
+              `${params.marker} <b>${escapeHtml(params.name)}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
             extraCssText: `white-space: normal; ${tooltipZIndexCss}`,
           },
           series: [

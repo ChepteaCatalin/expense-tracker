@@ -19,7 +19,7 @@ export const getUserDataExport = authGuard((session) => async () => {
         SELECT e.id, e.amount, e.category_id, c.name AS category_name,
           to_char(e.date, 'YYYY-MM-DD') AS date, e.description, e.created_at, e.updated_at
         FROM expense e
-        JOIN category c ON c.id = e.category_id
+        JOIN category c ON c.id = e.category_id AND c.user_id = e.user_id
         WHERE e.user_id = ${userId}
         ORDER BY e.date, e.id
       `,
@@ -27,7 +27,7 @@ export const getUserDataExport = authGuard((session) => async () => {
         SELECT i.id, i.amount, i.category_id, c.name AS category_name,
           to_char(i.date, 'YYYY-MM-DD') AS date, i.description, i.created_at, i.updated_at
         FROM income i
-        JOIN category c ON c.id = i.category_id
+        JOIN category c ON c.id = i.category_id AND c.user_id = i.user_id
         WHERE i.user_id = ${userId}
         ORDER BY i.date, i.id
       `,

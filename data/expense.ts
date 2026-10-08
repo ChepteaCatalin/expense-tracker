@@ -25,13 +25,17 @@ export const createExpense = authGuard(
           date,
           description,
           user_id
-        ) VALUES (
+        )
+        SELECT
           ${expense.amount},
-          ${expense.categoryId},
+          c.id,
           ${expense.date},
           ${expense.description},
           ${session.user.id}
-        )
+        FROM category c
+        WHERE c.id = ${expense.categoryId}
+          AND c.user_id = ${session.user.id}
+          AND c.type = 'expense'
         RETURNING
           id,
           amount,
@@ -77,6 +81,13 @@ export const updateExpense = authGuard(
         WHERE
           id = ${expense.id}
           AND user_id = ${session.user.id}
+          AND EXISTS (
+            SELECT 1
+            FROM category c
+            WHERE c.id = ${expense.categoryId}
+              AND c.user_id = ${session.user.id}
+              AND c.type = 'expense'
+          )
         RETURNING
           id,
           amount,
@@ -156,7 +167,7 @@ export const getExpenseCategories = authGuard(
             c.background_color,
             SUM(e.amount) AS total_amount
           FROM expense e
-          JOIN category c ON e.category_id = c.id
+          JOIN category c ON e.category_id = c.id AND c.user_id = e.user_id
           WHERE e.user_id = ${session.user.id}
             AND e.date >= ${from}::date
             AND e.date <= ${to}::date
@@ -282,7 +293,7 @@ export const getExpensesByCategory = authGuard(
             c.stroke_color,
             c.background_color
           FROM expense e
-          JOIN category c ON e.category_id = c.id
+          JOIN category c ON e.category_id = c.id AND c.user_id = e.user_id
           WHERE e.user_id = ${session.user.id}
             AND e.category_id = ${categoryId}
             AND e.date >= ${from}::date

@@ -23,13 +23,17 @@ export const createIncome = authGuard(
           date,
           description,
           user_id
-        ) VALUES (
+        )
+        SELECT
           ${income.amount},
-          ${income.categoryId},
+          c.id,
           ${income.date},
           ${income.description},
           ${session.user.id}
-        )
+        FROM category c
+        WHERE c.id = ${income.categoryId}
+          AND c.user_id = ${session.user.id}
+          AND c.type = 'income'
         RETURNING
           id,
           amount,
@@ -115,6 +119,13 @@ export const updateIncome = authGuard(
         WHERE
           id = ${income.id}
           AND user_id = ${session.user.id}
+          AND EXISTS (
+            SELECT 1
+            FROM category c
+            WHERE c.id = ${income.categoryId}
+              AND c.user_id = ${session.user.id}
+              AND c.type = 'income'
+          )
         RETURNING
           id,
           amount,
@@ -194,7 +205,7 @@ export const getIncomeCategories = authGuard(
             c.background_color,
             SUM(i.amount) AS total_amount
           FROM income i
-          JOIN category c ON i.category_id = c.id
+          JOIN category c ON i.category_id = c.id AND c.user_id = i.user_id
           WHERE i.user_id = ${session.user.id}
             AND i.date >= ${from}::date
             AND i.date <= ${to}::date
@@ -248,7 +259,7 @@ export const getIncomesByCategory = authGuard(
             c.stroke_color,
             c.background_color
           FROM income i
-          JOIN category c ON i.category_id = c.id
+          JOIN category c ON i.category_id = c.id AND c.user_id = i.user_id
           WHERE i.user_id = ${session.user.id}
             AND i.category_id = ${categoryId}
             AND i.date >= ${from}::date

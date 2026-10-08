@@ -2,7 +2,7 @@
 
 import ReactECharts from "echarts-for-react";
 import { useThemeColors } from "@/hooks/use-theme-colors";
-import { textStyle } from "@/lib/echarts";
+import { escapeHtml, textStyle } from "@/lib/echarts";
 import {
   axisStyle,
   barBorderRadius,
@@ -84,12 +84,12 @@ export default function CategoryBreakdownChart({
                   .filter((p) => p.value > 0)
                   .sort((a, b) => b.value - a.value);
                 if (!nonZero.length) return "";
-                const header = `<div style="margin-bottom:8px">${params[0].name}</div>`;
+                const header = `<div style="margin-bottom:8px">${escapeHtml(params[0].name)}</div>`;
                 const rows = nonZero
                   .map(
                     (p) =>
                       `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px">` +
-                      `<span>${p.marker} ${p.seriesName}</span>` +
+                      `<span>${p.marker} ${escapeHtml(p.seriesName)}</span>` +
                       `<span style="font-weight:bold;margin-left:auto">${(+p.value).toLocaleString()}</span>` +
                       `</div>`,
                   )
