@@ -1,6 +1,11 @@
 "use client";
 
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  type DefaultValues,
+} from "react-hook-form";
 import { type Category, type CategoryFormValues } from "@/types/category";
 import {
   startTransition,
@@ -201,7 +206,9 @@ export default function Form({ category }: { category?: Category }) {
   );
 }
 
-function getDefaultValues(category?: Category): CategoryFormValues {
+function getDefaultValues(
+  category?: Category,
+): DefaultValues<CategoryFormValues> {
   if (category)
     return {
       name: category.name,
@@ -216,5 +223,5 @@ function getDefaultValues(category?: Category): CategoryFormValues {
     icon: "/category-icons/other.svg",
     strokeColor: "rgb(52, 211, 153)",
     backgroundColor: "rgb(6, 95, 70)",
-  } as CategoryFormValues;
+  };
 }

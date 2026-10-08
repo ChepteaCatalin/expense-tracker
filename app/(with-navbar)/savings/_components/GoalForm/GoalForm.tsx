@@ -1,8 +1,17 @@
 "use client";
 
-import type { SavingsGoal, SavingsGoalFormValues } from "@/types/savings";
+import type {
+  SavingsGoal,
+  SavingsGoalFormValues,
+  SavingsGoalInput,
+} from "@/types/savings";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  type DefaultValues,
+} from "react-hook-form";
 import { savingsGoalSchema } from "../../validation";
 import {
   startTransition,
@@ -56,7 +65,7 @@ export default function GoalForm({
 
   const isMutating = isPendingCreate || isPendingUpdate;
 
-  const methods = useForm<SavingsGoalFormValues>({
+  const methods = useForm<SavingsGoalFormValues, unknown, SavingsGoalInput>({
     defaultValues: getDefaultValues(goal, defaultCurrency),
     resolver: zodResolver(savingsGoalSchema),
     disabled: isMutating,
@@ -237,14 +246,14 @@ export default function GoalForm({
 function getDefaultValues(
   goal?: SavingsGoal,
   defaultCurrency?: CurrencyOption,
-): SavingsGoalFormValues {
+): DefaultValues<SavingsGoalFormValues> {
   if (goal) {
     return {
       name: goal.name,
       initialAmount: fromCents(goal.initialAmount),
       targetAmount: fromCents(goal.targetAmount),
       notes: goal.notes || "",
-      currency: defaultCurrency!,
+      currency: defaultCurrency,
       startDate: new Date(goal.startDate).toISOString(),
     };
   }
@@ -254,5 +263,5 @@ function getDefaultValues(
     initialAmount: 0,
     targetAmount: "",
     notes: "",
-  } as SavingsGoalFormValues;
+  };
 }

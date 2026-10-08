@@ -1,6 +1,11 @@
 "use client";
 
-import { Controller } from "react-hook-form";
+import {
+  Controller,
+  type Control,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import {
   InputGroup,
@@ -11,19 +16,19 @@ import {
 import { useId, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-interface PasswordInputProps {
+interface PasswordInputProps<T extends FieldValues> {
   label: string;
-  name: string;
-  control?: any;
+  name: FieldPath<T>;
+  control?: Control<T>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export default function PasswordInput({
+export default function PasswordInput<T extends FieldValues>({
   label,
   name,
   onChange,
   control,
-}: PasswordInputProps) {
+}: PasswordInputProps<T>) {
   const [showPassword, setShowPassword] = useState(false);
   const id = useId();
 

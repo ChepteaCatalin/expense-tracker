@@ -8,17 +8,43 @@ import type {
 import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { authGuard } from "@/lib/auth-utils";
 import { userTag } from "@/utils/cache";
+
+interface TransactionRow {
+  id: number;
+  amount: number;
+  category_id: number;
+  date: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+interface CategoryTotalRow {
+  category_id: number;
+  name: string;
+  icon: string;
+  stroke_color: string;
+  background_color: string;
+  total_amount: string;
+}
+
+interface TransactionWithCategoryRow extends TransactionRow {
+  name: string;
+  icon: string;
+  stroke_color: string;
+  background_color: string;
+}
 import type {
   SortTransactionBy,
   Transaction,
-  TransactionFormValues,
-  TransactionFormValuesWithId,
+  TransactionInput,
+  TransactionInputWithId,
 } from "@/types/transaction";
 
 export const createExpense = authGuard(
   (session) =>
-    async (expense: TransactionFormValues): Promise<Transaction> => {
-      const result = await sql`
+    async (expense: TransactionInput): Promise<Transaction> => {
+      const result = await sql<TransactionRow>`
         INSERT INTO expense (
           amount,
           category_id,
@@ -69,8 +95,8 @@ export const createExpense = authGuard(
 
 export const updateExpense = authGuard(
   (session) =>
-    async (expense: TransactionFormValuesWithId): Promise<Transaction> => {
-      const result = await sql`
+    async (expense: TransactionInputWithId): Promise<Transaction> => {
+      const result = await sql<TransactionRow>`
         UPDATE expense
         SET
           amount = ${expense.amount},
@@ -123,7 +149,7 @@ export const updateExpense = authGuard(
 export const deleteExpense = authGuard(
   (session) =>
     async (expenseId: number): Promise<{ id: number; categoryId: number }> => {
-      const result = await sql`
+      const result = await sql<Pick<TransactionRow, "id" | "category_id">>`
         DELETE FROM expense
         WHERE id = ${expenseId}
           AND user_id = ${session.user.id}
@@ -158,7 +184,7 @@ export const getExpenseCategories = authGuard(
       cacheTag(userTag(session.user.id)("expenses/categories"));
 
       try {
-        const result = await sql`
+        const result = await sql<CategoryTotalRow>`
           SELECT
             c.id AS category_id,
             c.name,
@@ -197,7 +223,7 @@ export const getExpenseById = authGuard(
       cacheTag(userTag(session.user.id)(`expenses/id/${expenseId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<TransactionRow>`
           SELECT
             id,
             amount,
@@ -245,7 +271,7 @@ export const getExpenseCategoryTotal = authGuard(
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<Pick<CategoryTotalRow, "total_amount">>`
           SELECT COALESCE(SUM(amount), 0) AS total_amount
           FROM expense
           WHERE user_id = ${session.user.id}
@@ -279,7 +305,7 @@ export const getExpensesByCategory = authGuard(
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<TransactionWithCategoryRow>`
           SELECT
             e.id,
             e.amount,
@@ -304,7 +330,8 @@ export const getExpensesByCategory = authGuard(
         const groupedByDate = Object.groupBy(result, (row) => row.date);
 
         const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
-          if (!rows) return [];
+          const firstRow = rows?.[0];
+          if (!rows || !firstRow) return [];
 
           const transactions = rows.map((row) => ({
             id: row.id,
@@ -320,10 +347,10 @@ export const getExpensesByCategory = authGuard(
             {
               date: new Date(date),
               transactions,
-              categoryName: rows[0]!.name,
-              icon: rows[0]!.icon,
-              strokeColor: rows[0]!.stroke_color,
-              backgroundColor: rows[0]!.background_color,
+              categoryName: firstRow.name,
+              icon: firstRow.icon,
+              strokeColor: firstRow.stroke_color,
+              backgroundColor: firstRow.background_color,
             },
           ];
         });

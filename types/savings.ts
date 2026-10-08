@@ -20,12 +20,25 @@ export interface SavingsGoalFormValues {
   name: string;
   initialAmount: number | "";
   targetAmount: number | "";
-  currency: CurrencyOption;
+  currency: CurrencyOption | null;
   startDate: string | null;
   notes: string;
 }
 
 export interface SavingsGoalFormValuesWithId extends SavingsGoalFormValues {
+  id: number;
+}
+
+export interface SavingsGoalInput {
+  name: string;
+  initialAmount: number;
+  targetAmount: number;
+  currency: CurrencyOption;
+  startDate: string;
+  notes: string;
+}
+
+export interface SavingsGoalInputWithId extends SavingsGoalInput {
   id: number;
 }
 
@@ -57,3 +70,18 @@ export interface SavingsDepositFormValuesWithId extends SavingsDepositFormValues
 }
 
 export type SavingsDepositFormErrors = FormErrors<SavingsDepositFormValues>;
+
+export interface SavingsDepositInput {
+  amount: number;
+  date: string;
+  notes: string;
+}
+
+export interface SavingsDepositInputWithGoalId extends SavingsDepositInput {
+  goalId: number;
+}
+
+export interface SavingsDepositInputWithId extends SavingsDepositInput {
+  id: number;
+  goalId: number;
+}

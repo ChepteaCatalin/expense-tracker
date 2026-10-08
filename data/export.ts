@@ -3,19 +3,64 @@ import "server-only";
 import { sql } from "@/lib/neon";
 import { authGuard } from "@/lib/auth-utils";
 import { fromCents } from "@/utils/currency";
+import type { CategoryType } from "@/types/category";
+
+interface Timestamps {
+  created_at: Date;
+  updated_at: Date;
+}
+
+interface CategoryExportRow extends Timestamps {
+  id: number;
+  name: string;
+  type: CategoryType;
+  icon: string;
+  stroke_color: string;
+  background_color: string;
+}
+
+interface TransactionExportRow extends Timestamps {
+  id: number;
+  amount: number;
+  category_id: number;
+  category_name: string;
+  date: string;
+  description: string | null;
+}
+
+interface SavingsGoalExportRow extends Timestamps {
+  id: number;
+  name: string;
+  initial_amount: number;
+  target_amount: number;
+  start_date: string;
+  is_completed: boolean;
+  completed_date: string | null;
+  notes: string | null;
+  currency: string;
+}
+
+interface SavingsDepositExportRow extends Timestamps {
+  id: number;
+  savings_goal_id: number;
+  savings_goal_name: string;
+  amount: number;
+  date: string;
+  notes: string | null;
+}
 
 export const getUserDataExport = authGuard((session) => async () => {
   const userId = session.user.id;
 
   const [categories, expenses, incomes, savingsGoals, savingsDeposits] =
     await Promise.all([
-      sql`
+      sql<CategoryExportRow>`
         SELECT id, name, type, icon, stroke_color, background_color, created_at, updated_at
         FROM category
         WHERE user_id = ${userId}
         ORDER BY id
       `,
-      sql`
+      sql<TransactionExportRow>`
         SELECT e.id, e.amount, e.category_id, c.name AS category_name,
           to_char(e.date, 'YYYY-MM-DD') AS date, e.description, e.created_at, e.updated_at
         FROM expense e
@@ -23,7 +68,7 @@ export const getUserDataExport = authGuard((session) => async () => {
         WHERE e.user_id = ${userId}
         ORDER BY e.date, e.id
       `,
-      sql`
+      sql<TransactionExportRow>`
         SELECT i.id, i.amount, i.category_id, c.name AS category_name,
           to_char(i.date, 'YYYY-MM-DD') AS date, i.description, i.created_at, i.updated_at
         FROM income i
@@ -31,7 +76,7 @@ export const getUserDataExport = authGuard((session) => async () => {
         WHERE i.user_id = ${userId}
         ORDER BY i.date, i.id
       `,
-      sql`
+      sql<SavingsGoalExportRow>`
         SELECT id, name, initial_amount, target_amount,
           to_char(start_date, 'YYYY-MM-DD') AS start_date, is_completed,
           to_char(completed_date, 'YYYY-MM-DD') AS completed_date,
@@ -40,7 +85,7 @@ export const getUserDataExport = authGuard((session) => async () => {
         WHERE user_id = ${userId}
         ORDER BY id
       `,
-      sql`
+      sql<SavingsDepositExportRow>`
         SELECT d.id, d.savings_goal_id, g.name AS savings_goal_name, d.amount,
           to_char(d.date, 'YYYY-MM-DD') AS date, d.notes, d.created_at, d.updated_at
         FROM savings_deposit d
@@ -99,7 +144,7 @@ export const getUserDataExport = authGuard((session) => async () => {
   };
 });
 
-function transactionFromDb(row: Record<string, any>) {
+function transactionFromDb(row: TransactionExportRow) {
   return {
     id: row.id,
     amount: fromCents(row.amount),

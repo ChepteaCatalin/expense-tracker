@@ -9,7 +9,7 @@ import type {
   SavingsGoalFormValuesWithId,
 } from "@/types/savings";
 import { savingsDepositSchema, savingsGoalSchema } from "./validation";
-import { getFormErrors } from "@/lib/zod";
+import { parseForm } from "@/lib/zod";
 import { isUniqueViolationError, UnauthorizedError } from "@/utils/error";
 import { redirect } from "next/navigation";
 import {
@@ -28,21 +28,24 @@ export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
   goal: SavingsGoalFormValues,
 ): Promise<SavingsGoalFormErrors> {
-  const errors = getFormErrors(savingsGoalSchema, {
+  const result = parseForm(savingsGoalSchema, {
     ...goal,
     targetAmount: +goal.targetAmount,
     initialAmount: +goal.initialAmount,
     startDate: String(goal.startDate),
   });
-  if (errors) return errors;
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await createNewSavingsGoal({
       ...goal,
-      targetAmount: toCents(goal.targetAmount),
-      initialAmount: toCents(goal.initialAmount),
+      targetAmount: toCents(data.targetAmount),
+      initialAmount: toCents(data.initialAmount),
+      startDate: data.startDate,
+      currency: data.currency,
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
       return { api: "A goal with this name already exists" };
@@ -57,21 +60,24 @@ export async function updateSavingsGoal(
   _: SavingsGoalFormErrors,
   goal: SavingsGoalFormValuesWithId,
 ): Promise<SavingsGoalFormErrors> {
-  const errors = getFormErrors(savingsGoalSchema, {
+  const result = parseForm(savingsGoalSchema, {
     ...goal,
     targetAmount: +goal.targetAmount,
     initialAmount: +goal.initialAmount,
     startDate: String(goal.startDate),
   });
-  if (errors) return errors;
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await updateExistingSavingsGoal({
       ...goal,
-      targetAmount: toCents(goal.targetAmount),
-      initialAmount: toCents(goal.initialAmount),
+      targetAmount: toCents(data.targetAmount),
+      initialAmount: toCents(data.initialAmount),
+      startDate: data.startDate,
+      currency: data.currency,
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
       return { api: "A goal with this name already exists" };
@@ -82,10 +88,13 @@ export async function updateSavingsGoal(
   redirect(`/savings/${goal.id}/details`);
 }
 
-export async function deleteSavingsGoal(_: string, id: number) {
+export async function deleteSavingsGoal(
+  _: string,
+  id: number,
+): Promise<string> {
   try {
     await deleteExistingSavingsGoal(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to delete savings goal";
   }
@@ -97,19 +106,21 @@ export async function createSavingsDeposit(
   _: SavingsDepositFormErrors,
   deposit: SavingsDepositFormValuesWithGoalId,
 ): Promise<SavingsDepositFormErrors> {
-  const errors = getFormErrors(savingsDepositSchema, {
+  const result = parseForm(savingsDepositSchema, {
     ...deposit,
     amount: +deposit.amount,
     date: String(deposit.date),
   });
-  if (errors) return errors;
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await createNewSavingsDeposit({
       ...deposit,
-      amount: toCents(deposit.amount),
+      ...data,
+      amount: toCents(data.amount),
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to create goal deposit" };
   }
@@ -123,10 +134,12 @@ export async function completeSavingsGoal(
 ): Promise<string | undefined> {
   try {
     await markAsCompleted(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to complete savings goal";
   }
+
+  return undefined;
 }
 
 export async function reopenSavingsGoal(
@@ -135,16 +148,21 @@ export async function reopenSavingsGoal(
 ): Promise<string | undefined> {
   try {
     await markAsReopened(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to reopen savings goal";
   }
+
+  return undefined;
 }
 
-export async function deleteSavingsDeposit(_: string, id: number) {
+export async function deleteSavingsDeposit(
+  _: string,
+  id: number,
+): Promise<string> {
   try {
     await deleteExistingSavingsDeposit(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to delete deposit";
   }
@@ -156,19 +174,21 @@ export async function updateSavingsDeposit(
   _: SavingsDepositFormErrors,
   deposit: SavingsDepositFormValuesWithId,
 ): Promise<SavingsDepositFormErrors> {
-  const errors = getFormErrors(savingsDepositSchema, {
+  const result = parseForm(savingsDepositSchema, {
     ...deposit,
     amount: +deposit.amount,
     date: String(deposit.date),
   });
-  if (errors) return errors;
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await updateExistingSavingsDeposit({
       ...deposit,
-      amount: toCents(deposit.amount),
+      ...data,
+      amount: toCents(data.amount),
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to update goal deposit" };
   }

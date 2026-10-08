@@ -45,8 +45,8 @@ export default function ColorInput({
       <PopoverContent>
         <ColorPicker
           value={localValue}
-          onChange={(color: any) => setLocalValue(color.toRgbString())}
-          onChangeComplete={(color: any) => onChange(color.toRgbString())}
+          onChange={(color) => setLocalValue(color.toRgbString())}
+          onChangeComplete={(color) => onChange(color.toRgbString())}
         />
       </PopoverContent>
     </Popover>

@@ -8,12 +8,12 @@ export function getCategoryPercentages(
     0,
   );
 
-  return transactionCategories.reduce(
+  return transactionCategories.reduce<Record<number, number>>(
     (acc, curr) => ({
       ...acc,
       [curr.categoryId]:
         totalAmount === 0 ? 0 : (curr.totalAmount / totalAmount) * 100,
     }),
-    {} as { [key: string]: number },
+    {},
   );
 }

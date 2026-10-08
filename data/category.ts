@@ -10,10 +10,21 @@ import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { authGuard } from "@/lib/auth-utils";
 import { userTag } from "@/utils/cache";
 
+interface CategoryRow {
+  id: number;
+  name: string;
+  type: CategoryType;
+  icon: string;
+  stroke_color: string;
+  background_color: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export const createCategory = authGuard(
   (session) =>
     async (category: CategoryFormValues): Promise<Category> => {
-      const result = await sql`
+      const result = await sql<CategoryRow>`
         INSERT INTO category (
           name,
           type,
@@ -43,7 +54,7 @@ export const createCategory = authGuard(
 export const updateCategory = authGuard(
   (session) =>
     async (category: Category): Promise<Category> => {
-      const result = await sql`
+      const result = await sql<CategoryRow>`
         UPDATE category 
         SET 
           name = ${category.name},
@@ -72,7 +83,7 @@ export const updateCategory = authGuard(
 
 export const deleteCategory = authGuard(
   (session) => async (categoryId: number) => {
-    const result = await sql`
+    const result = await sql<Pick<CategoryRow, "id" | "type">>`
       DELETE FROM category
       WHERE id = ${categoryId} AND user_id = ${session.user.id}
       RETURNING id, type
@@ -93,12 +104,12 @@ export const deleteCategory = authGuard(
 
 export const getAllCategoriesByType = authGuard(
   (session) =>
-    async (type: CategoryType): Promise<Category[] | Array<never>> => {
+    async (type: CategoryType): Promise<Category[]> => {
       "use cache";
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`categories/type/${type}`));
 
-      const result = await sql`
+      const result = await sql<CategoryRow>`
         SELECT 
           id,
           name,
@@ -126,7 +137,7 @@ export const getCategoryById = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`categories/id/${categoryId}`));
 
-      const result = await sql`
+      const result = await sql<CategoryRow>`
         SELECT 
           id,
           name,
@@ -141,7 +152,7 @@ export const getCategoryById = authGuard(
         WHERE id = ${categoryId} AND user_id = ${session.user.id}
       `;
 
-      if (result[0]) return categoryFromDb(result[0]);
+      return result[0] ? categoryFromDb(result[0]) : undefined;
     },
 );
 
@@ -152,7 +163,7 @@ export const getCategoryNameById = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`categories/id/${categoryId}`));
 
-      const result = await sql`
+      const result = await sql<Pick<CategoryRow, "name">>`
         SELECT name
         FROM category
         WHERE id = ${categoryId} AND user_id = ${session.user.id}
@@ -162,7 +173,7 @@ export const getCategoryNameById = authGuard(
     },
 );
 
-function categoryFromDb(dbResult: Record<string, any>): Category {
+function categoryFromDb(dbResult: CategoryRow): Category {
   return {
     id: dbResult.id,
     name: dbResult.name,

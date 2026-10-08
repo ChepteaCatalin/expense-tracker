@@ -26,7 +26,7 @@ export default async function IncomeCategoriesPage({
   const params = await searchParams;
   if (!validSearchParams(params)) notFound();
 
-  var incomesByCategory = [] as TransactionCategory[];
+  var incomesByCategory: TransactionCategory[] = [];
   var session: Awaited<ReturnType<typeof getSession>> = null;
   try {
     [incomesByCategory, session] = await Promise.all([
@@ -71,7 +71,7 @@ export default async function IncomeCategoriesPage({
                 strokeColor: c.strokeColor,
                 backgroundColor: c.backgroundColor,
                 amount: c.totalAmount,
-                percentage: categoryPercentages[c.categoryId],
+                percentage: categoryPercentages[c.categoryId] ?? 0,
               }}
               currency={currency}
               searchParams={params}

@@ -10,6 +10,7 @@ import {
   tooltipStyle,
 } from "../_utils/chart";
 import type { BreakdownChartData } from "@/types/dashboard";
+import type { TooltipComponentFormatterCallbackParams } from "echarts";
 
 export default function CategoryBreakdownChart({
   chartData,
@@ -79,18 +80,19 @@ export default function CategoryBreakdownChart({
               confine: true,
               ...tooltipStyle(theme.colors),
               axisPointer: { type: "shadow" },
-              formatter: (params: any[]) => {
-                const nonZero = params
-                  .filter((p) => p.value > 0)
-                  .sort((a, b) => b.value - a.value);
+              formatter: (params: TooltipComponentFormatterCallbackParams) => {
+                const items = Array.isArray(params) ? params : [params];
+                const nonZero = items
+                  .filter((p) => Number(p.value) > 0)
+                  .sort((a, b) => Number(b.value) - Number(a.value));
                 if (!nonZero.length) return "";
-                const header = `<div style="margin-bottom:8px">${escapeHtml(params[0].name)}</div>`;
+                const header = `<div style="margin-bottom:8px">${escapeHtml(items[0]?.name)}</div>`;
                 const rows = nonZero
                   .map(
                     (p) =>
                       `<div style="display:flex;align-items:center;justify-content:space-between;gap:20px">` +
                       `<span>${p.marker} ${escapeHtml(p.seriesName)}</span>` +
-                      `<span style="font-weight:bold;margin-left:auto">${(+p.value).toLocaleString()}</span>` +
+                      `<span style="font-weight:bold;margin-left:auto">${Number(p.value).toLocaleString()}</span>` +
                       `</div>`,
                   )
                   .join("");

@@ -31,7 +31,7 @@ export default function CategoryListItem({
         query: {
           ...searchParams,
           sortBy: "date" satisfies SortTransactionBy,
-        } as Record<string, string | string[]>,
+        },
       }}
     >
       <Card

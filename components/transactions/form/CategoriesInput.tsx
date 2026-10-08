@@ -98,12 +98,14 @@ export default function CategoriesInput({
   );
 }
 
+const luminanceWeights = [0.2126, 0.7152, 0.0722];
+
 function getContrastText(rgb: string) {
   const match = rgb.match(/\d+(?:\.\d+)?/g);
 
   if (!match || match.length < 3) return "#000";
 
-  const [r, g, b] = match.map(Number);
+  const [r = 0, g = 0, b = 0] = match.map(Number);
 
   const luminance = [r, g, b]
     .map((channel) => {
@@ -113,7 +115,7 @@ function getContrastText(rgb: string) {
         : Math.pow((value + 0.055) / 1.055, 2.4);
     })
     .reduce((sum, value, i) => {
-      return sum + value * [0.2126, 0.7152, 0.0722][i];
+      return sum + value * (luminanceWeights[i] ?? 0);
     }, 0);
 
   return luminance > 0.179 ? "#000" : "#fff";

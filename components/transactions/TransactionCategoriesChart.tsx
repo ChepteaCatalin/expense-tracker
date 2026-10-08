@@ -5,6 +5,7 @@ import type { TransactionCategoriesChartData } from "@/types/transaction";
 import { readableCurrency } from "@/utils/currency";
 import EChart from "@/components/EChart";
 import { useTheme } from "next-themes";
+import type { DefaultLabelFormatterCallbackParams } from "echarts";
 
 export default function TransactionCategoriesChart({
   data,
@@ -38,8 +39,8 @@ export default function TransactionCategoriesChart({
             trigger: "item",
             position: "inside",
             confine: true,
-            formatter: (params: any) =>
-              `${params.marker} <b>${escapeHtml(params.name)}:</b> ${readableCurrency(params.value)} ${currency} (${params.percent}%)`,
+            formatter: (params: DefaultLabelFormatterCallbackParams) =>
+              `${params.marker} <b>${escapeHtml(params.name)}:</b> ${readableCurrency(Number(params.value))} ${currency} (${params.percent}%)`,
             extraCssText: `white-space: normal; ${tooltipZIndexCss}`,
           },
           series: [

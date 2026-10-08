@@ -1,6 +1,6 @@
 "use server";
 
-import { getFormErrors } from "@/lib/zod";
+import { parseForm } from "@/lib/zod";
 import {
   type TransactionFormValuesWithId,
   type TransactionFormErrors,
@@ -22,21 +22,23 @@ export async function createExpense(
   _: TransactionFormErrors,
   expense: TransactionFormValues,
 ): Promise<TransactionFormErrors> {
-  const errors = getFormErrors(transactionSchema, expense);
-  if (errors) return errors;
+  const result = parseForm(transactionSchema, expense);
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await createNewExpense({
       ...expense,
-      amount: toCents(expense.amount),
+      ...data,
+      amount: toCents(data.amount),
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to add the expense" };
   }
 
   if (searchParams.includes("sortBy")) {
-    redirect(toExpensesCategoryPage(searchParams, +expense.categoryId));
+    redirect(toExpensesCategoryPage(searchParams, data.categoryId));
   } else {
     redirect(
       searchParams
@@ -51,35 +53,37 @@ export async function updateExpense(
   _: TransactionFormErrors,
   expense: TransactionFormValuesWithId,
 ): Promise<TransactionFormErrors> {
-  const errors = getFormErrors(transactionSchema, {
+  const result = parseForm(transactionSchema, {
     ...expense,
     amount: +expense.amount,
     categoryId: +expense.categoryId,
     date: String(expense.date),
   });
-  if (errors) return errors;
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await updateExistingExpense({
       ...expense,
-      amount: toCents(expense.amount),
+      ...data,
+      amount: toCents(data.amount),
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to edit the expense" };
   }
 
-  redirect(toExpensesCategoryPage(searchParams, +expense.categoryId));
+  redirect(toExpensesCategoryPage(searchParams, data.categoryId));
 }
 
 export async function deleteExpense(
   searchParams: string,
   _: string,
   { id }: { id: number },
-) {
+): Promise<string> {
   try {
     var { categoryId } = await deleteExistingExpense(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to delete expense";
   }

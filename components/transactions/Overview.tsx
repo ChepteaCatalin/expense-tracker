@@ -3,7 +3,6 @@ import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { parsePeriod } from "@/utils/transactions/url";
 import { readableCurrency } from "@/utils/currency";
-import type { ReadonlyURLSearchParams } from "next/navigation";
 import { getSession } from "@/data/auth";
 
 export default async function Overview({
@@ -21,7 +20,7 @@ export default async function Overview({
       Object.entries(searchParams).flatMap(([key, value]) =>
         typeof value === "string" ? [[key, value]] : [],
       ),
-    ) as unknown as ReadonlyURLSearchParams,
+    ),
   );
 
   return (

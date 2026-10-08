@@ -44,7 +44,7 @@ export async function consumeRateLimit(
   const expiredBefore = now - windowMs;
 
   try {
-    const [row] = await sql`
+    const [row] = await sql<{ count: number; window_start: string }>`
       INSERT INTO rate_limit AS r (key, count, window_start)
       VALUES (${key}, 1, ${now})
       ON CONFLICT (key) DO UPDATE SET
@@ -87,7 +87,11 @@ export async function consumeRateLimit(
 export const rateLimitStorage: RateLimitStorage = {
   async get(key) {
     try {
-      const [row] = await sql`
+      const [row] = await sql<{
+        key: string;
+        count: number;
+        window_start: string;
+      }>`
         SELECT key, count, window_start
         FROM rate_limit
         WHERE key = ${key}

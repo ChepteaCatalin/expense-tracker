@@ -1,26 +1,38 @@
 import { z, type ZodSafeParseResult } from "zod";
 
-export function getFormErrors<T extends Record<string, any>>(
-  schema: z.ZodSchema<T>,
-  formValues: T,
-): Partial<Record<keyof T, string>> | undefined {
+type FieldErrors<Values> = Partial<Record<keyof Values, string>>;
+
+export type ParseFormResult<Schema extends z.ZodType> =
+  | { success: true; data: z.output<Schema> }
+  | { success: false; errors: FieldErrors<z.input<Schema>> };
+
+export function parseForm<Schema extends z.ZodType<unknown, object>>(
+  schema: Schema,
+  formValues: z.input<Schema>,
+): ParseFormResult<Schema> {
   const parseResult = schema.safeParse(formValues);
+
+  if (parseResult.success) return { success: true, data: parseResult.data };
+
   const getError = extractZodError(parseResult);
+  const errors: FieldErrors<z.input<Schema>> = {};
 
-  if (parseResult.success) return;
-
-  if (!parseResult.success) {
-    return Object.keys(formValues).reduce(
-      (acc, key) => {
-        const err = getError(key);
-        if (err) {
-          acc[key as keyof T] = err;
-        }
-        return acc;
-      },
-      {} as Partial<Record<keyof T, string>>,
-    );
+  for (const key of Object.keys(formValues) as Array<
+    keyof z.input<Schema> & string
+  >) {
+    const err = getError(key);
+    if (err) errors[key] = err;
   }
+
+  return { success: false, errors };
+}
+
+export function getFormErrors<Schema extends z.ZodType<unknown, object>>(
+  schema: Schema,
+  formValues: z.input<Schema>,
+): FieldErrors<z.input<Schema>> | undefined {
+  const result = parseForm(schema, formValues);
+  return result.success ? undefined : result.errors;
 }
 
 export const passwordSchema = (label: string) =>

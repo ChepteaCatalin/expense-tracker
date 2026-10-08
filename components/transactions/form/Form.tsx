@@ -24,6 +24,7 @@ import type {
   TransactionFormErrors,
   TransactionFormValues,
   TransactionFormValuesWithId,
+  TransactionInput,
   TransactionType,
   UpdateTransactionAction,
 } from "@/types/transaction";
@@ -43,15 +44,27 @@ import { Save } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import ActionErrorAlert from "@/components/ActionErrorAlert";
 
-interface FormProps {
+interface BaseFormProps {
   type: TransactionType;
   currency?: string;
   categories: Category[];
-  transaction?: Transaction;
-  createAction?: CreateTransactionAction;
-  updateAction?: UpdateTransactionAction;
-  deleteAction?: DeleteTransactionAction;
 }
+
+interface CreateFormProps extends BaseFormProps {
+  transaction?: undefined;
+  createAction: CreateTransactionAction;
+  updateAction?: undefined;
+  deleteAction?: undefined;
+}
+
+interface EditFormProps extends BaseFormProps {
+  transaction: Transaction;
+  createAction?: undefined;
+  updateAction: UpdateTransactionAction;
+  deleteAction: DeleteTransactionAction;
+}
+
+type FormProps = CreateFormProps | EditFormProps;
 
 export default function Form({
   type,
@@ -81,7 +94,7 @@ export default function Form({
 
   const disabledForm = isPendingCreate || isPendingUpdate;
 
-  const methods = useForm<TransactionFormValues>({
+  const methods = useForm<TransactionFormValues, unknown, TransactionInput>({
     defaultValues: getDefaultValues(transaction),
     resolver: zodResolver(transactionSchema),
     disabled: disabledForm,
@@ -230,7 +243,7 @@ export default function Form({
           <DeleteTransaction
             id={transaction.id}
             type={type}
-            action={deleteAction!}
+            action={deleteAction}
           />
         )}
       </form>

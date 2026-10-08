@@ -46,14 +46,17 @@ export async function updatePassword(
   redirect("/signin");
 }
 
-export async function updateCurrency(_: ChangeCurrencyError, currency: string) {
+export async function updateCurrency(
+  _: ChangeCurrencyError,
+  currency: string,
+): Promise<ChangeCurrencyError> {
   if (!currency || !currencies.find((c) => c.code === currency)) {
     return { currency: "Invalid currency" };
   }
 
   try {
     await changeCurrency(currency);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to update currency" };
   }

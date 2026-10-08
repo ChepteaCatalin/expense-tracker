@@ -12,7 +12,7 @@ import {
   deleteIncome as deleteExistingIncome,
 } from "@/data/income";
 import { toCents } from "@/utils/currency";
-import { getFormErrors } from "@/lib/zod";
+import { parseForm } from "@/lib/zod";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
 import { UnauthorizedError } from "@/utils/error";
@@ -22,21 +22,23 @@ export async function createIncome(
   _: TransactionFormErrors,
   income: TransactionFormValues,
 ): Promise<TransactionFormErrors> {
-  const errors = getFormErrors(transactionSchema, income);
-  if (errors) return errors;
+  const result = parseForm(transactionSchema, income);
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await createNewIncome({
       ...income,
-      amount: toCents(income.amount),
+      ...data,
+      amount: toCents(data.amount),
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to add the income" };
   }
 
   if (searchParams.includes("sortBy")) {
-    redirect(toIncomesCategoryPage(searchParams, +income.categoryId));
+    redirect(toIncomesCategoryPage(searchParams, data.categoryId));
   } else {
     redirect(
       searchParams
@@ -51,35 +53,37 @@ export async function updateIncome(
   _: TransactionFormErrors,
   income: TransactionFormValuesWithId,
 ): Promise<TransactionFormErrors> {
-  const errors = getFormErrors(transactionSchema, {
+  const result = parseForm(transactionSchema, {
     ...income,
     amount: +income.amount,
     categoryId: +income.categoryId,
     date: String(income.date),
   });
-  if (errors) return errors;
+  if (!result.success) return result.errors;
+  const { data } = result;
 
   try {
     await updateExistingIncome({
       ...income,
-      amount: toCents(income.amount),
+      ...data,
+      amount: toCents(data.amount),
     });
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return { api: "Failed to edit the income" };
   }
 
-  redirect(toIncomesCategoryPage(searchParams, +income.categoryId));
+  redirect(toIncomesCategoryPage(searchParams, data.categoryId));
 }
 
 export async function deleteIncome(
   searchParams: string,
   _: string,
   { id }: { id: number },
-) {
+): Promise<string> {
   try {
     var { categoryId } = await deleteExistingIncome(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to delete income";
   }

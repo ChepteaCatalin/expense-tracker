@@ -14,6 +14,11 @@ export class UnauthorizedError extends Error {
   }
 }
 
-export function isUniqueViolationError(error: any): boolean {
-  return error?.code === PostgresErrorCode.UniqueViolation;
+export function isUniqueViolationError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === PostgresErrorCode.UniqueViolation
+  );
 }

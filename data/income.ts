@@ -2,21 +2,47 @@ import "server-only";
 
 import { authGuard } from "@/lib/auth-utils";
 import { userTag } from "@/utils/cache";
+
+interface TransactionRow {
+  id: number;
+  amount: number;
+  category_id: number;
+  date: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+interface CategoryTotalRow {
+  category_id: number;
+  name: string;
+  icon: string;
+  stroke_color: string;
+  background_color: string;
+  total_amount: string;
+}
+
+interface TransactionWithCategoryRow extends TransactionRow {
+  name: string;
+  icon: string;
+  stroke_color: string;
+  background_color: string;
+}
 import type {
   SortTransactionBy,
   TransactionsByDate,
   Transaction,
   TransactionCategory,
-  TransactionFormValues,
-  TransactionFormValuesWithId,
+  TransactionInput,
+  TransactionInputWithId,
 } from "@/types/transaction";
 import { sql } from "@/lib/neon";
 import { cacheLife, cacheTag, updateTag } from "next/cache";
 
 export const createIncome = authGuard(
   (session) =>
-    async (income: TransactionFormValues): Promise<Transaction> => {
-      const result = await sql`
+    async (income: TransactionInput): Promise<Transaction> => {
+      const result = await sql<TransactionRow>`
         INSERT INTO income (
           amount,
           category_id,
@@ -73,7 +99,7 @@ export const getIncomeById = authGuard(
       cacheTag(userTag(session.user.id)(`incomes/id/${incomeId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<TransactionRow>`
           SELECT
             id,
             amount,
@@ -107,8 +133,8 @@ export const getIncomeById = authGuard(
 
 export const updateIncome = authGuard(
   (session) =>
-    async (income: TransactionFormValuesWithId): Promise<Transaction> => {
-      const result = await sql`
+    async (income: TransactionInputWithId): Promise<Transaction> => {
+      const result = await sql<TransactionRow>`
         UPDATE income
         SET
           amount = ${income.amount},
@@ -161,7 +187,7 @@ export const updateIncome = authGuard(
 export const deleteIncome = authGuard(
   (session) =>
     async (incomeId: number): Promise<{ id: number; categoryId: number }> => {
-      const result = await sql`
+      const result = await sql<Pick<TransactionRow, "id" | "category_id">>`
         DELETE FROM income
         WHERE id = ${incomeId}
           AND user_id = ${session.user.id}
@@ -196,7 +222,7 @@ export const getIncomeCategories = authGuard(
       cacheTag(userTag(session.user.id)("incomes/categories"));
 
       try {
-        const result = await sql`
+        const result = await sql<CategoryTotalRow>`
           SELECT
             c.id AS category_id,
             c.name,
@@ -245,7 +271,7 @@ export const getIncomesByCategory = authGuard(
       cacheTag(userTag(session.user.id)(`incomes/category/${categoryId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<TransactionWithCategoryRow>`
           SELECT
             i.id,
             i.amount,
@@ -270,7 +296,8 @@ export const getIncomesByCategory = authGuard(
         const groupedByDate = Object.groupBy(result, (row) => row.date);
 
         const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
-          if (!rows) return [];
+          const firstRow = rows?.[0];
+          if (!rows || !firstRow) return [];
 
           const transactions = rows.map((row) => ({
             id: row.id,
@@ -286,10 +313,10 @@ export const getIncomesByCategory = authGuard(
             {
               date: new Date(date),
               transactions,
-              categoryName: rows[0]!.name,
-              icon: rows[0]!.icon,
-              strokeColor: rows[0]!.stroke_color,
-              backgroundColor: rows[0]!.background_color,
+              categoryName: firstRow.name,
+              icon: firstRow.icon,
+              strokeColor: firstRow.stroke_color,
+              backgroundColor: firstRow.background_color,
             },
           ];
         });
@@ -326,7 +353,7 @@ export const getIncomeCategoryTotal = authGuard(
       cacheTag(userTag(session.user.id)(`incomes/category/${categoryId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<Pick<CategoryTotalRow, "total_amount">>`
           SELECT COALESCE(SUM(amount), 0) AS total_amount
           FROM income
           WHERE user_id = ${session.user.id}

@@ -11,7 +11,6 @@ import {
   startOfYear,
 } from "date-fns";
 import { endOfWeek, startOfWeek } from "@/lib/date-fns";
-import type { ReadonlyURLSearchParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import { parseURLDate, validIdParam } from "@/utils/url";
 import type {
@@ -130,7 +129,7 @@ function getActivePeriod(searchParams: TransactionCategoriesSearchParams) {
 }
 
 export function getActivePeriodEntry(
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: ReadableSearchParams,
 ): [string, string] | [] {
   return (
     Array.from(searchParams.entries()).find(([key]) =>
@@ -139,7 +138,7 @@ export function getActivePeriodEntry(
   );
 }
 
-export function parsePeriod(searchParams: ReadonlyURLSearchParams): string {
+export function parsePeriod(searchParams: ReadableSearchParams): string {
   const [period, periodValue] = getActivePeriodEntry(searchParams);
 
   if (!period) return "";
@@ -174,7 +173,7 @@ function formatDateParam(
   return format(transform(parsedDate), pattern);
 }
 
-function validSortBySearchParam(sortBy: SortTransactionBy) {
+function validSortBySearchParam(sortBy: unknown): sortBy is SortTransactionBy {
   return sortBy === "date" || sortBy === "amount";
 }
 
@@ -185,10 +184,12 @@ export function notFoundOnInvalidParams(
   if (
     !validSearchParams(searchParams) ||
     !validIdParam(params.id) ||
-    !validSortBySearchParam(searchParams.sortBy as SortTransactionBy)
+    !validSortBySearchParam(searchParams.sortBy)
   ) {
     notFound();
   }
 }
 
 type SearchParamValue = string | null | undefined;
+
+type ReadableSearchParams = Pick<URLSearchParams, "entries" | "get">;

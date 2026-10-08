@@ -72,7 +72,7 @@ function readThemeColors(): ThemeColors {
       ctx.clearRect(0, 0, 1, 1);
       ctx.fillStyle = styles.getPropertyValue(variable).trim();
       ctx.fillRect(0, 0, 1, 1);
-      const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+      const [r = 0, g = 0, b = 0, a = 0] = ctx.getImageData(0, 0, 1, 1).data;
       return [key, `rgba(${r}, ${g}, ${b}, ${+(a / 255).toFixed(3)})`];
     }),
   ) as ThemeColors;

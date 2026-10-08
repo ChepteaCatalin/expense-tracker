@@ -6,8 +6,9 @@ import { refreshSession } from "./auth";
 
 export const updateCurrency = authGuard(
   (session) => async (currency: string) => {
-    const result =
-      await sql`UPDATE "user" SET currency = ${currency} WHERE id = ${session.user.id} RETURNING id`;
+    const result = await sql<{
+      id: string;
+    }>`UPDATE "user" SET currency = ${currency} WHERE id = ${session.user.id} RETURNING id`;
 
     if (!result[0]) throw new Error("Failed to update currency");
 

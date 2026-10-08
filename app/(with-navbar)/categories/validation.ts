@@ -1,4 +1,5 @@
 import z from "zod";
+import type { CategoryFormValues } from "@/types/category";
 
 const colorSchema = z
   .string()
@@ -31,4 +32,4 @@ export const categorySchema = z.object({
     .max(100, "Icon must be at most 100 characters"),
   strokeColor: colorSchema,
   backgroundColor: colorSchema,
-});
+}) satisfies z.ZodType<CategoryFormValues>;

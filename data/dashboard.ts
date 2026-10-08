@@ -13,6 +13,15 @@ import type {
   TotalsMetrics,
 } from "@/types/dashboard";
 
+type NumericString = string;
+
+interface CategoryAmountRow {
+  category_id: number;
+  category_name: string;
+  background_color: string;
+  total: NumericString;
+}
+
 export const getTotals = authGuard(
   (session) =>
     async ({
@@ -28,7 +37,7 @@ export const getTotals = authGuard(
       cacheTag(tag("expenses"), tag("incomes"), tag("savings"));
 
       const [totalsResult, savingsResult] = await Promise.all([
-        sql`
+        sql<{ expenses: NumericString; income: NumericString }>`
           SELECT
             COALESCE((
               SELECT SUM(e.amount)
@@ -45,7 +54,7 @@ export const getTotals = authGuard(
                 AND i.date <= ${to}::date
             ), 0) AS income
         `,
-        sql`
+        sql<{ currency: string; total: NumericString }>`
           SELECT currency, SUM(amount) AS total
           FROM (
             SELECT sg.currency, sd.amount
@@ -68,12 +77,13 @@ export const getTotals = authGuard(
       ]);
 
       const row = totalsResult[0];
+      if (!row) throw new Error("Failed to load totals");
 
       return {
         expenses: +row.expenses,
         income: +row.income,
         savingsByCurrency: savingsResult.map((r) => ({
-          currency: r.currency as string,
+          currency: r.currency,
           total: +r.total,
         })),
       };
@@ -94,7 +104,11 @@ export const getMonthlyMetrics = authGuard(
       const tag = userTag(session.user.id);
       cacheTag(tag("expenses"), tag("incomes"));
 
-      const rows = await sql`
+      const rows = await sql<{
+        month: string;
+        income: NumericString;
+        expenses: NumericString;
+      }>`
         SELECT
           TO_CHAR(months.month, 'Mon YYYY') AS month,
           COALESCE(i.total, 0) AS income,
@@ -126,7 +140,7 @@ export const getMonthlyMetrics = authGuard(
       `;
 
       return rows.map((r) => ({
-        month: r.month as string,
+        month: r.month,
         income: +r.income,
         expenses: +r.expenses,
         netIncome: +r.income - +r.expenses,
@@ -147,7 +161,11 @@ export const getSavingsChartData = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("savings"));
 
-      const rows = await sql`
+      const rows = await sql<{
+        month: string;
+        currency: string;
+        total: NumericString;
+      }>`
         WITH months AS (
           SELECT generate_series(
             DATE_TRUNC('month', ${from}::date),
@@ -197,17 +215,16 @@ export const getSavingsChartData = authGuard(
         ORDER BY currencies.currency, months.month
       `;
 
-      const months = Array.from(
-        new Set(rows.map((row) => row.month as string)),
-      );
+      const months = Array.from(new Set(rows.map((row) => row.month)));
       const seriesMap = new Map<string, number[]>();
 
       for (const row of rows) {
-        const currency = row.currency as string;
-        if (!seriesMap.has(currency)) {
-          seriesMap.set(currency, []);
+        let series = seriesMap.get(row.currency);
+        if (!series) {
+          series = [];
+          seriesMap.set(row.currency, series);
         }
-        seriesMap.get(currency)!.push(+row.total);
+        series.push(+row.total);
       }
 
       return {
@@ -233,7 +250,7 @@ export const getExpenseCategoryBreakdown = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("expenses"));
 
-      const rows = await sql`
+      const rows = await sql<CategoryAmountRow & { month: string }>`
         WITH category_totals AS (
           SELECT category_id, SUM(amount) AS period_total
           FROM expense
@@ -277,19 +294,21 @@ export const getExpenseCategoryBreakdown = authGuard(
       const categoryMap = new Map<number, CategoryBreakdown>();
 
       for (const r of rows) {
-        const month = r.month as string;
+        const month = r.month;
         if (months[months.length - 1] !== month) months.push(month);
 
         const id = +r.category_id;
-        if (!categoryMap.has(id)) {
-          categoryMap.set(id, {
+        let category = categoryMap.get(id);
+        if (!category) {
+          category = {
             categoryId: id,
-            categoryName: r.category_name as string,
-            backgroundColor: r.background_color as string,
+            categoryName: r.category_name,
+            backgroundColor: r.background_color,
             data: [],
-          });
+          };
+          categoryMap.set(id, category);
         }
-        categoryMap.get(id)!.data.push(+r.total);
+        category.data.push(+r.total);
       }
 
       return { months, categories: Array.from(categoryMap.values()) };
@@ -309,7 +328,7 @@ export const getIncomeCategoryBreakdown = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("incomes"));
 
-      const rows = await sql`
+      const rows = await sql<CategoryAmountRow & { month: string }>`
         WITH category_totals AS (
           SELECT category_id, SUM(amount) AS period_total
           FROM income
@@ -353,19 +372,21 @@ export const getIncomeCategoryBreakdown = authGuard(
       const categoryMap = new Map<number, CategoryBreakdown>();
 
       for (const r of rows) {
-        const month = r.month as string;
+        const month = r.month;
         if (months[months.length - 1] !== month) months.push(month);
 
         const id = +r.category_id;
-        if (!categoryMap.has(id)) {
-          categoryMap.set(id, {
+        let category = categoryMap.get(id);
+        if (!category) {
+          category = {
             categoryId: id,
-            categoryName: r.category_name as string,
-            backgroundColor: r.background_color as string,
+            categoryName: r.category_name,
+            backgroundColor: r.background_color,
             data: [],
-          });
+          };
+          categoryMap.set(id, category);
         }
-        categoryMap.get(id)!.data.push(+r.total);
+        category.data.push(+r.total);
       }
 
       return { months, categories: Array.from(categoryMap.values()) };
@@ -385,7 +406,7 @@ export const getExpenseCategoryTreemapData = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("expenses"));
 
-      const rows = await sql`
+      const rows = await sql<CategoryAmountRow>`
         SELECT
           c.id AS category_id,
           c.name AS category_name,
@@ -404,8 +425,8 @@ export const getExpenseCategoryTreemapData = authGuard(
 
       return rows.map((row) => ({
         categoryId: +row.category_id,
-        categoryName: row.category_name as string,
-        backgroundColor: row.background_color as string,
+        categoryName: row.category_name,
+        backgroundColor: row.background_color,
         value: +row.total,
       }));
     },
@@ -424,7 +445,7 @@ export const getIncomeCategoryTreemapData = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("incomes"));
 
-      const rows = await sql`
+      const rows = await sql<CategoryAmountRow>`
         SELECT
           c.id AS category_id,
           c.name AS category_name,
@@ -443,8 +464,8 @@ export const getIncomeCategoryTreemapData = authGuard(
 
       return rows.map((row) => ({
         categoryId: +row.category_id,
-        categoryName: row.category_name as string,
-        backgroundColor: row.background_color as string,
+        categoryName: row.category_name,
+        backgroundColor: row.background_color,
         value: +row.total,
       }));
     },

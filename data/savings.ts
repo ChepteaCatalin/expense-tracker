@@ -5,18 +5,43 @@ import { authGuard } from "@/lib/auth-utils";
 import { userTag } from "@/utils/cache";
 import type {
   SavingsGoal,
-  SavingsGoalFormValues,
-  SavingsGoalFormValuesWithId,
+  SavingsGoalInput,
+  SavingsGoalInputWithId,
   SavingsDeposit,
-  SavingsDepositFormValuesWithGoalId,
-  SavingsDepositFormValuesWithId,
+  SavingsDepositInputWithGoalId,
+  SavingsDepositInputWithId,
 } from "@/types/savings";
 import { cacheLife, cacheTag, updateTag } from "next/cache";
 
+interface SavingsGoalRow {
+  id: number;
+  name: string;
+  initial_amount: number;
+  target_amount: number;
+  start_date: string;
+  is_completed: boolean;
+  completed_date: string | null;
+  notes: string | null;
+  currency: string;
+  created_at: Date;
+  updated_at: Date;
+  current_amount: string | number;
+}
+
+interface SavingsDepositRow {
+  id: number;
+  savings_goal_id: number;
+  amount: number;
+  date: string;
+  notes: string | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export const createSavingsGoal = authGuard(
   (session) =>
-    async (goal: SavingsGoalFormValues): Promise<SavingsGoal> => {
-      const result = await sql`
+    async (goal: SavingsGoalInput): Promise<SavingsGoal> => {
+      const result = await sql<SavingsGoalRow>`
         INSERT INTO savings_goal (
           name,
           initial_amount,
@@ -68,7 +93,7 @@ export const getSavingsGoalById = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`savings-goals/id/${id}`));
 
-      const result = await sql`
+      const result = await sql<SavingsGoalRow>`
         SELECT
           sg.id,
           sg.name,
@@ -103,7 +128,7 @@ export const getAllSavingsGoals = authGuard(
     cacheTag(userTag(session.user.id)("savings-goals/list"));
 
     try {
-      const result = await sql`
+      const result = await sql<SavingsGoalRow>`
         SELECT
           sg.id,
           sg.name,
@@ -133,8 +158,8 @@ export const getAllSavingsGoals = authGuard(
 
 export const updateSavingsGoal = authGuard(
   (session) =>
-    async (goal: SavingsGoalFormValuesWithId): Promise<SavingsGoal> => {
-      const result = await sql`
+    async (goal: SavingsGoalInputWithId): Promise<SavingsGoal> => {
+      const result = await sql<SavingsGoalRow>`
         WITH updated AS (
           UPDATE savings_goal
           SET
@@ -186,7 +211,7 @@ export const updateSavingsGoal = authGuard(
 
 export const deleteSavingsGoal = authGuard(
   (session) => async (goalId: number) => {
-    const result = await sql`
+    const result = await sql<Pick<SavingsGoalRow, "id">>`
       DELETE FROM savings_goal
       WHERE id = ${goalId} AND user_id = ${session.user.id}
       RETURNING id
@@ -204,7 +229,7 @@ export const deleteSavingsGoal = authGuard(
 export const completeSavingsGoal = authGuard(
   (session) =>
     async (goalId: number): Promise<void> => {
-      const result = await sql`
+      const result = await sql<Pick<SavingsGoalRow, "id">>`
         UPDATE savings_goal
         SET
           is_completed = true,
@@ -228,7 +253,7 @@ export const completeSavingsGoal = authGuard(
 export const reopenSavingsGoal = authGuard(
   (session) =>
     async (goalId: number): Promise<void> => {
-      const result = await sql`
+      const result = await sql<Pick<SavingsGoalRow, "id">>`
         UPDATE savings_goal
         SET
           is_completed = false,
@@ -249,7 +274,7 @@ export const reopenSavingsGoal = authGuard(
     },
 );
 
-function savingsGoalFromDb(dbResult: Record<string, any>): SavingsGoal {
+function savingsGoalFromDb(dbResult: SavingsGoalRow): SavingsGoal {
   return {
     id: dbResult.id,
     name: dbResult.name,
@@ -270,10 +295,8 @@ function savingsGoalFromDb(dbResult: Record<string, any>): SavingsGoal {
 
 export const createSavingsDeposit = authGuard(
   (session) =>
-    async (
-      deposit: SavingsDepositFormValuesWithGoalId,
-    ): Promise<SavingsDeposit> => {
-      const result = await sql`
+    async (deposit: SavingsDepositInputWithGoalId): Promise<SavingsDeposit> => {
+      const result = await sql<SavingsDepositRow>`
         INSERT INTO savings_deposit (
           savings_goal_id,
           amount,
@@ -323,7 +346,7 @@ export const getSavingsDepositsByGoalId = authGuard(
       cacheTag(userTag(session.user.id)(`savings-deposits/goal/${goalId}`));
 
       try {
-        const result = await sql`
+        const result = await sql<SavingsDepositRow>`
           SELECT
             sd.id,
             sd.savings_goal_id,
@@ -348,10 +371,8 @@ export const getSavingsDepositsByGoalId = authGuard(
 
 export const updateSavingsDeposit = authGuard(
   (session) =>
-    async (
-      deposit: SavingsDepositFormValuesWithId,
-    ): Promise<SavingsDeposit> => {
-      const result = await sql`
+    async (deposit: SavingsDepositInputWithId): Promise<SavingsDeposit> => {
+      const result = await sql<SavingsDepositRow>`
         UPDATE savings_deposit sd
         SET
           amount = ${deposit.amount},
@@ -389,7 +410,7 @@ export const updateSavingsDeposit = authGuard(
 export const deleteSavingsDeposit = authGuard(
   (session) =>
     async (depositId: number): Promise<void> => {
-      const result = await sql`
+      const result = await sql<{ goal_id: number }>`
         DELETE FROM savings_deposit sd
         USING savings_goal sg
         WHERE sd.id = ${depositId}
@@ -412,7 +433,7 @@ export const deleteSavingsDeposit = authGuard(
     },
 );
 
-function savingsDepositFromDb(dbResult: Record<string, any>): SavingsDeposit {
+function savingsDepositFromDb(dbResult: SavingsDepositRow): SavingsDeposit {
   return {
     id: dbResult.id,
     goalId: dbResult.savings_goal_id,

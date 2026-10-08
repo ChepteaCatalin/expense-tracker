@@ -1,5 +1,5 @@
 import type { FormErrors } from "./form";
-import type { Category } from "./category";
+import type { Category, CategoryType } from "./category";
 
 export interface Transaction {
   id: number;
@@ -19,6 +19,17 @@ export interface TransactionFormValues {
 }
 
 export interface TransactionFormValuesWithId extends TransactionFormValues {
+  id: number;
+}
+
+export interface TransactionInput {
+  amount: number;
+  categoryId: number;
+  date: string;
+  description: string;
+}
+
+export interface TransactionInputWithId extends TransactionInput {
   id: number;
 }
 
@@ -42,7 +53,7 @@ export type DeleteTransactionAction = (
   { id }: { id: number },
 ) => Promise<string>;
 
-export type TransactionType = "expense" | "income";
+export type TransactionType = CategoryType;
 
 export interface TransactionCategoriesSearchParams {
   day?: string | null;

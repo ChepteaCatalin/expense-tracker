@@ -1,5 +1,12 @@
 import { amountValidation, validDate } from "@/utils/validation";
 import z from "zod";
+import type { CurrencyOption } from "@/types/currency";
+import type {
+  SavingsDepositFormValues,
+  SavingsDepositInput,
+  SavingsGoalFormValues,
+  SavingsGoalInput,
+} from "@/types/savings";
 
 export const savingsGoalSchema = z
   .object({
@@ -9,7 +16,7 @@ export const savingsGoalSchema = z
       .min(1, "Required field")
       .max(100, "Must be at most 100 characters"),
     initialAmount: z
-      .any()
+      .custom<number | "">()
       .refine((v) => v !== "", { message: "Required field" })
       .pipe(
         z
@@ -21,9 +28,11 @@ export const savingsGoalSchema = z
           }),
       ),
     targetAmount: amountValidation,
-    currency: z.any().refine((v) => !!v?.code, {
-      message: "Required field",
-    }),
+    currency: z
+      .custom<CurrencyOption | null>()
+      .refine((v): v is CurrencyOption => !!v?.code, {
+        message: "Required field",
+      }),
     startDate: validDate,
     notes: z.string().max(500, "Must be at most 500 characters"),
   })
@@ -35,10 +44,10 @@ export const savingsGoalSchema = z
         message: "Must be greater than initial amount",
       });
     }
-  });
+  }) satisfies z.ZodType<SavingsGoalInput, SavingsGoalFormValues>;
 
 export const savingsDepositSchema = z.object({
   amount: amountValidation,
   date: validDate,
   notes: z.string().max(500, "Must be at most 500 characters"),
-});
+}) satisfies z.ZodType<SavingsDepositInput, SavingsDepositFormValues>;

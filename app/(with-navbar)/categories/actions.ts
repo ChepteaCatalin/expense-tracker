@@ -30,7 +30,7 @@ export async function createCategory(
 
   try {
     await createNewCategory(category);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
       return { api: "A category with this name already exists" };
@@ -54,7 +54,7 @@ export async function updateCategory(
 
   try {
     await updateExistingCategory(category);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
       return { api: "A category with this name already exists" };
@@ -68,10 +68,10 @@ export async function updateCategory(
 export async function deleteCategory(
   _: string,
   { id, type }: { id: number; type: CategoryType },
-) {
+): Promise<string> {
   try {
     await deleteExistingCategory(id);
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to delete category";
   }

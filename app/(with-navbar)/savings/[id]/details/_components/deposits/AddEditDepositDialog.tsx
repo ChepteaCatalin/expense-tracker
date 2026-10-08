@@ -1,6 +1,10 @@
 "use client";
 
-import type { SavingsDeposit, SavingsDepositFormValues } from "@/types/savings";
+import type {
+  SavingsDeposit,
+  SavingsDepositFormValues,
+  SavingsDepositInput,
+} from "@/types/savings";
 import { fromCents } from "@/utils/currency";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -89,7 +93,11 @@ function DepositForm({
 
   const isMutating = isPendingCreate || isPendingUpdate;
 
-  const methods = useForm<SavingsDepositFormValues>({
+  const methods = useForm<
+    SavingsDepositFormValues,
+    unknown,
+    SavingsDepositInput
+  >({
     defaultValues: getDefaultValues(deposit),
     resolver: zodResolver(savingsDepositSchema),
     disabled: isMutating,

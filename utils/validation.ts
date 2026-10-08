@@ -1,8 +1,12 @@
 import z from "zod";
+import type {
+  TransactionFormValues,
+  TransactionInput,
+} from "@/types/transaction";
 
 const invalidDateError = "Please enter a valid date";
 export const validDate = z
-  .any()
+  .custom<string | null>()
   .refine((v) => v, { message: invalidDateError })
   .pipe(
     z
@@ -13,7 +17,7 @@ export const validDate = z
   );
 
 export const amountValidation = z
-  .any()
+  .custom<number | "">()
   .refine((v) => v !== "", { message: "Required field" })
   .pipe(
     z
@@ -28,7 +32,7 @@ export const amountValidation = z
 export const transactionSchema = z.object({
   amount: amountValidation,
   categoryId: z
-    .any()
+    .custom<number | "">()
     .refine((v) => v !== "", { message: "Category is required" })
     .pipe(
       z
@@ -38,4 +42,4 @@ export const transactionSchema = z.object({
     ),
   date: validDate,
   description: z.string().max(500, "Must be at most 500 characters"),
-});
+}) satisfies z.ZodType<TransactionInput, TransactionFormValues>;

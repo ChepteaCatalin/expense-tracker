@@ -1,8 +1,5 @@
 import type { TransactionsByDate } from "@/types/transaction";
-import {
-  type SortTransactionBy,
-  type TransactionByCategorySearchParams,
-} from "@/types/transaction";
+import { type TransactionByCategorySearchParams } from "@/types/transaction";
 import { UnauthorizedError } from "@/utils/error";
 import { redirect } from "next/navigation";
 import { getExpensesByCategory } from "@/data/expense";
@@ -30,7 +27,7 @@ export default async function CategoryExpensesList({
     expensesByDate = await getExpensesByCategory({
       categoryId: awaitedParams.id,
       ...dateFromSearchParams(awaitedSearchParams),
-      sortBy: (awaitedSearchParams.sortBy as SortTransactionBy) || "date",
+      sortBy: awaitedSearchParams.sortBy || "date",
     });
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
