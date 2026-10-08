@@ -1,19 +1,13 @@
 import type { DashboardSearchParams } from "@/types/dashboard";
 import { parseURLDate } from "@/utils/url";
-import { format, isAfter, isSameDay, isValid, startOfYear } from "date-fns";
-import { notFound } from "next/navigation";
-import { connection } from "next/server";
-
-export async function getValidNormalizedSearchParams(
-  searchParams: Promise<DashboardSearchParams>,
-) {
-  const awaitedSearchParams = await searchParams;
-
-  if (!validSearchParams(awaitedSearchParams)) notFound();
-  if (!awaitedSearchParams.from && !awaitedSearchParams.to) await connection();
-
-  return normalizedSearchParams(awaitedSearchParams);
-}
+import {
+  format,
+  isAfter,
+  isSameDay,
+  isValid,
+  parseISO,
+  startOfYear,
+} from "date-fns";
 
 export function validSearchParams({ from, to }: DashboardSearchParams) {
   if (!from && !to) return true;
@@ -28,14 +22,14 @@ export function validSearchParams({ from, to }: DashboardSearchParams) {
   );
 }
 
-export function normalizedSearchParams({
-  from,
-  to,
-}: DashboardSearchParams): DashboardSearchParams {
+export function normalizedSearchParams(
+  { from, to }: DashboardSearchParams,
+  today = format(new Date(), "yyyy-MM-dd"),
+): DashboardSearchParams {
   if (!from && !to)
     return {
-      from: format(startOfYear(new Date()), "yyyy-MM-dd"),
-      to: format(new Date(), "yyyy-MM-dd"),
+      from: format(startOfYear(parseISO(today)), "yyyy-MM-dd"),
+      to: today,
     };
 
   return { from, to };

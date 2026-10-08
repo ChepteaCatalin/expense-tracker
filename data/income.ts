@@ -1,7 +1,7 @@
 import "server-only";
 
 import { authGuard } from "@/lib/auth-utils";
-import { userTag } from "@/utils/cache";
+import { userTag, withFallback } from "@/utils/cache";
 
 interface TransactionRow {
   id: number;
@@ -91,15 +91,15 @@ export const createIncome = authGuard(
     },
 );
 
-export const getIncomeById = authGuard(
-  (session) =>
+export const getIncomeById = authGuard((session) =>
+  withFallback(
+    undefined,
     async (incomeId: number): Promise<Transaction | undefined> => {
       "use cache";
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`incomes/id/${incomeId}`));
 
-      try {
-        const result = await sql<TransactionRow>`
+      const result = await sql<TransactionRow>`
           SELECT
             id,
             amount,
@@ -113,38 +113,40 @@ export const getIncomeById = authGuard(
             AND user_id = ${session.user.id}
         `;
 
-        const row = result[0];
-        if (!row) return undefined;
+      const row = result[0];
+      if (!row) return undefined;
 
-        return {
-          id: row.id,
-          amount: row.amount,
-          categoryId: row.category_id,
-          date: new Date(row.date),
-          description: row.description,
-          createdAt: new Date(row.created_at),
-          updatedAt: new Date(row.updated_at),
-        };
-      } catch {
-        return undefined;
-      }
+      return {
+        id: row.id,
+        amount: row.amount,
+        categoryId: row.category_id,
+        date: new Date(row.date),
+        description: row.description,
+        createdAt: new Date(row.created_at),
+        updatedAt: new Date(row.updated_at),
+      };
     },
+  ),
 );
 
 export const updateIncome = authGuard(
   (session) =>
     async (income: TransactionInputWithId): Promise<Transaction> => {
-      const result = await sql<TransactionRow>`
-        UPDATE income
+      const result = await sql<
+        TransactionRow & { previous_category_id: number }
+      >`
+        UPDATE income i
         SET
           amount = ${income.amount},
           category_id = ${income.categoryId},
           date = ${income.date},
           description = ${income.description},
           updated_at = NOW()
+        FROM income prev
         WHERE
-          id = ${income.id}
-          AND user_id = ${session.user.id}
+          i.id = ${income.id}
+          AND prev.id = i.id
+          AND i.user_id = ${session.user.id}
           AND EXISTS (
             SELECT 1
             FROM category c
@@ -153,13 +155,14 @@ export const updateIncome = authGuard(
               AND c.type = 'income'
           )
         RETURNING
-          id,
-          amount,
-          category_id,
-          to_char(date, 'YYYY-MM-DD') AS date,
-          description,
-          created_at,
-          updated_at
+          i.id,
+          i.amount,
+          i.category_id,
+          to_char(i.date, 'YYYY-MM-DD') AS date,
+          i.description,
+          i.created_at,
+          i.updated_at,
+          prev.category_id AS previous_category_id
       `;
 
       const editedIncome = result[0];
@@ -169,7 +172,10 @@ export const updateIncome = authGuard(
       const tag = userTag(session.user.id);
       updateTag(tag("incomes"));
       updateTag(tag("incomes/categories"));
-      updateTag(tag(`incomes/category/${income.categoryId}`));
+      updateTag(tag(`incomes/category/${editedIncome.category_id}`));
+      if (editedIncome.previous_category_id !== editedIncome.category_id) {
+        updateTag(tag(`incomes/category/${editedIncome.previous_category_id}`));
+      }
       updateTag(tag(`incomes/id/${income.id}`));
 
       return {
@@ -208,8 +214,9 @@ export const deleteIncome = authGuard(
     },
 );
 
-export const getIncomeCategories = authGuard(
-  (session) =>
+export const getIncomeCategories = authGuard((session) =>
+  withFallback(
+    [],
     async ({
       from,
       to,
@@ -221,8 +228,7 @@ export const getIncomeCategories = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("incomes/categories"));
 
-      try {
-        const result = await sql<CategoryTotalRow>`
+      const result = await sql<CategoryTotalRow>`
           SELECT
             c.id AS category_id,
             c.name,
@@ -239,22 +245,21 @@ export const getIncomeCategories = authGuard(
           ORDER BY total_amount DESC
         `;
 
-        return result.map((row) => ({
-          categoryId: row.category_id,
-          name: row.name,
-          icon: row.icon,
-          strokeColor: row.stroke_color,
-          backgroundColor: row.background_color,
-          totalAmount: +row.total_amount,
-        }));
-      } catch {
-        return [];
-      }
+      return result.map((row) => ({
+        categoryId: row.category_id,
+        name: row.name,
+        icon: row.icon,
+        strokeColor: row.stroke_color,
+        backgroundColor: row.background_color,
+        totalAmount: +row.total_amount,
+      }));
     },
+  ),
 );
 
-export const getIncomesByCategory = authGuard(
-  (session) =>
+export const getIncomesByCategory = authGuard((session) =>
+  withFallback(
+    [],
     async ({
       categoryId,
       from,
@@ -270,8 +275,7 @@ export const getIncomesByCategory = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`incomes/category/${categoryId}`));
 
-      try {
-        const result = await sql<TransactionWithCategoryRow>`
+      const result = await sql<TransactionWithCategoryRow>`
           SELECT
             i.id,
             i.amount,
@@ -293,52 +297,51 @@ export const getIncomesByCategory = authGuard(
           ORDER BY i.date DESC, i.amount DESC
         `;
 
-        const groupedByDate = Object.groupBy(result, (row) => row.date);
+      const groupedByDate = Object.groupBy(result, (row) => row.date);
 
-        const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
-          const firstRow = rows?.[0];
-          if (!rows || !firstRow) return [];
+      const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
+        const firstRow = rows?.[0];
+        if (!rows || !firstRow) return [];
 
-          const transactions = rows.map((row) => ({
-            id: row.id,
-            amount: +row.amount,
-            categoryId: row.category_id,
-            date: new Date(row.date),
-            description: row.description,
-            createdAt: new Date(row.created_at),
-            updatedAt: new Date(row.updated_at),
-          }));
+        const transactions = rows.map((row) => ({
+          id: row.id,
+          amount: +row.amount,
+          categoryId: row.category_id,
+          date: new Date(row.date),
+          description: row.description,
+          createdAt: new Date(row.created_at),
+          updatedAt: new Date(row.updated_at),
+        }));
 
-          return [
-            {
-              date: new Date(date),
-              transactions,
-              categoryName: firstRow.name,
-              icon: firstRow.icon,
-              strokeColor: firstRow.stroke_color,
-              backgroundColor: firstRow.background_color,
-            },
-          ];
-        });
+        return [
+          {
+            date: new Date(date),
+            transactions,
+            categoryName: firstRow.name,
+            icon: firstRow.icon,
+            strokeColor: firstRow.stroke_color,
+            backgroundColor: firstRow.background_color,
+          },
+        ];
+      });
 
-        if (sortBy === "amount") {
-          days.sort(
-            (a, b) =>
-              getIncomesSum(b.transactions) - getIncomesSum(a.transactions),
-          );
-        } else {
-          days.sort((a, b) => b.date.getTime() - a.date.getTime());
-        }
-
-        return days;
-      } catch {
-        return [];
+      if (sortBy === "amount") {
+        days.sort(
+          (a, b) =>
+            getIncomesSum(b.transactions) - getIncomesSum(a.transactions),
+        );
+      } else {
+        days.sort((a, b) => b.date.getTime() - a.date.getTime());
       }
+
+      return days;
     },
+  ),
 );
 
-export const getIncomeCategoryTotal = authGuard(
-  (session) =>
+export const getIncomeCategoryTotal = authGuard((session) =>
+  withFallback(
+    0,
     async ({
       categoryId,
       from,
@@ -352,8 +355,7 @@ export const getIncomeCategoryTotal = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`incomes/category/${categoryId}`));
 
-      try {
-        const result = await sql<Pick<CategoryTotalRow, "total_amount">>`
+      const result = await sql<Pick<CategoryTotalRow, "total_amount">>`
           SELECT COALESCE(SUM(amount), 0) AS total_amount
           FROM income
           WHERE user_id = ${session.user.id}
@@ -362,11 +364,9 @@ export const getIncomeCategoryTotal = authGuard(
             AND date <= ${to}::date
         `;
 
-        return +(result[0]?.total_amount ?? 0);
-      } catch {
-        return 0;
-      }
+      return +(result[0]?.total_amount ?? 0);
     },
+  ),
 );
 
 function getIncomesSum(incomes: Transaction[]): number {

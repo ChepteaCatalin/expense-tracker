@@ -21,8 +21,8 @@ import { UnauthorizedError } from "@/utils/error";
 export async function signOut() {
   try {
     await signOutUser();
-  } catch (error) {
-    return error;
+  } catch {
+    return "Failed to sign out";
   }
 
   revalidatePath("/", "layout");
@@ -38,11 +38,16 @@ export async function updatePassword(
 
   try {
     await changePassword(formValues);
-    await signOut();
   } catch (error) {
     if (error instanceof APIError) return { api: error.message };
+    return { api: "Failed to change password" };
   }
 
+  try {
+    await signOutUser();
+  } catch {}
+
+  revalidatePath("/", "layout");
   redirect("/signin");
 }
 

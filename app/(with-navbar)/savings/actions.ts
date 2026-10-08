@@ -23,6 +23,7 @@ import {
   updateSavingsDeposit as updateExistingSavingsDeposit,
 } from "@/data/savings";
 import { toCents } from "@/utils/currency";
+import { getToday } from "@/lib/today";
 
 export async function createSavingsGoal(
   _: SavingsGoalFormErrors,
@@ -40,6 +41,7 @@ export async function createSavingsGoal(
   try {
     await createNewSavingsGoal({
       ...goal,
+      name: data.name,
       targetAmount: toCents(data.targetAmount),
       initialAmount: toCents(data.initialAmount),
       startDate: data.startDate,
@@ -72,6 +74,7 @@ export async function updateSavingsGoal(
   try {
     await updateExistingSavingsGoal({
       ...goal,
+      name: data.name,
       targetAmount: toCents(data.targetAmount),
       initialAmount: toCents(data.initialAmount),
       startDate: data.startDate,
@@ -132,8 +135,10 @@ export async function completeSavingsGoal(
   _: string | undefined,
   id: number,
 ): Promise<string | undefined> {
+  const today = await getToday();
+
   try {
-    await markAsCompleted(id);
+    await markAsCompleted(id, today);
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     return "Failed to complete savings goal";

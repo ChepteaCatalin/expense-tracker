@@ -15,7 +15,7 @@ import {
   deleteExpense as deleteExistingExpense,
 } from "@/data/expense";
 import { toCents } from "@/utils/currency";
-import { format } from "date-fns";
+import { getToday } from "@/lib/today";
 
 export async function createExpense(
   searchParams: string,
@@ -38,12 +38,12 @@ export async function createExpense(
   }
 
   if (searchParams.includes("sortBy")) {
-    redirect(toExpensesCategoryPage(searchParams, data.categoryId));
+    redirect(await toExpensesCategoryPage(searchParams, data.categoryId));
   } else {
     redirect(
       searchParams
         ? `/expenses/categories?${searchParams}`
-        : `/expenses/categories?month=${format(new Date(), "yyyy-MM-dd")}`,
+        : `/expenses/categories?month=${await getToday()}`,
     );
   }
 }
@@ -73,7 +73,7 @@ export async function updateExpense(
     return { api: "Failed to edit the expense" };
   }
 
-  redirect(toExpensesCategoryPage(searchParams, data.categoryId));
+  redirect(await toExpensesCategoryPage(searchParams, data.categoryId));
 }
 
 export async function deleteExpense(
@@ -88,11 +88,14 @@ export async function deleteExpense(
     return "Failed to delete expense";
   }
 
-  redirect(toExpensesCategoryPage(searchParams, categoryId));
+  redirect(await toExpensesCategoryPage(searchParams, categoryId));
 }
 
-function toExpensesCategoryPage(searchParams: string, categoryId: number) {
+async function toExpensesCategoryPage(
+  searchParams: string,
+  categoryId: number,
+) {
   return searchParams
     ? `/expenses/category/${categoryId}?${searchParams}`
-    : `/expenses/categories?month=${format(new Date(), "yyyy-MM-dd")}`;
+    : `/expenses/categories?month=${await getToday()}`;
 }

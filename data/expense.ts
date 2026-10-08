@@ -7,7 +7,7 @@ import type {
 } from "@/types/transaction";
 import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { authGuard } from "@/lib/auth-utils";
-import { userTag } from "@/utils/cache";
+import { userTag, withFallback } from "@/utils/cache";
 
 interface TransactionRow {
   id: number;
@@ -96,17 +96,21 @@ export const createExpense = authGuard(
 export const updateExpense = authGuard(
   (session) =>
     async (expense: TransactionInputWithId): Promise<Transaction> => {
-      const result = await sql<TransactionRow>`
-        UPDATE expense
+      const result = await sql<
+        TransactionRow & { previous_category_id: number }
+      >`
+        UPDATE expense e
         SET
           amount = ${expense.amount},
           category_id = ${expense.categoryId},
           date = ${expense.date},
           description = ${expense.description},
           updated_at = NOW()
+        FROM expense prev
         WHERE
-          id = ${expense.id}
-          AND user_id = ${session.user.id}
+          e.id = ${expense.id}
+          AND prev.id = e.id
+          AND e.user_id = ${session.user.id}
           AND EXISTS (
             SELECT 1
             FROM category c
@@ -115,13 +119,14 @@ export const updateExpense = authGuard(
               AND c.type = 'expense'
           )
         RETURNING
-          id,
-          amount,
-          category_id,
-          to_char(date, 'YYYY-MM-DD') AS date,
-          description,
-          created_at,
-          updated_at
+          e.id,
+          e.amount,
+          e.category_id,
+          to_char(e.date, 'YYYY-MM-DD') AS date,
+          e.description,
+          e.created_at,
+          e.updated_at,
+          prev.category_id AS previous_category_id
       `;
 
       const editedExpense = result[0];
@@ -131,7 +136,12 @@ export const updateExpense = authGuard(
       const tag = userTag(session.user.id);
       updateTag(tag("expenses"));
       updateTag(tag("expenses/categories"));
-      updateTag(tag(`expenses/category/${expense.categoryId}`));
+      updateTag(tag(`expenses/category/${editedExpense.category_id}`));
+      if (editedExpense.previous_category_id !== editedExpense.category_id) {
+        updateTag(
+          tag(`expenses/category/${editedExpense.previous_category_id}`),
+        );
+      }
       updateTag(tag(`expenses/id/${expense.id}`));
 
       return {
@@ -170,8 +180,9 @@ export const deleteExpense = authGuard(
     },
 );
 
-export const getExpenseCategories = authGuard(
-  (session) =>
+export const getExpenseCategories = authGuard((session) =>
+  withFallback(
+    [],
     async ({
       from,
       to,
@@ -183,8 +194,7 @@ export const getExpenseCategories = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)("expenses/categories"));
 
-      try {
-        const result = await sql<CategoryTotalRow>`
+      const result = await sql<CategoryTotalRow>`
           SELECT
             c.id AS category_id,
             c.name,
@@ -201,29 +211,27 @@ export const getExpenseCategories = authGuard(
           ORDER BY total_amount DESC
         `;
 
-        return result.map((row) => ({
-          categoryId: row.category_id,
-          name: row.name,
-          icon: row.icon,
-          strokeColor: row.stroke_color,
-          backgroundColor: row.background_color,
-          totalAmount: +row.total_amount,
-        }));
-      } catch {
-        return [];
-      }
+      return result.map((row) => ({
+        categoryId: row.category_id,
+        name: row.name,
+        icon: row.icon,
+        strokeColor: row.stroke_color,
+        backgroundColor: row.background_color,
+        totalAmount: +row.total_amount,
+      }));
     },
+  ),
 );
 
-export const getExpenseById = authGuard(
-  (session) =>
+export const getExpenseById = authGuard((session) =>
+  withFallback(
+    undefined,
     async (expenseId: number): Promise<Transaction | undefined> => {
       "use cache";
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`expenses/id/${expenseId}`));
 
-      try {
-        const result = await sql<TransactionRow>`
+      const result = await sql<TransactionRow>`
           SELECT
             id,
             amount,
@@ -237,26 +245,25 @@ export const getExpenseById = authGuard(
             AND user_id = ${session.user.id}
         `;
 
-        const row = result[0];
-        if (!row) return undefined;
+      const row = result[0];
+      if (!row) return undefined;
 
-        return {
-          id: row.id,
-          amount: row.amount,
-          categoryId: row.category_id,
-          date: new Date(row.date),
-          description: row.description,
-          createdAt: new Date(row.created_at),
-          updatedAt: new Date(row.updated_at),
-        };
-      } catch {
-        return undefined;
-      }
+      return {
+        id: row.id,
+        amount: row.amount,
+        categoryId: row.category_id,
+        date: new Date(row.date),
+        description: row.description,
+        createdAt: new Date(row.created_at),
+        updatedAt: new Date(row.updated_at),
+      };
     },
+  ),
 );
 
-export const getExpenseCategoryTotal = authGuard(
-  (session) =>
+export const getExpenseCategoryTotal = authGuard((session) =>
+  withFallback(
+    0,
     async ({
       categoryId,
       from,
@@ -270,8 +277,7 @@ export const getExpenseCategoryTotal = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
-      try {
-        const result = await sql<Pick<CategoryTotalRow, "total_amount">>`
+      const result = await sql<Pick<CategoryTotalRow, "total_amount">>`
           SELECT COALESCE(SUM(amount), 0) AS total_amount
           FROM expense
           WHERE user_id = ${session.user.id}
@@ -280,15 +286,14 @@ export const getExpenseCategoryTotal = authGuard(
             AND date <= ${to}::date
         `;
 
-        return +(result[0]?.total_amount ?? 0);
-      } catch {
-        return 0;
-      }
+      return +(result[0]?.total_amount ?? 0);
     },
+  ),
 );
 
-export const getExpensesByCategory = authGuard(
-  (session) =>
+export const getExpensesByCategory = authGuard((session) =>
+  withFallback(
+    [],
     async ({
       categoryId,
       from,
@@ -304,8 +309,7 @@ export const getExpensesByCategory = authGuard(
       cacheLife("max");
       cacheTag(userTag(session.user.id)(`expenses/category/${categoryId}`));
 
-      try {
-        const result = await sql<TransactionWithCategoryRow>`
+      const result = await sql<TransactionWithCategoryRow>`
           SELECT
             e.id,
             e.amount,
@@ -327,48 +331,46 @@ export const getExpensesByCategory = authGuard(
           ORDER BY e.date DESC, e.amount DESC
         `;
 
-        const groupedByDate = Object.groupBy(result, (row) => row.date);
+      const groupedByDate = Object.groupBy(result, (row) => row.date);
 
-        const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
-          const firstRow = rows?.[0];
-          if (!rows || !firstRow) return [];
+      const days = Object.entries(groupedByDate).flatMap(([date, rows]) => {
+        const firstRow = rows?.[0];
+        if (!rows || !firstRow) return [];
 
-          const transactions = rows.map((row) => ({
-            id: row.id,
-            amount: +row.amount,
-            categoryId: row.category_id,
-            date: new Date(row.date),
-            description: row.description,
-            createdAt: new Date(row.created_at),
-            updatedAt: new Date(row.updated_at),
-          }));
+        const transactions = rows.map((row) => ({
+          id: row.id,
+          amount: +row.amount,
+          categoryId: row.category_id,
+          date: new Date(row.date),
+          description: row.description,
+          createdAt: new Date(row.created_at),
+          updatedAt: new Date(row.updated_at),
+        }));
 
-          return [
-            {
-              date: new Date(date),
-              transactions,
-              categoryName: firstRow.name,
-              icon: firstRow.icon,
-              strokeColor: firstRow.stroke_color,
-              backgroundColor: firstRow.background_color,
-            },
-          ];
-        });
+        return [
+          {
+            date: new Date(date),
+            transactions,
+            categoryName: firstRow.name,
+            icon: firstRow.icon,
+            strokeColor: firstRow.stroke_color,
+            backgroundColor: firstRow.background_color,
+          },
+        ];
+      });
 
-        if (sortBy === "amount") {
-          days.sort(
-            (a, b) =>
-              getExpensesSum(b.transactions) - getExpensesSum(a.transactions),
-          );
-        } else {
-          days.sort((a, b) => b.date.getTime() - a.date.getTime());
-        }
-
-        return days;
-      } catch {
-        return [];
+      if (sortBy === "amount") {
+        days.sort(
+          (a, b) =>
+            getExpensesSum(b.transactions) - getExpensesSum(a.transactions),
+        );
+      } else {
+        days.sort((a, b) => b.date.getTime() - a.date.getTime());
       }
+
+      return days;
     },
+  ),
 );
 
 function getExpensesSum(expenses: Transaction[]): number {

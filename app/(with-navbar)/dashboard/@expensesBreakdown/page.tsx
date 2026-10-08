@@ -2,7 +2,7 @@ import type {
   DashboardSearchParams,
   BreakdownChartData,
 } from "@/types/dashboard";
-import { getValidNormalizedSearchParams } from "../utils";
+import { getValidNormalizedSearchParams } from "../search-params";
 import InsightCard from "../_components/InsightCard";
 import { getSession } from "@/data/auth";
 import { getExpenseCategoryBreakdown } from "@/data/dashboard";

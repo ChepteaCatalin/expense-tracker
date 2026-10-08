@@ -1,4 +1,4 @@
-import { passwordSchema } from "@/lib/zod";
+import { newPasswordSchema, passwordSchema } from "@/lib/zod";
 import z from "zod";
 
 const emailSchema = z.email("Invalid email address");
@@ -11,8 +11,8 @@ export const signUpSchema = z
       .min(1, "Name is required")
       .max(255, "Name must be at most 255 characters long"),
     email: emailSchema,
-    password: passwordSchema("Password"),
-    confirmPassword: passwordSchema("Confirm Password"),
+    password: newPasswordSchema("Password"),
+    confirmPassword: newPasswordSchema("Confirm Password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",

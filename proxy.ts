@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { format } from "date-fns";
+import { TIME_ZONE_COOKIE, todayInTimeZone } from "@/utils/timezone";
 
 export function proxy(request: NextRequest) {
   const url = new URL("/expenses/categories", request.url);
-  url.searchParams.set("month", format(new Date(), "yyyy-MM-dd"));
+  url.searchParams.set(
+    "month",
+    todayInTimeZone(request.cookies.get(TIME_ZONE_COOKIE)?.value),
+  );
 
   return NextResponse.redirect(url);
 }

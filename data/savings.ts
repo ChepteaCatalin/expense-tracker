@@ -2,7 +2,7 @@ import "server-only";
 
 import { sql } from "@/lib/neon";
 import { authGuard } from "@/lib/auth-utils";
-import { userTag } from "@/utils/cache";
+import { userTag, withFallback } from "@/utils/cache";
 import type {
   SavingsGoal,
   SavingsGoalInput,
@@ -121,14 +121,13 @@ export const getSavingsGoalById = authGuard(
     },
 );
 
-export const getAllSavingsGoals = authGuard(
-  (session) => async (): Promise<SavingsGoal[]> => {
+export const getAllSavingsGoals = authGuard((session) =>
+  withFallback([], async (): Promise<SavingsGoal[]> => {
     "use cache";
     cacheLife("max");
     cacheTag(userTag(session.user.id)("savings-goals/list"));
 
-    try {
-      const result = await sql<SavingsGoalRow>`
+    const result = await sql<SavingsGoalRow>`
         SELECT
           sg.id,
           sg.name,
@@ -149,11 +148,8 @@ export const getAllSavingsGoals = authGuard(
         ORDER BY sg.is_completed ASC, sg.start_date DESC
       `;
 
-      return result.map((row) => savingsGoalFromDb(row));
-    } catch {
-      return [];
-    }
-  },
+    return result.map((row) => savingsGoalFromDb(row));
+  }),
 );
 
 export const updateSavingsGoal = authGuard(
@@ -228,12 +224,12 @@ export const deleteSavingsGoal = authGuard(
 
 export const completeSavingsGoal = authGuard(
   (session) =>
-    async (goalId: number): Promise<void> => {
+    async (goalId: number, completedDate: string): Promise<void> => {
       const result = await sql<Pick<SavingsGoalRow, "id">>`
         UPDATE savings_goal
         SET
           is_completed = true,
-          completed_date = CURRENT_DATE,
+          completed_date = ${completedDate}::date,
           updated_at = NOW()
         WHERE id = ${goalId}
           AND user_id = ${session.user.id}
@@ -338,15 +334,13 @@ export const createSavingsDeposit = authGuard(
     },
 );
 
-export const getSavingsDepositsByGoalId = authGuard(
-  (session) =>
-    async (goalId: number): Promise<SavingsDeposit[]> => {
-      "use cache";
-      cacheLife("max");
-      cacheTag(userTag(session.user.id)(`savings-deposits/goal/${goalId}`));
+export const getSavingsDepositsByGoalId = authGuard((session) =>
+  withFallback([], async (goalId: number): Promise<SavingsDeposit[]> => {
+    "use cache";
+    cacheLife("max");
+    cacheTag(userTag(session.user.id)(`savings-deposits/goal/${goalId}`));
 
-      try {
-        const result = await sql<SavingsDepositRow>`
+    const result = await sql<SavingsDepositRow>`
           SELECT
             sd.id,
             sd.savings_goal_id,
@@ -359,14 +353,11 @@ export const getSavingsDepositsByGoalId = authGuard(
           INNER JOIN savings_goal sg ON sg.id = sd.savings_goal_id
           WHERE sd.savings_goal_id = ${goalId}
             AND sg.user_id = ${session.user.id}
-          ORDER BY sd.date DESC
+          ORDER BY sd.date DESC, sd.id DESC
         `;
 
-        return result.map(savingsDepositFromDb);
-      } catch {
-        return [];
-      }
-    },
+    return result.map(savingsDepositFromDb);
+  }),
 );
 
 export const updateSavingsDeposit = authGuard(
@@ -399,9 +390,9 @@ export const updateSavingsDeposit = authGuard(
 
       const tag = userTag(session.user.id);
       updateTag(tag("savings"));
-      updateTag(tag(`savings-goals/id/${deposit.goalId}`));
+      updateTag(tag(`savings-goals/id/${updated.savings_goal_id}`));
       updateTag(tag("savings-goals/list"));
-      updateTag(tag(`savings-deposits/goal/${deposit.goalId}`));
+      updateTag(tag(`savings-deposits/goal/${updated.savings_goal_id}`));
 
       return savingsDepositFromDb(updated);
     },

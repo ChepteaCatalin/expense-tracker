@@ -66,18 +66,19 @@ export const updateCategory = authGuard(
         RETURNING *
       `;
 
-      if (!result[0]) throw new Error("Category not found or update failed");
+      const updated = result[0];
+      if (!updated) throw new Error("Category not found or update failed");
 
       const tag = userTag(session.user.id);
-      updateTag(tag(category.type === "expense" ? "expenses" : "incomes"));
-      updateTag(tag(`categories/type/${category.type}`));
+      updateTag(tag(updated.type === "expense" ? "expenses" : "incomes"));
+      updateTag(tag(`categories/type/${updated.type}`));
       updateTag(tag(`categories/id/${category.id}`));
       updateTag(tag("expenses/categories"));
       updateTag(tag("incomes/categories"));
       updateTag(tag(`expenses/category/${category.id}`));
       updateTag(tag(`incomes/category/${category.id}`));
 
-      return categoryFromDb(result[0]);
+      return categoryFromDb(updated);
     },
 );
 

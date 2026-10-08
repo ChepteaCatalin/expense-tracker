@@ -29,22 +29,17 @@ ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS fk_category
 ALTER TABLE IF EXISTS ONLY public.account DROP CONSTRAINT IF EXISTS "account_userId_fkey";
 DROP INDEX IF EXISTS public.verification_identifier_idx;
 DROP INDEX IF EXISTS public."session_userId_idx";
-DROP INDEX IF EXISTS public.idx_savings_goal_user_id;
 DROP INDEX IF EXISTS public.idx_savings_goal_user_completed;
-DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_id;
 DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_date;
 DROP INDEX IF EXISTS public.idx_savings_deposit_date;
 DROP INDEX IF EXISTS public.idx_rate_limit_window_start;
-DROP INDEX IF EXISTS public.idx_income_user_id;
 DROP INDEX IF EXISTS public.idx_income_user_date;
 DROP INDEX IF EXISTS public.idx_income_date;
 DROP INDEX IF EXISTS public.idx_income_category_id;
-DROP INDEX IF EXISTS public.idx_expense_user_id;
 DROP INDEX IF EXISTS public.idx_expense_user_date;
 DROP INDEX IF EXISTS public.idx_expense_date;
 DROP INDEX IF EXISTS public.idx_expense_category_id;
 DROP INDEX IF EXISTS public.idx_category_user_type;
-DROP INDEX IF EXISTS public.idx_category_user_id;
 DROP INDEX IF EXISTS public.idx_category_type;
 DROP INDEX IF EXISTS public."account_userId_idx";
 ALTER TABLE IF EXISTS ONLY public.verification DROP CONSTRAINT IF EXISTS verification_pkey;
@@ -640,13 +635,6 @@ CREATE INDEX idx_category_type ON public.category USING btree (type);
 
 
 --
--- Name: idx_category_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_category_user_id ON public.category USING btree (user_id);
-
-
---
 -- Name: idx_category_user_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -675,13 +663,6 @@ CREATE INDEX idx_expense_user_date ON public.expense USING btree (user_id, date)
 
 
 --
--- Name: idx_expense_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_expense_user_id ON public.expense USING btree (user_id);
-
-
---
 -- Name: idx_income_category_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -700,13 +681,6 @@ CREATE INDEX idx_income_date ON public.income USING btree (date);
 --
 
 CREATE INDEX idx_income_user_date ON public.income USING btree (user_id, date);
-
-
---
--- Name: idx_income_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_income_user_id ON public.income USING btree (user_id);
 
 
 --
@@ -731,24 +705,10 @@ CREATE INDEX idx_savings_deposit_savings_goal_date ON public.savings_deposit USI
 
 
 --
--- Name: idx_savings_deposit_savings_goal_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_savings_deposit_savings_goal_id ON public.savings_deposit USING btree (savings_goal_id);
-
-
---
 -- Name: idx_savings_goal_user_completed; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_savings_goal_user_completed ON public.savings_goal USING btree (user_id, is_completed);
-
-
---
--- Name: idx_savings_goal_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_savings_goal_user_id ON public.savings_goal USING btree (user_id);
 
 
 --

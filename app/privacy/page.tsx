@@ -18,7 +18,7 @@ export const metadata = {
 
 const CONTROLLER_NAME = "Cătălin Cheptea";
 const CONTROLLER_EMAIL = "vested.slump_6o@icloud.com";
-const LAST_UPDATED = "September 1, 2026";
+const LAST_UPDATED = "October 8, 2026";
 
 export default function PrivacyPolicyPage() {
   return (
@@ -63,6 +63,12 @@ export default function PrivacyPolicyPage() {
             created that includes your IP address and browser user agent. This
             is used to keep you signed in and to protect your account.
           </Item>
+          <Item>
+            <b>Time zone</b> — your device’s time zone name (for example,
+            Europe/Chisinau), sent with each request in a cookie so that dates
+            such as “today” match your calendar day. It is not stored on our
+            servers.
+          </Item>
         </List>
         <Paragraph>
           We do <b>not</b> use analytics, advertising, or tracking services, and
@@ -74,7 +80,8 @@ export default function PrivacyPolicyPage() {
           <Item>
             <b>To provide the service</b> (Art. 6(1)(b) GDPR — performance of a
             contract): creating your account, authenticating you, storing and
-            displaying your financial records, and showing dashboards.
+            displaying your financial records, showing dashboards, and showing
+            dates in your time zone.
           </Item>
           <Item>
             <b>To keep the service secure</b> (Art. 6(1)(f) GDPR — legitimate
@@ -116,6 +123,14 @@ export default function PrivacyPolicyPage() {
                 Protects the Google sign-in flow against forgery
               </TableCell>
               <TableCell>A few minutes, during sign-in only</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Time zone</TableCell>
+              <TableCell>
+                Your device’s time zone name (e.g. Europe/Chisinau), so dates
+                like “today” match your calendar day
+              </TableCell>
+              <TableCell>Until you close your browser</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -165,6 +180,10 @@ export default function PrivacyPolicyPage() {
           <Item>
             <b>Session records</b> — deleted when they expire or when you sign
             out.
+          </Item>
+          <Item>
+            <b>Time zone</b> — kept only in a cookie in your browser until you
+            close it; never stored on our servers.
           </Item>
         </List>
       </Section>

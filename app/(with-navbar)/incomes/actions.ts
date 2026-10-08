@@ -13,7 +13,7 @@ import {
 } from "@/data/income";
 import { toCents } from "@/utils/currency";
 import { parseForm } from "@/lib/zod";
-import { format } from "date-fns";
+import { getToday } from "@/lib/today";
 import { redirect } from "next/navigation";
 import { UnauthorizedError } from "@/utils/error";
 
@@ -38,12 +38,12 @@ export async function createIncome(
   }
 
   if (searchParams.includes("sortBy")) {
-    redirect(toIncomesCategoryPage(searchParams, data.categoryId));
+    redirect(await toIncomesCategoryPage(searchParams, data.categoryId));
   } else {
     redirect(
       searchParams
         ? `/incomes/categories?${searchParams}`
-        : `/incomes/categories?month=${format(new Date(), "yyyy-MM-dd")}`,
+        : `/incomes/categories?month=${await getToday()}`,
     );
   }
 }
@@ -73,7 +73,7 @@ export async function updateIncome(
     return { api: "Failed to edit the income" };
   }
 
-  redirect(toIncomesCategoryPage(searchParams, data.categoryId));
+  redirect(await toIncomesCategoryPage(searchParams, data.categoryId));
 }
 
 export async function deleteIncome(
@@ -88,11 +88,11 @@ export async function deleteIncome(
     return "Failed to delete income";
   }
 
-  redirect(toIncomesCategoryPage(searchParams, categoryId));
+  redirect(await toIncomesCategoryPage(searchParams, categoryId));
 }
 
-function toIncomesCategoryPage(searchParams: string, categoryId: number) {
+async function toIncomesCategoryPage(searchParams: string, categoryId: number) {
   return searchParams
     ? `/incomes/category/${categoryId}?${searchParams}`
-    : `/incomes/categories?month=${format(new Date(), "yyyy-MM-dd")}`;
+    : `/incomes/categories?month=${await getToday()}`;
 }

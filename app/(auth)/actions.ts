@@ -25,6 +25,7 @@ export async function signUp(
     if (error instanceof APIError) {
       return { api: error.message };
     }
+    return { api: "Something went wrong. Please try again." };
   }
 
   redirect("/");
@@ -43,6 +44,7 @@ export async function signIn(
     if (error instanceof APIError) {
       return { api: error.message };
     }
+    return { api: "Something went wrong. Please try again." };
   }
 
   redirect("/");

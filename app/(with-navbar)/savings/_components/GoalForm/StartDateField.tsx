@@ -4,6 +4,7 @@ import DatePicker from "@/components/DatePicker";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { cn } from "cn";
 import { Controller } from "react-hook-form";
+import { todayISO } from "@/utils/date";
 
 export default function StartDateField({
   isEditMode,
@@ -13,7 +14,7 @@ export default function StartDateField({
   return (
     <Controller
       name="startDate"
-      {...(!isEditMode && { defaultValue: new Date().toISOString() })}
+      {...(!isEditMode && { defaultValue: todayISO() })}
       render={({ field: { value, onChange, disabled } }) => (
         <Field>
           <FieldLabel className={cn({ "opacity-50": disabled })}>

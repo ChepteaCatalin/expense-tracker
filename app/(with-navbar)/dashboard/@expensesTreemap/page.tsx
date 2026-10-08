@@ -1,7 +1,7 @@
 import { getSession } from "@/data/auth";
 import InsightCard from "../_components/InsightCard";
 import TreemapChart from "../_components/TreemapChart";
-import { getValidNormalizedSearchParams } from "../utils";
+import { getValidNormalizedSearchParams } from "../search-params";
 import type {
   CategoryTreemapNode,
   DashboardSearchParams,

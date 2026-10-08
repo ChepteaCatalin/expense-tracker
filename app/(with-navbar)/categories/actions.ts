@@ -1,6 +1,6 @@
 "use server";
 
-import { getFormErrors } from "@/lib/zod";
+import { parseForm } from "@/lib/zod";
 import {
   type Category,
   type CategoryFormErrors,
@@ -21,15 +21,16 @@ export async function createCategory(
   _: CategoryFormErrors,
   category: CategoryFormValues,
 ): Promise<CategoryFormErrors> {
-  const errors = getFormErrors(categorySchema, category);
-  if (errors) return errors;
+  const result = parseForm(categorySchema, category);
+  if (!result.success) return result.errors;
+  const { data } = result;
 
-  if (!categoryIcons.some(({ src }) => src === category.icon)) {
+  if (!categoryIcons.some(({ src }) => src === data.icon)) {
     return { icon: "Must be a valid icon" };
   }
 
   try {
-    await createNewCategory(category);
+    await createNewCategory({ ...category, ...data });
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {
@@ -45,15 +46,16 @@ export async function updateCategory(
   _: CategoryFormErrors,
   category: Category,
 ): Promise<CategoryFormErrors> {
-  const errors = getFormErrors(categorySchema, category);
-  if (errors) return errors;
+  const result = parseForm(categorySchema, category);
+  if (!result.success) return result.errors;
+  const { data } = result;
 
-  if (!categoryIcons.some(({ src }) => src === category.icon)) {
+  if (!categoryIcons.some(({ src }) => src === data.icon)) {
     return { icon: "Must be a valid icon" };
   }
 
   try {
-    await updateExistingCategory(category);
+    await updateExistingCategory({ ...category, ...data });
   } catch (err) {
     if (err instanceof UnauthorizedError) redirect("/signin");
     if (isUniqueViolationError(err)) {

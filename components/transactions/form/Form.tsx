@@ -43,6 +43,7 @@ import { cn } from "cn";
 import { Save } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import ActionErrorAlert from "@/components/ActionErrorAlert";
+import { calendarDateISO, todayISO } from "@/utils/date";
 
 interface BaseFormProps {
   type: TransactionType;
@@ -256,7 +257,7 @@ function getDefaultValues(transaction?: Transaction): TransactionFormValues {
     return {
       amount: fromCents(transaction.amount),
       categoryId: transaction.categoryId,
-      date: new Date(transaction.date).toISOString(),
+      date: calendarDateISO(transaction.date),
       description: transaction.description,
     };
   }
@@ -264,7 +265,7 @@ function getDefaultValues(transaction?: Transaction): TransactionFormValues {
   return {
     amount: "",
     categoryId: "",
-    date: new Date().toISOString(),
+    date: todayISO(),
     description: "",
   };
 }

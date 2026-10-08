@@ -38,6 +38,7 @@ import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ActionErrorAlert from "@/components/ActionErrorAlert";
 import { cn } from "cn";
+import { calendarDateISO } from "@/utils/date";
 
 interface FormProps {
   goal?: SavingsGoal;
@@ -254,7 +255,7 @@ function getDefaultValues(
       targetAmount: fromCents(goal.targetAmount),
       notes: goal.notes || "",
       currency: defaultCurrency,
-      startDate: new Date(goal.startDate).toISOString(),
+      startDate: calendarDateISO(goal.startDate),
     };
   }
 

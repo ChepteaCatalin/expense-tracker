@@ -1,4 +1,4 @@
-import { getValidNormalizedSearchParams } from "../utils";
+import { getValidNormalizedSearchParams } from "../search-params";
 import InsightCard from "../_components/InsightCard";
 import type { DashboardSearchParams, TotalsMetrics } from "@/types/dashboard";
 import { cn } from "cn";

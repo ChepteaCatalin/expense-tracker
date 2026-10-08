@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { calendarDateISO, todayISO } from "@/utils/date";
 
 interface AddEditDepositDialogProps {
   goalId: number;
@@ -247,14 +248,14 @@ function getDefaultValues(deposit?: SavingsDeposit): SavingsDepositFormValues {
   if (!deposit) {
     return {
       amount: "",
-      date: new Date().toISOString(),
+      date: todayISO(),
       notes: "",
     };
   }
 
   return {
     amount: fromCents(deposit.amount),
-    date: deposit.date.toISOString(),
+    date: calendarDateISO(deposit.date),
     notes: deposit?.notes ?? "",
   };
 }
