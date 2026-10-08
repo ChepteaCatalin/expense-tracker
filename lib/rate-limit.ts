@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHash } from "node:crypto";
+import { createHmac } from "node:crypto";
 import type { BetterAuthOptions } from "better-auth";
 import { sql } from "@/lib/neon";
 
@@ -21,11 +21,15 @@ export interface RateLimitResult {
   retryAfter: number | null;
 }
 
-const STALE_ENTRY_TTL_MS = 24 * 60 * 60 * 1000;
+export const STALE_ENTRY_TTL_MS = 24 * 60 * 60 * 1000;
 const PRUNE_PROBABILITY = 0.01;
 
+// Keyed with the server secret so stored keys can't be reversed by
+// brute-forcing the small IP address / email space (data minimisation).
 export function hashRateLimitKey(value: string): string {
-  return createHash("sha256").update(value).digest("hex");
+  return createHmac("sha256", process.env.BETTER_AUTH_SECRET ?? "")
+    .update(value)
+    .digest("hex");
 }
 
 /**
@@ -65,10 +69,7 @@ export async function consumeRateLimit(
     const windowStart = Number(row.window_start);
 
     if (count === 1 && Math.random() < PRUNE_PROBABILITY) {
-      await sql`
-        DELETE FROM rate_limit
-        WHERE window_start < ${now - STALE_ENTRY_TTL_MS}
-      `;
+      await deleteStaleRateLimits();
     }
 
     if (count <= max) return { allowed: true, retryAfter: null };
@@ -83,7 +84,32 @@ export async function consumeRateLimit(
   }
 }
 
-/** Shared Postgres storage for better-auth's built-in `/api/auth` limiter. */
+/** Deletes counters whose window ended more than `STALE_ENTRY_TTL_MS` ago. */
+export async function deleteStaleRateLimits() {
+  await sql`
+    DELETE FROM rate_limit
+    WHERE window_start < ${Date.now() - STALE_ENTRY_TTL_MS}
+  `;
+}
+
+/** Deletes the counters keyed by a user's ID or email address. */
+export async function deleteUserRateLimits(userId: string, email: string) {
+  const userKeySuffix = `:user:${hashRateLimitKey(userId)}`;
+  const emailKeySuffix = `:email:${hashRateLimitKey(email.trim().toLowerCase())}`;
+
+  await sql`
+    DELETE FROM rate_limit
+    WHERE right(key, ${userKeySuffix.length}) = ${userKeySuffix}
+      OR right(key, ${emailKeySuffix.length}) = ${emailKeySuffix}
+  `;
+}
+
+/**
+ * Shared Postgres storage for better-auth's built-in `/api/auth` limiter.
+ * better-auth keys entries by the raw client IP (`<ip>|<path>`), so the key is
+ * hashed before it is stored.
+ */
 export const rateLimitStorage: RateLimitStorage = {
-  consume: consumeRateLimit,
+  consume: (key, rule) =>
+    consumeRateLimit(`better-auth:${hashRateLimitKey(key)}`, rule),
 };

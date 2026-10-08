@@ -40,7 +40,8 @@ export default function SignInPage() {
                 </Link>
               </p>
               <p>
-                By signing in, you agree to our{" "}
+                By continuing, you confirm that you are at least 16 years old
+                and have read our{" "}
                 <Link
                   href="/privacy"
                   className="text-primary-light font-medium hover:underline"

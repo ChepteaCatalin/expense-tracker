@@ -24,6 +24,7 @@ async function AccountDetails() {
         <AvatarImage
           src={user.image || undefined}
           alt={`${user.name} avatar`}
+          referrerPolicy="no-referrer"
         />
         <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
       </Avatar>

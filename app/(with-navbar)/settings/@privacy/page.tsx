@@ -22,8 +22,8 @@ export default function PrivacyPage() {
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <p className="text-muted-foreground">
-            Download a copy of all your data (profile, categories, expenses,
-            income, and savings) as a JSON file.
+            Download a copy of all your data (profile, sign-in methods,
+            sessions, categories, expenses, income, and savings) as a JSON file.
           </p>
           <a
             href="/api/export"

@@ -56,7 +56,10 @@ export async function enforceAuthRateLimits(ctx: GenericEndpointContext) {
   if (rules.user) {
     const session = await getSessionFromCtx(ctx);
     if (session) {
-      checks.push([`auth:${path}:user:${session.user.id}`, rules.user]);
+      checks.push([
+        `auth:${path}:user:${hashRateLimitKey(session.user.id)}`,
+        rules.user,
+      ]);
     }
   }
 
