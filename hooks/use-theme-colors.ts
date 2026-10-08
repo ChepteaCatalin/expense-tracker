@@ -1,4 +1,4 @@
-import { useMemo, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 
 const tokens = {
   foreground: "--foreground",
@@ -18,6 +18,25 @@ const tokens = {
 
 export type ThemeColors = Record<keyof typeof tokens, string>;
 
+type ResolvedTheme = { dark: boolean; colors: ThemeColors };
+
+// Shared across all chart instances so the (relatively expensive) style and
+// canvas reads happen once per theme change instead of once per chart.
+let cached: { htmlClass: string; theme: ResolvedTheme } | null = null;
+
+function getResolvedTheme(htmlClass: string): ResolvedTheme {
+  if (cached?.htmlClass !== htmlClass) {
+    cached = {
+      htmlClass,
+      theme: {
+        dark: htmlClass.split(" ").includes("dark"),
+        colors: readThemeColors(),
+      },
+    };
+  }
+  return cached.theme;
+}
+
 /**
  * Resolves the app's CSS theme tokens to rgba() strings so they can be used
  * by canvas-based libraries (e.g. ECharts) that can't read CSS variables or
@@ -30,13 +49,7 @@ export function useThemeColors() {
     () => null,
   );
 
-  return useMemo(() => {
-    if (htmlClass === null) return null;
-    return {
-      dark: htmlClass.split(" ").includes("dark"),
-      colors: readThemeColors(),
-    };
-  }, [htmlClass]);
+  return htmlClass === null ? null : getResolvedTheme(htmlClass);
 }
 
 function subscribe(callback: () => void) {

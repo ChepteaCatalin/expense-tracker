@@ -1,6 +1,6 @@
 "use client";
 
-import ReactECharts from "echarts-for-react";
+import EChart from "@/components/EChart";
 import { textStyle } from "@/lib/echarts";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import {
@@ -23,7 +23,7 @@ export default function NetIncomeChart({ data }: { data: ChartData }) {
   return (
     <div className="h-87.5">
       {theme && (
-        <ReactECharts
+        <EChart
           style={{ height: "100%" }}
           theme={theme.dark ? "dark" : undefined}
           option={{

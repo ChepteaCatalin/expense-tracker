@@ -2,7 +2,7 @@
 
 import type { CategoryTreemapNode } from "@/types/dashboard";
 import { escapeHtml, textStyle } from "@/lib/echarts";
-import ReactECharts from "echarts-for-react";
+import EChart from "@/components/EChart";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { tooltipStyle } from "../_utils/chart";
 
@@ -20,7 +20,7 @@ export default function TreemapChart({
   return (
     <div className="h-175">
       {theme && (
-        <ReactECharts
+        <EChart
           style={{ height: "100%" }}
           theme={theme.dark ? "dark" : undefined}
           option={{

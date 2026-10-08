@@ -3,7 +3,7 @@
 import { escapeHtml, textStyle, tooltipZIndexCss } from "@/lib/echarts";
 import type { TransactionCategoriesChartData } from "@/types/transaction";
 import { readableCurrency } from "@/utils/currency";
-import ReactECharts from "echarts-for-react";
+import EChart from "@/components/EChart";
 import { useTheme } from "next-themes";
 
 export default function TransactionCategoriesChart({
@@ -19,7 +19,7 @@ export default function TransactionCategoriesChart({
 
   return (
     <div className="h-62.5 lg:h-75">
-      <ReactECharts
+      <EChart
         style={{ height: "100%" }}
         theme={resolvedTheme}
         option={{

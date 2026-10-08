@@ -45,6 +45,10 @@ export default async function CategoryExpensesList({
     );
   }
 
+  const serializedSearchParams = new URLSearchParams(
+    awaitedSearchParams as Record<string, string>,
+  ).toString();
+
   return (
     <div className="space-y-4">
       {expensesByDate.map((expense) => (
@@ -52,9 +56,7 @@ export default async function CategoryExpensesList({
           key={expense.date.toISOString()}
           type="expenses"
           transactions={expense}
-          searchParams={new URLSearchParams(
-            awaitedSearchParams as Record<string, string>,
-          ).toString()}
+          searchParams={serializedSearchParams}
         />
       ))}
     </div>

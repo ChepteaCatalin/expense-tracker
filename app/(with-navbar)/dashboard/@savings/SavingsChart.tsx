@@ -1,6 +1,6 @@
 "use client";
 
-import ReactECharts from "echarts-for-react";
+import EChart from "@/components/EChart";
 import { textStyle } from "@/lib/echarts";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { axisStyle, legendStyle, tooltipStyle } from "../_utils/chart";
@@ -16,7 +16,7 @@ export default function SavingsChart({
   return (
     <div className="h-125">
       {theme && (
-        <ReactECharts
+        <EChart
           style={{ height: "100%" }}
           theme={theme.dark ? "dark" : undefined}
           option={{
