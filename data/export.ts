@@ -1,7 +1,8 @@
 import "server-only";
 
 import { sql } from "@/lib/neon";
-import { authGuard } from "@/lib/auth-utils";
+import { UnauthorizedError } from "@/utils/error";
+import { refreshSession } from "./auth";
 import { fromCents } from "@/utils/currency";
 import type { CategoryType } from "@/types/category";
 
@@ -64,7 +65,12 @@ interface SessionExportRow {
   userAgent: string | null;
 }
 
-export const getUserDataExport = authGuard((session) => async () => {
+// A full data export checks the session in the database rather than the
+// 5-minute cookie cache, so a revoked session cannot download it.
+export async function getUserDataExport() {
+  const session = await refreshSession();
+  if (!session) throw new UnauthorizedError();
+
   const userId = session.user.id;
 
   const [
@@ -186,7 +192,7 @@ export const getUserDataExport = authGuard((session) => async () => {
       updatedAt: row.updated_at,
     })),
   };
-});
+}
 
 function transactionFromDb(row: TransactionExportRow) {
   return {

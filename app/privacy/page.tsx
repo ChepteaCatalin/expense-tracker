@@ -18,7 +18,7 @@ export const metadata = {
 
 const CONTROLLER_NAME = "Cătălin Cheptea";
 const CONTROLLER_EMAIL = "vested.slump_6o@icloud.com";
-const LAST_UPDATED = "October 8, 2026";
+const LAST_UPDATED = "October 10, 2026";
 
 const MD_LAW = "Law No. 195/2024";
 
@@ -160,7 +160,7 @@ export default function PrivacyPolicyPage() {
             [
               "better-auth.session_token",
               "Keeps you signed in",
-              "7 days, renewed while you use the app; deleted when you sign out",
+              "7 days, renewed automatically (at most once a day) while you use the app; deleted when you sign out",
             ],
             [
               "better-auth.session_data",
@@ -182,9 +182,12 @@ export default function PrivacyPolicyPage() {
         <Paragraph>
           If you use the light/dark mode toggle, your choice is saved in your
           browser’s <code>localStorage</code> under the key <code>theme</code>{" "}
-          so the site remembers it. This value never leaves your device and
-          contains no personal data. You can remove it at any time by clearing
-          your browser’s site data.
+          so the site remembers it. While you are signed in, the time when your
+          session is next due for renewal is also saved there, under the key{" "}
+          <code>session-renewal-due-at</code>, so the app checks your session at
+          most once a day instead of on every page load. These values never
+          leave your device and contain no personal data. You can remove them at
+          any time by clearing your browser’s site data.
         </Paragraph>
       </Section>
       <Section title="Who we share data with">
@@ -244,7 +247,7 @@ export default function PrivacyPolicyPage() {
             ],
             [
               "Session records",
-              "Until you sign out or the session expires (7 days after last use). Expired records are deleted automatically within 24 hours.",
+              "Until you sign out or the session expires. A session expires 7 days after it was last renewed; while you use the app it is renewed automatically, at most once a day. Expired records are deleted automatically within 24 hours.",
             ],
             [
               "Security counters (hashed)",

@@ -6,6 +6,7 @@ import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { enforceAuthRateLimits } from "@/lib/auth-rate-limit";
 import { deleteUserRateLimits, rateLimitStorage } from "@/lib/rate-limit";
+import { SESSION_EXPIRES_IN, SESSION_UPDATE_AGE } from "@/lib/session-config";
 
 // Google is only used to confirm the user's identity; the app never calls
 // Google APIs, so OAuth tokens are not stored (data minimisation).
@@ -81,7 +82,8 @@ export const auth = betterAuth({
     enabled: false,
   },
   session: {
-    expiresIn: 7 * 24 * 60 * 60,
+    expiresIn: SESSION_EXPIRES_IN,
+    updateAge: SESSION_UPDATE_AGE,
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60,
