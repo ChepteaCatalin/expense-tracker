@@ -3,7 +3,7 @@ export interface DashboardSearchParams {
   to?: string | null;
 }
 
-export interface SavingsByCurrency {
+export interface CurrencyTotal {
   currency: string;
   total: number;
 }
@@ -11,7 +11,9 @@ export interface SavingsByCurrency {
 export interface TotalsMetrics {
   income: number;
   expenses: number;
-  savingsByCurrency: SavingsByCurrency[];
+  savingsByCurrency: CurrencyTotal[];
+  debtPaidByCurrency: CurrencyTotal[];
+  remainingDebtByCurrency: CurrencyTotal[];
 }
 
 export interface MonthlyMetric {
@@ -21,14 +23,14 @@ export interface MonthlyMetric {
   netIncome: number;
 }
 
-export interface SavingsChartSeries {
+export interface CurrencySeries {
   currency: string;
   data: number[];
 }
 
-export interface SavingsChartData {
+export interface CurrencySeriesChartData {
   months: string[];
-  series: SavingsChartSeries[];
+  series: CurrencySeries[];
 }
 
 export interface CategoryBreakdown {

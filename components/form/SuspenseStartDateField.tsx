@@ -4,8 +4,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SuspenseStartDateField({
   isEditMode,
+  maxDate,
 }: {
   isEditMode?: boolean;
+  maxDate?: string;
 }) {
   return (
     <Suspense
@@ -16,7 +18,7 @@ export default function SuspenseStartDateField({
         </div>
       }
     >
-      <StartDateField isEditMode={isEditMode} />
+      <StartDateField isEditMode={isEditMode} maxDate={maxDate} />
     </Suspense>
   );
 }

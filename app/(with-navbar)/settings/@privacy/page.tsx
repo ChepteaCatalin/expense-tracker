@@ -23,7 +23,8 @@ export default function PrivacyPage() {
         <div className="flex flex-col gap-2">
           <p className="text-muted-foreground">
             Download a copy of all your data (profile, sign-in methods,
-            sessions, categories, expenses, income, and savings) as a JSON file.
+            sessions, categories, expenses, income, savings, and loans) as a
+            JSON file.
           </p>
           <a
             href="/api/export"
@@ -36,7 +37,7 @@ export default function PrivacyPage() {
         <div className="flex flex-col gap-2">
           <p className="text-muted-foreground">
             Permanently delete your account and all associated data — expenses,
-            income, savings, and categories. This cannot be undone.
+            income, savings, loans, and categories. This cannot be undone.
           </p>
           <DeleteAccount />
         </div>

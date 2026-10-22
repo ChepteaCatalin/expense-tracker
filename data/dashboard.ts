@@ -8,12 +8,22 @@ import type {
   BreakdownChartData,
   CategoryBreakdown,
   CategoryTreemapNode,
+  CurrencySeriesChartData,
+  CurrencyTotal,
   MonthlyMetric,
-  SavingsChartData,
   TotalsMetrics,
 } from "@/types/dashboard";
 
 type NumericString = string;
+
+interface CurrencyTotalRow {
+  currency: string;
+  total: NumericString;
+}
+
+interface CurrencyMonthTotalRow extends CurrencyTotalRow {
+  month: string;
+}
 
 interface CategoryAmountRow {
   category_id: number;
@@ -34,10 +44,11 @@ export const getTotals = authGuard(
       "use cache";
       cacheLife("max");
       const tag = userTag(session.user.id);
-      cacheTag(tag("expenses"), tag("incomes"), tag("savings"));
+      cacheTag(tag("expenses"), tag("incomes"), tag("savings"), tag("loans"));
 
-      const [totalsResult, savingsResult] = await Promise.all([
-        sql<{ expenses: NumericString; income: NumericString }>`
+      const [totalsResult, savingsResult, debtPaidResult, remainingDebtResult] =
+        await Promise.all([
+          sql<{ expenses: NumericString; income: NumericString }>`
           SELECT
             COALESCE((
               SELECT SUM(e.amount)
@@ -54,7 +65,7 @@ export const getTotals = authGuard(
                 AND i.date <= ${to}::date
             ), 0) AS income
         `,
-        sql<{ currency: string; total: NumericString }>`
+          sql<{ currency: string; total: NumericString }>`
           SELECT currency, SUM(amount) AS total
           FROM (
             SELECT sg.currency, sd.amount
@@ -74,7 +85,33 @@ export const getTotals = authGuard(
           GROUP BY currency
           ORDER BY currency
         `,
-      ]);
+          sql<CurrencyTotalRow>`
+          SELECT l.currency, SUM(p.amount) AS total
+          FROM loan_payment p
+          JOIN loan l ON l.id = p.loan_id
+          WHERE l.user_id = ${session.user.id}
+            AND p.date >= ${from}::date
+            AND p.date <= ${to}::date
+          GROUP BY l.currency
+          ORDER BY l.currency
+        `,
+          // What was still owed at the end of the period
+          sql<CurrencyTotalRow>`
+          SELECT l.currency, SUM(l.amount - COALESCE(paid.total, 0)) AS total
+          FROM loan l
+          LEFT JOIN LATERAL (
+            SELECT SUM(p.amount) AS total
+            FROM loan_payment p
+            WHERE p.loan_id = l.id
+              AND p.date <= ${to}::date
+          ) paid ON true
+          WHERE l.user_id = ${session.user.id}
+            AND l.start_date <= ${to}::date
+          GROUP BY l.currency
+          HAVING SUM(l.amount - COALESCE(paid.total, 0)) > 0
+          ORDER BY l.currency
+        `,
+        ]);
 
       const row = totalsResult[0];
       if (!row) throw new Error("Failed to load totals");
@@ -82,10 +119,9 @@ export const getTotals = authGuard(
       return {
         expenses: +row.expenses,
         income: +row.income,
-        savingsByCurrency: savingsResult.map((r) => ({
-          currency: r.currency,
-          total: +r.total,
-        })),
+        savingsByCurrency: toCurrencyTotals(savingsResult),
+        debtPaidByCurrency: toCurrencyTotals(debtPaidResult),
+        remainingDebtByCurrency: toCurrencyTotals(remainingDebtResult),
       };
     },
 );
@@ -156,7 +192,7 @@ export const getSavingsChartData = authGuard(
     }: {
       from: string;
       to: string;
-    }): Promise<SavingsChartData> => {
+    }): Promise<CurrencySeriesChartData> => {
       "use cache";
       cacheLife("max");
       cacheTag(userTag(session.user.id)("savings"));
@@ -234,6 +270,77 @@ export const getSavingsChartData = authGuard(
           data,
         })),
       };
+    },
+);
+
+// The remaining debt per currency at the end of each month of the period (or
+// at the end of the period, for its last month).
+export const getDebtBalanceChartData = authGuard(
+  (session) =>
+    async ({
+      from,
+      to,
+    }: {
+      from: string;
+      to: string;
+    }): Promise<CurrencySeriesChartData> => {
+      "use cache";
+      cacheLife("max");
+      cacheTag(userTag(session.user.id)("loans"));
+
+      const rows = await sql<CurrencyMonthTotalRow>`
+        WITH months AS (
+          SELECT generate_series(
+            DATE_TRUNC('month', ${from}::date),
+            DATE_TRUNC('month', ${to}::date),
+            '1 month'::interval
+          )::date AS month
+        ),
+        points AS (
+          SELECT
+            month,
+            LEAST((month + '1 month'::interval)::date - 1, ${to}::date) AS as_of
+          FROM months
+        ),
+        loans AS (
+          SELECT l.id, l.currency, l.amount, l.start_date
+          FROM loan l
+          WHERE l.user_id = ${session.user.id}
+            AND l.start_date <= ${to}::date
+        ),
+        payments AS (
+          SELECT loans.currency, p.amount, p.date
+          FROM loan_payment p
+          JOIN loans ON loans.id = p.loan_id
+          WHERE p.date <= ${to}::date
+        ),
+        currencies AS (
+          SELECT DISTINCT currency
+          FROM loans
+        )
+        SELECT
+          TO_CHAR(points.month, 'Mon YYYY') AS month,
+          currencies.currency,
+          (
+            COALESCE((
+              SELECT SUM(loans.amount)
+              FROM loans
+              WHERE loans.currency = currencies.currency
+                AND loans.start_date <= points.as_of
+            ), 0)
+            - COALESCE((
+              SELECT SUM(payments.amount)
+              FROM payments
+              WHERE payments.currency = currencies.currency
+                AND payments.date <= points.as_of
+            ), 0)
+          ) / 100.0 AS total
+        FROM points
+        CROSS JOIN currencies
+        ORDER BY currencies.currency, points.month
+      `;
+
+      return toCurrencySeriesChartData(rows);
     },
 );
 
@@ -470,3 +577,33 @@ export const getIncomeCategoryTreemapData = authGuard(
       }));
     },
 );
+
+function toCurrencyTotals(rows: CurrencyTotalRow[]): CurrencyTotal[] {
+  return rows.map((row) => ({ currency: row.currency, total: +row.total }));
+}
+
+// Expects rows ordered by currency, then month. Currencies whose values are all
+// zero in the period (e.g. debts paid off before it) are left out.
+function toCurrencySeriesChartData(
+  rows: CurrencyMonthTotalRow[],
+): CurrencySeriesChartData {
+  const months = Array.from(new Set(rows.map((row) => row.month)));
+  const seriesMap = new Map<string, number[]>();
+
+  for (const row of rows) {
+    let series = seriesMap.get(row.currency);
+    if (!series) {
+      series = [];
+      seriesMap.set(row.currency, series);
+    }
+    series.push(+row.total);
+  }
+
+  return {
+    months,
+    series: Array.from(seriesMap, ([currency, data]) => ({
+      currency,
+      data,
+    })).filter(({ data }) => data.some((value) => value !== 0)),
+  };
+}

@@ -2,7 +2,7 @@ import { getValidNormalizedSearchParams } from "../search-params";
 import InsightCard from "../_components/InsightCard";
 import type {
   DashboardSearchParams,
-  SavingsChartData,
+  CurrencySeriesChartData,
 } from "@/types/dashboard";
 import SavingsChart from "./SavingsChart";
 import { getSavingsChartData } from "@/data/dashboard";
@@ -17,7 +17,7 @@ export default async function SavingsPage({
 }) {
   const params = await getValidNormalizedSearchParams(searchParams);
 
-  var chartData: SavingsChartData;
+  var chartData: CurrencySeriesChartData;
   try {
     chartData = await getSavingsChartData({
       from: params.from!,

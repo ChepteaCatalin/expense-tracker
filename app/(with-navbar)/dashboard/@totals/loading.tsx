@@ -12,6 +12,10 @@ export default function TotalsLoading() {
       <Skeleton className="h-7 w-full rounded-sm" />
       <Separator className="my-2" />
       <Skeleton className="h-5 w-full rounded-sm" />
+      <Separator className="my-2" />
+      <Skeleton className="h-5 w-full rounded-sm" />
+      <Separator className="my-2" />
+      <Skeleton className="h-5 w-full rounded-sm" />
     </InsightCard>
   );
 }

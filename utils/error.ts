@@ -22,3 +22,11 @@ export function isUniqueViolationError(error: unknown): boolean {
     error.code === PostgresErrorCode.UniqueViolation
   );
 }
+
+/** A business rule was broken; the message is safe to show to the user. */
+export class RuleViolationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RuleViolationError";
+  }
+}

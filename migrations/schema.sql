@@ -3,7 +3,7 @@
 --
 
 
--- Dumped from database version 17.11 (7d7ea2a)
+-- Dumped from database version 17.11 (11592b3)
 -- Dumped by pg_dump version 18.6
 
 SET statement_timeout = 0;
@@ -21,6 +21,8 @@ SET row_security = off;
 ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS "session_userId_fkey";
 ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS fk_savings_goal_user;
 ALTER TABLE IF EXISTS ONLY public.savings_deposit DROP CONSTRAINT IF EXISTS fk_savings_deposit_savings_goal;
+ALTER TABLE IF EXISTS ONLY public.loan DROP CONSTRAINT IF EXISTS fk_loan_user;
+ALTER TABLE IF EXISTS ONLY public.loan_payment DROP CONSTRAINT IF EXISTS fk_loan_payment_loan;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_user;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS fk_income_category;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS fk_expense_user;
@@ -33,6 +35,8 @@ DROP INDEX IF EXISTS public.idx_savings_goal_user_completed;
 DROP INDEX IF EXISTS public.idx_savings_deposit_savings_goal_date;
 DROP INDEX IF EXISTS public.idx_savings_deposit_date;
 DROP INDEX IF EXISTS public.idx_rate_limit_window_start;
+DROP INDEX IF EXISTS public.idx_loan_user_start_date;
+DROP INDEX IF EXISTS public.idx_loan_payment_loan_date;
 DROP INDEX IF EXISTS public.idx_income_user_date;
 DROP INDEX IF EXISTS public.idx_income_date;
 DROP INDEX IF EXISTS public.idx_income_category_id;
@@ -52,6 +56,8 @@ ALTER TABLE IF EXISTS ONLY public.session DROP CONSTRAINT IF EXISTS session_pkey
 ALTER TABLE IF EXISTS ONLY public.savings_goal DROP CONSTRAINT IF EXISTS savings_goal_pkey;
 ALTER TABLE IF EXISTS ONLY public.savings_deposit DROP CONSTRAINT IF EXISTS savings_deposit_pkey;
 ALTER TABLE IF EXISTS ONLY public.rate_limit DROP CONSTRAINT IF EXISTS rate_limit_pkey;
+ALTER TABLE IF EXISTS ONLY public.loan DROP CONSTRAINT IF EXISTS loan_pkey;
+ALTER TABLE IF EXISTS ONLY public.loan_payment DROP CONSTRAINT IF EXISTS loan_payment_pkey;
 ALTER TABLE IF EXISTS ONLY public.income DROP CONSTRAINT IF EXISTS income_pkey;
 ALTER TABLE IF EXISTS ONLY public.expense DROP CONSTRAINT IF EXISTS expense_pkey;
 ALTER TABLE IF EXISTS ONLY public.category DROP CONSTRAINT IF EXISTS category_pkey;
@@ -62,6 +68,8 @@ DROP TABLE IF EXISTS public.session;
 DROP TABLE IF EXISTS public.savings_goal;
 DROP TABLE IF EXISTS public.savings_deposit;
 DROP TABLE IF EXISTS public.rate_limit;
+DROP TABLE IF EXISTS public.loan_payment;
+DROP TABLE IF EXISTS public.loan;
 DROP TABLE IF EXISTS public.income;
 DROP TABLE IF EXISTS public.expense;
 DROP TABLE IF EXISTS public.category;
@@ -384,6 +392,68 @@ ALTER TABLE public.income ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: loan; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.loan (
+    id integer NOT NULL,
+    lender character varying(100) NOT NULL,
+    amount integer NOT NULL,
+    currency public.currency_code NOT NULL,
+    start_date date NOT NULL,
+    notes character varying(500),
+    user_id text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT loan_amount_check CHECK (((amount > 0) AND (amount <= 1000000000)))
+);
+
+
+--
+-- Name: loan_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.loan ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.loan_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: loan_payment; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.loan_payment (
+    id integer NOT NULL,
+    loan_id integer NOT NULL,
+    amount integer NOT NULL,
+    date date NOT NULL,
+    notes character varying(500),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT loan_payment_amount_check CHECK (((amount > 0) AND (amount <= 1000000000)))
+);
+
+
+--
+-- Name: loan_payment_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.loan_payment ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.loan_payment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: rate_limit; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -541,6 +611,22 @@ ALTER TABLE ONLY public.income
 
 
 --
+-- Name: loan_payment loan_payment_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.loan_payment
+    ADD CONSTRAINT loan_payment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: loan loan_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.loan
+    ADD CONSTRAINT loan_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: rate_limit rate_limit_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -684,6 +770,20 @@ CREATE INDEX idx_income_user_date ON public.income USING btree (user_id, date);
 
 
 --
+-- Name: idx_loan_payment_loan_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_loan_payment_loan_date ON public.loan_payment USING btree (loan_id, date);
+
+
+--
+-- Name: idx_loan_user_start_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_loan_user_start_date ON public.loan USING btree (user_id, start_date);
+
+
+--
 -- Name: idx_rate_limit_window_start; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -771,6 +871,22 @@ ALTER TABLE ONLY public.income
 
 ALTER TABLE ONLY public.income
     ADD CONSTRAINT fk_income_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: loan_payment fk_loan_payment_loan; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.loan_payment
+    ADD CONSTRAINT fk_loan_payment_loan FOREIGN KEY (loan_id) REFERENCES public.loan(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: loan fk_loan_user; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.loan
+    ADD CONSTRAINT fk_loan_user FOREIGN KEY (user_id) REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

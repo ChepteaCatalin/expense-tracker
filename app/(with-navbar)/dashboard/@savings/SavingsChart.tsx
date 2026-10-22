@@ -4,12 +4,12 @@ import EChart from "@/components/EChart";
 import { textStyle } from "@/lib/echarts";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { axisStyle, legendStyle, tooltipStyle } from "../_utils/chart";
-import type { SavingsChartData } from "@/types/dashboard";
+import type { CurrencySeriesChartData } from "@/types/dashboard";
 
 export default function SavingsChart({
   chartData,
 }: {
-  chartData: SavingsChartData;
+  chartData: CurrencySeriesChartData;
 }) {
   const theme = useThemeColors();
 

@@ -12,6 +12,7 @@ export default function DashboardLayout({
   expensesBreakdown,
   incomeBreakdown,
   savings,
+  debtBalance,
   expensesTreemap,
   incomeTreemap,
 }: {
@@ -21,6 +22,7 @@ export default function DashboardLayout({
   expensesBreakdown: React.ReactNode;
   incomeBreakdown: React.ReactNode;
   savings: React.ReactNode;
+  debtBalance: React.ReactNode;
   expensesTreemap: React.ReactNode;
   incomeTreemap: React.ReactNode;
 }) {
@@ -34,6 +36,7 @@ export default function DashboardLayout({
         <div className="col-span-12 min-w-0">{expensesBreakdown}</div>
         <div className="col-span-12 min-w-0">{incomeBreakdown}</div>
         <div className="col-span-12 min-w-0">{savings}</div>
+        <div className="col-span-12 min-w-0">{debtBalance}</div>
         <div className="col-span-12 min-w-0">{expensesTreemap}</div>
         <div className="col-span-12 min-w-0">{incomeTreemap}</div>
       </div>

@@ -1,6 +1,10 @@
 import { getValidNormalizedSearchParams } from "../search-params";
 import InsightCard from "../_components/InsightCard";
-import type { DashboardSearchParams, TotalsMetrics } from "@/types/dashboard";
+import type {
+  CurrencyTotal,
+  DashboardSearchParams,
+  TotalsMetrics,
+} from "@/types/dashboard";
 import { cn } from "cn";
 import { Separator } from "@/components/ui/separator";
 import { getSession } from "@/data/auth";
@@ -39,7 +43,9 @@ export default async function TotalsPage({
   if (
     totals.income === 0 &&
     totals.expenses === 0 &&
-    totals.savingsByCurrency?.length === 0
+    totals.savingsByCurrency?.length === 0 &&
+    totals.debtPaidByCurrency.length === 0 &&
+    totals.remainingDebtByCurrency.length === 0
   ) {
     return <NoData title="Totals" customLink={<AddExpensesLinkBtn />} />;
   }
@@ -68,21 +74,49 @@ export default async function TotalsPage({
         highlight
       />
       <Separator className="my-2" />
-      {totals.savingsByCurrency.length === 0 ? (
-        <MetricRow label="Savings" value={0} className="text-chart-2" />
-      ) : (
-        totals.savingsByCurrency.map(({ currency, total }) => (
-          <MetricRow
-            key={currency}
-            label="Savings"
-            value={total}
-            currency={currency}
-            className="text-chart-2"
-          />
-        ))
-      )}
+      <CurrencyMetricRows
+        label="Savings"
+        totals={totals.savingsByCurrency}
+        className="text-chart-2"
+      />
+      <Separator className="my-2" />
+      <CurrencyMetricRows
+        label="Debt Paid"
+        totals={totals.debtPaidByCurrency}
+        className="text-chart-5"
+      />
+      <Separator className="my-2" />
+      <CurrencyMetricRows
+        label="Remaining Debt"
+        totals={totals.remainingDebtByCurrency}
+        className="text-chart-5"
+      />
     </InsightCard>
   );
+}
+
+function CurrencyMetricRows({
+  label,
+  totals,
+  className,
+}: {
+  label: string;
+  totals: CurrencyTotal[];
+  className: string;
+}) {
+  if (totals.length === 0) {
+    return <MetricRow label={label} value={0} className={className} />;
+  }
+
+  return totals.map(({ currency, total }) => (
+    <MetricRow
+      key={currency}
+      label={label}
+      value={total}
+      currency={currency}
+      className={className}
+    />
+  ));
 }
 
 function MetricRow({

@@ -50,6 +50,24 @@ interface SavingsDepositExportRow extends Timestamps {
   notes: string | null;
 }
 
+interface LoanExportRow extends Timestamps {
+  id: number;
+  lender: string;
+  amount: number;
+  currency: string;
+  start_date: string;
+  notes: string | null;
+}
+
+interface LoanPaymentExportRow extends Timestamps {
+  id: number;
+  loan_id: number;
+  loan_lender: string;
+  amount: number;
+  date: string;
+  notes: string | null;
+}
+
 interface SignInMethodExportRow {
   providerId: string;
   accountId: string;
@@ -79,6 +97,8 @@ export async function getUserDataExport() {
     incomes,
     savingsGoals,
     savingsDeposits,
+    loans,
+    loanPayments,
     signInMethods,
     sessions,
   ] = await Promise.all([
@@ -120,6 +140,22 @@ export async function getUserDataExport() {
         JOIN savings_goal g ON g.id = d.savings_goal_id
         WHERE g.user_id = ${userId}
         ORDER BY d.date, d.id
+      `,
+    sql<LoanExportRow>`
+        SELECT id, lender, amount, currency,
+          to_char(start_date, 'YYYY-MM-DD') AS start_date,
+          notes, created_at, updated_at
+        FROM loan
+        WHERE user_id = ${userId}
+        ORDER BY id
+      `,
+    sql<LoanPaymentExportRow>`
+        SELECT p.id, p.loan_id, l.lender AS loan_lender, p.amount,
+          to_char(p.date, 'YYYY-MM-DD') AS date, p.notes, p.created_at, p.updated_at
+        FROM loan_payment p
+        JOIN loan l ON l.id = p.loan_id
+        WHERE l.user_id = ${userId}
+        ORDER BY p.date, p.id
       `,
     sql<SignInMethodExportRow>`
         SELECT "providerId", "accountId", "createdAt", "updatedAt"
@@ -185,6 +221,26 @@ export async function getUserDataExport() {
       id: row.id,
       savingsGoalId: row.savings_goal_id,
       savingsGoalName: row.savings_goal_name,
+      amount: fromCents(row.amount),
+      date: row.date,
+      notes: row.notes,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    })),
+    loans: loans.map((row) => ({
+      id: row.id,
+      lender: row.lender,
+      amount: fromCents(row.amount),
+      currency: row.currency,
+      startDate: row.start_date,
+      notes: row.notes,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    })),
+    loanPayments: loanPayments.map((row) => ({
+      id: row.id,
+      loanId: row.loan_id,
+      loanLender: row.loan_lender,
       amount: fromCents(row.amount),
       date: row.date,
       notes: row.notes,

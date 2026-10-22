@@ -2,6 +2,7 @@
 
 export {
   CircleDollarSign,
+  Landmark,
   LayoutDashboard,
   PiggyBank,
   Settings,

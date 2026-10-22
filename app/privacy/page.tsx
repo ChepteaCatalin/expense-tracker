@@ -18,7 +18,7 @@ export const metadata = {
 
 const CONTROLLER_NAME = "Cătălin Cheptea";
 const CONTROLLER_EMAIL = "vested.slump_6o@icloud.com";
-const LAST_UPDATED = "October 10, 2026";
+const LAST_UPDATED = "October 22, 2026";
 
 const MD_LAW = "Law No. 195/2024";
 
@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
       <Section title="Who we are">
         <Paragraph>
           Expense Tracker is a personal finance app that lets you record and
-          visualize your expenses, income, and savings. It is operated by{" "}
+          visualize your expenses, income, savings, and loans. It is operated by{" "}
           <b>{CONTROLLER_NAME}</b>, who is the <b>data controller</b> for the
           personal data processed by this app.
         </Paragraph>
@@ -76,10 +76,24 @@ export default function PrivacyPolicyPage() {
           </Item>
           <Item>
             <b>Financial data you enter</b> — expenses, income, savings goals,
-            deposits, categories, amounts, dates, and any descriptions or notes
-            you add. You decide what to enter. Please do not enter sensitive
-            information (for example, health data) or personal data about other
-            people in descriptions or notes.
+            deposits, loans, loan payments, categories, amounts, dates, and any
+            descriptions or notes you add. You decide what to enter. Please do
+            not enter sensitive information (for example, health data) or
+            personal data about other people in descriptions or notes.
+          </Item>
+          <Item>
+            <b>Lender names</b> — when you record a loan, you enter who you owe
+            the money to. If the lender is a private person, this is personal
+            data about them (see{" "}
+            <a
+              href="#other-people"
+              className="text-primary-light font-semibold"
+            >
+              Data about other people
+            </a>
+            ). Enter only what you need to recognize the loan, such as a first
+            name or a nickname, and never contact details or identification
+            numbers.
           </Item>
           <Item>
             <b>Preferences</b> — your chosen display currency.
@@ -139,12 +153,33 @@ export default function PrivacyPolicyPage() {
               "Legitimate interests — Art. 6(1)(f). Our interest, and yours, is keeping accounts and financial data safe. We use the minimum data needed, stored in hashed form and kept only briefly.",
             ],
             [
+              "Storing the lender names you enter, which may identify other people, so that you can keep track of who you owe money to",
+              "Lender names",
+              "Legitimate interests — Art. 6(1)(f). Your interest, and ours, is letting you keep track of your own debts. Lender names are entered by you, visible only to you, not used for any other purpose, and deleted together with the loan or your account.",
+            ],
+            [
               "Answering your privacy requests and keeping a record that we did",
               "Your request and our correspondence",
               "Legal obligation — Art. 6(1)(c)",
             ],
           ]}
         />
+      </Section>
+      <Section id="other-people" title="Data about other people">
+        <Paragraph>
+          When you record a loan, the lender you enter may be a private person.
+          We receive this information from you, not from the lender, and only
+          use it to show it back to you. Because we have no way to contact the
+          people named as lenders, informing each of them individually would be
+          impossible or involve disproportionate effort, so we make this policy
+          publicly available instead (Art. 14(5)(b)).
+        </Paragraph>
+        <Paragraph>
+          If you believe one of our users has named you as a lender, you can
+          exercise the rights described below by contacting us at <EmailLink />.
+          We will handle your request while also respecting the rights of the
+          user who recorded the loan (Art. 15(4)).
+        </Paragraph>
       </Section>
       <Section title="Cookies and local storage">
         <Paragraph>
@@ -242,7 +277,7 @@ export default function PrivacyPolicyPage() {
           headers={["Data", "Retention"]}
           rows={[
             [
-              "Account, financial data, and preferences",
+              "Account, financial data (including lender names), and preferences",
               "Until you delete your account. Deletion is immediate and permanent. Residual copies in our database provider’s short-term recovery history are overwritten automatically within 24 hours.",
             ],
             [
@@ -394,14 +429,16 @@ export default function PrivacyPolicyPage() {
 }
 
 function Section({
+  id,
   title,
   children,
 }: {
+  id?: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="mb-8">
+    <section id={id} className="mb-8">
       <h2 className="mb-2 text-2xl font-bold">{title}</h2>
       {children}
     </section>

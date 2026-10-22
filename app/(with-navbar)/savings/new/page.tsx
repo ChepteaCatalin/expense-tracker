@@ -1,7 +1,7 @@
 import TitledCardPageWrapper from "@/components/TitledCardPageWrapper";
 import GoalForm from "../_components/GoalForm/GoalForm";
-import SuspenseCurrencyAutocomplete from "../_components/GoalForm/SuspenseCurrencyAutocomplete";
-import SuspenseStartDateField from "../_components/GoalForm/SuspenseStartDateField";
+import SuspenseCurrencyAutocomplete from "@/components/form/SuspenseCurrencyAutocomplete";
+import SuspenseStartDateField from "@/components/form/SuspenseStartDateField";
 import { BackToSavingsLink } from "../_components/BackToSavingsLink";
 
 export const metadata = {

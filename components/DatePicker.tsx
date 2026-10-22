@@ -7,17 +7,24 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { format, formatISO } from "date-fns";
+import { format, formatISO, parseISO } from "date-fns";
 import { useState } from "react";
 
+/** `minDate` and `maxDate` are inclusive calendar days (`yyyy-MM-dd`). */
 export default function DatePicker({
   value,
   onChange,
   disabled,
+  minDate,
+  maxDate,
+  invalid,
 }: {
   value: string | null;
   onChange: (date: string) => void;
   disabled?: boolean;
+  minDate?: string;
+  maxDate?: string;
+  invalid?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -31,6 +38,7 @@ export default function DatePicker({
             variant="outline"
             className="disabled:bg-input/50 dark:disabled:bg-input/80 justify-start font-normal"
             disabled={disabled}
+            aria-invalid={invalid || undefined}
           >
             {value ? format(date!, "d MMMM yyyy") : <span>Pick a date</span>}
           </Button>
@@ -46,6 +54,10 @@ export default function DatePicker({
             setOpen(false);
           }}
           defaultMonth={date}
+          disabled={[
+            ...(minDate ? [{ before: parseISO(minDate) }] : []),
+            ...(maxDate ? [{ after: parseISO(maxDate) }] : []),
+          ]}
         />
       </PopoverContent>
     </Popover>
